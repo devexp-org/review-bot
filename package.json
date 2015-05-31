@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha tests/**"
   },
   "repository": {
     "type": "git",
@@ -17,9 +17,15 @@
   },
   "homepage": "https://github.com/devexp-org/devexp#readme",
   "dependencies": {
-    "express": "^4.12.4"
+    "body-parser": "^1.12.4",
+    "es6-promise": "^2.1.1",
+    "express": "^4.12.4",
+    "github": "^0.2.4",
+    "lodash": "^3.9.3",
+    "mongoose": "^4.0.4"
   },
   "devDependencies": {
+    "mocha": "^2.2.5",
     "supertest": "^1.0.1"
   }
 }

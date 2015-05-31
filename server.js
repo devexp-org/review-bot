@@ -1,10 +1,4 @@
-var express = require('express');
-var app = express();
-
-app.get('/', function (req, res) {
-  res.send('Hello World!');
-});
-
+var app = require('./app.js');
 var server = app.listen(3000, function () {
 
   var host = server.address().address;
@@ -13,4 +7,3 @@ var server = app.listen(3000, function () {
   console.log('Example app listening at http://%s:%s', host, port);
 
 });
-
