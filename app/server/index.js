@@ -21,6 +21,8 @@ app.use('/public', express.static(path.join(__dirname, '..', 'public')));
 
 require('app/module/mongoose');
 
+app.use('/api/github', require('app/module/github/routes'));
+
 /**
  * Default Route
  */
