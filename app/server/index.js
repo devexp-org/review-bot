@@ -1,17 +1,24 @@
 var express = require('express'),
     path = require('path'),
+    responseTime = require('response-time'),
 
     app = express();
 
 /**
  * Setup application
  */
-app.use('/public', express.static(path.join(__dirname, 'public')));
-app.set('views', path.join(__dirname, 'app/server/views'));
+
+if (process.env.NODE_ENV !== 'production') {
+    app.use(require('errorhandler')());
+}
+
+app.use(responseTime());
+app.use('/public', express.static(path.join(__dirname, '..', 'public')));
 
 /**
  * Serverside modules
  */
+require('app/modules/mongoose');
 
 /**
  * Default Route
