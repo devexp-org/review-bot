@@ -1,31 +1,35 @@
 {
   "name": "devexp",
-  "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.0",
+  "description": "DevExp",
+  "main": "app.js",
   "scripts": {
-    "test": "mocha tests/**"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "scripts/postinstall.sh",
+    "serve": "nodemon -w app -e js,jsx -i '**/tests/' -V app.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devexp-org/devexp.git"
+    "url": "https://github.com/devexp-org/devexp.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Stanislav Sysoev <d4rkr00t@gmail.com> (http://sysoev.org)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/devexp-org/devexp/issues"
   },
-  "homepage": "https://github.com/devexp-org/devexp#readme",
+  "homepage": "https://github.com/devexp-org/devexp",
   "dependencies": {
     "body-parser": "^1.12.4",
-    "es6-promise": "^2.1.1",
     "express": "^4.12.4",
     "github": "^0.2.4",
     "lodash": "^3.9.3",
-    "mongoose": "^4.0.4"
+    "mongoose": "^4.0.4",
+    "response-time": "^2.3.1"
   },
   "devDependencies": {
-    "mocha": "^2.2.5",
-    "supertest": "^1.0.1"
+    "chai": "^2.3.0",
+    "errorhandler": "^1.3.6",
+    "eslint": "^0.22.1",
+    "mocha": "^2.2.5"
   }
 }
