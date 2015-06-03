@@ -18,7 +18,8 @@ app.use('/public', express.static(path.join(__dirname, '..', 'public')));
 /**
  * Serverside modules
  */
-require('app/modules/mongoose');
+
+require('app/module/mongoose');
 
 /**
  * Default Route

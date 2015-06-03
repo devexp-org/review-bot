@@ -1,7 +1,7 @@
 var mongoose = require('mongoose'),
-    config = require('app/config/server');
+    config = require('app/config').load('mongoose');
 
-mongoose.connect(config.mongo.host);
+mongoose.connect(config.host);
 
 mongoose
     .connection
