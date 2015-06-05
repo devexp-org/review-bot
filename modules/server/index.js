@@ -23,6 +23,7 @@ app.use('/public', express.static(path.join(__dirname, '..', 'public')));
  */
 require('modules/mongoose').init(config.load('mongoose'));
 
+app.use(require('modules/response').middleware());
 app.use('/api/github', require('modules/github').routes);
 
 /**

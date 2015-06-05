@@ -6,14 +6,13 @@ var express = require('express'),
     GITHUB_EVENT_NAME = 'x-github-event';
 
 router.get('/info', function (req, res) {
-    res.send('github module');
+    res.success('github module');
 });
 
 router.post('/webhook', function (req, res) {
     if (!_.isPlainObject(req.body)) {
-        res.status(500).json({
-            error: 'req.body is not plain object'
-        });
+        res.error('req.body is not plain object');
+        return;
     }
 
     switch(req.headers[GITHUB_EVENT_NAME]) {
@@ -29,17 +28,16 @@ router.post('/webhook', function (req, res) {
         case 'pull_request':
             break;
 
+        case 'ping':
+            res.success('pong');
+            return;
+
         default:
-            res.status(500).json({
-                error: 'unsupported event type'
-            });
+            res.error('unsupported event type');
             return;
     }
 
-    res.json({
-        error: null,
-        message: 'got you'
-    });
+    res.success('got you');
 });
 
 module.exports = router;
