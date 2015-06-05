@@ -4,9 +4,9 @@
   "description": "DevExp",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/.bin/mocha -c -R dot -r ./tests/setup.js --full-trace --recursive **/tests/*.test.js",
     "postinstall": "scripts/postinstall.sh",
-    "serve": "nodemon -w app -e js,jsx -i '**/tests/' -V app.js",
+    "serve": "nodemon -w modules -e js,jsx -i '**/tests/' -V app.js",
     "mongo": "mkdir -p data 2> /dev/null && mongod --dbpath ./data"
   },
   "repository": {
