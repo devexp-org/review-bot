@@ -1,6 +1,8 @@
-var Schema = require('mongoose').Schema;
+var Schema = require('mongoose').Schema,
+    PullRequest;
 
-module.exports = new Schema({
+PullRequest = new Schema({
+    id: Number,
     title: String,
     body: String,
     extra: Schema.Types.Mixed,
@@ -40,3 +42,9 @@ module.exports = new Schema({
         }
     }
 });
+
+PullRequest.statics.findByPrId = function (id, cb) {
+    return this.model('PullRequest').findOne({ id: id }, cb);
+};
+
+module.exports = PullRequest;
