@@ -7,7 +7,7 @@ var path = require('path'),
 injector
     .register('server', require('modules/server'), config.load('server'))
     .register('mongoose', require('modules/mongoose'), config.load('mongoose'))
-    .register('github', require('modules/github'))
+    .register('github', require('modules/github'), config.load('github'))
     .register('response', require('modules/response'));
 
 injector.initModules();

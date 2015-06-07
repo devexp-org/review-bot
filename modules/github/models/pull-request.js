@@ -3,6 +3,7 @@ var Schema = require('mongoose').Schema;
 module.exports = new Schema({
     title: String,
     body: String,
+    extra: Schema.Types.Mixed,
     url: String,
     html_url: String,
     number: Number,
@@ -19,8 +20,12 @@ module.exports = new Schema({
     updated_at: Date,
     closed_at: Date,
     merged_at: Date,
-    merged: false,
-    merged_by: null,
+    merged: Boolean,
+    merged_by: {
+        login: String,
+        avatar_url: String,
+        url: String
+    },
     comments: Number,
     review_comments: Number,
     commits: Number,
