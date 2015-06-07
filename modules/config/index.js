@@ -1,4 +1,17 @@
-var isProduction = process.env.NODE_ENV === 'production';
+var path = require('path'),
+    isProduction,
+    configsDirPath;
+
+/**
+ * Initialize config module with path to configs directory.
+ *
+ * @param {Object} options
+ * @param {String} options.path — path to configs directory
+ */
+module.exports.initImmediately = function (options) {
+    isProduction = process.env.NODE_ENV === 'production';
+    configsDirPath = options.path;
+};
 
 /**
  * Loads config by name.
@@ -9,7 +22,7 @@ var isProduction = process.env.NODE_ENV === 'production';
  * @return {Object}
  */
 module.exports.load = function (configName) {
-    var config = require('./' + configName);
+    var config = require(path.join(configsDirPath, '/', configName));
 
     if (isProduction && config.prod) {
         return config.prod;
