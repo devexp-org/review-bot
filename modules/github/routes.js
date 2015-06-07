@@ -1,9 +1,9 @@
 var express = require('express'),
     _ = require('lodash'),
 
-    router = express.Router(),
+    router = express.Router();
 
-    GITHUB_EVENT_NAME = 'x-github-event';
+const GITHUB_HEADER_EVENT = 'x-github-event';
 
 router.get('/info', function (req, res) {
     res.success('github module');
@@ -15,7 +15,7 @@ router.post('/webhook', function (req, res) {
         return;
     }
 
-    switch(req.headers[GITHUB_EVENT_NAME]) {
+    switch(req.headers[GITHUB_HEADER_EVENT]) {
         case 'commit_comment':
             break;
 
