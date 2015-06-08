@@ -27,6 +27,10 @@ github = {
 
     off: function (event, callback) {
         ee.removeListener(event, callback);
+    },
+
+    emit: function (event, data) {
+        ee.emit(event, data);
     }
 };
 

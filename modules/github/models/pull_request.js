@@ -34,13 +34,7 @@ PullRequest = new Schema({
     additions: Number,
     deletions: Number,
     changed_files: Number,
-    repository: {
-        name: String,
-        full_name: String,
-        owner: {
-            login: String
-        }
-    }
+    head: Schema.Types.Mixed
 });
 
 PullRequest.statics.findByPrId = function (id, cb) {

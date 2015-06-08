@@ -1,18 +1,20 @@
 module.exports = function (github) {
+    var PullRequest = github.models.PullRequest;
+
     return function processPullRequest(body) {
-        github.models.PullRequest.findByPrId(body.pull_request.id, function (err, pullRequest) {
-            if (pullRequest) {
-                console.log(pullRequest);
-                console.log('found');
-            } else {
-                pullRequest = new github.models.PullRequest(body.pull_request);
+        PullRequest
+            .findByPrId(body.pull_request.id)
+            .exec()
+            .then(function (pullRequest) {
+                if (!pullRequest)
+                    pullRequest = new PullRequest(body.pull_request);
 
-                pullRequest.save(function (err, doc) {
-                    if (err) console.error(err);
+                return pullRequest.save();
+            })
+            .then(function (pullRequest) {
+                console.log('saved: ', pullRequest);
 
-                    console.log('saved: ', doc);
-                });
-            }
-        });
+                github.emit('pull_request', pullRequest);
+            }, console.error.bind(console));
     };
 };
