@@ -3,34 +3,29 @@ var express = require('express'),
     responseTime = require('response-time'),
     bodyParser = require('body-parser'),
 
-    app = express(),
-
-    config = require('modules/config');
+    injector = require('modules/injector'),
+    app = express();
 
 /**
  * Setup application
  */
-if (process.env.NODE_ENV !== 'production') {
-    app.use(require('errorhandler')());
-}
+module.exports.init = function (options) {
+    if (process.env.NODE_ENV !== 'production') {
+        app.use(require('errorhandler')());
+    }
 
-app.use(responseTime());
-app.use(bodyParser.json());
-app.use('/public', express.static(path.join(__dirname, '..', 'public')));
-
-/**
- * Serverside modules
- */
-require('modules/mongoose').init(config.load('mongoose'));
-
-app.use(require('modules/response').middleware());
-app.use('/api/github', require('modules/github').routes);
+    app.use(responseTime());
+    app.use(bodyParser.json());
+    app.use(options.staticBase, express.static(options.staticPath));
+};
 
 /**
  * Default Route
  */
-app.get('*', function (req, res) {
-    res.sendFile(path.join(__dirname, 'views', 'layout.html'));
-});
+module.exports.setupDefaultRoute = function () {
+    app.get('*', function (req, res) {
+        res.sendFile(path.join(__dirname, 'views', 'layout.html'));
+    });
+};
 
-module.exports = app;
+module.exports.app = app;
