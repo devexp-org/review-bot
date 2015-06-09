@@ -9,7 +9,8 @@ var path = require('path'),
         .register('config', require('modules/config'), { path: path.join(__dirname, 'config') })
         .get('config');
 
-injector.register('mongoose', require('modules/mongoose'), config.load('mongoose'));
+injector
+    .register('mongoose', require('modules/mongoose'), config.load('mongoose'))
+    .initModules();
 
 global.assert = chai.assert;
-global.injector = injector;

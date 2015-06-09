@@ -37,8 +37,15 @@ PullRequest = new Schema({
     head: Schema.Types.Mixed
 });
 
-PullRequest.statics.findByPrId = function (id, cb) {
+PullRequest.statics.findById = function (id, cb) {
     return this.model('PullRequest').findOne({ id: id }, cb);
+};
+
+PullRequest.statics.findByNumberAndRepo = function (number, fullName, cb) {
+    return this.model('PullRequest').findOne({
+        number: number,
+        'head.repo.full_name': fullName
+    }, cb);
 };
 
 module.exports = PullRequest;

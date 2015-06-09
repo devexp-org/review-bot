@@ -3,7 +3,7 @@ module.exports = function (github) {
 
     return function processPullRequest(body) {
         PullRequest
-            .findByPrId(body.pull_request.id)
+            .findById(body.pull_request.id)
             .exec()
             .then(function (pullRequest) {
                 if (!pullRequest)

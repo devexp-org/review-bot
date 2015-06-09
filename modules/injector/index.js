@@ -45,8 +45,7 @@ Injector.prototype.register = function register(name, module, options) {
  */
 Injector.prototype.initModules = function initModules() {
     _.forEach(this._modules, function (module, name) {
-        if (module.init)
-            module.init(this._options[name] || {});
+        if (module.init) module.init(this._options[name] || {});
     }, this);
 
     // Clear options because no longer needed.
