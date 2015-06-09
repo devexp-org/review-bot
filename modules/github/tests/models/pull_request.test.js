@@ -4,7 +4,8 @@ describe('GitHub PullRequest Model', function () {
 
     beforeEach(function (done) {
         var pullRequest = new PullRequest(pullRequestMock);
-        pullRequest.save().then(done);
+
+        pullRequest.save(done);
     });
 
     afterEach(function (done) {
@@ -12,14 +13,14 @@ describe('GitHub PullRequest Model', function () {
     });
 
     it('should find pull request by it`s id', function (done) {
-        PullRequest.findById(37112129).then(function (pr) {
+        PullRequest.findByPrId(37112129).then(function (pr) {
             assert.isObject(pr);
 
             done();
         });
     });
 
-    it('should find pull request by it`s number and repo', function (done) {
+    it('should find pull request by it`s number and repo full name', function (done) {
         PullRequest.findByNumberAndRepo(5, 'devexp-org/devexp').then(function (pr) {
             assert.isObject(pr);
 

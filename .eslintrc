@@ -42,7 +42,7 @@
         "consistent-return": 0,
         "comma-style": [2, "last"],
         "eol-last": 2,
-        "max-nested-callbacks": [1, 3],
+        "max-nested-callbacks": [1, 5],
         "no-array-constructor": 1,
         "no-lonely-if": 2,
         "no-multiple-empty-lines": [2, { "max": 2 }],
@@ -63,6 +63,6 @@
     },
     "globals": {
         "assert": true,
-        "injector": true
+        "sinon": true
     }
 }

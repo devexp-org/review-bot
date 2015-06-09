@@ -37,7 +37,7 @@ PullRequest = new Schema({
     head: Schema.Types.Mixed
 });
 
-PullRequest.statics.findById = function (id, cb) {
+PullRequest.statics.findByPrId = function (id, cb) {
     return this.model('PullRequest').findOne({ id: id }, cb);
 };
 

@@ -3,5 +3,5 @@
 NODE_MODULES=node_modules
 
 if [ ! -d $NODE_MODULES/app ]; then
-    ln -s ../modules $NODE_MODULES/modules
+    ln -sf ../modules $NODE_MODULES
 fi
