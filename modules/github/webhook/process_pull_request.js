@@ -14,7 +14,7 @@ module.exports = function (github) {
             .then(function (pullRequest) {
                 console.log('saved: ', pullRequest);
 
-                github.emit('pull_request', pullRequest);
+                github.emit('pull_request', { pullRequest: pullRequest });
             }, console.error.bind(console));
     };
 };

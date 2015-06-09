@@ -21,9 +21,8 @@ function Injector() {
  * @return {Injector}
  */
 Injector.prototype.register = function register(name, module, options) {
-    if (name in this._modules) {
+    if (name in this._modules)
         throw new Error('Module with name: "' + name + '" already registered.');
-    }
 
     this._modules[name] = module;
 
@@ -64,9 +63,8 @@ Injector.prototype.initModules = function initModules() {
  * @return {Object} module
  */
 Injector.prototype.get = function get(name) {
-    if (!(name in this._modules)) {
+    if (!(name in this._modules))
         throw new Error('Module with name: "' + name + '" has not been registred.');
-    }
 
     return this._modules[name];
 };
