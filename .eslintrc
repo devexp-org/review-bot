@@ -6,7 +6,8 @@
         "es6": true
     },
     "ecmaFeatures": {
-        "jsx": true
+        "jsx": true,
+        "modules": true
     },
     "rules": {
         "no-extra-boolean-cast": 0,

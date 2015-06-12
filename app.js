@@ -1,25 +1,29 @@
-/* global __dirname */
-var express = require('express'),
-    path = require('path'),
+// Enable all ES6 features
+require('babel/register')({
+    loose: ['es6.classes', 'es6.modules', 'es6.properties.computed', 'es6.templateLiterals']
+});
 
-    app = express(),
-    config = require('app/config');
+var path = require('path'),
+    config = require('app/lib/config'),
+    app,
+    port,
+    logger;
 
-require('node-jsx').install();
-
-app.use('/public', express.static(path.join(__dirname, 'public')));
-
-app.set('views', path.join(__dirname, 'app/server/views'));
-app.set('view engine', 'ejs');
-
-/**
- * App
- */
-require('app/lib/mongoose');
-require('app/server')(app);
+config.init({ path: path.join(__dirname, 'config') });
 
 /**
- * Server
+ * Log
  */
-app.listen(config.app.port);
-console.log('App started on http://localhost:' + config.app.port);
+logger = require('app/lib/logger');
+
+/**
+ * Main Server Module
+ */
+app = require('app/server');
+port = process.env.PORT || config.load('server').port;
+
+/**
+ * Start Server
+ */
+app.listen(port);
+logger.info('App started on http://localhost:' + port);
