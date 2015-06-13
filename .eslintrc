@@ -40,6 +40,7 @@
         "indent": 2,
         "brace-style": [2, "1tbs", { "allowSingleLine": true }],
         "consistent-this": [2, "_this"],
+        "consistent-return": 0,
         "comma-style": [2, "last"],
         "eol-last": 2,
         "max-nested-callbacks": [1, 5],
