@@ -4,7 +4,8 @@
   "description": "DevExp",
   "main": "app.js",
   "scripts": {
-    "test": "jest --coverage --verbose",
+    "test": "gulp test",
+    "mongo": "mkdir -p data 2> /dev/null && mongod --dbpath ./data",
     "postinstall": "scripts/postinstall.sh"
   },
   "author": "Stanislav Sysoev <d4rkr00t@gmail.com> (http://sysoev.org)",

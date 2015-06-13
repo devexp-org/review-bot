@@ -4,10 +4,10 @@ import path from 'path';
 import responseTime from 'response-time';
 import bodyParser from 'body-parser';
 import errorhandler from 'errorhandler';
-import * as _config from 'app/lib/config';
+import * as config from 'app/lib/config';
 
 var app = express(),
-    config = _config.load('server');
+    serverConfig = config.load('server');
 
 /**
  * Setup server
@@ -18,12 +18,12 @@ if (process.env.NODE_ENV !== 'production') {
 
 app.use(responseTime());
 app.use(bodyParser.json());
-app.use(config.staticBase, express.static(config.staticPath));
+app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
 
 /**
  * Server side modules
  */
-// require('app/lib/mongoose');
+require('app/lib/mongoose')(config.load('mongoose'));
 
 /**
  * Default Route
