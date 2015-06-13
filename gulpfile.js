@@ -12,28 +12,29 @@ var gulp = require('gulp'),
     MOCHA = {
         reporter: 'dot',
         require: [
-            'app/tests/setup'
+            './../../tests/setup'
         ]
     },
 
     PATHS = {
-        mainStyle: 'client/styles/style.scss',
-        styles: ['client/**/*.scss', 'plugins/**/*.scss'],
+        mainStyle: 'app/client/styles/style.scss',
+        styles: ['app/client/**/*.scss', 'app/plugins/**/*.scss'],
 
-        mainScript: 'client/index.jsx',
+        mainScript: 'app/client/index.jsx',
 
         allScript: [
-            'client/**/*.js',
-            'server/**/*.js',
-            'lib/**/*.js',
-            'plugins/**/*.js'
+            'app/client/**/*.js',
+            'app/client/**/*.jsx',
+            'app/server/**/*.js',
+            'app/lib/**/*.js',
+            'app/plugins/**/*.js'
         ],
 
         tests: [
-            'client/**/__tests__/**/*.test.js',
-            'server/**/__tests__/**/*.test.js',
-            'lib/**/__tests__/**/*.test.js',
-            'plugins/**/__tests__/**/*.test.js'
+            'app/client/**/__tests__/**/*.test.js',
+            'app/server/**/__tests__/**/*.test.js',
+            'app/lib/**/__tests__/**/*.test.js',
+            'app/plugins/**/__tests__/**/*.test.js'
         ],
 
         dest: {

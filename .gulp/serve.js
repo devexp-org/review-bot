@@ -4,8 +4,8 @@ module.exports = function (gulp) {
     gulp.task('serve', function () {
         nodemon({
             script: 'app.js',
-            ext: 'ejs js',
-            ignore: ['public/app.js', 'node_modules'],
+            ext: 'js',
+            ignore: ['public/app.js', 'app/client', 'node_modules', '.gulp', '__tests__'],
             env: { 'NODE_ENV': 'development' },
             nodeArgs: ['--harmony']
         })

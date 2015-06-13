@@ -1,0 +1,10 @@
+{
+  "name": "devexp-app",
+  "version": "0.0.1",
+  "description": "DevExp package.json for browserify",
+  "author": "Stanislav Sysoev <d4rkr00t@gmail.com> (http://sysoev.org)",
+  "license": "MIT",
+  "browserify": {
+    "transform": ["babelify"]
+  }
+}
