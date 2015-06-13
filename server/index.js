@@ -1,14 +1,23 @@
 /* global __dirname */
 import express from 'express';
 import path from 'path';
-import _config from 'app/lib/config';
+import responseTime from 'response-time';
+import bodyParser from 'body-parser';
+import errorhandler from 'errorhandler';
+import * as _config from 'app/lib/config';
 
 var app = express(),
     config = _config.load('server');
 
 /**
- * Route for static files
+ * Setup server
  */
+if (process.env.NODE_ENV !== 'production') {
+    app.use(errorhandler());
+}
+
+app.use(responseTime());
+app.use(bodyParser.json());
 app.use(config.staticBase, express.static(config.staticPath));
 
 /**
