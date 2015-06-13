@@ -7,6 +7,6 @@ module.exports = function (gulp, paths, options) {
     });
 
     gulp.task('test:watch', function () {
-        gulp.watch(paths.allScript, ['test']);
+        gulp.watch(paths.allScript.concat(paths.tests), ['test']);
     });
 };

@@ -10,6 +10,7 @@ var gulp = require('gulp'),
     ],
 
     MOCHA = {
+        reporter: 'dot',
         require: [
             'app/tests/setup'
         ]
@@ -17,20 +18,9 @@ var gulp = require('gulp'),
 
     PATHS = {
         mainStyle: 'client/styles/style.scss',
-        styles: ['client/styles/style.scss', 'client/styles/*.scss', 'client/styles/**/*.scss'],
+        styles: ['client/**/*.scss', 'plugins/**/*.scss'],
 
         mainScript: 'client/index.jsx',
-        scripts: [
-            'client/actions/*.js',
-            'client/components/*.jsx',
-            'client/components/**/*.jsx',
-            'client/constants/*.js',
-            'client/mixins/*.js',
-            'client/pages/*.jsx',
-            'client/stores/*.js',
-            'client/*.jsx',
-            'client/routes.js'
-        ],
 
         allScript: [
             'client/**/*.js',
@@ -64,7 +54,7 @@ require('./.gulp/test')(gulp, PATHS, MOCHA);
  * Watchers
  */
 gulp.task('watch', function () {
-    gulp.watch(PATHS.scripts, ['scripts:dev']);
+    gulp.watch(PATHS.allScript, ['scripts:dev']);
     gulp.watch(PATHS.styles, ['sass:dev']);
 });
 

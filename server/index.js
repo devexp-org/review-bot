@@ -24,6 +24,13 @@ app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
  * Server side modules
  */
 require('app/lib/mongoose')(config.load('mongoose'));
+require('app/lib/github/api').init(config.load('github'));
+
+/**
+ * Routes / Middlewares
+ */
+app.use(require('app/lib/response').middleware());
+app.use('/api/github', require('app/lib/github/routes'));
 
 /**
  * Default Route
