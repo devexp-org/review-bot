@@ -1,6 +1,6 @@
-var path = require('path');
+import path from 'path';
 
-module.exports = {
+export default {
     staticBase: '/public',
     staticPath: path.join(__dirname, '..', 'public'),
     port: 3000

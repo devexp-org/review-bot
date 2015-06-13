@@ -1,8 +1,19 @@
+// Enable all ES6 features
+require('babel/register')({
+    loose: ['es6.classes', 'es6.modules', 'es6.properties.computed', 'es6.templateLiterals']
+});
+
 var gulp = require('gulp'),
 
     AUTOPREFIXER_BROWSERS = [
         'last 2 versions'
     ],
+
+    MOCHA = {
+        require: [
+            'app/tests/setup'
+        ]
+    },
 
     PATHS = {
         mainStyle: 'client/styles/style.scss',
@@ -21,6 +32,20 @@ var gulp = require('gulp'),
             'client/routes.js'
         ],
 
+        allScript: [
+            'client/**/*.js',
+            'server/**/*.js',
+            'lib/**/*.js',
+            'plugins/**/*.js'
+        ],
+
+        tests: [
+            'client/**/__tests__/**/*.test.js',
+            'server/**/__tests__/**/*.test.js',
+            'lib/**/__tests__/**/*.test.js',
+            'plugins/**/__tests__/**/*.test.js'
+        ],
+
         dest: {
             styles: './public',
             scripts: './public'
@@ -33,6 +58,7 @@ var gulp = require('gulp'),
 require('./.gulp/serve')(gulp);
 require('./.gulp/scripts')(gulp, PATHS);
 require('./.gulp/sass')(gulp, PATHS, AUTOPREFIXER_BROWSERS);
+require('./.gulp/test')(gulp, PATHS, MOCHA);
 
 /**
  * Watchers
@@ -46,3 +72,4 @@ gulp.task('watch', function () {
  * Main Tasks
  */
 gulp.task('dev', ['scripts:dev', 'sass:dev', 'serve', 'watch']);
+gulp.task('dev:tdd', ['dev', 'test:watch']);
