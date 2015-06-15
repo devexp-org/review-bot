@@ -4,13 +4,10 @@ export default {
             /**
              * Sends success response
              *
-             * @param {String} [msg] — response message (default: success)
-             * @param {Object} [data] — response data
+             * @param {*} [data] — response data
              */
-            res.success = function (msg, data) {
+            res.success = function (data) {
                 this.json({
-                    error: null,
-                    message: msg || 'success',
                     data: data || {}
                 });
             };

@@ -1,5 +1,6 @@
 node_modules
-public/*
+public/style.css
+public/app.js
 old-review
 data
 npm-debug.log

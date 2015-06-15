@@ -62,4 +62,10 @@ PullRequest.statics.findByNumberAndRepo = function (number, fullName, cb) {
     }, cb);
 };
 
+PullRequest.statics.findByUsername = function (username, cb) {
+    return this.model('PullRequest').find({
+        'user.login': username
+    }, cb);
+};
+
 export default mongoose.model('PullRequest', PullRequest);

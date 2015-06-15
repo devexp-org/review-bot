@@ -18,7 +18,11 @@ var gulp = require('gulp'),
 
     PATHS = {
         mainStyle: 'app/client/styles/style.scss',
-        styles: ['app/client/**/*.scss', 'app/plugins/**/*.scss'],
+        styles: [
+            'app/client/styles/*.scss',
+            'app/client/**/*.scss',
+            'app/plugins/**/*.scss'
+        ],
 
         clientEntryPoint: 'app/client/index.jsx',
 

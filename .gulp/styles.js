@@ -8,11 +8,11 @@ function generateStylesTask(gulp, options) {
     return function stylesGeneratedTask() {
         return gulp
             .src(options.src)
-            .on('error', console.error.bind(console))
             .pipe(options.debug ? sourcemaps.init() : empty())
             .pipe(sass({
                 errLogToConsole: options.debug ? true : false
             }))
+            .on('error', console.error.bind(console))
             .pipe(autoprefixer(options.autoprefixer))
             .pipe(options.debug ? sourcemaps.write() : empty())
             .pipe(options.debug ? empty() : minifyCSS())
