@@ -60,4 +60,4 @@ gulp.task('watch', function () {
  * Main Tasks
  */
 gulp.task('dev', ['scripts:dev', 'styles:dev', 'serve', 'watch']);
-gulp.task('tdd', ['dev', 'test:watch']);
+gulp.task('tdd', ['dev', 'test', 'test:watch']);
