@@ -20,9 +20,9 @@ var gulp = require('gulp'),
         mainStyle: 'app/client/styles/style.scss',
         styles: ['app/client/**/*.scss', 'app/plugins/**/*.scss'],
 
-        mainScript: 'app/client/index.jsx',
+        clientEntryPoint: 'app/client/index.jsx',
 
-        allScript: [
+        scripts: [
             'app/client/**/*.js',
             'app/client/**/*.jsx',
             'app/server/**/*.js',
@@ -37,10 +37,7 @@ var gulp = require('gulp'),
             'app/plugins/**/__tests__/**/*.test.js'
         ],
 
-        dest: {
-            styles: './public',
-            scripts: './public'
-        }
+        dest: './public'
     };
 
 /**
@@ -48,19 +45,19 @@ var gulp = require('gulp'),
  */
 require('./.gulp/serve')(gulp);
 require('./.gulp/scripts')(gulp, PATHS);
-require('./.gulp/sass')(gulp, PATHS, AUTOPREFIXER_BROWSERS);
+require('./.gulp/styles')(gulp, PATHS, AUTOPREFIXER_BROWSERS);
 require('./.gulp/test')(gulp, PATHS, MOCHA);
 
 /**
  * Watchers
  */
 gulp.task('watch', function () {
-    gulp.watch(PATHS.allScript, ['scripts:dev']);
-    gulp.watch(PATHS.styles, ['sass:dev']);
+    gulp.watch(PATHS.scripts, ['scripts:dev']);
+    gulp.watch(PATHS.styles, ['styles:dev']);
 });
 
 /**
  * Main Tasks
  */
-gulp.task('dev', ['scripts:dev', 'sass:dev', 'serve', 'watch']);
-gulp.task('dev:tdd', ['dev', 'test:watch']);
+gulp.task('dev', ['scripts:dev', 'styles:dev', 'serve', 'watch']);
+gulp.task('tdd', ['dev', 'test:watch']);

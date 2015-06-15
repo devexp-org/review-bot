@@ -1,34 +1,45 @@
-var browserify = require('browserify'),
+var babelify = require('babelify'),
+    browserify = require('browserify'),
     uglify = require('gulp-uglify'),
-    rename = require('gulp-rename'),
-    source = require('vinyl-source-stream');
+    source = require('vinyl-source-stream'),
+    empty = require('gulp-empty');
+
+function generateScriptsTask(gulp, options) {
+    var browserifyOptions = {
+        insertGlobals: options.insertGlobals || true,
+        entries: options.src,
+        extensions: options.extensions || ['.js', '.jsx'],
+        transform: ['babelify']
+    };
+
+    if (options.debug) {
+        browserifyOptions.debug = true;
+    }
+
+    return function scriptsGeneratedTask() {
+        return browserify(browserifyOptions)
+            .transform(babelify.configure({
+                loose: ['es6.classes', 'es6.modules', 'es6.properties.computed', 'es6.templateLiterals']
+            }))
+            .bundle()
+            .on('error', console.error.bind(console, options))
+            .pipe(options.debug ? empty() : uglify())
+            .pipe(source(options.resultName))
+            .pipe(gulp.dest(options.dest));
+    };
+}
 
 module.exports = function (gulp, paths) {
-    gulp.task('scripts:dev', function () {
-        return browserify({
-                insertGlobals: true,
-                entries: [paths.mainScript],
-                transform: ['babelify'],
-                extensions: ['.js', '.jsx'],
-                debug: true
-            })
-            .bundle()
-            .on('error', console.error.bind(console))
-            .pipe(source('app.js'))
-            .pipe(gulp.dest(paths.dest.scripts));
-    });
+    gulp.task('scripts:dev', generateScriptsTask(gulp, {
+        src: [paths.clientEntryPoint],
+        dest: paths.dest,
+        resultName: 'app.js',
+        debug: true
+    }));
 
-    gulp.task('scripts:prod', function () {
-        return gulp.src(paths.mainScript)
-            .pipe(browserify({
-                insertGlobals: true,
-                transform: ['babelify'],
-                extensions: ['.js', '.jsx'],
-                debug: false
-            }))
-            .pipe(uglify())
-            .on('error', console.error.bind(console))
-            .pipe(rename('app.js'))
-            .pipe(gulp.dest(paths.dest.scripts));
-    });
+    gulp.task('scripts:prod', generateScriptsTask(gulp, {
+        src: [paths.clientEntryPoint],
+        dest: paths.dest,
+        resultName: 'app.js'
+    }));
 };

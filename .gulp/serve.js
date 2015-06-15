@@ -5,7 +5,7 @@ module.exports = function (gulp) {
         nodemon({
             script: 'app.js',
             ext: 'js',
-            ignore: ['public/app.js', 'app/client', 'node_modules', '.gulp', '__tests__'],
+            ignore: ['public/*', 'app/client/*', 'node_modules/*', '.gulp/*', '__tests__/*'],
             env: { 'NODE_ENV': 'development' },
             nodeArgs: ['--harmony']
         })
