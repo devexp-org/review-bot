@@ -1,6 +1,6 @@
-import logger from 'app/lib/logger';
-import { PullRequest } from 'app/lib/github/models';
-import ee from 'app/lib/github/events';
+import logger from 'app/core/logger';
+import { PullRequest } from 'app/core/github/models';
+import ee from 'app/core/github/events';
 
 export default function processPullRequest(body) {
     return PullRequest

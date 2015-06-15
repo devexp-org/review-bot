@@ -1,4 +1,4 @@
-describe('lib/github/webhook/process_pull_request', function () {
+describe('core/github/webhook/process_pull_request', function () {
     var proxyquire = require('proxyquire'),
         PullRequest = require('../../models').PullRequest,
         ee,
@@ -10,7 +10,7 @@ describe('lib/github/webhook/process_pull_request', function () {
 
         payload = require('../mocks/payloads/pull_request.opened.json');
 
-        processPullRequest = proxyquire('../../webhook/process_pull_request', { 'app/lib/github/events': ee });
+        processPullRequest = proxyquire('../../webhook/process_pull_request', { 'app/core/github/events': ee });
     });
 
     afterEach(function (done) {

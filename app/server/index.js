@@ -4,7 +4,7 @@ import path from 'path';
 import responseTime from 'response-time';
 import bodyParser from 'body-parser';
 import errorhandler from 'errorhandler';
-import * as config from 'app/lib/config';
+import * as config from 'app/core/config';
 
 var app = express(),
     serverConfig = config.load('server');
@@ -23,14 +23,14 @@ app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
 /**
  * Server side modules
  */
-require('app/lib/mongoose')(config.load('mongoose'));
-require('app/lib/github/api').init(config.load('github'));
+require('app/core/mongoose')(config.load('mongoose'));
+require('app/core/github/api').init(config.load('github'));
 
 /**
  * Routes / Middlewares
  */
-app.use(require('app/lib/response').middleware());
-app.use('/api/github', require('app/lib/github/routes'));
+app.use(require('app/core/response').middleware());
+app.use('/api/github', require('app/core/github/routes'));
 
 /**
  * Default Route

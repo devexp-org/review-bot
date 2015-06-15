@@ -1,4 +1,4 @@
-describe('lib/github/webhook/process_issue_comment', function () {
+describe('core/github/webhook/process_issue_comment', function () {
     var proxyquire = require('proxyquire'),
         PullRequest = require('../../models').PullRequest,
         ee, payload, proccessIssueComment, pullRequest;
@@ -7,7 +7,7 @@ describe('lib/github/webhook/process_issue_comment', function () {
         ee = { emit: sinon.stub() };
 
         payload = require('../mocks/payloads/issue_comment.json');
-        proccessIssueComment = proxyquire('../../webhook/process_issue_comment', { 'app/lib/github/events': ee });
+        proccessIssueComment = proxyquire('../../webhook/process_issue_comment', { 'app/core/github/events': ee });
 
         new PullRequest(require('../mocks/pull_request.json'))
             .save()

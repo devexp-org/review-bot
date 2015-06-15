@@ -1,7 +1,7 @@
-import logger from 'app/lib/logger';
-import { PullRequest } from 'app/lib/github/models';
-import getPrNumber from 'app/lib/github/utils/get_pr_number';
-import ee from 'app/lib/github/events';
+import logger from 'app/core/logger';
+import { PullRequest } from 'app/core/github/models';
+import getPrNumber from 'app/core/github/utils/get_pr_number';
+import ee from 'app/core/github/events';
 
 export default function processIssueComment(body) {
     var pullRequestTitle = body.issue.title,

@@ -26,14 +26,14 @@ var gulp = require('gulp'),
             'app/client/**/*.js',
             'app/client/**/*.jsx',
             'app/server/**/*.js',
-            'app/lib/**/*.js',
+            'app/core/**/*.js',
             'app/plugins/**/*.js'
         ],
 
         tests: [
             'app/client/**/__tests__/**/*.test.js',
             'app/server/**/__tests__/**/*.test.js',
-            'app/lib/**/__tests__/**/*.test.js',
+            'app/core/**/__tests__/**/*.test.js',
             'app/plugins/**/__tests__/**/*.test.js'
         ],
 

@@ -4,7 +4,7 @@ require('babel/register')({
 });
 
 var path = require('path'),
-    config = require('app/lib/config'),
+    config = require('app/core/config'),
     app,
     port,
     logger;
@@ -14,7 +14,7 @@ config.init({ path: path.join(__dirname, 'config') });
 /**
  * Log
  */
-logger = require('app/lib/logger');
+logger = require('app/core/logger');
 
 /**
  * Main Server Module
