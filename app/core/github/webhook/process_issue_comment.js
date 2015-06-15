@@ -1,5 +1,5 @@
 import logger from 'app/core/logger';
-import { PullRequest } from 'app/core/github/models';
+import { PullRequest } from 'app/core/models';
 import getPrNumber from 'app/core/github/utils/get_pr_number';
 import ee from 'app/core/github/events';
 

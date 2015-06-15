@@ -34,6 +34,13 @@ PullRequest = new Schema({
     },
     comments: Number,
     review_comments: Number,
+    complexity: Number,
+    review: {
+        status: String,
+        reviewers: Array,
+        started_at: Date,
+        finished_at: Date
+    },
     commits: Number,
     additions: Number,
     deletions: Number,

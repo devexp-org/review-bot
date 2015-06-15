@@ -1,6 +1,6 @@
-describe('GitHub PullRequest Model', function () {
-    var pullRequestMock = require('../mocks/pull_request.json'),
-        PullRequest = require('../../models').PullRequest;
+describe('Core Model: PullRequest', function () {
+    var pullRequestMock = require('app/core/models/__tests__/mocks/pull_request.json'),
+        PullRequest = require('../').PullRequest;
 
     beforeEach(function (done) {
         var pullRequest = new PullRequest(pullRequestMock);

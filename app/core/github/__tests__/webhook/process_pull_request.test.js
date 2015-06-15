@@ -1,6 +1,6 @@
 describe('core/github/webhook/process_pull_request', function () {
     var proxyquire = require('proxyquire'),
-        PullRequest = require('../../models').PullRequest,
+        PullRequest = require('app/core/models').PullRequest,
         ee,
         payload,
         processPullRequest;
