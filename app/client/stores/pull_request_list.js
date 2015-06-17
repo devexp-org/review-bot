@@ -12,7 +12,29 @@ class PullRequestListStore {
         });
     }
 
+    splitByRepo(pullRequests) {
+        var listByRepo = {},
+            result = [];
+
+        pullRequests.forEach((pr) => {
+            var fullName = pr.head.repo.full_name;
+
+            listByRepo[fullName] = listByRepo[fullName] || [];
+            listByRepo[fullName].push(pr);
+        });
+
+        Object.keys(listByRepo).forEach((key) => {
+            result.push(key);
+
+            result = result.concat(listByRepo[key]);
+        });
+
+        return result;
+    }
+
     onPullRequestsLoaded(pullRequests) {
+        pullRequests = this.splitByRepo(pullRequests);
+
         this.setState({ pullRequests });
     }
 }

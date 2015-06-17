@@ -36,7 +36,10 @@ PullRequest = new Schema({
     review_comments: Number,
     complexity: Number,
     review: {
-        status: String,
+        status: {
+            type: String,
+            'enum': ['notstarted', 'inprogress', 'complete']
+        },
         reviewers: Array,
         started_at: Date,
         finished_at: Date
@@ -55,17 +58,17 @@ PullRequest.path('id').set(function (v) {
     return v;
 });
 
-PullRequest.statics.findByNumberAndRepo = function (number, fullName, cb) {
+PullRequest.statics.findByNumberAndRepo = function (number, fullName) {
     return this.model('PullRequest').findOne({
         number,
         'head.repo.full_name': fullName
-    }, cb);
+    });
 };
 
-PullRequest.statics.findByUsername = function (username, cb) {
+PullRequest.statics.findByUsername = function (username) {
     return this.model('PullRequest').find({
         'user.login': username
-    }, cb);
+    }).sort('-updated_at');
 };
 
 export default mongoose.model('PullRequest', PullRequest);

@@ -12,10 +12,20 @@ export default class PullRequestList extends React.Component {
 
     tableItems(list) {
         return list.map(item => {
+
+            if (typeof item === 'string') {
+                return (
+                    <tr key={ item }>
+                        <td colSpan='7'><h5>{ item }</h5></td>
+                    </tr>
+                );
+            }
+
             return (
                 <tr key={ item._id }>
                     <td>{ item.number }</td>
                     <td><a href={ item.html_url }>{ item.title }</a></td>
+                    <td>{ item.user.login }</td>
                     <td><span className={ 'label label-' + this.getLabelType(item.state) }>{ item.state }</span></td>
                     <td>{ item.review.reviewers.length ? item.review.reviewers.join(', ') : 'Not specified' }</td>
                     <td>{ item.complexity || 'Not defined' }</td>
@@ -32,6 +42,7 @@ export default class PullRequestList extends React.Component {
                     <tr>
                         <th>#</th>
                         <th>Title</th>
+                        <th>Author</th>
                         <th>Status</th>
                         <th>Reviewers</th>
                         <th>Complexity</th>
