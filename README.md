@@ -9,3 +9,5 @@ npm install
 npm run mongo
 npm run serve
 ```
+
+## Structure
