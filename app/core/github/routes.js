@@ -1,6 +1,8 @@
 import { Router } from 'express';
 import _ from 'lodash';
+
 import { PullRequest } from 'app/core/models';
+
 import processCommitComment from 'app/core/github/webhook/process_commit_comment';
 import processPullRequestReviewComment from 'app/core/github/webhook/process_pull_request_review_comment';
 import processIssueComment from 'app/core/github/webhook/process_issue_comment';

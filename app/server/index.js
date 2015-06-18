@@ -25,12 +25,14 @@ app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
  */
 require('app/core/mongoose')(config.load('mongoose'));
 require('app/core/github/api').init(config.load('github'));
+require('app/core/review/ranking').init(config.load('review'));
 
 /**
  * Routes / Middlewares
  */
 app.use(require('app/core/response').middleware());
 app.use('/api/github', require('app/core/github/routes'));
+app.use('/api/review', require('app/core/review/routes'));
 
 /**
  * Default Route
