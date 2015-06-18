@@ -1,6 +1,11 @@
 import React from 'react';
 import connectToStores from 'alt/utils/connectToStores';
 
+import PullRequestListStore from 'app/client/stores/pull_request_list';
+import PullRequestStore from 'app/client/stores/pull_request';
+import PullRequestsActions from 'app/client/actions/pull_requests';
+
+@connectToStores
 class ReviewPage {
     static getStores() {
         return [PullRequestStore];
@@ -8,6 +13,10 @@ class ReviewPage {
 
     static getPropsFromStores() {
         return PullRequestStore.getState();
+    }
+
+    componentWillMount() {
+        PullRequestsActions.loadPull(this.props.params.id);
     }
 
     render() {
@@ -24,3 +33,5 @@ class ReviewPage {
         );
     }
 }
+
+export default ReviewPage;

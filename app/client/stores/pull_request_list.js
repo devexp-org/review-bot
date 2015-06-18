@@ -8,10 +8,17 @@ class PullRequestListStore {
         };
 
         this.bindListeners({
-            onPullRequestsLoaded: PullRequestsActions.loaded
+            onPullRequestsLoaded: PullRequestsActions.userPullsLoaded
         });
     }
 
+    /**
+     * Splits pull requests by repo and adds section title for displaying in listByRepo
+     *
+     * @param {Array} pullRequests — user pull requests from server
+     *
+     * @returns {Array}
+     */
     splitByRepo(pullRequests) {
         var listByRepo = {},
             result = [];

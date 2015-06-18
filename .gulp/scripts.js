@@ -19,7 +19,8 @@ function generateScriptsTask(gulp, options) {
     return function scriptsGeneratedTask() {
         return browserify(browserifyOptions)
             .transform(babelify.configure({
-                loose: ['es6.classes', 'es6.modules', 'es6.properties.computed', 'es6.templateLiterals']
+                loose: ['es6.classes', 'es6.modules', 'es6.properties.computed', 'es6.templateLiterals'],
+                optional: ['es7.decorators']
             }))
             .bundle()
             .on('error', console.error.bind(console, options))

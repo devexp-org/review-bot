@@ -5,6 +5,12 @@
   "author": "Stanislav Sysoev <d4rkr00t@gmail.com> (http://sysoev.org)",
   "license": "MIT",
   "browserify": {
-    "transform": ["babelify"]
+    "transform": [[
+      "babelify",
+      {
+        "optional": ["es7.decorators"],
+        "loose": ["es6.classes", "es6.modules", "es6.properties.computed", "es6.templateLiterals"]
+      }
+    ]]
   }
 }

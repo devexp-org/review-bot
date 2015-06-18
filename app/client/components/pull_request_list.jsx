@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router';
 
 export default class PullRequestList extends React.Component {
     getLabelType(state) {
@@ -29,7 +30,7 @@ export default class PullRequestList extends React.Component {
                     <td><span className={ 'label label-' + this.getLabelType(item.state) }>{ item.state }</span></td>
                     <td>{ item.review.reviewers.length ? item.review.reviewers.join(', ') : 'Not specified' }</td>
                     <td>{ item.complexity || 'Not defined' }</td>
-                    <td><button className='btn btn-default'>Start Review</button></td>
+                    <td><Link className='btn btn-default' to={ '/review/' + item._id }>Start Review</Link></td>
                 </tr>
             );
         });

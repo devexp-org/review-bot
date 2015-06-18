@@ -49,9 +49,7 @@ router.post('/webhook', function (req, res) {
     res.success('got you');
 });
 
-router.get('/pull-requests/:username', function (req, res) {
-    console.log(req.params.username);
-
+router.get('/pulls/:username', function (req, res) {
     PullRequest
         .findByUsername(req.params.username)
         .then(function (pullRequests) {
@@ -59,6 +57,18 @@ router.get('/pull-requests/:username', function (req, res) {
                 res.error('Pull Requests not found!');
             } else {
                 res.success(pullRequests);
+            }
+        });
+});
+
+router.get('/pull/:id', function (req, res) {
+    PullRequest
+        .findById(req.params.id)
+        .then(function (pullRequest) {
+            if (_.isEmpty(pullRequest)) {
+                res.error(`Pull Request with id = ${req.params.id} not found!`);
+            } else {
+                res.success(pullRequest);
             }
         });
 });

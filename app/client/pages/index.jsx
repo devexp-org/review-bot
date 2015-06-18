@@ -1,9 +1,12 @@
 import React from 'react';
 import connectToStores from 'alt/utils/connectToStores';
+
 import PullRequestListStore from 'app/client/stores/pull_request_list';
 import PullRequestsActions from 'app/client/actions/pull_requests';
+
 import PullRequestList from 'app/client/components/pull_request_list.jsx';
 
+@connectToStores
 class IndexPage extends React.Component {
     static getStores() {
         return [PullRequestListStore];
@@ -14,7 +17,7 @@ class IndexPage extends React.Component {
     }
 
     componentWillMount() {
-        PullRequestsActions.load('d4rkr00t');
+        PullRequestsActions.loadUserPulls('d4rkr00t');
     }
 
     render() {
@@ -26,4 +29,4 @@ class IndexPage extends React.Component {
     }
 }
 
-export default connectToStores(IndexPage);
+export default IndexPage;
