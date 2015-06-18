@@ -1,15 +1,16 @@
 var babelify = require('babelify'),
+    envify = require('envify/custom'),
     browserify = require('browserify'),
     uglify = require('gulp-uglify'),
     source = require('vinyl-source-stream'),
+    buffer = require('vinyl-buffer'),
     empty = require('gulp-empty');
 
 function generateScriptsTask(gulp, options) {
     var browserifyOptions = {
         insertGlobals: options.insertGlobals || true,
         entries: options.src,
-        extensions: options.extensions || ['.js', '.jsx'],
-        transform: ['babelify']
+        extensions: options.extensions || ['.js', '.jsx']
     };
 
     if (options.debug) {
@@ -22,10 +23,14 @@ function generateScriptsTask(gulp, options) {
                 loose: ['es6.classes', 'es6.modules', 'es6.properties.computed', 'es6.templateLiterals'],
                 optional: ['es7.decorators']
             }))
+            .transform(envify({
+                NODE_ENV: options.debug ? 'development' : 'production'
+            }))
             .bundle()
-            .on('error', console.error.bind(console, options))
-            .pipe(options.debug ? empty() : uglify())
             .pipe(source(options.resultName))
+            .pipe(buffer())
+            .pipe(options.debug ? empty() : uglify())
+            .on('error', console.error.bind(console, options))
             .pipe(gulp.dest(options.dest));
     };
 }
