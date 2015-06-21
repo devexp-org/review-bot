@@ -1,1 +1,8 @@
-@import './_bootstrap';
+@import '_vars.scss';
+
+@import '_bootstrap';
+
+@import '_global.scss';
+@import '_avatar.scss';
+@import '_review.scss';
+@import '_loader.scss';

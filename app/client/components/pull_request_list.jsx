@@ -30,7 +30,7 @@ export default class PullRequestList extends React.Component {
                     <td><span className={ 'label label-' + this.getLabelType(item.state) }>{ item.state }</span></td>
                     <td>{ item.review.reviewers.length ? item.review.reviewers.join(', ') : 'Not specified' }</td>
                     <td>{ item.complexity || 'Not defined' }</td>
-                    <td><Link className='btn btn-default' to={ '/review/' + item._id }>Start Review</Link></td>
+                    <td><Link className='btn btn-default' to={ '/review/' + item._id }>Review</Link></td>
                 </tr>
             );
         });
