@@ -1,16 +1,16 @@
 describe('core/github/webhook/process_pull_request', function () {
     var proxyquire = require('proxyquire'),
         PullRequest = require('app/core/models').PullRequest,
-        ee,
+        events,
         payload,
         processPullRequest;
 
     beforeEach(function () {
-        ee = { emit: sinon.stub() };
+        events = { emit: sinon.stub() };
 
         payload = require('../mocks/payloads/pull_request.opened.json');
 
-        processPullRequest = proxyquire('../../webhook/process_pull_request', { 'app/core/github/events': ee });
+        processPullRequest = proxyquire('../../webhook/process_pull_request', { 'app/core/events': events });
     });
 
     afterEach(function (done) {
@@ -32,7 +32,7 @@ describe('core/github/webhook/process_pull_request', function () {
             });
 
             it('should emit pull_request event', function () {
-                assert.calledWith(ee.emit, 'github:pull_request');
+                assert.calledWith(events.emit, 'github:pull_request');
             });
         });
 
