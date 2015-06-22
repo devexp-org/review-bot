@@ -1,0 +1,20 @@
+.reviewers-list {
+    &__item {
+        display: inline-block;
+
+        margin-left: 15px;
+
+        &:first-child {
+            margin-left: 0;
+        }
+
+        &-avatar {
+            max-width: 80px;
+            margin: 0 auto;
+        }
+
+        &-username {
+            text-align: center;
+        }
+    }
+}

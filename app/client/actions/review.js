@@ -2,7 +2,7 @@ import alt from 'app/client/alt';
 
 class ReviewActions {
     constructor() {
-        this.generateActions('reviewersChoosen', 'failed');
+        this.generateActions('reviewersChosen', 'failed');
     }
 
     /**
@@ -11,16 +11,20 @@ class ReviewActions {
      * @param {Number} pullId
      */
     chooseReviewers(pullId) {
-        fetch('/api/review/reviewers/choose/' + pullId)
-            .then(res => res.json())
-            .then(
-                (res) => this.actions.reviewersChoosen(res.data.team),
-                (err) => {
-                    console.error(err);
+        setTimeout(() => {
+            fetch('/api/review/reviewers/choose/' + pullId)
+                .then(res => res.json())
+                .then(
+                    (res) => this.actions.reviewersChosen(res.data.team),
+                    (err) => {
+                        console.error(err);
 
-                    this.actions.failed(err);
-                }
-            );
+                        this.actions.failed(err);
+                    }
+                );
+        }, 100);
+
+        this.dispatch();
     }
 }
 

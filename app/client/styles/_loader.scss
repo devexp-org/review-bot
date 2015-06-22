@@ -17,7 +17,7 @@
 .preloader-wrapper {
     position: relative;
 
-    display: inline-block;
+    display: none;
 
     width: 48px;
     height: 48px;
@@ -33,10 +33,12 @@
     }
 
     &.active {
+        display: inline-block;
+
         animation: container-rotate 1568ms linear infinite;
     }
 
-    &.centered {
+    &.centered.active {
         display: block;
 
         margin-right: auto;

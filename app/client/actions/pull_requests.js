@@ -11,6 +11,8 @@ class PullRequestsActions {
      * @param {String} username
      */
     loadUserPulls(username) {
+        this.dispatch();
+
         fetch('/api/github/pulls/' + username)
             .then(res => res.json())
             .then(
@@ -29,6 +31,8 @@ class PullRequestsActions {
      * @param {Number} id
      */
     loadPull(id) {
+        this.dispatch();
+
         fetch('/api/github/pull/' + id)
             .then(res => res.json())
             .then(

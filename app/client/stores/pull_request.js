@@ -3,10 +3,6 @@ import PullRequestsActions from 'app/client/actions/pull_requests';
 
 class PullRequestStore {
     constructor() {
-        this.state = {
-            pullRequest: {}
-        };
-
         this.bindListeners({
             onPullRequestLoaded: PullRequestsActions.pullLoaded
         });
