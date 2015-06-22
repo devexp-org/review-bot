@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export default function reviewSimpleTeamReducer(team) {
     return function (review) {
         return new Promise(function (resolve, reject) {
@@ -5,7 +7,7 @@ export default function reviewSimpleTeamReducer(team) {
                 teamName = team.repoToTeam[repo];
 
             if (teamName && team.teams[teamName]) {
-                review.team = team.teams[teamName];
+                review.team = _.clone(team.teams[teamName], true);
 
                 resolve(review);
             } else {

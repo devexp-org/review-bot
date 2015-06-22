@@ -13,8 +13,8 @@ export default function review(pullRequestId) {
             return { pull: pullRequest, team: [] };
         });
 
-    ranking.get().forEach((reducer) => {
-        reviewQueue.then(reducer);
+    ranking.get().forEach((processor) => {
+        reviewQueue.then(processor);
     });
 
     return reviewQueue;

@@ -1,11 +1,11 @@
 export default {
-    rankingReducersList: [],
+    rankingProcessorsList: [],
 
     /**
      * Register reducer for ranking reviewers
      *
      * @param {Object} options
-     * @param {Function[]} optins.reducers — function which returns promise which resolve with { pull, team } object
+     * @param {Function[]} options.processors — function which returns promise which resolve with { pull, team } object
      *
      * @returns {this}
      */
@@ -14,17 +14,17 @@ export default {
             throw new Error('At least 1 reducer should be added.');
         }
 
-        this.rankingReducersList = options.reducers;
+        this.rankingProcessorsList = options.reducers;
 
         return this;
     },
 
     /**
-     * Returns registred reducers for futher using
+     * Returns registred processors list for futher using
      *
      * @returns {Function[]}
      */
     get() {
-        return this.rankingReducersList;
+        return this.rankingProcessorsList;
     }
 };
