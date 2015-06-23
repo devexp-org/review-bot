@@ -43,26 +43,28 @@ class ReviewPage extends React.Component {
         } else {
             content = (
                 <div className='review'>
-                    <div className='col-xs-2 col-md-2 hidden-xs'>
-                        <div className='avatar -big'>
-                            <img src={ pullRequest.user.avatar_url }/>
+                    <div className="row">
+                        <div className='col-xs-2 col-md-2 hidden-xs'>
+                            <div className='avatar -big'>
+                                <img src={ pullRequest.user.avatar_url }/>
+                            </div>
                         </div>
-                    </div>
-                    <div className='col-xs-12 col-md-10'>
-                        <h3 className='review__title'>Review of pull request: "{ pullRequest.title }"</h3>
-                        <div className='review__labels text-muted'>
-                            <span className='label label-success'>{ pullRequest.state }</span>
-                            <span> | </span>
-                            <span className='label label-info'>Updated: { pullRequest.updated_at }</span>
-                            <span> | </span>
-                            <a href={ pullRequest.html_url } className='label label-default'>
-                                <i className='glyphicon glyphicon-comment'></i>
-                                <strong> { pullRequest.comments }</strong>
-                            </a>
-                        </div>
-                        <p className='lead'>{ pullRequest.body }</p>
-                        <div>
-                            <button className='btn btn-primary' onClick={ this.chooseReviewers.bind(this) }>Choose reviewers</button>
+                        <div className='col-xs-12 col-md-10'>
+                            <h3 className='review__title'>Review of pull request: "{ pullRequest.title }"</h3>
+                            <div className='review__labels text-muted'>
+                                <span className='label label-success'>{ pullRequest.state }</span>
+                                <span> | </span>
+                                <span className='label label-info'>Updated: { pullRequest.updated_at }</span>
+                                <span> | </span>
+                                <a href={ pullRequest.html_url } className='label label-default'>
+                                    <i className='glyphicon glyphicon-comment'></i>
+                                    <strong> { pullRequest.comments }</strong>
+                                </a>
+                            </div>
+                            <p className='lead'>{ pullRequest.body }</p>
+                            <div>
+                                <button className='btn btn-primary' onClick={ this.chooseReviewers.bind(this) }>Choose reviewers</button>
+                            </div>
                         </div>
                     </div>
                 </div>

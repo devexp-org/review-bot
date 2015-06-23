@@ -1,11 +1,23 @@
 .reviewers-list {
-    &__item {
-        display: inline-block;
+    display: flex;
+    flex-direction: row;
 
-        margin-left: 15px;
+    padding-bottom: 10px;
+
+    columns: 4;
+    flex-wrap: wrap;
+    align-content: flex-start;
+
+    &__item {
+        width: 25%;
+        padding-left: 1%;
+
+        text-align: center;
+
+        flex-shrink: 1;
 
         &:first-child {
-            margin-left: 0;
+            padding-left: 0;
         }
 
         &-avatar {
