@@ -1,0 +1,32 @@
+.reviewers-list {
+    display: flex;
+    flex-direction: row;
+
+    padding-bottom: 10px;
+
+    columns: 4;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+.reviewer {
+    width: 20%;
+    padding-left: 1%;
+
+    text-align: center;
+
+    flex-shrink: 1;
+
+    &:first-child {
+        padding-left: 0;
+    }
+
+    &__avatar {
+        max-width: 80px;
+        margin: 0 auto;
+    }
+
+    &__username {
+        text-align: center;
+    }
+}

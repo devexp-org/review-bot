@@ -6,7 +6,8 @@ class ReviewersStore {
         this.bindListeners({
             onChooseReviewers: ReviewActions.chooseReviewers,
             onReviewersChosen: ReviewActions.reviewersChosen,
-            onChooseReviewersFailed: ReviewActions.failed
+            onChooseReviewersFailed: ReviewActions.failed,
+            onAssign: ReviewActions.assign
         });
     }
 
@@ -26,6 +27,20 @@ class ReviewersStore {
     onChooseReviewersFailed() {
         this.setState({
             reviewersLoading: false
+        });
+    }
+
+    onAssign(index) {
+        var assignedReviewers = this.assignedReviewers || [],
+            suggestedReviewers = this.suggestedReviewers,
+            reviewer;
+
+        reviewer = suggestedReviewers.splice(index, 1);
+        assignedReviewers.push(reviewer[0]);
+
+        this.setState({
+            suggestedReviewers,
+            assignedReviewers
         });
     }
 }

@@ -8,7 +8,7 @@ import ReviewersStore from 'app/client/stores/reviewers';
 
 import Loader from 'app/client/components/loader/loader.jsx';
 import ReviewCard from 'app/client/components/review-card/review-card.jsx';
-import ReviewersList from 'app/client/components/reviewers-list/reviewers-list.jsx';
+import Reviewer from 'app/client/components/reviewer/reviewer-panel.jsx';
 
 @connectToStores
 class ReviewPage extends React.Component {
@@ -31,10 +31,15 @@ class ReviewPage extends React.Component {
         ReviewActions.chooseReviewers(this.props.pullRequestStore.pullRequest.id);
     }
 
+    assignReviewer(index) {
+        ReviewActions.assign(index);
+    }
+
     render() {
         var reviewersStore = this.props.reviewersStore,
             pullRequest = this.props.pullRequestStore.pullRequest,
             suggestedReviewersList,
+            assignedReviewersList,
             content,
             review;
 
@@ -54,7 +59,33 @@ class ReviewPage extends React.Component {
             suggestedReviewersList = (
                 <div>
                     <h4>Suggested Reviewers</h4>
-                    <ReviewersList list={ reviewersStore.suggestedReviewers }/>
+                    <div className="reviewers-list">
+                        { reviewersStore.suggestedReviewers.map((reviewer, index) => {
+                            return (
+                                <Reviewer
+                                    reviewer={ reviewer }
+                                    onClick={ this.assignReviewer.bind(this, index) }/>
+                            );
+                        }) }
+                    </div>
+                </div>
+            );
+        }
+
+        if (reviewersStore.assignedReviewers) {
+            console.log(reviewersStore.assignedReviewers);
+
+            assignedReviewersList = (
+                <div>
+                    <h4>Assigned Reviewers</h4>
+                    <div className="reviewers-list">
+                        { reviewersStore.assignedReviewers.map((reviewer, index) => {
+                            return (
+                                <Reviewer
+                                    reviewer={ reviewer }/>
+                            );
+                        }) }
+                    </div>
                 </div>
             );
         }
@@ -66,6 +97,8 @@ class ReviewPage extends React.Component {
                         { content }
                     </div>
                 </div>
+
+                { assignedReviewersList }
 
                 { suggestedReviewersList }
 

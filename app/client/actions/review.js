@@ -2,7 +2,7 @@ import alt from 'app/client/alt';
 
 class ReviewActions {
     constructor() {
-        this.generateActions('reviewersChosen', 'failed');
+        this.generateActions('reviewersChosen', 'assign', 'failed');
     }
 
     /**
