@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Avatar from 'app/client/components/avatar/avatar.jsx';
+
 export default class ReviewersList {
     renderItem(item) {
         return (
@@ -7,9 +9,7 @@ export default class ReviewersList {
                 <div className='panel panel-default '>
                     <div className='panel-body'>
                         <div className='reviewers-list__item-avatar'>
-                            <div className='avatar'>
-                                <img src={ item.avatar }/>
-                            </div>
+                            <Avatar img={ item.avatar }/>
                         </div>
                         <h5 className='reviewers-list__item-username'>
                             { item.login } <span className='label label-success'>{ item.rank }</span>

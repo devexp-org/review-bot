@@ -6,7 +6,8 @@ import PullRequestsActions from 'app/client/actions/pull_requests';
 import ReviewActions from 'app/client/actions/review';
 import ReviewersStore from 'app/client/stores/reviewers';
 
-import Loader from 'app/client/components/loader.jsx';
+import Loader from 'app/client/components/loader/loader.jsx';
+import ReviewCard from 'app/client/components/review-card/review-card.jsx';
 import ReviewersList from 'app/client/components/reviewers-list/reviewers-list.jsx';
 
 @connectToStores
@@ -33,6 +34,7 @@ class ReviewPage extends React.Component {
     render() {
         var reviewersStore = this.props.reviewersStore,
             pullRequest = this.props.pullRequestStore.pullRequest,
+            suggestedReviewersList,
             content,
             review;
 
@@ -42,31 +44,17 @@ class ReviewPage extends React.Component {
             );
         } else {
             content = (
-                <div className='review'>
-                    <div className="row">
-                        <div className='col-xs-2 col-md-2 hidden-xs'>
-                            <div className='avatar -big'>
-                                <img src={ pullRequest.user.avatar_url }/>
-                            </div>
-                        </div>
-                        <div className='col-xs-12 col-md-10'>
-                            <h3 className='review__title'>Review of pull request: "{ pullRequest.title }"</h3>
-                            <div className='review__labels text-muted'>
-                                <span className='label label-success'>{ pullRequest.state }</span>
-                                <span> | </span>
-                                <span className='label label-info'>Updated: { pullRequest.updated_at }</span>
-                                <span> | </span>
-                                <a href={ pullRequest.html_url } className='label label-default'>
-                                    <i className='glyphicon glyphicon-comment'></i>
-                                    <strong> { pullRequest.comments }</strong>
-                                </a>
-                            </div>
-                            <p className='lead'>{ pullRequest.body }</p>
-                            <div>
-                                <button className='btn btn-primary' onClick={ this.chooseReviewers.bind(this) }>Choose reviewers</button>
-                            </div>
-                        </div>
-                    </div>
+                <ReviewCard
+                    pullRequest={ pullRequest }
+                    chooseReviewersClick={ this.chooseReviewers.bind(this) } />
+            );
+        }
+
+        if (reviewersStore.suggestedReviewers) {
+            suggestedReviewersList = (
+                <div>
+                    <h4>Suggested Reviewers</h4>
+                    <ReviewersList list={ reviewersStore.suggestedReviewers }/>
                 </div>
             );
         }
@@ -79,7 +67,7 @@ class ReviewPage extends React.Component {
                     </div>
                 </div>
 
-                <ReviewersList list={ reviewersStore.suggestedReviewers }/>
+                { suggestedReviewersList }
 
                 <Loader active={ reviewersStore.reviewersLoading } centered={ true }/>
             </div>

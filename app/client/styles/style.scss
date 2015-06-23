@@ -1,9 +1,8 @@
 @import '_vars.scss';
-
 @import '_bootstrap';
-
 @import '_global.scss';
-@import '_avatar.scss';
-@import '_review.scss';
-@import '_loader.scss';
+
+@import '../components/avatar/avatar.scss';
+@import '../components/loader/loader.scss';
+@import '../components/review-card/review-card.scss';
 @import '../components/reviewers-list/reviewers-list.scss';
