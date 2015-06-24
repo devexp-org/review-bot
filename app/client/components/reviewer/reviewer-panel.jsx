@@ -9,8 +9,8 @@ export default class Reviewer {
         if (!reviewer) return null;
 
         return (
-            <div className='reviewer'>
-                <div className='panel panel-default '>
+            <div className='reviewer' key={ reviewer.login }>
+                <div className='panel panel-default'>
                     <div className='panel-body'>
                         <div className='reviewer__avatar'>
                             <Avatar img={ reviewer.avatar }/>
@@ -19,7 +19,7 @@ export default class Reviewer {
                             { reviewer.login } <span className='label label-success'>{ reviewer.rank }</span>
                         </h5>
                         <div className='reviewer__actions'>
-                            <button className='btn btn-default' onClick={ this.props.onClick }>Add to review</button>
+                            <button className='btn btn-default btn-sm' onClick={ this.props.onClick }>Add to review</button>
                         </div>
                     </div>
                 </div>

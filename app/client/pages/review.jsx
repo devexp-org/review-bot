@@ -1,10 +1,10 @@
 import React from 'react';
+import isEmpty from 'lodash/lang/isEmpty';
 import connectToStores from 'alt/utils/connectToStores';
 
-import PullRequestStore from 'app/client/stores/pull_request';
 import PullRequestsActions from 'app/client/actions/pull_requests';
 import ReviewActions from 'app/client/actions/review';
-import ReviewersStore from 'app/client/stores/reviewers';
+import ReviewStore from 'app/client/stores/review';
 
 import Loader from 'app/client/components/loader/loader.jsx';
 import ReviewCard from 'app/client/components/review-card/review-card.jsx';
@@ -13,76 +13,48 @@ import Reviewer from 'app/client/components/reviewer/reviewer-panel.jsx';
 @connectToStores
 class ReviewPage extends React.Component {
     static getStores() {
-        return [PullRequestStore, ReviewersStore];
+        return [ReviewStore];
     }
 
     static getPropsFromStores() {
-        return {
-            pullRequestStore: PullRequestStore.getState() || {},
-            reviewersStore: ReviewersStore.getState() || {}
-        };
+        return ReviewStore.getState();
     }
 
     componentWillMount() {
         PullRequestsActions.loadPull(this.props.params.id);
     }
 
-    chooseReviewers() {
-        ReviewActions.chooseReviewers(this.props.pullRequestStore.pullRequest.id);
-    }
-
     assignReviewer(index) {
-        ReviewActions.assign(index);
+        ReviewActions.assignReviewer(index);
     }
 
     render() {
-        var reviewersStore = this.props.reviewersStore,
-            pullRequest = this.props.pullRequestStore.pullRequest,
+        var review = this.props.review || {},
+            pullRequest = review.pullRequest,
             suggestedReviewersList,
-            assignedReviewersList,
             content,
             review;
 
-        if (!pullRequest) {
+        if (!this.props.params || review.id != this.props.params.id) {
             content = (
-                <div>Pull request not found!</div>
+                <Loader active={ true } centered={ true }/>
             );
         } else {
             content = (
-                <ReviewCard
-                    pullRequest={ pullRequest }
-                    chooseReviewersClick={ this.chooseReviewers.bind(this) } />
+                <ReviewCard review={ review } />
             );
         }
 
-        if (reviewersStore.suggestedReviewers) {
+        if (!isEmpty(review.suggestedReviewers)) {
             suggestedReviewersList = (
                 <div>
                     <h4>Suggested Reviewers</h4>
                     <div className="reviewers-list">
-                        { reviewersStore.suggestedReviewers.map((reviewer, index) => {
+                        { review.suggestedReviewers.map((reviewer, index) => {
                             return (
                                 <Reviewer
                                     reviewer={ reviewer }
                                     onClick={ this.assignReviewer.bind(this, index) }/>
-                            );
-                        }) }
-                    </div>
-                </div>
-            );
-        }
-
-        if (reviewersStore.assignedReviewers) {
-            console.log(reviewersStore.assignedReviewers);
-
-            assignedReviewersList = (
-                <div>
-                    <h4>Assigned Reviewers</h4>
-                    <div className="reviewers-list">
-                        { reviewersStore.assignedReviewers.map((reviewer, index) => {
-                            return (
-                                <Reviewer
-                                    reviewer={ reviewer }/>
                             );
                         }) }
                     </div>
@@ -98,11 +70,9 @@ class ReviewPage extends React.Component {
                     </div>
                 </div>
 
-                { assignedReviewersList }
-
                 { suggestedReviewersList }
 
-                <Loader active={ reviewersStore.reviewersLoading } centered={ true }/>
+                <Loader active={ review.reviewersLoading } centered={ true }/>
             </div>
         )
     }

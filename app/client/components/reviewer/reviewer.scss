@@ -4,12 +4,13 @@
 
     padding-bottom: 10px;
 
-    columns: 4;
     flex-wrap: wrap;
     align-content: flex-start;
 }
 
 .reviewer {
+    position: relative;
+
     width: 20%;
     padding-left: 1%;
 
@@ -17,8 +18,35 @@
 
     flex-shrink: 1;
 
+    &:hover {
+        text-decoration: none;
+
+        .reviewer__remove {
+            opacity: 1;
+        }
+    }
+
+    &:focus {
+        text-decoration: none;
+
+        outline: none;
+    }
+
     &:first-child {
         padding-left: 0;
+    }
+
+    &__remove {
+        position: absolute;
+        top: -6px;
+        right: -6px;
+
+        width: 16px;
+        height: 16px;
+
+        transition: opacity .2s;
+
+        opacity: 0;
     }
 
     &__avatar {
@@ -28,5 +56,17 @@
 
     &__username {
         text-align: center;
+    }
+
+    &.-badge {
+        display: inline-block;
+
+        width: auto;
+        margin-right: 18px;
+        padding-left: 0;
+
+        .reviewer__avatar {
+            max-width: 40px;
+        }
     }
 }
