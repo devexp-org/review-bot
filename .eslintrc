@@ -1,5 +1,4 @@
 {
-    "parser": "babel-eslint",
     "env": {
         "browser": true,
         "node": true,
@@ -24,6 +23,7 @@
 
         "block-scoped-var": 1,
         "complexity": 1,
+        "camelcase": 0,
         "curly": 0,
         "no-else-return": 1,
         "no-eq-null": 2,

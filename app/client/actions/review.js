@@ -36,9 +36,13 @@ class ReviewActions {
     save(review) {
         this.dispatch();
 
-        fetch('/api/review/', {
+        fetch('/api/review/review', {
             method: 'post',
-            body: review
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(review)
         });
     }
 }

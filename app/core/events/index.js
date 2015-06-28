@@ -16,7 +16,7 @@ export default {
     },
 
     emit() {
-        ee.apply(ee, arguments);
+        ee.emit.apply(ee, arguments);
 
         return this;
     }
