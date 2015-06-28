@@ -16,8 +16,7 @@ class PullRequestListStore {
      * @returns {Array}
      */
     splitByRepo(pullRequests) {
-        var listByRepo = {},
-            result = [];
+        var listByRepo = {};
 
         pullRequests.forEach((pr) => {
             var fullName = pr.head.repo.full_name;
@@ -26,13 +25,7 @@ class PullRequestListStore {
             listByRepo[fullName].push(pr);
         });
 
-        Object.keys(listByRepo).forEach((key) => {
-            result.push(key);
-
-            result = result.concat(listByRepo[key]);
-        });
-
-        return result;
+        return listByRepo;
     }
 
     onPullRequestsLoaded(pullRequests) {

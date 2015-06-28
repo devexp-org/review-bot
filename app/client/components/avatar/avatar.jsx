@@ -1,6 +1,11 @@
 import React from 'react';
 
 export default class Avatar {
+    static propTypes = {
+        img: React.PropTypes.string.isRequired,
+        url: React.PropTypes.string
+    };
+
     render() {
         var img = (<img src={ this.props.img }/>);
 

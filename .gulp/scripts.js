@@ -21,7 +21,7 @@ function generateScriptsTask(gulp, options) {
         return browserify(browserifyOptions)
             .transform(babelify.configure({
                 loose: ['es6.classes', 'es6.modules', 'es6.properties.computed', 'es6.templateLiterals'],
-                optional: ['es7.decorators']
+                optional: ['es7.decorators', 'es7.classProperties']
             }))
             .transform(envify({
                 NODE_ENV: options.debug ? 'development' : 'production'

@@ -7,11 +7,16 @@ import ReviewActions from 'app/client/actions/review';
 import ReviewStore from 'app/client/stores/review';
 
 import Loader from 'app/client/components/loader/loader.jsx';
-import ReviewCard from 'app/client/components/review-card/review-card.jsx';
-import Reviewer from 'app/client/components/reviewer/reviewer-panel.jsx';
+import ReviewCard from 'app/client/components/review/review-card.jsx';
+import Reviewer from 'app/client/components/review/reviewer_type_panel.jsx';
 
 @connectToStores
 class ReviewPage extends React.Component {
+    static propTypes = {
+        params: React.PropTypes.object,
+        review: React.PropTypes.object
+    };
+
     static getStores() {
         return [ReviewStore];
     }
@@ -30,12 +35,10 @@ class ReviewPage extends React.Component {
 
     render() {
         var review = this.props.review || {},
-            pullRequest = review.pullRequest,
             suggestedReviewersList,
-            content,
-            review;
+            content;
 
-        if (!this.props.params || review.id != this.props.params.id) {
+        if (!this.props.params || review.id !== parseInt(this.props.params.id, 10)) {
             content = (
                 <Loader active={ true } centered={ true }/>
             );
@@ -49,12 +52,12 @@ class ReviewPage extends React.Component {
             suggestedReviewersList = (
                 <div>
                     <h4>Suggested Reviewers</h4>
-                    <div className="reviewers-list">
+                    <div className='reviewers-list'>
                         { review.suggestedReviewers.map((reviewer, index) => {
                             return (
                                 <Reviewer
-                                    reviewer={ reviewer }
-                                    onClick={ this.assignReviewer.bind(this, index) }/>
+                                    onClick={ this.assignReviewer.bind(this, index) }
+                                    reviewer={ reviewer }/>
                             );
                         }) }
                     </div>
@@ -72,9 +75,9 @@ class ReviewPage extends React.Component {
 
                 { suggestedReviewersList }
 
-                <Loader active={ review.reviewersLoading } centered={ true }/>
+                <Loader active={ Boolean(review.reviewersLoading) } centered={ true }/>
             </div>
-        )
+        );
     }
 }
 

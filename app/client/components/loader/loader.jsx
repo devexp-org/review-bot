@@ -1,6 +1,12 @@
 import React from 'react';
 
 export default class Loader {
+    static propTypes = {
+        active: React.PropTypes.bool.isRequired,
+        centered: React.PropTypes.bool,
+        size: React.PropTypes.string
+    };
+
     render() {
         var className = '';
 

@@ -1,7 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router';
+
+import Button from 'app/client/components/button.jsx';
+import Label from 'app/client/components/label.jsx';
+import ReviewerCell from 'app/client/components/review/reviewer-cell.jsx';
 
 export default class PullRequestList extends React.Component {
+    static propTypes = {
+        items: React.PropTypes.array.isRequired
+    };
+
     getLabelType(state) {
         switch (state) {
             case 'open':
@@ -12,25 +19,16 @@ export default class PullRequestList extends React.Component {
     }
 
     tableItems(list) {
-        return list.map(item => {
-
-            if (typeof item === 'string') {
-                return (
-                    <tr key={ item }>
-                        <td colSpan='7'><h5>{ item }</h5></td>
-                    </tr>
-                );
-            }
-
+        return list.map((item) => {
             return (
                 <tr key={ item._id }>
                     <td>{ item.number }</td>
                     <td><a href={ item.html_url }>{ item.title }</a></td>
                     <td>{ item.user.login }</td>
-                    <td><span className={ 'label label-' + this.getLabelType(item.state) }>{ item.state }</span></td>
-                    <td>{ item.review.reviewers.length ? item.review.reviewers.join(', ') : 'Not specified' }</td>
+                    <td><Label type={ this.getLabelType(item.state) }>{ item.state }</Label></td>
+                    <td><ReviewerCell reviewers={ item.review.reviewers } /></td>
                     <td>{ item.complexity || 'Not defined' }</td>
-                    <td><Link className='btn btn-default' to={ '/review/' + item._id }>Review</Link></td>
+                    <td><Button to={ '/review/' + item._id }>Review</Button></td>
                 </tr>
             );
         });
@@ -38,22 +36,32 @@ export default class PullRequestList extends React.Component {
 
     render() {
         return (
-            <table className='table table-hover'>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Title</th>
-                        <th>Author</th>
-                        <th>Status</th>
-                        <th>Reviewers</th>
-                        <th>Complexity</th>
-                        <th style={{ width: '1%' }}>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { this.tableItems(this.props.items) }
-                </tbody>
-            </table>
+            <div>
+                { Object.keys(this.props.items).map((key) => {
+                    return (
+                        <div className='panel panel-default'>
+                            <div className='panel-heading'>{ key }</div>
+
+                            <table className='table table-hover'>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Status</th>
+                                        <th>Review</th>
+                                        <th>Complexity</th>
+                                        <th style={{ width: '1%' }}>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    { this.tableItems(this.props.items[key]) }
+                                </tbody>
+                            </table>
+                        </div>
+                    );
+                }) }
+            </div>
         );
     }
 }

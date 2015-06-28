@@ -1,4 +1,5 @@
 {
+    "parser": "babel-eslint",
     "env": {
         "browser": true,
         "node": true,
@@ -81,7 +82,7 @@
         "react/prop-types": 1,
         "react/react-in-jsx-scope": 0,
         "react/self-closing-comp": 1,
-        "react/sort-comp": 1,
+        "react/sort-comp": 0,
         "react/wrap-multilines": 1
     },
     "globals": {

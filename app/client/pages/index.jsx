@@ -21,7 +21,7 @@ class IndexPage extends React.Component {
     }
 
     render() {
-        var pullRequests = this.props.pullRequests || [];
+        var pullRequests = this.props.pullRequests || {};
 
         return (
             <PullRequestList items={ pullRequests }/>

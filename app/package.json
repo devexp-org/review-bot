@@ -8,7 +8,7 @@
     "transform": [[
       "babelify",
       {
-        "optional": ["es7.decorators"],
+        "optional": ["es7.decorators", "es7.classProperties"],
         "loose": ["es6.classes", "es6.modules", "es6.properties.computed", "es6.templateLiterals"]
       }
     ]]

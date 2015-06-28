@@ -15,7 +15,6 @@ export default function () {
                 reviewers.forEach((reviewer) => {
                     if (reviewer.login === member.login) {
                         keep = false;
-
                         return false;
                     }
                 });
