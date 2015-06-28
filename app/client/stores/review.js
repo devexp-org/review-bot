@@ -14,6 +14,7 @@ class ReviewStore {
             onChooseReviewersFailed: ReviewActions.failed,
             onRemoveReviewer: ReviewActions.removeReviewer,
             onAssign: ReviewActions.assignReviewer,
+            onApprove: ReviewActions.approve,
             onCancel: ReviewActions.cancel,
             onSave: ReviewActions.save
         });
@@ -105,6 +106,18 @@ class ReviewStore {
         review.suggestedReviewers = [];
         review.origSuggestedReviewers = [];
         review.review.changed = false;
+
+        this.setState({ review });
+    }
+
+    onApprove(data) {
+        var review = this.review;
+
+        review.review.reviewers.forEach((reviewer) => {
+            if (reviewer.login === data.user.username) {
+                reviewer.approved = true;
+            }
+        });
 
         this.setState({ review });
     }

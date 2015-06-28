@@ -23,12 +23,16 @@ export default class ReviewerBadge {
         }
 
         return (
-            <a className='reviewer -badge'
+            <a className={ 'reviewer -badge ' + (reviewer.approved ? '-approved' : '') }
                 href='#'
                 key={ reviewer.login }>
                     { closeBtn }
 
                     <div className='reviewer__avatar'>
+                        <div className='reviewer__approved'>
+                            <i className='glyphicon glyphicon-ok'></i>
+                        </div>
+
                         <Avatar img={ reviewer.avatar }/>
                     </div>
 

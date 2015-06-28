@@ -1,6 +1,7 @@
 import * as config from 'app/core/config';
 
 export default {
+    approveCount: 1,
     reducers: [
         require('app/plugins/review-simple-team')(config.load('team')),
         require('app/plugins/review-remove-author')(),

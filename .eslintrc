@@ -63,7 +63,7 @@
 
         "generator-star-spacing": [2, "after"],
 
-        "max-depth": [1, 2],
+        "max-depth": [1, 3],
         "max-len": [1, 120, 4],
         "max-params": [1, 5],
 

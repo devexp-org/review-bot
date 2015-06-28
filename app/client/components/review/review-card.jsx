@@ -10,8 +10,39 @@ import ReviewerBadge from 'app/client/components/review/reviewer_type_badge.jsx'
 
 export default class ReviewCard {
     static propTypes = {
-        review: React.PropTypes.object.isRequired
+        review: React.PropTypes.object.isRequired,
+        user: React.PropTypes.object.isRequired
     };
+
+    isReviewNeeded() {
+        var login = this.props.user.login,
+            pullRequest = this.props.review.pullRequest,
+            reviewers = this.props.review.review.reviewers,
+            isInReviewers;
+
+        if (login === pullRequest.user.login) {
+            return false;
+        }
+
+        isInReviewers = reviewers.filter((reviewer) => reviewer.login === login)[0];
+        if (!isInReviewers) {
+            return false;
+        }
+
+        if (isInReviewers.approved) {
+            return false;
+        }
+
+        return true;
+    }
+
+    isAuthor(login) {
+        return this.props.user.login === login;
+    }
+
+    onApprove(review, user) {
+        ReviewActions.approve({ review, user });
+    }
 
     onRemove(reviewer, index) {
         ReviewActions.removeReviewer({ reviewer, index });
@@ -35,28 +66,49 @@ export default class ReviewCard {
             chooseReviewersBtn,
             saveBtn, saveBtnText,
             cancelBtn,
-            reviewers;
+            approveBtn,
+            reviewers,
+            isAuthor;
 
         if (!pullRequest) return null;
 
-        if (isEmpty(review.suggestedReviewers) && !review.review.changed) {
-            chooseReviewersBtn = (
-                <Button action={ this.onChooseReviewers.bind(this) } size='s' type='primary'>
-                    Choose reviewers
-                </Button>
-            );
-        }
+        isAuthor = this.isAuthor(pullRequest.user.login);
 
-        if (review.review.changed && !isEmpty(review.review.reviewers)) {
-            if (isEmpty(review.origReview.reviewers)) {
-                saveBtnText = 'Start Review';
-            } else {
-                saveBtnText = 'Update Review';
+        // If author
+        if (isAuthor) {
+            if (isEmpty(review.suggestedReviewers) && !review.review.changed) {
+                chooseReviewersBtn = (
+                    <Button action={ this.onChooseReviewers.bind(this) } size='s' type='primary'>
+                        Choose reviewers
+                    </Button>
+                );
             }
 
-            saveBtn = (
-                <Button action={ this.onSave.bind(this) } size='s' type='success'>
-                    { saveBtnText }
+            if (review.review.changed && !isEmpty(review.review.reviewers)) {
+                if (isEmpty(review.origReview.reviewers)) {
+                    saveBtnText = 'Start Review';
+                } else {
+                    saveBtnText = 'Update Review';
+                }
+
+                saveBtn = (
+                    <Button action={ this.onSave.bind(this, review) } size='s' type='success'>
+                        { saveBtnText }
+                    </Button>
+                );
+            }
+
+            if (review.review.changed) {
+                cancelBtn = (
+                    <Button action={ this.onCancelEditing.bind(this) } size='s' type='cancel'>
+                        Cancel
+                    </Button>
+                );
+            }
+        } else if (this.isReviewNeeded()) { // if reviewer
+            approveBtn = (
+                <Button action={ this.onApprove.bind(this, review, this.props.user) } size='s' type='success'>
+                    Approve
                 </Button>
             );
         }
@@ -69,19 +121,11 @@ export default class ReviewCard {
                         return (
                             <ReviewerBadge
                                 key={ reviewer.login }
-                                onRemoveClick={ this.onRemove.bind(this, reviewer, index) }
+                                onRemoveClick={ isAuthor ? this.onRemove.bind(this, reviewer, index) : null }
                                 reviewer={ reviewer } />
                         );
                     }) }
                 </div>
-            );
-        }
-
-        if (review.review.changed) {
-            cancelBtn = (
-                <Button action={ this.onCancelEditing.bind(this) } size='s' type='cancel'>
-                    Cancel
-                </Button>
             );
         }
 
@@ -105,7 +149,7 @@ export default class ReviewCard {
                         </div>
                         <p className='lead'>{ pullRequest.body }</p>
                         <div>
-                            { saveBtn } { cancelBtn } { chooseReviewersBtn }
+                            { approveBtn } { saveBtn } { cancelBtn } { chooseReviewersBtn }
                         </div>
                         <div>
                             { reviewers }

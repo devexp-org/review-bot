@@ -42,6 +42,7 @@ PullRequest = new Schema({
         },
         reviewers: Array,
         started_at: Date,
+        updated_at: Date,
         finished_at: Date
     },
     commits: Number,

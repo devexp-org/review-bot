@@ -65,8 +65,40 @@
         margin-right: 18px;
         padding-left: 0;
 
+        .reviewer__approved {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+
+            transition: opacity 1s;
+
+            opacity: 0;
+            border-radius: 50%;
+            background: rgba(76, 175, 80, .85);
+
+            i {
+                vertical-align: bottom;
+
+                color: #fff;
+            }
+        }
+
+        &.-approved {
+            .reviewer__approved {
+                opacity: 1;
+            }
+        }
+
         .reviewer__avatar {
+            position: relative;
+
+            overflow: hidden;
+
             max-width: 40px;
+
+            border-radius: 50%;
         }
     }
 }

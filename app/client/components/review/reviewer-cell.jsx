@@ -1,9 +1,12 @@
 import React from 'react';
 
-import Avatar from 'app/client/components/avatar/avatar.jsx';
 import ReviewerBadge from 'app/client/components/review/reviewer_type_badge.jsx';
 
 export default class ReviewerCell {
+    static propTypes = {
+        reviewers: React.PropTypes.array
+    };
+
     render() {
         if (!this.props.reviewers) {
             return 'Not Specified';
@@ -11,7 +14,8 @@ export default class ReviewerCell {
 
         return (
             <div className='reviewer-cell'>
-                { this.props.reviewers.map((reviewer) => <ReviewerBadge reviewer={ reviewer } />) }
+                { this.props.reviewers.map((reviewer) =>
+                    <ReviewerBadge key={ reviewer.login } reviewer={ reviewer } />) }
             </div>
         );
     }

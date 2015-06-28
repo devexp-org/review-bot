@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import review from './review';
-import saveReview from './actions/save_review.js';
+import saveReview from './actions/save_review';
+import approveReview from './actions/approve_review';
 
-var router = Router(),
-    counter = 1;
+var router = Router();
 
 router.get('/info', function reviewInfoRoute(req, res) {
     res.success('review api routes');
@@ -16,9 +16,16 @@ router.get('/reviewers/choose/:id', function chooseReviewersRoute(req, res) {
     );
 });
 
-router.post('/review', function saveReviewRoute(req, res) {
+router.post('/save', function saveReviewRoute(req, res) {
     saveReview(req.body).then(
         () => res.success('review saved'),
+        (err) => res.err(err)
+    );
+});
+
+router.post('/approve', function saveReviewRoute(req, res) {
+    approveReview(req.body).then(
+        () => res.success('review approved'),
         (err) => res.err(err)
     );
 });

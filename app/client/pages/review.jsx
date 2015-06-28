@@ -5,6 +5,7 @@ import connectToStores from 'alt/utils/connectToStores';
 import PullRequestsActions from 'app/client/actions/pull_requests';
 import ReviewActions from 'app/client/actions/review';
 import ReviewStore from 'app/client/stores/review';
+import UserStore from 'app/client/stores/user';
 
 import Loader from 'app/client/components/loader/loader.jsx';
 import ReviewCard from 'app/client/components/review/review-card.jsx';
@@ -34,7 +35,8 @@ class ReviewPage extends React.Component {
     }
 
     render() {
-        var review = this.props.review || {},
+        var user = UserStore.getState().user,
+            review = this.props.review || {},
             suggestedReviewersList,
             content;
 
@@ -44,7 +46,7 @@ class ReviewPage extends React.Component {
             );
         } else {
             content = (
-                <ReviewCard review={ review } />
+                <ReviewCard review={ review } user={ user } />
             );
         }
 

@@ -6,7 +6,7 @@ import ReviewerCell from 'app/client/components/review/reviewer-cell.jsx';
 
 export default class PullRequestList extends React.Component {
     static propTypes = {
-        items: React.PropTypes.array.isRequired
+        items: React.PropTypes.object.isRequired
     };
 
     getLabelType(state) {
@@ -39,7 +39,7 @@ export default class PullRequestList extends React.Component {
             <div>
                 { Object.keys(this.props.items).map((key) => {
                     return (
-                        <div className='panel panel-default'>
+                        <div className='panel panel-default' key={ key }>
                             <div className='panel-heading'>{ key }</div>
 
                             <table className='table table-hover'>
