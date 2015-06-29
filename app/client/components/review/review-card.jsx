@@ -138,8 +138,12 @@ export default class ReviewCard {
                     <div className='col-xs-2 col-md-2 hidden-xs'>
                         <Avatar img={ pullRequest.user.avatar_url }/>
                     </div>
+
                     <div className='col-xs-12 col-md-10'>
-                        <h3 className='review-card__title'>Review of pull request: "{ pullRequest.title }"</h3>
+                        <h3 className='review-card__title'>
+                            <a href={ pullRequest.html_url }>{ pullRequest.title }</a>
+                        </h3>
+
                         <div className='review-card__labels text-muted'>
                             <Label type={ statusToColor(pullRequest.state) }>pr: { pullRequest.state }</Label>
                             <span> | </span>
@@ -157,10 +161,13 @@ export default class ReviewCard {
                                 <strong> { pullRequest.comments }</strong>
                             </Label>
                         </div>
+
                         <p className='lead'>{ pullRequest.body }</p>
+
                         <div>
                             { approveBtn } { saveBtn } { cancelBtn } { chooseReviewersBtn }
                         </div>
+
                         <div>
                             { reviewers }
                         </div>
