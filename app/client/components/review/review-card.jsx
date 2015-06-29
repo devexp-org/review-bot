@@ -9,6 +9,8 @@ import Label from 'app/client/components/label.jsx';
 import ReviewerBadge from 'app/client/components/review/reviewer_type_badge.jsx';
 import TimeAgo from 'react-timeago';
 
+import statusToColor from 'app/client/utils/status-to-color-mapper';
+
 export default class ReviewCard {
     static propTypes = {
         review: React.PropTypes.object.isRequired,
@@ -139,10 +141,17 @@ export default class ReviewCard {
                     <div className='col-xs-12 col-md-10'>
                         <h3 className='review-card__title'>Review of pull request: "{ pullRequest.title }"</h3>
                         <div className='review-card__labels text-muted'>
-                            <Label type='success'>pr: { pullRequest.state }</Label>
+                            <Label type={ statusToColor(pullRequest.state) }>pr: { pullRequest.state }</Label>
                             <span> | </span>
+
+                            <Label type={ statusToColor(review.review.status) }>
+                                review: { review.review.status || 'no started yet' }
+                            </Label>
+                            <span> | </span>
+
                             <Label type='info'>updated: <TimeAgo date={ pullRequest.updated_at }/></Label>
                             <span> | </span>
+
                             <Label url={ pullRequest.html_url }>
                                 <i className='glyphicon glyphicon-comment'></i>
                                 <strong> { pullRequest.comments }</strong>

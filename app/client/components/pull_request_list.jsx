@@ -5,19 +5,12 @@ import Label from 'app/client/components/label.jsx';
 import ReviewerCell from 'app/client/components/review/reviewer-cell.jsx';
 import TimeAgo from 'react-timeago';
 
+import statusToColor from 'app/client/utils/status-to-color-mapper';
+
 export default class PullRequestList extends React.Component {
     static propTypes = {
         items: React.PropTypes.object.isRequired
     };
-
-    getLabelType(state) {
-        switch (state) {
-            case 'open':
-                return 'primary';
-            default:
-                return 'default';
-        }
-    }
 
     tableItems(list) {
         return list.map((item) => {
@@ -28,9 +21,10 @@ export default class PullRequestList extends React.Component {
                     <td>{ item.user.login }</td>
                     <td><TimeAgo date={ item.updated_at }/></td>
                     <td>
-                        <Label type={ this.getLabelType(item.state) }>pr: { item.state }</Label><br/>
+                        <Label type={ statusToColor(item.state) }>pr: { item.state }</Label><br/>
+
                         <Label
-                            type={ this.getLabelType(item.state) }>
+                            type={ statusToColor(item.review.status) }>
                                 review: { item.review.status || 'not started yet' }
                         </Label>
                     </td>
