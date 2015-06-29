@@ -72,4 +72,10 @@ PullRequest.statics.findByUsername = function (username) {
     }).sort('-updated_at');
 };
 
+PullRequest.statics.findByReviewer = function (username) {
+    return this.model('PullRequest').find({
+        'review.reviewers.login': username
+    }).sort('-updated_at');
+};
+
 export default mongoose.model('PullRequest', PullRequest);

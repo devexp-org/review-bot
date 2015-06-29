@@ -3,12 +3,29 @@ import alt from 'app/client/alt';
 class ReviewActions {
     constructor() {
         this.generateActions(
+            'userReviewsLoaded',
             'reviewersChosen',
             'removeReviewer',
             'assignReviewer',
             'cancel',
-            'failed'
+            'choosingReviewersFailed',
+            'loadingReviewsFailed'
         );
+    }
+
+    loadUserReviews(login) {
+        this.dispatch();
+
+        fetch('/api/review/reviews/' + login)
+            .then(res => res.json())
+            .then(
+                (res) => this.actions.userReviewsLoaded(res.data),
+                (err) => {
+                    console.error(err);
+
+                    this.actions.loadingReviewsFailed(err);
+                }
+            );
     }
 
     /**
@@ -19,18 +36,16 @@ class ReviewActions {
     chooseReviewers(pullId) {
         this.dispatch();
 
-        setTimeout(() => {
-            fetch('/api/review/reviewers/choose/' + pullId)
-                .then(res => res.json())
-                .then(
-                    (res) => this.actions.reviewersChosen(res.data.team),
-                    (err) => {
-                        console.error(err);
+        fetch('/api/review/reviewers/choose/' + pullId)
+            .then(res => res.json())
+            .then(
+                (res) => this.actions.reviewersChosen(res.data.team),
+                (err) => {
+                    console.error(err);
 
-                        this.actions.failed(err);
-                    }
-                );
-        }, 300);
+                    this.actions.choosingReviewersFailed(err);
+                }
+            );
     }
 
     save(review) {

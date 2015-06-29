@@ -1,4 +1,8 @@
 import { Router } from 'express';
+import _ from 'lodash';
+
+import { PullRequest } from 'app/core/models';
+
 import review from './review';
 import saveReview from './actions/save_review';
 import approveReview from './actions/approve_review';
@@ -7,6 +11,18 @@ var router = Router();
 
 router.get('/info', function reviewInfoRoute(req, res) {
     res.success('review api routes');
+});
+
+router.get('/reviews/:username', function chooseReviewersRoute(req, res) {
+    PullRequest
+        .findByReviewer(req.params.username)
+        .then(function (reviews) {
+            if (_.isEmpty(reviews)) {
+                res.error('Reviews not found!');
+            } else {
+                res.success(reviews);
+            }
+        });
 });
 
 router.get('/reviewers/choose/:id', function chooseReviewersRoute(req, res) {

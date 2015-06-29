@@ -11,7 +11,7 @@ class ReviewStore {
             onPullRequestLoaded: PullRequestActions.pullLoaded,
             onChooseReviewers: ReviewActions.chooseReviewers,
             onReviewersChosen: ReviewActions.reviewersChosen,
-            onChooseReviewersFailed: ReviewActions.failed,
+            onChooseReviewersFailed: ReviewActions.choosingReviewersFailed,
             onRemoveReviewer: ReviewActions.removeReviewer,
             onAssign: ReviewActions.assignReviewer,
             onApprove: ReviewActions.approve,

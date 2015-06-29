@@ -8,6 +8,7 @@ import App from 'app/client/app.jsx';
 
 import IndexPage from 'app/client/pages/index.jsx';
 import ReviewPage from 'app/client/pages/review.jsx';
+import ReviewListPage from 'app/client/pages/review_list.jsx';
 
 alt.dispatcher.register(console.log.bind(console));
 
@@ -18,6 +19,7 @@ routes = (
     <Route handler={ App }>
         <Route handler={ IndexPage } path='/'/>
         <Route handler={ ReviewPage } path='/review/:id'/>
+        <Route handler={ ReviewListPage } path='/reviews'/>
     </Route>
 );
 
