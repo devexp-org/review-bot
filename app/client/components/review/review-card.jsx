@@ -7,6 +7,7 @@ import Avatar from 'app/client/components/avatar/avatar.jsx';
 import Button from 'app/client/components/button.jsx';
 import Label from 'app/client/components/label.jsx';
 import ReviewerBadge from 'app/client/components/review/reviewer_type_badge.jsx';
+import TimeAgo from 'react-timeago';
 
 export default class ReviewCard {
     static propTypes = {
@@ -138,9 +139,9 @@ export default class ReviewCard {
                     <div className='col-xs-12 col-md-10'>
                         <h3 className='review-card__title'>Review of pull request: "{ pullRequest.title }"</h3>
                         <div className='review-card__labels text-muted'>
-                            <Label type='success'>{ pullRequest.state }</Label>
+                            <Label type='success'>pr: { pullRequest.state }</Label>
                             <span> | </span>
-                            <Label type='info'>Updated: { pullRequest.updated_at }</Label>
+                            <Label type='info'>updated: <TimeAgo date={ pullRequest.updated_at }/></Label>
                             <span> | </span>
                             <Label url={ pullRequest.html_url }>
                                 <i className='glyphicon glyphicon-comment'></i>

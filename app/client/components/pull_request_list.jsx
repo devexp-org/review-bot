@@ -3,6 +3,7 @@ import React from 'react';
 import Button from 'app/client/components/button.jsx';
 import Label from 'app/client/components/label.jsx';
 import ReviewerCell from 'app/client/components/review/reviewer-cell.jsx';
+import TimeAgo from 'react-timeago';
 
 export default class PullRequestList extends React.Component {
     static propTypes = {
@@ -25,7 +26,14 @@ export default class PullRequestList extends React.Component {
                     <td>{ item.number }</td>
                     <td><a href={ item.html_url }>{ item.title }</a></td>
                     <td>{ item.user.login }</td>
-                    <td><Label type={ this.getLabelType(item.state) }>{ item.state }</Label></td>
+                    <td><TimeAgo date={ item.updated_at }/></td>
+                    <td>
+                        <Label type={ this.getLabelType(item.state) }>pr: { item.state }</Label><br/>
+                        <Label
+                            type={ this.getLabelType(item.state) }>
+                                review: { item.review.status || 'not started yet' }
+                        </Label>
+                    </td>
                     <td><ReviewerCell reviewers={ item.review.reviewers } /></td>
                     <td>{ item.complexity || 'Not defined' }</td>
                     <td><Button to={ '/review/' + item._id }>Review</Button></td>
@@ -48,7 +56,8 @@ export default class PullRequestList extends React.Component {
                                         <th>#</th>
                                         <th>Title</th>
                                         <th>Author</th>
-                                        <th>Status</th>
+                                        <th>Updated At</th>
+                                        <th>Statuses</th>
                                         <th>Review</th>
                                         <th>Complexity</th>
                                         <th style={{ width: '1%' }}>Actions</th>
