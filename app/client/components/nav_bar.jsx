@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Link } from 'react-router';
+import NavBarLink from 'app/client/components/nav_bar_link.jsx';
 
 export default class NavBar extends React.Component {
     render() {
@@ -11,7 +13,7 @@ export default class NavBar extends React.Component {
                     </div>
                     <div className='collapse navbar-collapse'>
                         <ul className='nav navbar-nav'>
-                            <li className='active'><Link to='/'>Pulls</Link></li>
+                            <NavBarLink to='/'>Pulls</NavBarLink>
                         </ul>
                     </div>
                 </div>
