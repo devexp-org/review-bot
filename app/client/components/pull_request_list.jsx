@@ -50,9 +50,9 @@ export default class PullRequestList extends React.Component {
                                         <th>#</th>
                                         <th>Title</th>
                                         <th>Author</th>
-                                        <th>Updated At</th>
+                                        <th>Updated</th>
                                         <th>Statuses</th>
-                                        <th>Review</th>
+                                        <th>Reviewers</th>
                                         <th>Complexity</th>
                                         <th style={{ width: '1%' }}>Actions</th>
                                     </tr>
