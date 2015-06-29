@@ -24,7 +24,7 @@ class ReviewListStore {
     }
 
     onFailed() {
-        this.setState({ loading: false });
+        this.setState({ reviews: {}, loading: false });
     }
 }
 

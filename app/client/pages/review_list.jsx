@@ -29,14 +29,16 @@ export default class ReviewListPage {
     }
 
     render() {
-        var reviews = this.props.reviews || {};
+        var reviews = this.props.reviews;
+
+        if (!reviews || this.props.loading) {
+            return (
+                <Loader active={ true } centered={ true }/>
+            );
+        }
 
         return (
-            <div>
-                <Loader active={ Boolean(this.props.loading) } centered={ true }/>
-
-                <PullRequestList items={ reviews }/>
-            </div>
+            <PullRequestList items={ reviews }/>
         );
     }
 }

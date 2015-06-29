@@ -16,16 +16,18 @@ class ReviewActions {
     loadUserReviews(login) {
         this.dispatch();
 
-        fetch('/api/review/reviews/' + login)
-            .then(res => res.json())
-            .then(
-                (res) => this.actions.userReviewsLoaded(res.data),
-                (err) => {
-                    console.error(err);
+        setTimeout(() => {
+            fetch('/api/review/reviews/' + login)
+                .then(res => res.json())
+                .then(
+                    (res) => this.actions.userReviewsLoaded(res.data),
+                    (err) => {
+                        console.error(err);
 
-                    this.actions.loadingReviewsFailed(err);
-                }
-            );
+                        this.actions.loadingReviewsFailed(err);
+                    }
+                );
+        }, 1000);
     }
 
     /**

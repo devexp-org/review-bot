@@ -7,14 +7,24 @@ import splitByRepo from 'app/client/utils/split_by_repo';
 class PullRequestListStore {
     constructor() {
         this.bindListeners({
-            onPullRequestsLoaded: PullRequestsActions.userPullsLoaded
+            onLoadUserPulls: PullRequestsActions.loadUserPulls,
+            onPullRequestsLoaded: PullRequestsActions.userPullsLoaded,
+            onFailed: PullRequestsActions.userPullsLoadingFailed
         });
+    }
+
+    onLoadUserPulls() {
+        this.setState({ loading: true });
     }
 
     onPullRequestsLoaded(pullRequests) {
         pullRequests = splitByRepo(pullRequests);
 
-        this.setState({ pullRequests });
+        this.setState({ pullRequests, loading: false });
+    }
+
+    onFailed() {
+        this.setState({ pullRequests: {}, loading: false });
     }
 }
 
