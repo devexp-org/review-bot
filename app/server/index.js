@@ -4,6 +4,7 @@ import path from 'path';
 import responseTime from 'response-time';
 import bodyParser from 'body-parser';
 import errorhandler from 'errorhandler';
+import proxy from 'proxy-express';
 import * as config from 'app/core/config';
 
 var app = express(),
@@ -14,6 +15,7 @@ var app = express(),
  */
 if (process.env.NODE_ENV !== 'production') {
     app.use(errorhandler());
+    app.use(proxy('localhost:8080/public/app.js', '/public/app.js'));
 }
 
 app.use(responseTime());

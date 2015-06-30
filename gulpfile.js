@@ -1,5 +1,6 @@
 // Enable all ES6 features
 require('babel/register')({
+    optional: ['es7.decorators', 'es7.classProperties'],
     loose: ['es6.classes', 'es6.modules', 'es6.properties.computed', 'es6.templateLiterals']
 });
 
@@ -24,11 +25,9 @@ var gulp = require('gulp'),
             'app/plugins/**/*.scss'
         ],
 
-        clientEntryPoint: 'app/client/index.jsx',
+        clientEntryPoint: './app/client/index.jsx',
 
         scripts: [
-            'app/client/**/*.js',
-            'app/client/**/*.jsx',
             'app/server/**/*.js',
             'app/core/**/*.js',
             'app/plugins/**/*.js'
@@ -42,26 +41,30 @@ var gulp = require('gulp'),
         ],
 
         dest: './public'
+    },
+
+    WEBPACK = {
+        port: 8080,
+        publicPath: 'public'
     };
 
 /**
  * Tasks
  */
-require('./.gulp/serve')(gulp);
-require('./.gulp/scripts')(gulp, PATHS);
-require('./.gulp/styles')(gulp, PATHS, AUTOPREFIXER_BROWSERS);
-require('./.gulp/test')(gulp, PATHS, MOCHA);
+require('./.build/serve')(gulp);
+require('./.build/webpack')(gulp, PATHS, WEBPACK);
+require('./.build/styles')(gulp, PATHS, AUTOPREFIXER_BROWSERS);
+require('./.build/test')(gulp, PATHS, MOCHA);
 
 /**
  * Watchers
  */
 gulp.task('watch', function () {
-    gulp.watch(PATHS.scripts, ['scripts:dev']);
     gulp.watch(PATHS.styles, ['styles:dev']);
 });
 
 /**
  * Main Tasks
  */
-gulp.task('dev', ['scripts:dev', 'styles:dev', 'serve', 'watch']);
+gulp.task('dev', ['webpack:dev', 'styles:dev', 'serve', 'watch']);
 gulp.task('tdd', ['dev', 'test', 'test:watch']);
