@@ -14,7 +14,7 @@ class PullRequestListStore {
     }
 
     onLoadUserPulls() {
-        this.setState({ loading: true });
+        this.setState({ loading: true, notFound: false });
     }
 
     onPullRequestsLoaded(pullRequests) {
@@ -24,7 +24,7 @@ class PullRequestListStore {
     }
 
     onFailed() {
-        this.setState({ pullRequests: {}, loading: false });
+        this.setState({ pullRequests: {}, loading: false, notFound: true });
     }
 }
 

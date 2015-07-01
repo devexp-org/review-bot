@@ -3,7 +3,8 @@ import alt from 'app/client/alt';
 class UserStore {
     constructor() {
         this.user = {
-            login: 'd4rkr00t'
+            login: 'd4rkr00t',
+            url: 'https://github.com/d4rkr00t'
         };
     }
 }

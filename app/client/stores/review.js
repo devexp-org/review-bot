@@ -39,12 +39,17 @@ class ReviewStore {
         var review = this.review;
 
         review.reviewersLoading = true;
+        review.reviewersNotFound = false;
 
         this.setState({ review });
     }
 
     onReviewersChosen(suggestedReviewers) {
         var review = this.review;
+
+        if (suggestedReviewers.length === 0) {
+            review.reviewersNotFound = true;
+        }
 
         review.reviewersLoading = false;
         review.suggestedReviewers = suggestedReviewers;

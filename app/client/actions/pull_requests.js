@@ -2,7 +2,12 @@ import alt from 'app/client/alt';
 
 class PullRequestsActions {
     constructor() {
-        this.generateActions('userPullsLoaded', 'pullLoaded', 'userPullsLoadingFailed');
+        this.generateActions(
+            'userPullsLoaded',
+            'pullLoaded',
+            'userPullsLoadingFailed',
+            'pullLoadingFailed'
+        );
     }
 
     /**
@@ -16,14 +21,8 @@ class PullRequestsActions {
         setTimeout(() => {
             fetch('/api/github/pulls/' + username)
                 .then(res => res.json())
-                .then(
-                    (res) => this.actions.userPullsLoaded(res.data),
-                    (err) => {
-                        console.error(err);
-
-                        this.actions.userPullsLoadingFailed(err);
-                    }
-                );
+                .then(res => this.actions.userPullsLoaded(res.data))
+                .catch(err => this.actions.userPullsLoadingFailed(err));
         }, 1000);
     }
 
@@ -37,14 +36,8 @@ class PullRequestsActions {
 
         fetch('/api/github/pull/' + id)
             .then(res => res.json())
-            .then(
-                (res) => this.actions.pullLoaded(res.data),
-                (err) => {
-                    console.error(err);
-
-                    this.actions.failed(err);
-                }
-            );
+            .then(res => this.actions.pullLoaded(res.data))
+            .catch(err => this.actions.pullLoadingFailed(err));
     }
 }
 

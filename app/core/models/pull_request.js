@@ -20,7 +20,8 @@ PullRequest = new Schema({
     user: {
         login: String,
         avatar_url: String,
-        url: String
+        url: String,
+        html_url: String
     },
     created_at: Date,
     updated_at: Date,

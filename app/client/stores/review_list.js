@@ -14,7 +14,7 @@ class ReviewListStore {
     }
 
     onLoadUserReviews() {
-        this.setState({ loading: true });
+        this.setState({ loading: true, notFound: false });
     }
 
     onReviewsLoaded(reviews) {
@@ -24,7 +24,7 @@ class ReviewListStore {
     }
 
     onFailed() {
-        this.setState({ reviews: {}, loading: false });
+        this.setState({ reviews: {}, loading: false, notFound: true });
     }
 }
 

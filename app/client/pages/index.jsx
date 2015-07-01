@@ -7,11 +7,14 @@ import PullRequestListStore from 'app/client/stores/pull_request_list';
 import PullRequestsActions from 'app/client/actions/pull_requests';
 
 import Loader from 'app/client/components/loader/loader.jsx';
+import NotFound from 'app/client/components/not_found/not_found.jsx';
 import PullRequestList from 'app/client/components/pull_request_list.jsx';
 
 @connectToStores
 class IndexPage extends React.Component {
     static propTypes = {
+        loading: React.PropTypes.bool,
+        notFound: React.PropTypes.bool,
         pullRequests: React.PropTypes.object
     };
 
@@ -35,6 +38,12 @@ class IndexPage extends React.Component {
         if (!pullRequests || this.props.loading) {
             return (
                 <Loader active={ true } centered={ true }/>
+            );
+        }
+
+        if (this.props.notFound) {
+            return (
+                <NotFound message='Pull requests not found!' />
             );
         }
 

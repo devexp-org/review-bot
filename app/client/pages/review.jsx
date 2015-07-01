@@ -8,6 +8,7 @@ import ReviewStore from 'app/client/stores/review';
 import UserStore from 'app/client/stores/user';
 
 import Loader from 'app/client/components/loader/loader.jsx';
+import NotFound from 'app/client/components/not_found/not_found.jsx';
 import ReviewCard from 'app/client/components/review/review-card.jsx';
 import Reviewer from 'app/client/components/review/reviewer_type_panel.jsx';
 
@@ -78,6 +79,8 @@ class ReviewPage extends React.Component {
                 { suggestedReviewersList }
 
                 <Loader active={ Boolean(review.reviewersLoading) } centered={ true }/>
+
+                <NotFound message={ review.reviewersNotFound && 'Reviewers not found!' } />
             </div>
         );
     }

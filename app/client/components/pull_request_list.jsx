@@ -18,7 +18,7 @@ export default class PullRequestList extends React.Component {
                 <tr key={ item._id }>
                     <td>{ item.number }</td>
                     <td><a href={ item.html_url }>{ item.title }</a></td>
-                    <td>{ item.user.login }</td>
+                    <td><a href={ item.user.html_url }>{ item.user.login }</a></td>
                     <td><TimeAgo date={ item.updated_at }/></td>
                     <td>
                         <Label type={ statusToColor(item.state) }>pr: { item.state }</Label><br/>

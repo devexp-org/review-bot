@@ -6,6 +6,7 @@ import ReviewListStore from 'app/client/stores/review_list';
 import UserStore from 'app/client/stores/user';
 
 import Loader from 'app/client/components/loader/loader.jsx';
+import NotFound from 'app/client/components/not_found/not_found.jsx';
 import PullRequestList from 'app/client/components/pull_request_list.jsx';
 
 @connectToStores
@@ -34,6 +35,12 @@ export default class ReviewListPage {
         if (!reviews || this.props.loading) {
             return (
                 <Loader active={ true } centered={ true }/>
+            );
+        }
+
+        if (this.props.notFound) {
+            return (
+                <NotFound message='Reviews not found!' />
             );
         }
 
