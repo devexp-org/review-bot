@@ -25,7 +25,8 @@ app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
 /**
  * Server side modules
  */
-require('app/core/mongoose')(config.load('mongoose'));
+require('app/core/mongoose')(config.load('mongoose')); // TODO: init
+require('app/core/models/addons').init(config.load('models'));
 require('app/core/github/api').init(config.load('github'));
 require('app/core/review/ranking').init(config.load('review'));
 
@@ -40,6 +41,7 @@ app.use('/api/review', require('app/core/review/routes'));
  * Default Route
  * Should always be last
  */
+
 app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'views', 'layout.html'));
 });

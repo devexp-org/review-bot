@@ -8,6 +8,12 @@ export default class ReviewerBadge {
         reviewer: React.PropTypes.object.isRequired
     };
 
+    onRemoveClick(e) {
+        e.preventDefault();
+
+        this.props.onRemoveClick();
+    }
+
     render() {
         var reviewer = this.props.reviewer,
             closeBtn;
@@ -17,7 +23,7 @@ export default class ReviewerBadge {
         if (this.props.onRemoveClick) {
             closeBtn = (
                 <div className='reviewer__remove glyphicon glyphicon-remove text-muted'
-                    onClick={ this.props.onRemoveClick }>
+                    onClick={ this.onRemoveClick.bind(this) }>
                 </div>
             );
         }

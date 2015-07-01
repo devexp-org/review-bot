@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
+import * as addons from './addons';
 
 var Schema = mongoose.Schema,
-    PullRequest;
+    PullRequest,
+    baseSchema;
 
 /* eslint-disable camelcase */
-PullRequest = new Schema({
+baseSchema = {
     _id: Number,
     id: Number,
     title: String,
@@ -31,15 +33,16 @@ PullRequest = new Schema({
     merged_by: {
         login: String,
         avatar_url: String,
-        url: String
+        url: String,
+        html_url: String
     },
     comments: Number,
     review_comments: Number,
-    complexity: Number,
     review: {
         status: {
             type: String,
-            'enum': ['notstarted', 'inprogress', 'complete']
+            'enum': ['notstarted', 'inprogress', 'complete'],
+            'default': 'notstarted'
         },
         reviewers: Array,
         started_at: Date,
@@ -51,8 +54,22 @@ PullRequest = new Schema({
     deletions: Number,
     changed_files: Number,
     head: Schema.Types.Mixed
-});
+};
 /* eslint-enable camelcase */
+
+/**
+ * Setup model
+ */
+
+addons.setupExtenders('PullRequest', baseSchema);
+
+PullRequest = new Schema(baseSchema);
+
+addons.setupHooks('PullRequest', PullRequest);
+
+/**
+ * Setup properties hooks
+ */
 
 PullRequest.path('id').set(function (v) {
     this._id = v;
@@ -60,6 +77,18 @@ PullRequest.path('id').set(function (v) {
     return v;
 });
 
+/**
+ * Model static methods
+ */
+
+/**
+ * Find pull request by number and repo
+ *
+ * @param {Number} number
+ * @param {String} fullName - repository full name
+ *
+ * @returns {Promise}
+ */
 PullRequest.statics.findByNumberAndRepo = function (number, fullName) {
     return this.model('PullRequest').findOne({
         number,
@@ -67,12 +96,26 @@ PullRequest.statics.findByNumberAndRepo = function (number, fullName) {
     });
 };
 
+/**
+ * Find pull requests by username
+ *
+ * @param {String} username
+ *
+ * @returns {Promise}
+ */
 PullRequest.statics.findByUsername = function (username) {
     return this.model('PullRequest').find({
         'user.login': username
     }).sort('-updated_at');
 };
 
+/**
+ * Find pull requests by reviewer
+ *
+ * @param {String} username
+ *
+ * @returns {Promise}
+ */
 PullRequest.statics.findByReviewer = function (username) {
     return this.model('PullRequest').find({
         'review.reviewers.login': username
