@@ -24,7 +24,7 @@ export default class ReviewerBadge {
 
         return (
             <a className={ 'reviewer -badge ' + (reviewer.approved ? '-approved' : '') }
-                href='#'
+                href={ reviewer.url }
                 key={ reviewer.login }>
                     { closeBtn }
 
