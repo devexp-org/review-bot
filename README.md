@@ -20,7 +20,7 @@ gulp dev
 │   │   ├── pages // React components which responsible for whole page rendering
 │   │   ├── stores // Flux stores
 │   │   ├── styles // App styles
-│   │   └── utils // Some utils for using in clien side compontents
+│   │   └── utils // Some utils for using in client side components
 │   ├── core // Core modules like: github, review, models, logger, etc
 │   ├── plugins // Modules which extends core functionality
 │   └── server // Express server
