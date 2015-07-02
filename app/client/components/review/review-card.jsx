@@ -8,6 +8,7 @@ import Button from 'app/client/components/button.jsx';
 import Label from 'app/client/components/label.jsx';
 import ReviewerBadge from 'app/client/components/review/reviewer_type_badge.jsx';
 import TimeAgo from 'react-timeago';
+import Complexity from 'app/plugins/complexity/client/components/complexity.jsx';
 
 import statusToColor from 'app/client/utils/status-to-color-mapper';
 
@@ -135,8 +136,12 @@ export default class ReviewCard {
         return (
             <div className='review-card'>
                 <div className='row'>
-                    <div className='col-xs-2 col-md-2 hidden-xs'>
+                    <div className='col-md-2 hidden-xs hidden-sm'>
                         <Avatar img={ pullRequest.user.avatar_url }/>
+
+                        <div className='review-card__complexity'>
+                            <Complexity pull={ pullRequest }/>
+                        </div>
                     </div>
 
                     <div className='col-xs-12 col-md-10'>
