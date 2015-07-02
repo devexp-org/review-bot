@@ -4,6 +4,7 @@ import Button from 'app/client/components/button.jsx';
 import Label from 'app/client/components/label.jsx';
 import ReviewerCell from 'app/client/components/review/reviewer-cell.jsx';
 import TimeAgo from 'react-timeago';
+import Complexity from 'app/plugins/complexity/client/components/complexity.jsx';
 
 import statusToColor from 'app/client/utils/status-to-color-mapper';
 
@@ -29,8 +30,8 @@ export default class PullRequestList extends React.Component {
                         </Label>
                     </td>
                     <td><ReviewerCell reviewers={ item.review.reviewers } /></td>
-                    <td>{ item.complexity || 'Not defined' }</td>
-                    <td><Button to={ '/review/' + item._id }>Review</Button></td>
+                    <td><Complexity pull={ item }/></td>
+                    <td><Button to={ '/review/' + item._id } type='default'>Review</Button></td>
                 </tr>
             );
         });
