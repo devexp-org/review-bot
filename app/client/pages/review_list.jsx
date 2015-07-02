@@ -1,5 +1,7 @@
 import React from 'react';
+
 import connectToStores from 'alt/utils/connectToStores';
+import pageTitle from 'app/client/utils/page_title.jsx';
 
 import ReviewActions from 'app/client/actions/review';
 import ReviewListStore from 'app/client/stores/review_list';
@@ -10,6 +12,7 @@ import NotFound from 'app/client/components/not_found/not_found.jsx';
 import PullRequestList from 'app/client/components/pull_request_list.jsx';
 
 @connectToStores
+@pageTitle
 export default class ReviewListPage {
     static propTypes = {
         reviews: React.PropTypes.object
@@ -21,6 +24,10 @@ export default class ReviewListPage {
 
     static getPropsFromStores() {
         return ReviewListStore.getState();
+    }
+
+    static getPageTitle() {
+        return 'Reviews list';
     }
 
     componentWillMount() {

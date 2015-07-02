@@ -1,6 +1,8 @@
 import React from 'react';
 import isEmpty from 'lodash/lang/isEmpty';
+
 import connectToStores from 'alt/utils/connectToStores';
+import pageTitle from 'app/client/utils/page_title.jsx';
 
 import PullRequestsActions from 'app/client/actions/pull_requests';
 import ReviewActions from 'app/client/actions/review';
@@ -12,12 +14,22 @@ import NotFound from 'app/client/components/not_found/not_found.jsx';
 import ReviewCard from 'app/client/components/review/review-card.jsx';
 import Reviewer from 'app/client/components/review/reviewer_type_panel.jsx';
 
+
 @connectToStores
+@pageTitle
 class ReviewPage extends React.Component {
     static propTypes = {
         params: React.PropTypes.object,
         review: React.PropTypes.object
     };
+
+    static getPageTitle(nextProps) {
+        if (nextProps && nextProps.review) {
+            return 'Review | ' + nextProps.review.pullRequest.title;
+        }
+
+        return 'Review';
+    }
 
     static getStores() {
         return [ReviewStore];

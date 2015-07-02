@@ -1,8 +1,9 @@
 import React from 'react';
+
 import connectToStores from 'alt/utils/connectToStores';
+import pageTitle from 'app/client/utils/page_title.jsx';
 
 import UserStore from 'app/client/stores/user';
-
 import PullRequestListStore from 'app/client/stores/pull_request_list';
 import PullRequestsActions from 'app/client/actions/pull_requests';
 
@@ -11,12 +12,17 @@ import NotFound from 'app/client/components/not_found/not_found.jsx';
 import PullRequestList from 'app/client/components/pull_request_list.jsx';
 
 @connectToStores
+@pageTitle
 class IndexPage extends React.Component {
     static propTypes = {
         loading: React.PropTypes.bool,
         notFound: React.PropTypes.bool,
         pullRequests: React.PropTypes.object
     };
+
+    static getPageTitle() {
+        return 'Pull request list';
+    }
 
     static getStores() {
         return [PullRequestListStore];
