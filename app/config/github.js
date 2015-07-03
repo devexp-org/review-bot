@@ -10,7 +10,7 @@ export default {
         },
         authenticate: {
             type: 'token',
-            token: '1ab753139a6e56a5e896bb6b95e8061915840df4'
+            token: ''
         }
     }
 };
