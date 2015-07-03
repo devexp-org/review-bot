@@ -1,9 +1,12 @@
 import GitHub from 'github';
 
-var api;
+var github;
 
 export function init(options) {
-    api = new GitHub(options);
+    github = new GitHub(options);
+    github.authenticate(options.authenticate);
+
+    return github;
 }
 
-export default api;
+export var github = github;

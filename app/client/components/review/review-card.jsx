@@ -177,6 +177,8 @@ export default class ReviewCard {
 
                         <p className='lead'>{ pullRequest.body }</p>
 
+                        { btnsList }
+
                         <div>
                             { reviewers }
                         </div>

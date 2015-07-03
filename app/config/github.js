@@ -7,6 +7,10 @@ export default {
         timeout: 5000,
         headers: {
             'user-agent': 'Devexp-GitHub-App'
+        },
+        authenticate: {
+            type: 'token',
+            token: ''
         }
     }
 };
