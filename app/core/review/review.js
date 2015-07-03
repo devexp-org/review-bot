@@ -26,14 +26,14 @@ function startQueue(pullRequestId, reject) {
         });
 }
 
-export default function reviewQ(pullRequestId) {
+export default function review(pullRequestId) {
     var rankers = _.clone(ranking.get());
 
     return new Promise((resolve, reject) => {
         var reviewQueue = startQueue(pullRequestId, reject);
 
-        reviewQueue.then((review) => {
-            addNextRanker(review, rankers, resolve, reject);
+        reviewQueue.then((resultReview) => {
+            addNextRanker(resultReview, rankers, resolve, reject);
         });
     });
 }

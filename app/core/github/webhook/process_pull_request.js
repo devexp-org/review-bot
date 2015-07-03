@@ -13,13 +13,11 @@ export default function processPullRequest(body) {
                 pullRequest.set(body.pull_request);
             }
 
-            return pullRequest.save();
-        })
-        .then(function (pullRequest) {
-            events.emit('github:pull_request', { pullRequest: pullRequest });
+            pullRequest.save(function (err, pull) {
+                if (err) logger.error('Pull request saved:', pull.title, pull._id);
 
-            logger.info('Pull request saved:', pullRequest.title, pullRequest._id);
-
-            return pullRequest;
-        }, logger.error.bind(logger));
+                events.emit('github:pull_request:' + body.action, { pullRequest: pull });
+                logger.info('Pull request saved:', pull.title, pull._id);
+            });
+        });
 }

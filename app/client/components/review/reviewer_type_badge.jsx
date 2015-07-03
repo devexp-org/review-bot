@@ -30,7 +30,7 @@ export default class ReviewerBadge {
 
         return (
             <a className={ 'reviewer -badge ' + (reviewer.approved ? '-approved' : '') }
-                href={ reviewer.url }
+                href={ reviewer.html_url }
                 key={ reviewer.login }>
 
                     <div className='reviewer__avatar'>

@@ -1,22 +1,15 @@
+// TODO: move to model
 import _ from 'lodash';
+
 import logger from 'app/core/logger';
 import events from 'app/core/events';
 import { PullRequest } from 'app/core/models';
 
-export default function saveReview(reviewData) {
-    var review = reviewData.review,
-        isNew = true;
-
-    delete review.changed;
-
-    review.reviewers = review.reviewers.map((reviewer) => {
-        delete reviewer.index;
-
-        return reviewer;
-    });
+export default function saveReview(review, pullId) {
+    var isNew = false;
 
     return PullRequest
-        .findById(reviewData.id)
+        .findById(pullId)
         .exec()
         .then((pullRequest) => {
             if (!pullRequest) {
@@ -27,22 +20,27 @@ export default function saveReview(reviewData) {
                 isNew = true;
             }
 
-            review.status = 'inprogress';
-            review.started_at = new Date();
+            if (review.status === 'started' && isNew) {
+                review.started_at = new Date();
+            }
+
+            if (!review.status) {
+                review.status = 'notstarted';
+            }
 
             pullRequest.review = review;
 
             return pullRequest.save();
         }).then((pullRequest) => {
-            var eventName = 'review:started';
+            var eventName = 'review:saved';
 
-            if (!isNew) {
-                eventName = 'review:saved';
+            if (review.status === 'started' && isNew) {
+                eventName = 'review:started';
             }
 
             events.emit(eventName, { review });
 
-            logger.info('Review saved:', reviewData.id, eventName);
+            logger.info('Review saved:', pullId, eventName);
 
             return pullRequest;
         }, logger.error.bind(logger));
