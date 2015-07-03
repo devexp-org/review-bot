@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import { github } from 'app/core/github/api';
 
-var cache = {};
-
 function getTeamId(org, team) {
     return new Promise(function (resolve, reject) {
         github.orgs.getTeams({ org, per_page: 100 }, function (err, res) {
@@ -27,17 +25,24 @@ function getTeamMembers(id) {
     });
 }
 
+function addRank(team) {
+    return team.map((member) => {
+        member.rank = 0;
+
+        return member;
+    });
+}
+
 export default function (options) {
     return function reviewGithubOrgTeam(review) {
-        options = options[review.pull.head.repo.full_name];
+        var opts = options[review.pull.head.repo.full_name];
 
-        return getTeamId(options.org, options.team)
+        return getTeamId(opts.org, opts.team)
             .then(getTeamMembers)
-            .then(function (review) {
-                console.log('Teams: ', review);
-
+            .then(addRank)
+            .then(function (team) {
+                review.team = team;
                 return review;
-            })
-            .then();
+            });
     };
 }

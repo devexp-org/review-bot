@@ -38,7 +38,7 @@ export default class ReviewerBadge {
                             <i className='glyphicon glyphicon-ok'></i>
                         </div>
 
-                        <Avatar img={ reviewer.avatar }/>
+                        <Avatar img={ reviewer.avatar_url }/>
                     </div>
 
                     <div className='reviewer__username text-muted'>

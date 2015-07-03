@@ -19,7 +19,7 @@ export default class Reviewer {
                 <div className='panel panel-default'>
                     <div className='panel-body'>
                         <div className='reviewer__avatar'>
-                            <Avatar img={ reviewer.avatar }/>
+                            <Avatar img={ reviewer.avatar_url }/>
                         </div>
 
                         <h5 className='reviewer__username'>
