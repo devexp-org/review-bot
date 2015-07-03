@@ -9,7 +9,7 @@ var path = require('path'),
     port,
     logger;
 
-config.init({ path: path.join(__dirname, 'config') });
+config.init({ path: path.join(__dirname, 'app/config') });
 
 /**
  * Log

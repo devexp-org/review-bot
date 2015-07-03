@@ -22,12 +22,12 @@ gulp dev
 │   │   ├── styles // App styles
 │   │   └── utils // Some utils for using in client side components
 │   ├── core // Core modules like: github, review, models, logger, etc
+|   ├── config // Configs for modules and plugins
 │   ├── plugins // Modules which extends core functionality
 │   └── server // Express server
 |       ├── index.js // Place for including routes and initializing server side part of plugins
 |       └── views // Server side views
 ├── app.js // App entry point
-├── config // Configs for modules and plugins
 ├── data // Mongodb data
 ├── public // Compiled assets
 ├── scripts // Some post/pre install scripts
