@@ -2,8 +2,8 @@ import React from 'react';
 
 import connectToStores from 'alt/utils/connectToStores';
 import pageTitle from 'app/client/utils/page_title.jsx';
+import authenticated from 'app/client/utils/authenticated.jsx';
 
-import UserStore from 'app/client/stores/user';
 import PullRequestListStore from 'app/client/stores/pull_request_list';
 import PullRequestsActions from 'app/client/actions/pull_requests';
 
@@ -11,13 +11,16 @@ import Loader from 'app/client/components/loader/loader.jsx';
 import NotFound from 'app/client/components/not_found/not_found.jsx';
 import PullRequestList from 'app/client/components/pull_request_list.jsx';
 
+@authenticated
 @connectToStores
 @pageTitle
 class IndexPage extends React.Component {
     static propTypes = {
+        isAuthenticated: React.PropTypes.func,
         loading: React.PropTypes.bool,
         notFound: React.PropTypes.bool,
-        pullRequests: React.PropTypes.object
+        pullRequests: React.PropTypes.object,
+        user: React.PropTypes.object
     };
 
     static getPageTitle() {
@@ -33,9 +36,9 @@ class IndexPage extends React.Component {
     }
 
     componentWillMount() {
-        var user = UserStore.getState().user;
+        if (!this.props.isAuthenticated()) return;
 
-        PullRequestsActions.loadUserPulls(user.login);
+        PullRequestsActions.loadUserPulls(this.props.user.login);
     }
 
     render() {
@@ -49,7 +52,13 @@ class IndexPage extends React.Component {
 
         if (this.props.notFound) {
             return (
-                <NotFound message='Pull requests not found!' />
+                <NotFound>Pull requests not found!</NotFound>
+            );
+        }
+
+        if (!this.props.isAuthenticated()) {
+            return (
+                <NotFound>You should be authenticated</NotFound>
             );
         }
 

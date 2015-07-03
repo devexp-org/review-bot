@@ -10,7 +10,9 @@ import IndexPage from 'app/client/pages/index.jsx';
 import ReviewPage from 'app/client/pages/review.jsx';
 import ReviewListPage from 'app/client/pages/review_list.jsx';
 
-alt.dispatcher.register(console.log.bind(console));
+if (process.env.NODE_ENV !== 'production') {
+    alt.dispatcher.register(console.log.bind(console));
+}
 
 var Route = Router.Route,
     routes;

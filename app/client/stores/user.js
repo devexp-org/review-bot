@@ -1,11 +1,28 @@
 import alt from 'app/client/alt';
 
+import UserActions from 'app/client/actions/user';
+
 class UserStore {
     constructor() {
-        this.user = {
-            login: 'd4rkr00t',
-            url: 'https://github.com/d4rkr00t'
-        };
+        this.state = {};
+
+        this.bindListeners({
+            onLoggedIn: UserActions.loggedIn,
+            onLoggingFailes: UserActions.loggingFailed,
+            onLogout: UserActions.logout
+        });
+    }
+
+    onLoggedIn(user) {
+        this.setState({ user });
+    }
+
+    onLogout() {
+        this.setState({ user: null });
+    }
+
+    onLoggingFailes(err) {
+        this.setState({ authenticationError: err });
     }
 }
 

@@ -14,6 +14,7 @@ import statusToColor from 'app/client/utils/status_to_color_mapper';
 
 export default class ReviewCard {
     static propTypes = {
+        isAuthenticated: React.PropTypes.func,
         review: React.PropTypes.object.isRequired,
         user: React.PropTypes.object.isRequired
     };
@@ -72,7 +73,8 @@ export default class ReviewCard {
             cancelBtn,
             approveBtn,
             reviewers,
-            isAuthor;
+            isAuthor,
+            btnsList;
 
         if (!pullRequest) return null;
 
@@ -133,6 +135,12 @@ export default class ReviewCard {
             );
         }
 
+        btnsList = this.props.isAuthenticated() && (
+            <div>
+                { approveBtn } { saveBtn } { cancelBtn } { chooseReviewersBtn }
+            </div>
+        );
+
         return (
             <div className='review-card'>
                 <div className='row'>
@@ -169,9 +177,7 @@ export default class ReviewCard {
 
                         <p className='lead'>{ pullRequest.body }</p>
 
-                        <div>
-                            { approveBtn } { saveBtn } { cancelBtn } { chooseReviewersBtn }
-                        </div>
+                        { btnsList }
 
                         <div>
                             { reviewers }

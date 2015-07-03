@@ -2,15 +2,15 @@ import React from 'react';
 
 export default class NotFound {
     static propTypes = {
-        message: React.PropTypes.string
+        children: React.PropTypes.element
     };
 
     render() {
-        if (!this.props.message) return null;
+        if (!this.props.children) return null;
 
         return (
             <div className='panel panel-default not-found'>
-                { this.props.message }
+                { this.props.children }
             </div>
         );
     }
