@@ -28,7 +28,7 @@ app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
 require('app/core/mongoose')(config.load('mongoose')); // TODO: init
 require('app/core/models/addons').init(config.load('models'));
 require('app/core/github/api').init(config.load('github'));
-require('app/core/review/ranking').init(config.load('review'));
+require('app/core/review/init').init(config.load('review'));
 
 /**
  * Routes / Middlewares

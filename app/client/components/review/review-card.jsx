@@ -74,7 +74,7 @@ export default class ReviewCard {
             approveBtn,
             reviewers,
             isAuthor,
-            btnsList;
+            btnsList; //eslint-disable-line
 
         if (!pullRequest) return null;
 

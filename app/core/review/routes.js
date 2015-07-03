@@ -4,8 +4,8 @@ import _ from 'lodash';
 import { PullRequest } from 'app/core/models';
 
 import review from './review';
-import saveReview from './actions/save_review';
-import approveReview from './actions/approve_review';
+import saveReview from './actions/save';
+import approveReview from './actions/approve';
 
 var router = Router();
 
@@ -33,7 +33,7 @@ router.get('/reviewers/choose/:id', function chooseReviewersRoute(req, res) {
 });
 
 router.post('/save', function saveReviewRoute(req, res) {
-    saveReview(req.body).then(
+    saveReview(req.body.review, req.body.id).then(
         () => res.success('review saved'),
         (err) => res.err(err)
     );
