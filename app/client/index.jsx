@@ -1,4 +1,4 @@
-import fetch from 'whatwg-fetch';
+import fetch from 'whatwg-fetch'; // eslint-disable-line
 
 import React from 'react';
 import Router from 'react-router';

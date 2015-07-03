@@ -74,7 +74,7 @@ export default class ReviewCard {
             approveBtn,
             reviewers,
             isAuthor,
-            btnsList;
+            btnsList; //eslint-disable-line
 
         if (!pullRequest) return null;
 
@@ -176,8 +176,6 @@ export default class ReviewCard {
                         </div>
 
                         <p className='lead'>{ pullRequest.body }</p>
-
-                        { btnsList }
 
                         <div>
                             { reviewers }

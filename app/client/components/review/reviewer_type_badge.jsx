@@ -16,7 +16,7 @@ export default class ReviewerBadge {
 
     render() {
         var reviewer = this.props.reviewer,
-            closeBtn;
+            closeBtn; //eslint-disable-line
 
         if (!reviewer) return;
 
@@ -32,7 +32,6 @@ export default class ReviewerBadge {
             <a className={ 'reviewer -badge ' + (reviewer.approved ? '-approved' : '') }
                 href={ reviewer.url }
                 key={ reviewer.login }>
-                    { closeBtn }
 
                     <div className='reviewer__avatar'>
                         <div className='reviewer__approved'>
