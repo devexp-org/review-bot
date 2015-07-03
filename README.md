@@ -5,7 +5,7 @@ Requirements: mongodb, nodejs >= 0.12, gulp
 
 ```bash
 npm install
-node run mongo
+npm run mongo
 gulp dev
 ```
 
