@@ -53,7 +53,9 @@ router.post('/webhook', function (req, res) {
 
 router.get('/pulls/:username', function (req, res) {
     PullRequest
-        .findByUsername(req.params.username)
+        .find()
+        .sort({ updated_at: -1 })
+        .exec()
         .then(function (pullRequests) {
             if (_.isEmpty(pullRequests)) {
                 res.error('Pull Requests not found!');
