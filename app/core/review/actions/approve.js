@@ -1,8 +1,18 @@
+// TODO: Refactor
 import logger from 'app/core/logger';
 import events from 'app/core/events';
 import * as config from 'app/core/config';
+
 import { PullRequest } from 'app/core/models';
 
+/**
+ * Approves and complete review if approved reviewers count === review config approveCount.
+ *
+ * @param {String} login - user which approves pull.
+ * @param {String} pullId
+ *
+ * @returns {Promise}
+ */
 export default function approveReview(login, pullId) {
     var reviewConfig = config.load('review'),
         approvedCount = 0;

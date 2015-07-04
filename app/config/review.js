@@ -2,7 +2,7 @@ import * as config from 'app/core/config';
 
 export default {
     approveCount: 2,
-    reducers: [
+    processors: [
         require('app/plugins/review-choose-reviewers/review-github-org-team')(config.load('github_org_team')),
         require('app/plugins/review-choose-reviewers/review-remove-author')(),
         require('app/plugins/review-choose-reviewers/review-remove-already-reviewers')(),

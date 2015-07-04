@@ -35,6 +35,7 @@
         "no-mixed-requires": 0,
         "wrap-iife": 0,
         "new-cap": 0,
+        "no-shadow": 0,
 
         "strict": 0,
 

@@ -13,7 +13,7 @@ router.get('/info', function reviewInfoRoute(req, res) {
     res.success('review api routes');
 });
 
-router.get('/reviews/:username', function chooseReviewersRoute(req, res) {
+router.get('/reviews/:username', function suggestReviewersRoute(req, res) {
     PullRequest
         .findByReviewer(req.params.username)
         .then(function (reviews) {

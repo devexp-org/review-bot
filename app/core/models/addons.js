@@ -5,11 +5,11 @@ export default {
     hooks: {},
 
     /**
-     * Register extenders and hooks for models
+     * Register extenders and hooks for models.
      *
      * @param {Object} options
-     * @param {Object} options.extenders — objects which extends models
-     * @param {Object} options.hooks — objects which extends models
+     * @param {Object} options.extenders — objects which extends models.
+     * @param {Object} options.hooks — objects which extends models.
      *
      * @returns {this}
      */
@@ -23,7 +23,7 @@ export default {
     /**
      * Returns extenders and hooks for given model
      *
-     * @param {String} model - model name
+     * @param {String} model - model name.
      *
      * @returns {Object}
      */
@@ -34,6 +34,14 @@ export default {
         };
     },
 
+    /**
+     * Setup model extenders.
+     *
+     * @param {String} model - model name.
+     * @param {Object} baseSchema - model base schema.
+     *
+     * @returns {this}
+     */
     setupExtenders(model, baseSchema) {
         var extenders = this.get(model).extenders;
 
@@ -42,6 +50,14 @@ export default {
         return this;
     },
 
+    /**
+     * Setup model pre save hooks.
+     *
+     * @param {String} model - model name.
+     * @param {Object} schema - mongoose schema.
+     *
+     * @returns {this}
+     */
     setupHooks(model, schema) {
         var hooks = this.get(model).hooks;
 
@@ -54,5 +70,7 @@ export default {
                 Promise.all(hooksPromiseList).then(next);
             });
         }
+
+        return this;
     }
 };

@@ -1,23 +1,31 @@
 import logger from 'app/core/logger';
-import { PullRequest } from 'app/core/models';
 import events from 'app/core/events';
+import { PullRequest } from 'app/core/models';
 
+/**
+ * Handler for github web hook with type pull_request.
+ *
+ * @param {Object} body - github webhook payload.
+ *
+ * @returns {Promise}
+ */
 export default function processPullRequest(body) {
     return PullRequest
         .findById(body.pull_request.id)
         .exec()
-        .then(function (pullRequest) {
+        .then((pullRequest) => {
             if (!pullRequest) {
                 pullRequest = new PullRequest(body.pull_request);
             } else {
                 pullRequest.set(body.pull_request);
             }
 
-            pullRequest.save(function (err, pull) {
-                if (err) logger.error('Pull request saved:', pull.title, pull._id);
+            return pullRequest.save();
+        })
+        .then((pullRequest) => {
+            events.emit('github:pull_request:' + body.action, { pullRequest });
+            logger.info('Pull request saved:', pullRequest.title, pullRequest._id);
 
-                events.emit('github:pull_request:' + body.action, { pullRequest: pull });
-                logger.info('Pull request saved:', pull.title, pull._id);
-            });
-        });
+            return pullRequest;
+        }, logger.error.bind(logger, 'Process pull request: '));
 }

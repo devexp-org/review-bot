@@ -5,6 +5,7 @@ import responseTime from 'response-time';
 import bodyParser from 'body-parser';
 import errorhandler from 'errorhandler';
 import proxy from 'proxy-express';
+
 import * as config from 'app/core/config';
 
 var app = express(),
@@ -15,7 +16,7 @@ var app = express(),
  */
 if (process.env.NODE_ENV !== 'production') {
     app.use(errorhandler());
-    app.use(proxy('localhost:8080/public/app.js', '/public/app.js'));
+    app.use(proxy('localhost:8080/public/app.js', '/public/app.js')); // TODO: Move proxy to config
 }
 
 app.use(responseTime());
@@ -25,7 +26,7 @@ app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
 /**
  * Server side modules
  */
-require('app/core/mongoose')(config.load('mongoose')); // TODO: init
+require('app/core/mongoose').init(config.load('mongoose'));
 require('app/core/models/addons').init(config.load('models'));
 require('app/core/github/api').init(config.load('github'));
 require('app/core/review/init').init(config.load('review'));
@@ -33,7 +34,7 @@ require('app/core/review/init').init(config.load('review'));
 /**
  * Routes / Middlewares
  */
-app.use(require('app/core/response').middleware());
+app.use(require('app/core/response')());
 app.use('/api/github', require('app/core/github/routes'));
 app.use('/api/review', require('app/core/review/routes'));
 

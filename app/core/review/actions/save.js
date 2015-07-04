@@ -1,11 +1,19 @@
-// TODO: move to model
 // TODO: REFACTOR
 import _ from 'lodash';
 
 import logger from 'app/core/logger';
 import events from 'app/core/events';
+
 import { PullRequest } from 'app/core/models';
 
+/**
+ * Saves review.
+ *
+ * @param {Object} review
+ * @param {Number} pullId
+ *
+ * @returns {Promise}
+ */
 export default function saveReview(review, pullId) {
     var isNew = false;
 

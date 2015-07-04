@@ -1,7 +1,13 @@
 import mongoose from 'mongoose';
+
 import logger from 'app/core/logger';
 
-export default function connectMongoose(options) {
+/**
+ * Connects to mongodb.
+ *
+ * @param   {Object} options - connection params.
+ */
+export function init(options) {
     if (mongoose.connection.readyState === 2) {
         logger.info('Mongodb already connected');
 

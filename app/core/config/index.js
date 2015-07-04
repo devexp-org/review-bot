@@ -6,7 +6,7 @@ var isProduction, configsDirPath;
  * Initialize config module with path to configs directory.
  *
  * @param {Object} options
- * @param {String} options.path — path to configs directory
+ * @param {String} options.path - path to configs directory
  */
 export function init(options) {
     isProduction = process.env.NODE_ENV === 'production';
@@ -17,7 +17,7 @@ export function init(options) {
  * Loads config by name.
  * If there is property dev or prod in config exist they will be returned for related NODE_ENV.
  *
- * @param  {String} configName
+ * @param {String} configName
  *
  * @return {Object}
  */

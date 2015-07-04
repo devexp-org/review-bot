@@ -3,6 +3,14 @@ import _ from 'lodash';
 import ranking from './ranking';
 import { PullRequest } from 'app/core/models';
 
+/**
+ * Runs next ranker from rankers list or resolve with ranking result.
+ *
+ * @param {Object} review
+ * @param {Function[]} rankers
+ * @param {Function} resolve
+ * @param {Function} reject
+ */
 function addNextRanker(review, rankers, resolve, reject) {
     var ranker = rankers.splice(0, 1)[0];
 
@@ -16,6 +24,14 @@ function addNextRanker(review, rankers, resolve, reject) {
     }, reject);
 }
 
+/**
+ * Starts ranking queue.
+ *
+ * @param {Number} pullRequestId
+ * @param {Function} reject
+ *
+ * @returns {Promise}
+ */
 function startQueue(pullRequestId, reject) {
     return PullRequest
         .findById(pullRequestId)
@@ -26,6 +42,14 @@ function startQueue(pullRequestId, reject) {
         });
 }
 
+/**
+ * Main review suggestion method.
+ * Creates queue of promises from processor and retruns suggested reviewrs.
+ *
+ * @param {Number} pullRequestId
+ *
+ * @returns {Promise}
+ */
 export default function review(pullRequestId) {
     var rankers = _.clone(ranking.get());
 

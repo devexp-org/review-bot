@@ -1,4 +1,5 @@
 // Enable all ES6 features
+// TODO: Move babel config to it's own file (for reusing).
 require('babel/register')({
     loose: ['es6.classes', 'es6.modules', 'es6.properties.computed', 'es6.templateLiterals']
 });

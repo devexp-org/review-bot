@@ -1,29 +1,34 @@
 import logger from 'app/core/logger';
-import { PullRequest } from 'app/core/models';
-import getPrNumber from 'app/core/github/utils/get_pr_number';
 import events from 'app/core/events';
+import { PullRequest } from 'app/core/models';
 
+/**
+ * Handler for github web hook with type issue_comment.
+ *
+ * @param {Object} body - github webhook payload.
+ *
+ * @returns {Promise}
+ */
 export default function processIssueComment(body) {
     var pullRequestTitle = body.issue.title,
-        pullRequestNumber = getPrNumber(body.issue.pull_request.url),
+        pullRequestNumber = body.issue.number,
         repositoryName = body.repository.full_name;
 
     return PullRequest
         .findByNumberAndRepo(pullRequestNumber, repositoryName)
-        .then(function (pullRequest) {
+        .then((pullRequest) => {
             if (!pullRequest) return;
 
             pullRequest.title = pullRequestTitle;
 
             return pullRequest.save();
         })
-        .then(function (pullRequest) {
+        .then((pullRequest) => {
             if (!pullRequest) return;
 
             logger.info('Pull request updated:', pullRequest.title, pullRequest._id);
-
-            events.emit('github:issue_comment', { pullRequest: pullRequest, comment: body.comment });
+            events.emit('github:issue_comment', { pullRequest, comment: body.comment });
 
             return pullRequest;
-        }, logger.error.bind(logger));
+        }, logger.error.bind(logger, 'Process issue comment: '));
 }

@@ -1,4 +1,4 @@
-import PullRequest from './pull_request';
+import PullRequest from './models/pull_request';
 
 export default {
     PullRequest
