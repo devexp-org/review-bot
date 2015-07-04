@@ -1,8 +1,15 @@
 import _ from 'lodash';
 
-export default function () {
+export default function removeAlreadyReviewersCreator() {
+    /**
+     * Removes team members which are already reviewers.
+     *
+     * @param {Object} review
+     *
+     * @returns {Promise}
+     */
     return function removeAlreadyReviewers(review) {
-        return new Promise(function (resolve) {
+        return new Promise((resolve) => {
             var reviewers = review.pull.review.reviewers;
 
             if (_.isEmpty(reviewers)) {

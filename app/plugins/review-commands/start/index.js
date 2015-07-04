@@ -2,6 +2,12 @@ import logger from 'app/core/logger';
 import saveReview from 'app/core/review/actions/save';
 
 export default function startCommandCreator() {
+    /**
+     * Handles '/review start' command.
+     *
+     * @param {Array} cmd - [command, ...params]
+     * @param {Object} payload - github webhook handler payload.
+     */
     return function startCommand(cmd, payload) {
         logger.info(`/review start command ${payload.pullRequest.id} — ${payload.pullRequest.title}`);
 

@@ -98,7 +98,7 @@ export function extender() {
  */
 export function hook() {
     return function (model) {
-        return new Promise(function (resolve) {
+        return new Promise((resolve) => {
             var complexity = 0;
 
             complexity += additionsComplexity(model.additions);
@@ -106,8 +106,6 @@ export function hook() {
             complexity += commitsComplexity(model.commits);
 
             model.complexity = (complexity * 100) / MAX;
-
-            console.log('Complexity: ', model.complexity);
 
             resolve();
         });

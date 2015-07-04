@@ -4,6 +4,12 @@ import logger from 'app/core/logger';
 import approveReview from 'app/core/review/actions/approve';
 
 export default function okCommandCreator() {
+    /**
+     * Handles '/review ok' command.
+     *
+     * @param {Array} cmd - [command, ...params]
+     * @param {Object} payload - github webhook handler payload.
+     */
     return function okCommand(cmd, payload) {
         logger.info(`/review ok command ${payload.pullRequest.id} — ${payload.pullRequest.title}`);
 
