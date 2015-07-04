@@ -1,13 +1,11 @@
-import _ from 'lodash';
 import logger from 'app/core/logger';
 import events from 'app/core/events';
 import * as config from 'app/core/config';
 import { PullRequest } from 'app/core/models';
 
-var reviewConfig = config.load('review');
-
 export default function approveReview(login, pullId) {
-    var approvedCount = 0;
+    var reviewConfig = config.load('review'),
+        approvedCount = 0;
 
     return PullRequest
         .findById(pullId)
@@ -17,7 +15,7 @@ export default function approveReview(login, pullId) {
                 throw new Error('Pull request not found!');
             }
 
-            var reviewers = _.clone(pullRequest.review.reviewers, true);
+            var reviewers = pullRequest.review.reviewers;
 
             reviewers.forEach((reviewer) => {
                 if (reviewer.login === login) {
@@ -28,7 +26,7 @@ export default function approveReview(login, pullId) {
                     approvedCount += 1;
                 }
 
-                if (approvedCount === reviewConfig.approvedCount) {
+                if (approvedCount === reviewConfig.approveCount) {
                     pullRequest.review.status = 'complete';
 
                     return false;
