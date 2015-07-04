@@ -11,8 +11,15 @@ export default {
         require('app/plugins/review-total-number')(2)
     ],
     listeners: {
-        'github:pull_request:opened': [
-            require('app/plugins/review-autoassign')()
+        'github:pull_request:opened': [require('app/plugins/review-autoassign')()],
+        'github:issue_comment': [
+            require('app/plugins/review-commands/dispatcher')({
+                commands: {
+                    'start': [require('app/plugins/review-commands/start')()],
+                    'ok': [require('app/plugins/review-commands/ok')()]
+                },
+                aliases: {}
+            })
         ]
     }
 };

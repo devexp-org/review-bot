@@ -6,13 +6,11 @@ import { PullRequest } from 'app/core/models';
 
 var reviewConfig = config.load('review');
 
-export default function approveReview(reviewData) {
-    var id = reviewData.review.id,
-        login = reviewData.user.login,
-        approvedCount = 0;
+export default function approveReview(login, pullId) {
+    var approvedCount = 0;
 
     return PullRequest
-        .findById(id)
+        .findById(pullId)
         .exec()
         .then((pullRequest) => {
             if (!pullRequest) {
@@ -42,14 +40,12 @@ export default function approveReview(reviewData) {
 
             return pullRequest.save();
         }).then((pullRequest) => {
-            events.emit('review:approved', { pullRequest, review: reviewData.review, user: reviewData.user });
-            logger.info('Review approved:', reviewData.review.id, reviewData.user.username);
-
-            console.log(pullRequest.review);
+            events.emit('review:approved', { pullRequest, review: pullRequest.review, login: login });
+            logger.info('Review approved:', pullRequest.id, login);
 
             if (pullRequest.review.status === 'complete') {
-                events.emit('review:complete', { pullRequest, review: reviewData.review });
-                logger.info('Review complete:', reviewData.review.id);
+                events.emit('review:complete', { pullRequest, review: pullRequest.review });
+                logger.info('Review complete:', pullId);
             }
 
             return pullRequest;

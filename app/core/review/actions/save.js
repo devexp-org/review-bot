@@ -1,4 +1,5 @@
 // TODO: move to model
+// TODO: REFACTOR
 import _ from 'lodash';
 
 import logger from 'app/core/logger';
@@ -20,12 +21,20 @@ export default function saveReview(review, pullId) {
                 isNew = true;
             }
 
+            review = _.assign({}, pullRequest.review, review);
+
             if (review.status === 'started' && isNew) {
                 review.started_at = new Date();
             }
 
             if (!review.status) {
                 review.status = 'notstarted';
+            }
+
+            if (review.status === 'inprogress' && _.isEmpty(review.reviewers)) {
+                throw new Error(
+                    `Try to start review where reviewers weren't selected ${pullRequest.id} — ${pullRequest.title}`
+                );
             }
 
             pullRequest.review = review;

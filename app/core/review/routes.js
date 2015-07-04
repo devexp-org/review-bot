@@ -40,7 +40,7 @@ router.post('/save', function saveReviewRoute(req, res) {
 });
 
 router.post('/approve', function saveReviewRoute(req, res) {
-    approveReview(req.body).then(
+    approveReview(req.body.user.login, req.body.id).then(
         () => res.success('review approved'),
         (err) => res.err(err)
     );
