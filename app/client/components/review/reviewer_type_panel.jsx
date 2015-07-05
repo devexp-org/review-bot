@@ -1,3 +1,4 @@
+import style from './reviewer.scss'; // eslint-disable-line
 import React from 'react';
 
 import Avatar from 'app/client/components/avatar/avatar.jsx';

@@ -2,13 +2,14 @@ var webpack = require('webpack'),
     WebpackDevServer = require('webpack-dev-server'),
     config = require('./webpack-config.js');
 
-module.exports = function (gulp, paths, webpackDevServerOpts) {
+module.exports = function (gulp, paths, webpackDevServerOpts, autoprefixer) {
     gulp.task('webpack:dev', function (cb) {
         var compiler = webpack(config({
             entryPoint: paths.clientEntryPoint,
-            paths: paths,
             debug: true,
-            devServer: webpackDevServerOpts
+            devServer: webpackDevServerOpts,
+            paths,
+            autoprefixer
         }));
 
         new WebpackDevServer(compiler, {
@@ -16,10 +17,7 @@ module.exports = function (gulp, paths, webpackDevServerOpts) {
             hot: true
         }).listen(8080, 'localhost', function (err) {
             if (err) console.error(err);
-
             console.log('[webpack-dev-server]', 'started http://localhost:8080');
-
-            // keep the server alive or continue?
             cb();
         });
     });

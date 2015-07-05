@@ -11,7 +11,7 @@ import ReviewStore from 'app/client/stores/review';
 
 import Loader from 'app/client/components/loader/loader.jsx';
 import NotFound from 'app/client/components/not_found/not_found.jsx';
-import ReviewCard from 'app/client/components/review/review-card.jsx';
+import ReviewCard from 'app/client/components/review/review_card.jsx';
 import Reviewer from 'app/client/components/review/reviewer_type_panel.jsx';
 
 @authenticated

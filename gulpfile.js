@@ -18,20 +18,7 @@ var gulp = require('gulp'),
     },
 
     PATHS = {
-        mainStyle: 'app/client/styles/style.scss',
-        styles: [
-            'app/client/styles/*.scss',
-            'app/client/**/*.scss',
-            'app/plugins/**/*.scss'
-        ],
-
         clientEntryPoint: './app/client/index.jsx',
-
-        scripts: [
-            'app/server/**/*.js',
-            'app/core/**/*.js',
-            'app/plugins/**/*.js'
-        ],
 
         tests: [
             'app/client/**/__tests__/**/*.test.js',
@@ -40,7 +27,7 @@ var gulp = require('gulp'),
             'app/plugins/**/__tests__/**/*.test.js'
         ],
 
-        dest: './public'
+        dest: './public' // keep
     },
 
     WEBPACK = {
@@ -52,19 +39,11 @@ var gulp = require('gulp'),
  * Tasks
  */
 require('./.build/serve')(gulp);
-require('./.build/webpack')(gulp, PATHS, WEBPACK);
-require('./.build/styles')(gulp, PATHS, AUTOPREFIXER_BROWSERS);
+require('./.build/webpack')(gulp, PATHS, WEBPACK, AUTOPREFIXER_BROWSERS);
 require('./.build/test')(gulp, PATHS, MOCHA);
-
-/**
- * Watchers
- */
-gulp.task('watch', function () {
-    gulp.watch(PATHS.styles, ['styles:dev']);
-});
 
 /**
  * Main Tasks
  */
-gulp.task('dev', ['webpack:dev', 'styles:dev', 'serve', 'watch']);
+gulp.task('dev', ['webpack:dev', 'serve']);
 gulp.task('tdd', ['dev', 'test', 'test:watch']);

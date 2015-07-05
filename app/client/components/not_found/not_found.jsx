@@ -1,3 +1,4 @@
+import style from './not_found.scss'; // eslint-disable-line
 import React from 'react';
 
 export default class NotFound {

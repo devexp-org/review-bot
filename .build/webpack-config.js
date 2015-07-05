@@ -1,8 +1,28 @@
 var webpack = require('webpack'),
-    path = require('path');
+    path = require('path'),
+    ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-function loaders() {
+function makeStylesLoader(options) {
+    var debug = options.debug,
+        autoprefixer = options.autoprefixer.map(item => `"${item}"`).join(', '),
+        loaders = `autoprefixer?{browsers:[${autoprefixer}]}!sass`;
+
+    if (debug) {
+        loaders = 'style!css!' + loaders;
+    } else {
+        loaders = 'css?mimimize!' + loaders;
+    }
+
+    return {
+        test: /\.scss$/,
+        loader: debug ? loaders : ExtractTextPlugin.extract(loaders)
+    };
+}
+
+function loaders(options) {
     return [
+        makeStylesLoader(options),
+        { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
         {
             test: /\.jsx?$/,
             exclude: /node_modules/,
@@ -26,6 +46,7 @@ function plugins(debug) {
     if (!debug) {
         pluginsList.push(new webpack.optimize.DedupePlugin());
         pluginsList.push(new webpack.optimize.UglifyJsPlugin());
+        pluginsList.push(new ExtractTextPlugin('styles.css'));
     } else {
         pluginsList.push(new webpack.HotModuleReplacementPlugin());
     }
@@ -68,7 +89,7 @@ export default function webpackDevConfig(options) {
         debug: options.debug,
         devtool: 'eval',
         module: {
-            loaders: loaders()
+            loaders: loaders(options)
         },
         plugins: plugins(options.debug)
     };

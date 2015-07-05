@@ -2,7 +2,7 @@ import React from 'react';
 
 import Button from 'app/client/components/button.jsx';
 import Label from 'app/client/components/label.jsx';
-import ReviewerCell from 'app/client/components/review/reviewer-cell.jsx';
+import ReviewerCell from 'app/client/components/review/reviewer_cell.jsx';
 import TimeAgo from 'react-timeago';
 import Complexity from 'app/plugins/complexity/client/components/complexity.jsx';
 

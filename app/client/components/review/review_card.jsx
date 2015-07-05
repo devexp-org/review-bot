@@ -1,3 +1,4 @@
+import style from './review_card.scss'; // eslint-disable-line
 import React from 'react';
 import isEmpty from 'lodash/lang/isEmpty';
 

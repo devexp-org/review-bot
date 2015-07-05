@@ -1,3 +1,4 @@
+import style from './loader.scss'; // eslint-disable-line
 import React from 'react';
 
 export default class Loader {

@@ -1,3 +1,4 @@
+import style from './avatar.scss'; // eslint-disable-line
 import React from 'react';
 
 export default class Avatar {

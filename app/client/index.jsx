@@ -1,3 +1,4 @@
+import style from 'app/client/styles/style.scss'; // eslint-disable-line
 import fetch from 'whatwg-fetch'; // eslint-disable-line
 
 import React from 'react';
