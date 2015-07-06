@@ -5,6 +5,7 @@ import review from 'app/core/review/review';
 import saveReview from 'app/core/review/actions/save';
 
 import github from 'app/core/github/api';
+import badges from 'app/core/badges';
 
 export default function reviewAutoAssignCreator() {
     /**
@@ -15,17 +16,18 @@ export default function reviewAutoAssignCreator() {
     return function reviewAutoStart({ pullRequest }) {
         logger.info(`Autostart review for pull "${pullRequest.id} — ${pullRequest.title}"`);
 
-        if (!_.isEmpty(pullRequest.review.reviewrs)) return;
+        // if (!_.isEmpty(pullRequest.review.reviewrs)) return;
 
         review(pullRequest.id)
             .then(resultReview => saveReview({ reviewers: resultReview.team}, pullRequest.id))
             .then((pullRequest) => {
-                console.log(pullRequest.review.reviewers);
-
                 github.setBodyContent(
                     pullRequest.id,
                     'review:reviewers_badge',
-                    'reviewers_badge_test: ' + pullRequest.review.reviewers.map(item => item.login).join(', ')
+                    badges.create('review_status', pullRequest.review) +
+                        pullRequest.review.reviewers.map((item) => {
+                            return badges.create('reviewer', item);
+                        }).join(' ')
                 );
             }, ::logger.error);
     };
