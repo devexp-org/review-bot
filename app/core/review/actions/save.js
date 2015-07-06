@@ -49,13 +49,13 @@ export default function saveReview(review, pullId) {
 
             return pullRequest.save();
         }).then((pullRequest) => {
-            var eventName = 'review:saved';
+            var eventName = 'review:updated';
 
             if (review.status === 'started' && isNew) {
                 eventName = 'review:started';
             }
 
-            events.emit(eventName, { review });
+            events.emit(eventName, { pullRequest, review });
 
             logger.info('Review saved:', pullId, eventName);
 
