@@ -28,7 +28,7 @@ function loaders(options) {
             loader: 'babel',
             exclude: /node_modules/,
             query: {
-                optional: ['es7.decorators', 'es7.classProperties'],
+                optional: ['es7.decorators', 'es7.classProperties', 'es7.functionBind'],
                 loose: ['es6.classes', 'es6.modules', 'es6.properties.computed', 'es6.templateLiterals']
             }
         }

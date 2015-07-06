@@ -1,5 +1,5 @@
 import * as complexity from 'app/plugins/complexity';
-import * as githubContent from 'app/core/github/content/model_addons';
+import * as githubContent from 'app/core/github/pull_request_model_addons';
 
 export default {
     extenders: {

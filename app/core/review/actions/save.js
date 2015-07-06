@@ -1,4 +1,5 @@
 // TODO: REFACTOR
+// HELL BEGIN
 import _ from 'lodash';
 
 import logger from 'app/core/logger';
@@ -27,6 +28,10 @@ export default function saveReview(review, pullId) {
 
             if (_.isEmpty(pullRequest.review.reviewers)) {
                 isNew = true;
+            }
+
+            if (_.isEmpty(review.reviewers)) {
+                review.reviewers = pullRequest.review.reviewers;
             }
 
             review = _.assign({}, pullRequest.review, review);
@@ -60,5 +65,6 @@ export default function saveReview(review, pullId) {
             logger.info('Review saved:', pullId, eventName);
 
             return pullRequest;
-        }, logger.error.bind(logger));
+        }, ::logger.error);
 }
+// HELL END

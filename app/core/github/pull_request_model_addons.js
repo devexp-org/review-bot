@@ -1,14 +1,14 @@
-import bodyCleaner from './cleaner';
+import { _bodyCleaner } from './api';
 
 /**
  * Extender for PullRequest model which adds extra body content field.
- * Extra body entry format: [{ id: 'uniqId', content: 'content' }].
+ * Extra body entry format: { uniqId: 'content' }.
  *
  * @returns {Object}
  */
 export function extender() {
     return {
-        extra_body: Array
+        extra_body: Object
     };
 }
 
@@ -20,10 +20,7 @@ export function extender() {
 export function hook() {
     return function (model) {
         return new Promise((resolve) => {
-            console.log('Raw model body: ', model.body);
-            model.body = bodyCleaner(model.body);
-            console.log('Clear model body: ', model.body);
-
+            model.body = _bodyCleaner(model.body);
             resolve();
         });
     };

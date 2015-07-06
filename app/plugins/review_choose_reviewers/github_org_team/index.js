@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { github } from 'app/core/github/api';
+import github from 'app/core/github/api';
 
 /**
  * Gets github team id from org name and team name.
@@ -11,7 +11,7 @@ import { github } from 'app/core/github/api';
  */
 function getTeamId(org, team) {
     return new Promise((resolve, reject) => {
-        github.orgs.getTeams({ org, per_page: 100 }, function (err, res) {
+        github.api.orgs.getTeams({ org, per_page: 100 }, function (err, res) {
             if (err) reject(err);
 
             var repoTeam = _(res).filter({ slug: team }).first();
@@ -32,7 +32,7 @@ function getTeamId(org, team) {
  */
 function getTeamMembers(id) {
     return new Promise((resolve, reject) => {
-        github.orgs.getTeamMembers({ id, per_page: 100 }, function (err, res) {
+        github.api.orgs.getTeamMembers({ id, per_page: 100 }, function (err, res) {
             if (err) reject(err);
 
             resolve(res);
