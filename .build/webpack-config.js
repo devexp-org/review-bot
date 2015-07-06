@@ -20,33 +20,43 @@ function makeStylesLoader(options) {
 }
 
 function loaders(options) {
-    return [
+    var loaders = [
         makeStylesLoader(options),
         { test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000' },
-        {
-            test: /\.jsx?$/,
-            exclude: /node_modules/,
-            loader: 'react-hot'
-        },
         {
             test: /\.jsx?$/,
             loader: 'babel',
             exclude: /node_modules/,
             query: {
-                optional: ['es7.decorators', 'es7.classProperties'],
+                optional: ['es7.decorators', 'es7.classProperties', 'es7.functionBind'],
                 loose: ['es6.classes', 'es6.modules', 'es6.properties.computed', 'es6.templateLiterals']
             }
         }
     ];
+
+    if (options.debug) {
+        loaders.push({
+            test: /\.jsx?$/,
+            exclude: /node_modules/,
+            loader: 'react-hot'
+        });
+    }
+
+    return loaders;
 }
 
 function plugins(debug) {
     var pluginsList = [];
 
     if (!debug) {
+        pluginsList.push(new webpack.DefinePlugin({
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }));
         pluginsList.push(new webpack.optimize.DedupePlugin());
-        pluginsList.push(new webpack.optimize.UglifyJsPlugin());
         pluginsList.push(new ExtractTextPlugin('styles.css'));
+        pluginsList.push(new webpack.optimize.UglifyJsPlugin());
     } else {
         pluginsList.push(new webpack.HotModuleReplacementPlugin());
     }

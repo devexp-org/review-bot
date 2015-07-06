@@ -5,13 +5,11 @@ var Schema = mongoose.Schema,
     PullRequest,
     baseSchema;
 
-/* eslint-disable camelcase */
 baseSchema = {
     _id: Number,
     id: Number,
     title: String,
     body: String,
-    extra: Schema.Types.Mixed,
     url: String,
     html_url: String,
     number: Number,
@@ -55,7 +53,6 @@ baseSchema = {
     changed_files: Number,
     head: Schema.Types.Mixed
 };
-/* eslint-enable camelcase */
 
 /**
  * Setup model
