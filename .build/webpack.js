@@ -26,8 +26,10 @@ module.exports = function (gulp, paths, webpackDevServerOpts, autoprefixer) {
         webpack(
             config({
                 entryPoint: paths.clientEntryPoint,
-                paths: paths,
-                debug: false
+                devServer: webpackDevServerOpts,
+                debug: false,
+                paths,
+                autoprefixer
             }),
             function (err, stats) {
                 if (err) console.error(err);
