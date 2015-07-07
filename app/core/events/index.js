@@ -4,6 +4,21 @@ var ee = new EventEmitter();
 
 export default {
     /**
+     * Setup listeners for internal events.
+     *
+     * @param {Object} options
+     * @param {Object} options.listeners
+     */
+    init(options) {
+        // TODO: aliases
+        Object.keys(options.listeners).forEach((eventName) => {
+            options.listeners[eventName].forEach((handler) => {
+                this.on(eventName, handler);
+            });
+        });
+    },
+
+    /**
      * Subscribes on event.
      *
      * @param {String} event - event name.

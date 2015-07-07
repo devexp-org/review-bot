@@ -26,10 +26,11 @@ app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
 /**
  * Server side modules
  */
+require('app/core/events').init(config.load('events'));
 require('app/core/mongoose').init(config.load('mongoose'));
 require('app/core/models/addons').init(config.load('models'));
 require('app/core/github/api').init(config.load('github'));
-require('app/core/review/init').init(config.load('review'));
+require('app/core/review/ranking').init(config.load('review'));
 require('app/core/badges').init(config.load('badges'));
 
 /**
