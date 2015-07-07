@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import * as addons from './../addons';
+import addons from './../addons';
 
 var Schema = mongoose.Schema,
     PullRequest,
@@ -57,7 +57,6 @@ baseSchema = {
 /**
  * Setup model
  */
-
 addons.setupExtenders('PullRequest', baseSchema);
 
 PullRequest = new Schema(baseSchema);

@@ -1,6 +1,6 @@
 export default {
     types: {},
-    style: 'flat',
+    style: '',
 
     init(options) {
         this.types = options.types;

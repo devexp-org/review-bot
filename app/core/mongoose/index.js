@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
-
 import logger from 'app/core/logger';
 
 /**
  * Connects to mongodb.
  *
- * @param   {Object} options - connection params.
+ * @param {Object} options - connection params.
  */
 export function init(options) {
     if (mongoose.connection.readyState === 2) {

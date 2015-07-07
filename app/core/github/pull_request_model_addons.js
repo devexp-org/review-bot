@@ -1,4 +1,4 @@
-import { _bodyCleaner } from './api';
+import bodyCleaner from 'app/core/github/utils/body_cleaner';
 
 /**
  * Extender for PullRequest model which adds extra body content field.
@@ -20,7 +20,7 @@ export function extender() {
 export function hook() {
     return function (model) {
         return new Promise((resolve) => {
-            model.body = _bodyCleaner(model.body);
+            model.body = bodyCleaner(model.body);
             resolve();
         });
     };
