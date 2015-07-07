@@ -54,14 +54,18 @@ function plugins(debug) {
                 'NODE_ENV': JSON.stringify('production')
             }
         }));
+
         pluginsList.push(new webpack.optimize.DedupePlugin());
-        pluginsList.push(new ExtractTextPlugin('styles.css'));
+
+        pluginsList.push(new ExtractTextPlugin('style.css', {
+            allChunks: true
+        }));
+
         pluginsList.push(new webpack.optimize.UglifyJsPlugin());
     } else {
         pluginsList.push(new webpack.HotModuleReplacementPlugin());
+        pluginsList.push(new webpack.NoErrorsPlugin());
     }
-
-    pluginsList.push(new webpack.NoErrorsPlugin());
 
     return pluginsList;
 }
@@ -87,9 +91,10 @@ function buildPublicPath(options) {
 }
 
 export default function webpackDevConfig(options) {
-    var paths = options.paths;
+    var paths = options.paths,
+        config;
 
-    return {
+    config = {
         entry: entries(options.entryPoint, options.debug, options.devServer.port),
         output: {
             path: path.join(__dirname, '..', paths.dest),
@@ -97,10 +102,15 @@ export default function webpackDevConfig(options) {
             publicPath: buildPublicPath(options)
         },
         debug: options.debug,
-        devtool: 'eval',
         module: {
             loaders: loaders(options)
         },
         plugins: plugins(options.debug)
     };
+
+    if (options.debug) {
+        config.devtool = 'eval';
+    }
+
+    return config;
 }
