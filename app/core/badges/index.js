@@ -3,16 +3,17 @@ export default {
     style: '',
 
     init(options) {
-        this.types = options.types;
         this.url = options.url;
         this.style = options.style || 'flat';
     },
 
-    create(type, ...rest) {
-        if (!this.types[type]) throw new Error(`Badge with type ${type} doesn't exists!`);
+    create(subject, status, color, url) {
+        if (!subject) throw new Error(`Badge should have at least subject!`);
 
-        var { subject, status, color, url } = this.types[type].apply(this, rest),
-            img = `<img src="${this.url}${subject}-${status}-${color}.svg?style=${this.style}" />`;
+        color = color || 'lightgrey';
+        status = status || '...';
+
+        var img = `<img src="${this.url}${subject}-${status}-${color}.svg?style=${this.style}" />`;
 
         if (url) {
             return `<a href="${url}">${img}</a>`;

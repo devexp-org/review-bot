@@ -19,17 +19,10 @@ function reviewAutoStart({ pullRequest }) {
     // if (!_.isEmpty(pullRequest.review.reviewrs)) return;
 
     review(pullRequest.id)
-        .then(resultReview => saveReview({ reviewers: resultReview.team}, pullRequest.id))
-        .then((pullRequest) => {
-            github.setBodyContent(
-                pullRequest.id,
-                'review:reviewers_badge',
-                badges.create('review_status', pullRequest.review) +
-                    pullRequest.review.reviewers.map((item) => {
-                        return badges.create('reviewer', item);
-                    }).join(' ')
-            );
-        }, ::logger.error);
+        .then(
+            resultReview => saveReview({ reviewers: resultReview.team}, pullRequest.id),
+            ::logger.error
+        );
 };
 
 /**
