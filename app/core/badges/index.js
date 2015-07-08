@@ -11,12 +11,7 @@ export default {
     create(type, ...rest) {
         if (!this.types[type]) throw new Error(`Badge with type ${type} doesn't exists!`);
 
-        var {
-                subject,
-                status,
-                color,
-                url
-            } = this.types[type].apply(this, rest),
+        var { subject, status, color, url } = this.types[type].apply(this, rest),
             img = `<img src="${this.url}${subject}-${status}-${color}.svg?style=${this.style}" />`;
 
         if (url) {

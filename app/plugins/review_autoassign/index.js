@@ -6,7 +6,7 @@ import saveReview from 'app/core/review/actions/save';
 
 import github from 'app/core/github/api';
 import badges from 'app/core/badges';
-import events ftom 'app/core/events'
+import events from 'app/core/events';
 
 /**
  * Plugin for auto assign reviewers for pull request.

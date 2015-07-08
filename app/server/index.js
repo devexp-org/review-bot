@@ -26,7 +26,6 @@ app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
 /**
  * Core modules
  */
-require('app/core/events').init(config.load('events'));
 require('app/core/mongoose').init(config.load('mongoose'));
 require('app/core/models/addons').init(config.load('models'));
 require('app/core/github/api').init(config.load('github'));
@@ -37,6 +36,8 @@ require('app/core/badges').init(config.load('badges'));
  * Routes / Middlewares
  */
 app.use(require('app/core/response')());
+app.use(require('app/core/badges/proxy'));
+
 app.use('/api/github', require('app/core/github/routes'));
 app.use('/api/review', require('app/core/review/routes'));
 
