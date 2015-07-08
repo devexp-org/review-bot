@@ -7,7 +7,7 @@ config.init({ path: path.join(__dirname, 'config') });
 
 sinon.assert.expose(assert, { prefix: '' });
 
-require('app/core/mongoose')(config.load('mongoose'));
+require('app/core/mongoose').init(config.load('mongoose'));
 
 global.sinon = sinon;
 global.assert = assert;
