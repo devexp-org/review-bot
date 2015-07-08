@@ -16,7 +16,10 @@ var app = express(),
  */
 if (process.env.NODE_ENV !== 'production') {
     app.use(errorhandler());
-    app.use(proxy('localhost:8080/public/app.js', '/public/app.js')); // TODO: Move proxy to config
+}
+
+if (process.env.WEBPACK_DEV) {
+    app.use(proxy('localhost:' + (process.env.WEBPACK_DEV_PORT || 8080) + '/public/app.js', '/public/app.js'));
 }
 
 app.use(responseTime());
