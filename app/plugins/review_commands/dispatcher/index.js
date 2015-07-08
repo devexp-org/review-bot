@@ -1,33 +1,39 @@
 import _ from 'lodash';
+import events from 'app/core/events';
 
-const COMMAND_REGEX = /^\/review\s+/i;
+var commands = {},
+    command_regex;
+
+/**
+ * Dispatch commands to handlers.
+ *
+ * @param {Object} payload - github webhook handler payload.
+ */
+function commandsDispatcher(payload) {
+    var comment = _.get(payload, ['comment', 'body']),
+        cmd;
+
+    if (comment && comment.match(command_regex)) {
+        cmd = _.compact(comment.replace(command_regex, '').split(' '));
+        cmd = cmd.map(c => c.toLowerCase());
+
+        _.forEach(commands[cmd[0]], (processor) => {
+            processor(cmd, payload);
+        });
+    }
+};
 
 /**
  * Creates commands dispatcher.
  *
  * @param {Object} options
- *
- * @returns {Function}
+ * @param {Object} options.commands - list of handlers for command
+ * @param {RegExp} options.regex - regex wich match command
+ * @param {String[]} options.events - name of events for subscribe to.
  */
 export default function commandsDispatcherCreator(options) {
-    var commands = options.commands;
+    commands = options.commands;
+    command_regex = options.regex;
 
-    /**
-     * Dispatch commands to handlers.
-     *
-     * @param {Object} payload - github webhook handler payload.
-     */
-    return function commandsDispatcher(payload) {
-        var comment = _.get(payload, ['comment', 'body']),
-            cmd;
-
-        if (comment && comment.match(COMMAND_REGEX)) {
-            cmd = _.compact(comment.replace(COMMAND_REGEX, '').split(' '));
-            cmd = cmd.map(c => c.toLowerCase());
-
-            _.forEach(commands[cmd[0]], (processor) => {
-                processor(cmd, payload);
-            });
-        }
-    };
+    options.events.forEach(event => events.on(event, commandsDispatcher));
 }

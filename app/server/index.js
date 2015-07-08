@@ -24,7 +24,7 @@ app.use(bodyParser.json());
 app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
 
 /**
- * Server side modules
+ * Core modules
  */
 require('app/core/events').init(config.load('events'));
 require('app/core/mongoose').init(config.load('mongoose'));
@@ -39,6 +39,11 @@ require('app/core/badges').init(config.load('badges'));
 app.use(require('app/core/response')());
 app.use('/api/github', require('app/core/github/routes'));
 app.use('/api/review', require('app/core/review/routes'));
+
+/**
+ * Plugins
+ */
+require('app/plugins');
 
 /**
  * Default Route
