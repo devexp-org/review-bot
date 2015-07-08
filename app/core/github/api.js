@@ -5,10 +5,26 @@ import * as config from 'app/core/config';
 import logger from 'app/core/logger';
 import { PullRequest } from 'app/core/models';
 
-var { start, end, regex } = config.load('github').content;
+var { start, end } = config.load('github').content;
 
 var github = {
     api: {},
+
+    /**
+     * Init github api wrapper.
+     *
+     * @param {Object} options
+     *
+     * @returns {this}
+     */
+    init(options) {
+        var api = new GitHub(options);
+        api.authenticate(options.authenticate);
+
+        this.api = api;
+
+        return this;
+    },
 
     /**
      * Adds content to pull request body.
@@ -65,15 +81,13 @@ var github = {
      * @param {Object} pullRequest
      */
     _updatePullRequestBody(pullRequest) {
-        console.log(pullRequest.extra_body);
-
-        var newBody = start + Object.keys(pullRequest.extra_body).map((key) => {
+        var extraBody = start + Object.keys(pullRequest.extra_body).map((key) => {
             return '<div>' + pullRequest.extra_body[key] + '</div>';
         }) + end;
 
-        github
+        this
             .updatePullRequestInfo(pullRequest)
-            .then(pullRequest => github._updateBody(pullRequest, newBody));
+            .then(pullRequest => this._updateBody(pullRequest, extraBody));
     },
 
     /**
@@ -81,47 +95,19 @@ var github = {
      * @private
      *
      * @param {Object} pullRequest
-     * @param {String} newBody
+     * @param {String} extraBody
      */
-    _updateBody(pullRequest, newBody) {
+    _updateBody(pullRequest, extraBody) {
         this.api.pullRequests.update({
             user: pullRequest.head.repo.owner.login,
             repo: pullRequest.head.repo.name,
             number: pullRequest.number,
             title: pullRequest.title,
-            body: newBody
+            body: pullRequest.body + extraBody
         });
-    },
-
-    /**
-     * Clears Pull Request body from generated content.
-     * @private
-     *
-     * @param {String} body
-     *
-     * @returns {String} clear body
-     */
-    _bodyCleaner(body) {
-        return body.replace(regex, '');
     }
 };
 
-github.updatePullRequest = _.debounce(github._updatePullRequestBody, 2000);
-
-/**
- * Init github api wrapper.
- *
- * @param {Object} options
- *
- * @returns {GitHub}
- */
-export function init(options) {
-    var api = new GitHub(options);
-    api.authenticate(options.authenticate);
-
-    github.api = api;
-
-    return github;
-}
+github.updatePullRequest = _.debounce(::github._updatePullRequestBody, 2000);
 
 export default github;

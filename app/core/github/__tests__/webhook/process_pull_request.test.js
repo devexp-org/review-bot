@@ -32,7 +32,7 @@ describe('core/github/webhook/process_pull_request', function () {
             });
 
             it('should emit pull_request event', function () {
-                assert.calledWith(events.emit, 'github:pull_request');
+                assert.calledWith(events.emit, 'github:pull_request:opened');
             });
         });
 
