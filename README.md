@@ -5,13 +5,17 @@ Requirements: mongodb, nodejs >= 0.12, gulp
 
 ```bash
 npm install
-npm run mongo
-gulp dev
+
+// run
+npm run dev
+
+// or
+npm run dev:tdd
 ```
 
 #### Structure
 ```js
-├── .build // Gulp tasks
+├── .webpack // Webpack configs
 ├── app
 │   ├── client // Core client side functionality
 │   │   ├── actions // Flux actions
@@ -24,8 +28,8 @@ gulp dev
 │   ├── core // Core modules like: github, review, models, logger, etc
 |   ├── config // Configs for modules and plugins
 │   ├── plugins // Modules which extends core functionality
+│   │   └── index.js // Plugins registry
 │   └── server // Express server
-|       ├── index.js // Place for including routes and initializing server side part of plugins
 |       └── views // Server side views
 ├── app.js // App entry point
 ├── data // Mongodb data

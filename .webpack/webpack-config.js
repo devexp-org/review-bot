@@ -4,13 +4,13 @@ var webpack = require('webpack'),
 
 function makeStylesLoader(options) {
     var debug = options.debug,
-        autoprefixer = options.autoprefixer.map(item => `"${item}"`).join(', '),
-        loaders = `autoprefixer?{browsers:[${autoprefixer}]}!sass`;
+        autoprefixer = options.autoprefixer.map(function (item) { return '"' + item + '"'; }).join(', '),
+        loaders = 'autoprefixer?{browsers:[' + autoprefixer + ']}!sass';
 
     if (debug) {
         loaders = 'style!css!' + loaders;
     } else {
-        loaders = 'css?mimimize!' + loaders;
+        loaders = 'css?minimize!' + loaders;
     }
 
     return {
@@ -55,15 +55,10 @@ function plugins(debug) {
             }
         }));
 
+        pluginsList.push(new ExtractTextPlugin('style.css'));
         pluginsList.push(new webpack.optimize.DedupePlugin());
-
-        pluginsList.push(new ExtractTextPlugin('style.css', {
-            allChunks: true
-        }));
-
         pluginsList.push(new webpack.optimize.UglifyJsPlugin());
     } else {
-        pluginsList.push(new webpack.HotModuleReplacementPlugin());
         pluginsList.push(new webpack.NoErrorsPlugin());
     }
 
@@ -90,7 +85,7 @@ function buildPublicPath(options) {
     return '/' + options.devServer.publicPath;
 }
 
-export default function webpackDevConfig(options) {
+module.exports = function webpackDevConfig(options) {
     var paths = options.paths,
         config;
 
@@ -113,4 +108,4 @@ export default function webpackDevConfig(options) {
     }
 
     return config;
-}
+};
