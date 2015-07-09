@@ -7,3 +7,4 @@ if [ ! -d $NODE_MODULES/app ]; then
 fi
 
 mkdir -p data 2> /dev/null
+mkdir -p logs 2> /dev/null
