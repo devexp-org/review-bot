@@ -7,4 +7,4 @@ export default {
     },
 
     events: ['github:issue_comment']
-}
+};

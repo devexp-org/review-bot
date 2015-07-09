@@ -6,13 +6,14 @@
   "scripts": {
     "postinstall": "scripts/postinstall.sh",
     "parallel": "./node_modules/.bin/parallelshell",
-    "test": "echo 'TODO'",
-    "webpack:dev": "WEBPACK_DEV=1 ./node_modules/.bin/webpack-dev-server --config ./.build/webpack.js --hot",
-    "mongo": "mkdir -p data 2> /dev/null && mongod --dbpath ./data",
+    "test": "./node_modules/.bin/mocha -r ./tests/setup.js -R dot app/**/__tests__/**/*.test.js",
+    "mongo": "mongod --dbpath ./data",
+    "webpack:dev": "WEBPACK_DEV=1 ./node_modules/.bin/webpack-dev-server --config ./.webpack/webpack.js --hot",
     "serve:dev": "nodemon app.js -e js,html --ignore __test__ --ignore public/ --ignore app/client/ --ignore node_modules",
-    "dev:nowp": "npm run parallel -- 'npm run mongo' 'npm run serve:dev'",
     "dev": "WEBPACK_DEV=1 npm run parallel -- 'npm run webpack:dev' 'npm run mongo' 'npm run serve:dev'",
-    "build": "./node_modules/.bin/webpack --config ./.build/webpack.js"
+    "dev:nowp": "npm run parallel -- 'npm run mongo' 'npm run serve:dev'",
+    "dev:tdd": "npm run dev -- 'npm test -- -w'",
+    "build": "./node_modules/.bin/webpack --config ./.webpack/webpack.js"
   },
   "author": "Stanislav Sysoev <d4rkr00t@gmail.com> (http://sysoev.org)",
   "license": "MIT",
@@ -43,6 +44,7 @@
     "eslint": "^0.24.0",
     "eslint-plugin-react": "^2.6.4",
     "extract-text-webpack-plugin": "^0.8.2",
+    "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
     "node-sass": "^3.2.0",
     "parallelshell": "^1.2.0",

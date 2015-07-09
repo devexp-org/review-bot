@@ -1,5 +1,5 @@
 node_modules
-public/style.css
-public/app.js
+public
+!public/fonts
 data
 npm-debug.log
