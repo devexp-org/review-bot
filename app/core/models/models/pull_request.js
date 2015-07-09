@@ -93,29 +93,44 @@ PullRequest.statics.findByNumberAndRepo = function (number, fullName) {
 };
 
 /**
- * Find pull requests by username
+ * Find pull requests by user
  *
- * @param {String} username
+ * @param {String} login
  *
  * @returns {Promise}
  */
-PullRequest.statics.findByUsername = function (username) {
+PullRequest.statics.findByUsername = function (login) {
     return this.model('PullRequest').find({
-        'user.login': username
+        'user.login': login
     }).sort('-updated_at');
 };
 
 /**
  * Find pull requests by reviewer
  *
- * @param {String} username
+ * @param {String} login
  *
  * @returns {Promise}
  */
-PullRequest.statics.findByReviewer = function (username) {
+PullRequest.statics.findByReviewer = function (login) {
     return this.model('PullRequest').find({
-        'review.reviewers.login': username
+        'review.reviewers.login': login
     }).sort('-updated_at');
+};
+
+/**
+ * Find open reviews by reviewer
+ *
+ * @param {String} login
+ *
+ * @returns {Promise}
+ */
+PullRequest.statics.findOpenReviewsByUser = function (login) {
+    return this.model('PullRequest').find({
+        'state': 'open',
+        'review.reviewers.login': login,
+        'review.status': 'inprogress'
+    }, 'review');
 };
 
 export default mongoose.model('PullRequest', PullRequest);
