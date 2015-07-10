@@ -1,8 +1,8 @@
-import _ from 'lodash';
-import events from 'app/core/events';
+var _ = require('lodash');
+var events = require('app/core/events');
 
-var commands = {},
-    command_regex;
+var commands = {};
+var command_regex;
 
 /**
  * Dispatch commands to handlers.
@@ -15,13 +15,13 @@ function commandsDispatcher(payload) {
 
     if (comment && comment.match(command_regex)) {
         cmd = _.compact(comment.replace(command_regex, '').split(' '));
-        cmd = cmd.map(c => c.toLowerCase());
+        cmd = cmd.map(function (c) { return c.toLowerCase(); });
 
-        _.forEach(commands[cmd[0]], (processor) => {
+        _.forEach(commands[cmd[0]], function (processor) {
             processor(cmd, payload);
         });
     }
-};
+}
 
 /**
  * Creates commands dispatcher.
@@ -31,9 +31,9 @@ function commandsDispatcher(payload) {
  * @param {RegExp} options.regex - regex wich match command
  * @param {String[]} options.events - name of events for subscribe to.
  */
-export default function commandsDispatcherCreator(options) {
+module.exports = function commandsDispatcherCreator(options) {
     commands = options.commands;
     command_regex = options.regex;
 
-    options.events.forEach(event => events.on(event, commandsDispatcher));
-}
+    options.events.forEach(function (event) { events.on(event, commandsDispatcher); });
+};

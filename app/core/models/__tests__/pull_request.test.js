@@ -1,6 +1,6 @@
 describe('Core Model: PullRequest', function () {
-    var pullRequestMock = require('app/core/models/__tests__/mocks/pull_request.json'),
-        PullRequest = require('../').PullRequest;
+    var pullRequestMock = require('app/core/models/__tests__/mocks/pull_request.json');
+    var PullRequest = require('../').PullRequest;
 
     beforeEach(function (done) {
         var pullRequest = new PullRequest(pullRequestMock);

@@ -1,33 +1,44 @@
-import _ from 'lodash';
+var _ = require('lodash');
 
-import logger from 'app/core/logger';
-import review from 'app/core/review/review';
-import saveReview from 'app/core/review/actions/save';
+var logger = require('app/core/logger');
+var review = require('app/core/review/review');
+var saveReview = require('app/core/review/actions/save');
+var events = require('app/core/events');
 
-import github from 'app/core/github/api';
-import badges from 'app/core/badges';
-import events from 'app/core/events';
+/**
+ * Few checks for autostarting review.
+ *
+ * @param {Object} pullRequest
+ *
+ * @returns {Boolean}
+ */
+function shouldStartReview(pullRequest) {
+    if (_.isEmpty(pullRequest.review.reviewrs)) return true;
+}
 
 /**
  * Plugin for auto assign reviewers for pull request.
  *
- * @param {{ PullRequest }} pullRequest
+ * @param {Object} payload
+ * @param {Object} payload.pullRequest
  */
-function reviewAutoStart({ pullRequest }) {
-    logger.info(`Autostart review for pull "${pullRequest.id} — ${pullRequest.title}"`);
+function reviewAutoStart(payload) {
+    var pullRequest = payload.pullRequest;
 
-    // if (!_.isEmpty(pullRequest.review.reviewrs)) return;
+    if (!shouldStartReview(pullRequest)) return;
+
+    logger.info('Autostart review for pull "' + pullRequest.id + ' — ' + pullRequest.title + '"');
 
     review(pullRequest.id)
         .then(
-            resultReview => saveReview({ reviewers: resultReview.team}, pullRequest.id),
-            ::logger.error
+            function (resultReview) { saveReview({ reviewers: resultReview.team }, pullRequest.id); },
+            logger.error.bind(logger)
         );
-};
+}
 
 /**
  * Creates review autoassign plugin.
  */
-export default function reviewAutoAssignCreator() {
+module.exports = function reviewAutoAssignCreator() {
     events.on('github:pull_request:opened', reviewAutoStart);
-}
+};

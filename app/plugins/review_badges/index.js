@@ -1,6 +1,6 @@
-import github from 'app/core/github/api';
-import badges from 'app/core/badges';
-import events from 'app/core/events';
+var github = require('app/core/github/api');
+var badges = require('app/core/badges');
+var events = require('app/core/events');
 
 function statusToColor(status) {
     switch (status) {
@@ -33,15 +33,15 @@ function buildReviewBadges(review) {
     return '<div>' + status + ' ' + reviewers + '</div>';
 }
 
-function updateReviewBadges({ pullRequest, review }) {
+function updateReviewBadges(payload) {
     github.setBodyContent(
-        pullRequest.id,
+        payload.pullRequest.id,
         'review:badge',
-        buildReviewBadges(review)
+        buildReviewBadges(payload.review)
     );
 }
 
-export default function reviewBadgesPluginCreator() {
+module.exports = function reviewBadgesPluginCreator() {
     events.on('review:updated', updateReviewBadges);
     events.on('review:started', updateReviewBadges);
     events.on('review:approved', updateReviewBadges);

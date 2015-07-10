@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     version: '3.0.0',
     debug: false,
     protocol: 'https',

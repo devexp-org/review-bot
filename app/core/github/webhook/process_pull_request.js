@@ -1,6 +1,6 @@
-import logger from 'app/core/logger';
-import events from 'app/core/events';
-import { PullRequest } from 'app/core/models';
+var logger = require('app/core/logger');
+var events = require('app/core/events');
+var PullRequest = require('app/core/models').PullRequest;
 
 /**
  * Handler for github web hook with type pull_request.
@@ -9,11 +9,11 @@ import { PullRequest } from 'app/core/models';
  *
  * @returns {Promise}
  */
-export default function processPullRequest(body) {
+module.exports = function processPullRequest(body) {
     return PullRequest
         .findById(body.pull_request.id)
         .exec()
-        .then((pullRequest) => {
+        .then(function (pullRequest) {
             if (!pullRequest) {
                 pullRequest = new PullRequest(body.pull_request);
             } else {
@@ -22,10 +22,10 @@ export default function processPullRequest(body) {
 
             return pullRequest.save();
         })
-        .then((pullRequest) => {
-            events.emit('github:pull_request:' + body.action, { pullRequest });
+        .then(function (pullRequest) {
+            events.emit('github:pull_request:' + body.action, { pullRequest: pullRequest });
             logger.info('Pull request saved:', pullRequest.title, pullRequest._id);
 
             return pullRequest;
         }, logger.error.bind(logger, 'Process pull request: '));
-}
+};

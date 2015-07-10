@@ -1,7 +1,6 @@
-import _ from 'lodash';
-
-import ranking from './ranking';
-import { PullRequest } from 'app/core/models';
+var _ = require('lodash');
+var ranking = require('./ranking');
+var PullRequest = require('app/core/models').PullRequest;
 
 /**
  * Runs next ranker from rankers list or resolve with ranking result.
@@ -14,7 +13,7 @@ import { PullRequest } from 'app/core/models';
 function addNextRanker(review, rankers, resolve, reject) {
     var ranker = rankers.splice(0, 1)[0];
 
-    ranker(review).then((resultReview) => {
+    ranker(review).then(function (resultReview) {
         if (rankers.length === 0) {
             resolve(resultReview);
             return;
@@ -35,8 +34,12 @@ function addNextRanker(review, rankers, resolve, reject) {
 function startQueue(pullRequestId, reject) {
     return PullRequest
         .findById(pullRequestId)
-        .then((pullRequest) => {
-            if (!pullRequest) reject(`Pull Request with id = ${pullRequestId} not found!`);
+        .then(function (pullRequest) {
+            if (!pullRequest) {
+                reject('Pull Request with id = ' + pullRequestId + ' not found!');
+
+                return;
+            }
 
             return { pull: pullRequest, team: [] };
         });
@@ -50,14 +53,14 @@ function startQueue(pullRequestId, reject) {
  *
  * @returns {Promise}
  */
-export default function review(pullRequestId) {
+module.exports = function review(pullRequestId) {
     var rankers = _.clone(ranking.get());
 
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         var reviewQueue = startQueue(pullRequestId, reject);
 
-        reviewQueue.then((resultReview) => {
+        reviewQueue.then(function (resultReview) {
             addNextRanker(resultReview, rankers, resolve, reject);
         });
     });
-}
+};

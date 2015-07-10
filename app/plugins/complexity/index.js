@@ -85,20 +85,20 @@ function commitsComplexity(commits) {
  *
  * @returns {Object}
  */
-export function extender() {
+module.exports.extender = function extender() {
     return {
         complexity: { type: Number, 'default': 0 }
     };
-}
+};
 
 /**
  * Pre save hook for PullRequest model which calculates pull request complexity.
  *
  * @returns {Function}
  */
-export function hook() {
+module.exports.hook = function hook() {
     return function (model) {
-        return new Promise((resolve) => {
+        return new Promise(function (resolve) {
             var complexity = 0;
 
             complexity += additionsComplexity(model.additions);
@@ -110,4 +110,4 @@ export function hook() {
             resolve();
         });
     };
-}
+};

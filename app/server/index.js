@@ -1,15 +1,14 @@
 /* global __dirname */
-import express from 'express';
-import path from 'path';
-import responseTime from 'response-time';
-import bodyParser from 'body-parser';
-import errorhandler from 'errorhandler';
-import proxy from 'proxy-express';
+var express = require('express');
+var path = require('path');
+var responseTime = require('response-time');
+var bodyParser = require('body-parser');
+var errorhandler = require('errorhandler');
+var proxy = require('proxy-express');
 
-import * as config from 'app/core/config';
-
-var app = express(),
-    serverConfig = config.load('server');
+var app = express();
+var config = require('app/core/config');
+var serverConfig = config.load('server');
 
 /**
  * Setup server
@@ -58,4 +57,4 @@ app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'views', 'layout.html'));
 });
 
-export default app;
+module.exports = app;

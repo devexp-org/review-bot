@@ -1,4 +1,4 @@
-import * as config from 'app/core/config';
+var config = require('app/core/config');
 
 /**
  * Review

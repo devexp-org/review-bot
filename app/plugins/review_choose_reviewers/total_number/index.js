@@ -5,7 +5,7 @@
  *
  * @returns {Function}
  */
-export default function reviewTotalNumberCreator(max) {
+module.exports = function reviewTotalNumberCreator(max) {
     /**
      * Takes defined amount of team member for review.
      *
@@ -14,10 +14,10 @@ export default function reviewTotalNumberCreator(max) {
      * @returns {Promise}
      */
     return function reviewTotalNumber(review) {
-        return new Promise((resolve) => {
+        return new Promise(function (resolve) {
             review.team = review.team.slice(0, max);
 
             resolve(review);
         });
     };
-}
+};

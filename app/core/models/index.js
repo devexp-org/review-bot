@@ -1,5 +1,5 @@
-import PullRequest from './models/pull_request';
+var PullRequest = require('./models/pull_request');
 
-export default {
-    PullRequest
+module.exports = {
+    PullRequest: PullRequest
 };

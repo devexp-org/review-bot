@@ -1,4 +1,4 @@
-export default function reviewRemoveAuthorCreator() {
+module.exports = function reviewRemoveAuthorCreator() {
     /**
      * Removes pull author from team.
      *
@@ -7,14 +7,14 @@ export default function reviewRemoveAuthorCreator() {
      * @returns {Promise}
      */
     return function reviewRemoveAuthor(review) {
-        return new Promise((resolve) => {
+        return new Promise(function (resolve) {
             var pullAuthor = review.pull.user.login;
 
-            review.team = review.team.filter((item) => {
+            review.team = review.team.filter(function (item) {
                 return item.login !== pullAuthor;
             });
 
             resolve(review);
         });
     };
-}
+};

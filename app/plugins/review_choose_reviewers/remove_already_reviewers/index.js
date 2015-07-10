@@ -1,6 +1,6 @@
-import _ from 'lodash';
+var _ = require('lodash');
 
-export default function removeAlreadyReviewersCreator() {
+module.exports = function removeAlreadyReviewersCreator() {
     /**
      * Removes team members which are already reviewers.
      *
@@ -9,17 +9,17 @@ export default function removeAlreadyReviewersCreator() {
      * @returns {Promise}
      */
     return function removeAlreadyReviewers(review) {
-        return new Promise((resolve) => {
+        return new Promise(function (resolve) {
             var reviewers = review.pull.review.reviewers;
 
             if (_.isEmpty(reviewers)) {
                 resolve(review);
             }
 
-            review.team = _.filter(review.team, (member) => {
+            review.team = _.filter(review.team, function (member) {
                 var keep = true;
 
-                reviewers.forEach((reviewer) => {
+                reviewers.forEach(function (reviewer) {
                     if (reviewer.login === member.login) {
                         keep = false;
                         return false;
@@ -32,4 +32,4 @@ export default function removeAlreadyReviewersCreator() {
             resolve(review);
         });
     };
-}
+};

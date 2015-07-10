@@ -1,7 +1,7 @@
 /**
  * Map repo => { org, team }
  */
-export default {
+module.exports = {
     'devexp-org/devexp': {
         org: 'devexp-org',
         team: 'owners'

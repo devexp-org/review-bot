@@ -1,9 +1,9 @@
 // TODO: Refactor
-import logger from 'app/core/logger';
-import events from 'app/core/events';
-import * as config from 'app/core/config';
+var logger = require('app/core/logger');
+var events = require('app/core/events');
+var config = require('app/core/config');
 
-import { PullRequest } from 'app/core/models';
+var PullRequest = require('app/core/models').PullRequest;
 
 /**
  * Approves and complete review if approved reviewers count === review config approveCount.
@@ -13,21 +13,21 @@ import { PullRequest } from 'app/core/models';
  *
  * @returns {Promise}
  */
-export default function approveReview(login, pullId) {
-    var reviewConfig = config.load('review'),
-        approvedCount = 0;
+module.exports = function approveReview(login, pullId) {
+    var reviewConfig = config.load('review');
+    var approvedCount = 0;
 
     return PullRequest
         .findById(pullId)
         .exec()
-        .then((pullRequest) => {
+        .then(function (pullRequest) {
             if (!pullRequest) {
                 throw new Error('Pull request not found!');
             }
 
             var reviewers = pullRequest.review.reviewers;
 
-            reviewers.forEach((reviewer) => {
+            reviewers.forEach(function (reviewer) {
                 if (reviewer.login === login) {
                     reviewer.approved = true;
                 }
@@ -47,15 +47,15 @@ export default function approveReview(login, pullId) {
             pullRequest.review.reviewers = reviewers;
 
             return pullRequest.save();
-        }).then((pullRequest) => {
-            events.emit('review:approved', { pullRequest, review: pullRequest.review, login: login });
+        }).then(function (pullRequest) {
+            events.emit('review:approved', { pullRequest: pullRequest, review: pullRequest.review, login: login });
             logger.info('Review approved:', pullRequest.id, login);
 
             if (pullRequest.review.status === 'complete') {
-                events.emit('review:complete', { pullRequest, review: pullRequest.review });
+                events.emit('review:complete', { pullRequest: pullRequest, review: pullRequest.review });
                 logger.info('Review complete:', pullId);
             }
 
             return pullRequest;
         }, logger.error.bind(logger));
-}
+};

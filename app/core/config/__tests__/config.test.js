@@ -1,7 +1,7 @@
 describe('Module: config', function () {
-    var path = require('path'),
-        config = require('../'),
-        options = { path: path.join(__dirname, 'mocks') };
+    var path = require('path');
+    var config = require('../');
+    var options = { path: path.join(__dirname, 'mocks') };
 
     beforeEach(function () {
         config.init(options);

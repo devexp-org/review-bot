@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     dev: {
         host: 'mongodb://localhost/devexp'
     },

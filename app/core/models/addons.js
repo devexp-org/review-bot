@@ -1,6 +1,6 @@
-import _ from 'lodash';
+var _ = require('lodash');
 
-export default {
+module.exports = {
     extenders: {},
     hooks: {},
 
@@ -13,9 +13,9 @@ export default {
      *
      * @returns {this}
      */
-    init(options) {
-        this.extenders = options.extenders;
-        this.hooks = options.hooks;
+    init: function init(options) {
+        this.extenders = options.extenders || {};
+        this.hooks = options.hooks || {};
 
         return this;
     },
@@ -27,7 +27,7 @@ export default {
      *
      * @returns {Object}
      */
-    get(model) {
+    get: function get(model) {
         return {
             extenders: this.extenders[model] || [],
             hooks: this.hooks[model] || []
@@ -42,10 +42,12 @@ export default {
      *
      * @returns {this}
      */
-    setupExtenders(model, baseSchema) {
+    setupExtenders: function setupExtenders(model, baseSchema) {
         var extenders = this.get(model).extenders;
 
-        _.forEach(extenders, extender => _.extend(baseSchema, extender));
+        _.forEach(extenders, function (extender) {
+            _.extend(baseSchema, extender);
+        });
 
         return this;
     },
@@ -58,14 +60,16 @@ export default {
      *
      * @returns {this}
      */
-    setupHooks(model, schema) {
+    setupHooks: function setupHooks(model, schema) {
         var hooks = this.get(model).hooks;
 
         if (hooks.preSave) {
             schema.pre('save', function (next) {
                 var hooksPromiseList = [];
 
-                _.forEach(hooks.preSave, hook => hooksPromiseList.push(hook(this)));
+                _.forEach(hooks.preSave, function (hook) {
+                    hooksPromiseList.push(hook(this));
+                });
 
                 Promise.all(hooksPromiseList).then(next);
             });

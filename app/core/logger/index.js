@@ -1,7 +1,6 @@
-import winston from 'winston';
-
-var isProduction = process.env.NODE_ENV === 'production',
-    transports = [];
+var winston = require('winston');
+var isProduction = process.env.NODE_ENV === 'production';
+var transports = [];
 
 if (isProduction) {
     transports.push(
@@ -22,4 +21,4 @@ if (isProduction) {
     );
 }
 
-export default new winston.Logger({ transports });
+module.exports = new winston.Logger({ transports: transports });

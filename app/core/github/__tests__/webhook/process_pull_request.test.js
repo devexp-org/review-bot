@@ -1,9 +1,9 @@
 describe('core/github/webhook/process_pull_request', function () {
-    var proxyquire = require('proxyquire'),
-        PullRequest = require('app/core/models').PullRequest,
-        events,
-        payload,
-        processPullRequest;
+    var proxyquire = require('proxyquire');
+    var PullRequest = require('app/core/models').PullRequest;
+    var events;
+    var payload;
+    var processPullRequest;
 
     beforeEach(function () {
         events = { emit: sinon.stub() };
@@ -20,7 +20,7 @@ describe('core/github/webhook/process_pull_request', function () {
     describe('Action: opened', function () {
         describe('Add pull request', function () {
             beforeEach(function (done) {
-                processPullRequest(payload).then(() => done());
+                processPullRequest(payload).then(function () { done(); });
             });
 
             it('should add entry to db', function (done) {
@@ -38,7 +38,7 @@ describe('core/github/webhook/process_pull_request', function () {
 
         describe('Update pull request if exists', function () {
             beforeEach(function (done) {
-                processPullRequest(payload).then(() => done());
+                processPullRequest(payload).then(function () { done(); });
             });
 
             it('should update pull request', function (done) {

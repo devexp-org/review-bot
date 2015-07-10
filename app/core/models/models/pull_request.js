@@ -1,11 +1,8 @@
-import mongoose from 'mongoose';
-import addons from './../addons';
+var mongoose = require('mongoose');
+var addons = require('./../addons');
+var Schema = mongoose.Schema;
 
-var Schema = mongoose.Schema,
-    PullRequest,
-    baseSchema;
-
-baseSchema = {
+var baseSchema = {
     _id: Number,
     id: Number,
     title: String,
@@ -59,7 +56,7 @@ baseSchema = {
  */
 addons.setupExtenders('PullRequest', baseSchema);
 
-PullRequest = new Schema(baseSchema);
+var PullRequest = new Schema(baseSchema);
 
 addons.setupHooks('PullRequest', PullRequest);
 
@@ -87,7 +84,7 @@ PullRequest.path('id').set(function (v) {
  */
 PullRequest.statics.findByNumberAndRepo = function (number, fullName) {
     return this.model('PullRequest').findOne({
-        number,
+        number: number,
         'head.repo.full_name': fullName
     });
 };
@@ -133,4 +130,4 @@ PullRequest.statics.findOpenReviewsByUser = function (login) {
     }, 'review');
 };
 
-export default mongoose.model('PullRequest', PullRequest);
+module.exports = mongoose.model('PullRequest', PullRequest);

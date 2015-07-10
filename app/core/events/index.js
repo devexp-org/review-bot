@@ -1,18 +1,17 @@
-import { EventEmitter } from 'events';
-
+var EventEmitter = require('events').EventEmitter;
 var ee = new EventEmitter();
 
-export default {
+module.exports = {
     /**
      * Setup listeners for internal events.
      *
      * @param {Object} options
      * @param {Object} options.listeners
      */
-    init(options) {
+    init: function init(options) {
         // TODO: aliases
-        Object.keys(options.listeners).forEach((eventName) => {
-            options.listeners[eventName].forEach((handler) => {
+        Object.keys(options.listeners).forEach(function (eventName) {
+            options.listeners[eventName].forEach(function (handler) {
                 this.on(eventName, handler);
             });
         });
@@ -26,7 +25,7 @@ export default {
      *
      * @returns {this}
      */
-    on(event, callback) {
+    on: function on(event, callback) {
         ee.on(event, callback);
 
         return this;
@@ -40,7 +39,7 @@ export default {
      *
      * @returns {this}
      */
-    off(event, callback) {
+    off: function off(event, callback) {
         ee.removeListener(event, callback);
 
         return this;
@@ -51,7 +50,7 @@ export default {
      *
      * @returns {this}
      */
-    emit() {
+    emit: function emit() {
         ee.emit.apply(ee, arguments);
 
         return this;

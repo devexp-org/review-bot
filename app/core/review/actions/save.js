@@ -1,11 +1,11 @@
 // TODO: REFACTOR
 // HELL BEGIN
-import _ from 'lodash';
+var _ = require('lodash');
 
-import logger from 'app/core/logger';
-import events from 'app/core/events';
+var logger = require('app/core/logger');
+var events = require('app/core/events');
 
-import { PullRequest } from 'app/core/models';
+var PullRequest = require('app/core/models').PullRequest;
 
 /**
  * Saves review.
@@ -15,13 +15,13 @@ import { PullRequest } from 'app/core/models';
  *
  * @returns {Promise}
  */
-export default function saveReview(review, pullId) {
+module.exports = function saveReview(review, pullId) {
     var isNew = false;
 
     return PullRequest
         .findById(pullId)
         .exec()
-        .then((pullRequest) => {
+        .then(function (pullRequest) {
             if (!pullRequest) {
                 throw new Error('Pull request not found!');
             }
@@ -46,25 +46,26 @@ export default function saveReview(review, pullId) {
 
             if (review.status === 'inprogress' && _.isEmpty(review.reviewers)) {
                 throw new Error(
-                    `Try to start review where reviewers weren't selected ${pullRequest.id} — ${pullRequest.title}`
+                    'Try to start review where reviewers weren\'t selected ' +
+                    pullRequest.id + ' — ' + pullRequest.title
                 );
             }
 
             pullRequest.review = review;
 
             return pullRequest.save();
-        }).then((pullRequest) => {
+        }).then(function (pullRequest) {
             var eventName = 'review:updated';
 
             if (review.status === 'started' && isNew) {
                 eventName = 'review:started';
             }
 
-            events.emit(eventName, { pullRequest, review });
+            events.emit(eventName, { pullRequest: pullRequest, review: review });
 
             logger.info('Review saved:', pullId, eventName);
 
             return pullRequest;
-        }, ::logger.error);
-}
+        }, logger.error.bind(logger));
+};
 // HELL END

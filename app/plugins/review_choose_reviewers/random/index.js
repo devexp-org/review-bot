@@ -5,7 +5,7 @@
  *
  * @returns {Function}
  */
-export default function reviewRandomCreator(max) {
+module.exports = function reviewRandomCreator(max) {
     /**
      * Adds random rank to every team member.
      *
@@ -14,12 +14,12 @@ export default function reviewRandomCreator(max) {
      * @returns {Promise}
      */
     return function reviewRandom(review) {
-        return new Promise((resolve) => {
-            review.team.forEach((member) => {
+        return new Promise(function (resolve) {
+            review.team.forEach(function (member) {
                 member.rank += Math.floor(Math.random() * (max - 1));
             });
 
             resolve(review);
         });
     };
-}
+};

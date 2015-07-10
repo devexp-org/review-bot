@@ -1,7 +1,7 @@
-import path from 'path';
+var path = require('path');
 
-export default {
+module.exports = {
     staticBase: '/public',
     staticPath: path.join(__dirname, '..', '..', 'public'),
-    port: 3000
+    port: process.env.PORT || 3000
 };

@@ -1,4 +1,4 @@
-export default function reviewSortCretor() {
+module.exports = function reviewSortCreator() {
     /**
      * Sorts reviewers by rank.
      *
@@ -7,8 +7,8 @@ export default function reviewSortCretor() {
      * @returns {Promise}
      */
     return function reviewSort(review) {
-        return new Promise((resolve) => {
-            review.team = review.team.sort((a, b) => {
+        return new Promise(function (resolve) {
+            review.team = review.team.sort(function (a, b) {
                 if (a.rank > b.rank) return -1;
                 if (b.rank > a.rank) return 1;
                 return 0;
@@ -17,4 +17,4 @@ export default function reviewSortCretor() {
             resolve(review);
         });
     };
-}
+};

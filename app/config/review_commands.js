@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     regex: /^\/review\s+/i,
 
     commands: {

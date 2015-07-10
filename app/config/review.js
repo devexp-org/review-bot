@@ -1,6 +1,6 @@
-import * as config from 'app/core/config';
+var config = require('app/core/config');
 
-export default {
+module.exports = {
     approveCount: 2,
     processors: [
         require('app/plugins/review_choose_reviewers/github_org_team')(config.load('github_org_team')),

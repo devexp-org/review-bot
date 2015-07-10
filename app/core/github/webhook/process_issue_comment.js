@@ -1,6 +1,6 @@
-import logger from 'app/core/logger';
-import events from 'app/core/events';
-import { PullRequest } from 'app/core/models';
+var logger = require('app/core/logger');
+var events = require('app/core/events');
+var PullRequest = require('app/core/models').PullRequest;
 
 /**
  * Handler for github web hook with type issue_comment.
@@ -9,26 +9,27 @@ import { PullRequest } from 'app/core/models';
  *
  * @returns {Promise}
  */
-export default function processIssueComment(body) {
+module.exports = function processIssueComment(body) {
     var pullRequestTitle = body.issue.title,
         pullRequestNumber = body.issue.number,
         repositoryName = body.repository.full_name;
 
     return PullRequest
         .findByNumberAndRepo(pullRequestNumber, repositoryName)
-        .then((pullRequest) => {
+        .then(function (pullRequest) {
+
             if (!pullRequest) return;
 
             pullRequest.title = pullRequestTitle;
 
             return pullRequest.save();
         })
-        .then((pullRequest) => {
+        .then(function (pullRequest) {
             if (!pullRequest) return;
 
             logger.info('Pull request updated:', pullRequest.title, pullRequest._id);
-            events.emit('github:issue_comment', { pullRequest, comment: body.comment });
+            events.emit('github:issue_comment', { pullRequest: pullRequest, comment: body.comment });
 
             return pullRequest;
         }, logger.error.bind(logger, 'Process issue comment: '));
-}
+};

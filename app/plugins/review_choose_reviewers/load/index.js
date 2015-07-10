@@ -1,5 +1,6 @@
-import _ from 'lodash';
-import { PullRequest } from 'app/core/models';
+var _ = require('lodash');
+var logger = require('app/core/logger');
+var PullRequest = require('app/core/models').PullRequest;
 
 /**
  * Creates review load processor.
@@ -8,7 +9,7 @@ import { PullRequest } from 'app/core/models';
  *
  * @returns {Function}
  */
-export default function reviewLoadCreator(max) {
+module.exports = function reviewLoadCreator(max) {
     /**
      * Substract rank if member has some active reviews.
      *
@@ -17,26 +18,34 @@ export default function reviewLoadCreator(max) {
      * @returns {Promise}
      */
     return function reviewLoad(review) {
-        return new Promise((resolve) => {
+        return new Promise(function (resolve) {
             var promiseList = [];
 
-            review.team.forEach((member) => {
+            if (_.isEmpty(review.team)) {
+                resolve(review);
+                return;
+            }
+
+            review.team.forEach(function (member) {
                 promiseList.push(PullRequest.findOpenReviewsByUser(member.login));
             });
 
             Promise
                 .all(promiseList)
-                .then((openedReviews) => {
-                    _(openedReviews).uniq(item => item.id).first().forEach((activeReview) => {
-                        activeReview.review.reviewers.forEach((reviewer) => {
-                            reviewer = _.find(review.team, { login: reviewer.login });
+                .then(function (openedReviews) {
+                    _(openedReviews)
+                        .uniq(function (item) { return item.id; })
+                        .first()
+                        .forEach(function (activeReview) {
+                            activeReview.review.reviewers.forEach(function (reviewer) {
+                                reviewer = _.find(review.team, { login: reviewer.login });
 
-                            reviewer.rank -= max;
+                                reviewer.rank -= max;
+                            });
                         });
-                    });
 
                     resolve(review);
-                });
+                }, logger.error.bind(logger));
         });
     };
-}
+};

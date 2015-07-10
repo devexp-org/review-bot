@@ -1,16 +1,15 @@
-import { Router } from 'express';
-import _ from 'lodash';
-
-import { PullRequest } from 'app/core/models';
-
-import processCommitComment from 'app/core/github/webhook/process_commit_comment';
-import processPullRequestReviewComment from 'app/core/github/webhook/process_pull_request_review_comment';
-import processIssueComment from 'app/core/github/webhook/process_issue_comment';
-import processPullRequest from 'app/core/github/webhook/process_pull_request';
-
 const GITHUB_HEADER_EVENT = 'x-github-event';
 
+var Router = require('express').Router;
+var _ = require('lodash');
 var router = Router();
+
+var PullRequest = require('app/core/models').PullRequest;
+
+var processCommitComment = require('app/core/github/webhook/process_commit_comment');
+var processPullRequestReviewComment = require('app/core/github/webhook/process_pull_request_review_comment');
+var processIssueComment = require('app/core/github/webhook/process_issue_comment');
+var processPullRequest = require('app/core/github/webhook/process_pull_request');
 
 router.get('/info', function githubInfoRouter(req, res) {
     res.success('github api routes');
@@ -70,11 +69,11 @@ router.get('/pull/:id', function (req, res) {
         .findById(req.params.id)
         .then(function (pullRequest) {
             if (_.isEmpty(pullRequest)) {
-                res.error(`Pull Request with id = ${req.params.id} not found!`);
+                res.error('Pull Request with id = ' + req.params.id + ' not found!');
             } else {
                 res.success(pullRequest);
             }
         });
 });
 
-export default router;
+module.exports = router;

@@ -1,11 +1,12 @@
-import _ from 'lodash';
-import GitHub from 'github';
+var _ = require('lodash');
+var GitHub = require('github');
+var config = require('app/core/config');
+var logger = require('app/core/logger');
+var PullRequest = require('app/core/models').PullRequest;
 
-import * as config from 'app/core/config';
-import logger from 'app/core/logger';
-import { PullRequest } from 'app/core/models';
-
-var { start, end } = config.load('github').content;
+var githubConfig = config.load('github');
+var start = githubConfig.content.start;
+var end = githubConfig.content.end;
 
 var github = {
     api: {},
@@ -17,7 +18,7 @@ var github = {
      *
      * @returns {this}
      */
-    init(options) {
+    init: function init(options) {
         var api = new GitHub(options);
         api.authenticate(options.authenticate);
 
@@ -33,18 +34,19 @@ var github = {
      * @param {String} id - unique content id.
      * @param {String} content - any content which will be placed in pull request body.
      */
-    setBodyContent(pullId, id, content) {
+    setBodyContent: function setBodyContent(pullId, id, content) {
         PullRequest
             .findById(pullId)
-            .then((pullRequest) => {
+            .then(function (pullRequest) {
                 pullRequest.extra_body = pullRequest.extra_body || {};
                 pullRequest.extra_body[id] = content;
 
-                pullRequest.save((err, pullRequest) => {
+                pullRequest.save(function (err, pullRequest) {
                     if (err) logger.error(err);
+
                     this._updatePullRequestBody(pullRequest);
                 });
-            }, ::logger.error);
+            }, logger.error.bind(logger));
     },
 
     /**
@@ -54,18 +56,18 @@ var github = {
      *
      * @returns {Promise}
      */
-    updatePullRequestInfo(pullRequest) {
-        return new Promise((resolve, reject) => {
+    updatePullRequestInfo: function setBodyContent(pullRequest) {
+        return new Promise(function (resolve, reject) {
             this.api.pullRequests.get({
                 user: pullRequest.head.repo.owner.login,
                 repo: pullRequest.head.repo.name,
                 number: pullRequest.number
-            }, (err, pullRequestInfo) => {
+            }, function (err, pullRequestInfo) {
                 if (err) reject(err);
 
                 PullRequest
                     .findById(pullRequest.id)
-                    .then((pullRequest) => {
+                    .then(function (pullRequest) {
                         pullRequest.set(pullRequestInfo);
 
                         resolve(pullRequest.save());
@@ -80,14 +82,16 @@ var github = {
      *
      * @param {Object} pullRequest
      */
-    _updatePullRequestBody(pullRequest) {
-        var extraBody = start + Object.keys(pullRequest.extra_body).map((key) => {
+    _updatePullRequestBody: function _updatePullRequestBody(pullRequest) {
+        var extraBody = start + Object.keys(pullRequest.extra_body).map(function (key) {
             return '<div>' + pullRequest.extra_body[key] + '</div>';
         }) + end;
 
         this
             .updatePullRequestInfo(pullRequest)
-            .then(pullRequest => this._updateBody(pullRequest, extraBody));
+            .then(function (pullRequest) {
+                this._updateBody(pullRequest, extraBody);
+            });
     },
 
     /**
@@ -97,7 +101,7 @@ var github = {
      * @param {Object} pullRequest
      * @param {String} extraBody
      */
-    _updateBody(pullRequest, extraBody) {
+    _updateBody: function _updateBody(pullRequest, extraBody) {
         this.api.pullRequests.update({
             user: pullRequest.head.repo.owner.login,
             repo: pullRequest.head.repo.name,
@@ -108,6 +112,6 @@ var github = {
     }
 };
 
-github.updatePullRequest = _.debounce(::github._updatePullRequestBody, 2000);
+github.updatePullRequest = _.debounce(github._updatePullRequestBody.bind(github), 2000);
 
-export default github;
+module.exports = github;

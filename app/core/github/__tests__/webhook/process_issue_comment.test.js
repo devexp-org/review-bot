@@ -1,10 +1,10 @@
 describe('core/github/webhook/process_issue_comment', function () {
-    var proxyquire = require('proxyquire'),
-        PullRequest = require('app/core/models').PullRequest,
-        events,
-        payload,
-        proccessIssueComment,
-        pullRequest;
+    var proxyquire = require('proxyquire');
+    var PullRequest = require('app/core/models').PullRequest;
+    var events;
+    var payload;
+    var proccessIssueComment;
+    var pullRequest;
 
     beforeEach(function (done) {
         events = { emit: sinon.stub() };

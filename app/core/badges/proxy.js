@@ -1,4 +1,4 @@
-import proxy from 'proxy-express';
-import * as config from 'app/core/config';
+var proxy = require('proxy-express');
+var config = require('app/core/config');
 
-export default proxy(config.load('badges').host, '/badges');
+module.exports = proxy(config.load('badges').host, '/badges');

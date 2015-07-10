@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     rankingProcessorsList: [],
 
     /**
@@ -9,7 +9,7 @@ export default {
      *
      * @returns {this}
      */
-    init(options) {
+    init: function init(options) {
         if (!options.processors) {
             throw new Error('At least 1 processors should be added.');
         }
@@ -24,7 +24,7 @@ export default {
      *
      * @returns {Function[]}
      */
-    get() {
+    get: function get() {
         return this.rankingProcessorsList;
     }
 };

@@ -1,4 +1,4 @@
-import _ from 'lodash';
+var _ = require('lodash');
 
 /**
  * Creates review simple team processor.
@@ -7,7 +7,7 @@ import _ from 'lodash';
  *
  * @returns {Function}
  */
-export default function reviewSimpleTeamCreator(team) {
+module.exports = function reviewSimpleTeamCreator(team) {
     /**
      * Adds team to review fom simple config.
      *
@@ -16,7 +16,7 @@ export default function reviewSimpleTeamCreator(team) {
      * @returns {Promise}
      */
     return function reviewSimpleTeam(review) {
-        return new Promise((resolve, reject) => {
+        return new Promise(function (resolve, reject) {
             var repo = review.pull.head.repo.full_name,
                 teamName = team.repoToTeam[repo];
 
@@ -25,8 +25,8 @@ export default function reviewSimpleTeamCreator(team) {
 
                 resolve(review);
             } else {
-                reject(`Team for repo: ${repo} not found!`);
+                reject('Team for repo: ' + repo + ' not found!');
             }
         });
     };
-}
+};

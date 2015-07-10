@@ -1,15 +1,14 @@
-import mongoose from 'mongoose';
-import logger from 'app/core/logger';
+var mongoose = require('mongoose');
+var logger = require('app/core/logger');
 
 /**
  * Connects to mongodb.
  *
  * @param {Object} options - connection params.
  */
-export function init(options) {
+module.exports.init = function init(options) {
     if (mongoose.connection.readyState === 2) {
         logger.info('Mongodb already connected');
-
         return;
     }
 
@@ -19,4 +18,4 @@ export function init(options) {
         .connection
         .on('error', logger.error.bind(logger, 'Mongodb connection error: '))
         .once('open', logger.info.bind(logger, 'Mongodb connected'));
-}
+};

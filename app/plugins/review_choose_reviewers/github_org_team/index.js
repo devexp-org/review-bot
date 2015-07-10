@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import github from 'app/core/github/api';
+var _ = require('lodash');
+var github = require('app/core/github/api');
 
 /**
  * Gets github team id from org name and team name.
@@ -10,13 +10,16 @@ import github from 'app/core/github/api';
  * @returns {Promise}
  */
 function getTeamId(org, team) {
-    return new Promise((resolve, reject) => {
-        github.api.orgs.getTeams({ org, per_page: 100 }, function (err, res) {
-            if (err) reject(err);
+    return new Promise(function (resolve, reject) {
+        github.api.orgs.getTeams({ org: org, per_page: 100 }, function (err, res) {
+            if (err) {
+                reject(err);
+                return;
+            }
 
             var repoTeam = _(res).filter({ slug: team }).first();
 
-            if (!repoTeam) reject(`Team ${team} for org ${org} not found.`);
+            if (!repoTeam) reject('Team ' + team + ' for org ' + org + ' not found.');
 
             resolve(repoTeam.id);
         });
@@ -31,9 +34,12 @@ function getTeamId(org, team) {
  * @returns {Promise}
  */
 function getTeamMembers(id) {
-    return new Promise((resolve, reject) => {
-        github.api.orgs.getTeamMembers({ id, per_page: 100 }, function (err, res) {
-            if (err) reject(err);
+    return new Promise(function (resolve, reject) {
+        github.api.orgs.getTeamMembers({ id: id, per_page: 100 }, function (err, res) {
+            if (err) {
+                reject(err);
+                return;
+            }
 
             resolve(res);
         });
@@ -48,14 +54,14 @@ function getTeamMembers(id) {
  * @returns {Array}
  */
 function addRank(team) {
-    return team.map((member) => {
+    return team.map(function (member) {
         member.rank = 0;
 
         return member;
     });
 }
 
-export default function reviewGithubOrgTeamCreator(options) {
+module.exports = function reviewGithubOrgTeamCreator(options) {
     /**
      * Gets team for review from github repo organization.
      *
@@ -71,7 +77,8 @@ export default function reviewGithubOrgTeamCreator(options) {
             .then(addRank)
             .then(function (team) {
                 review.team = team;
+
                 return review;
             });
     };
-}
+};

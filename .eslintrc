@@ -54,7 +54,7 @@
         "no-lonely-if": 2,
         "no-multiple-empty-lines": [2, { "max": 2 }],
         "no-underscore-dangle": 0,
-        "one-var": 1,
+        "one-var": 0,
         "quote-props": 0,
         "quotes": [2, "single", "avoid-escape"],
         "space-before-blocks": [2, "always"],

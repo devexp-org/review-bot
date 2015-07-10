@@ -1,4 +1,4 @@
-import http from 'http';
+var http = require('http');
 
 /**
  * @param {Function} handler
@@ -6,7 +6,7 @@ import http from 'http';
  *
  * @returns {http.Server}
  */
-export default function multilistener(handler, port) {
+module.exports = function multilistener(handler, port) {
     var srv = http.createServer(handler),
         srv4;
 
@@ -16,13 +16,13 @@ export default function multilistener(handler, port) {
     } else {
         // try to listen ipv6 address
         srv.listen(port, '::');
-        srv.on('listening', () => {
+        srv.on('listening', function () {
             // try to listen ipv4 too
             srv4 = http.createServer(handler).listen(port);
 
             // handle ipv4 server error to prevent app fail on EADDINUSE if ipv6 server handles both
             // ipv6 and ipv4 requests in accordance with kernel settings
-            srv4.on('error', (err) => {
+            srv4.on('error', function (err) {
                 if (err.code === 'EADDRINUSE') {
                     console.log('listen: looks like AF_INET6 socket serve both ipv6 and ipv4 requests');
                 } else {
@@ -36,4 +36,4 @@ export default function multilistener(handler, port) {
     }
 
     return srv;
-}
+};

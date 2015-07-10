@@ -1,6 +1,5 @@
-import * as config from 'app/core/config';
-
-var { regex } = config.load('github').content;
+var config = require('app/core/config');
+var githubConfig = config.load('github');
 
 /**
  * Clears Pull Request body from generated content.
@@ -9,6 +8,6 @@ var { regex } = config.load('github').content;
  *
  * @returns {String} clear body
  */
-export default function bodyCleaner(body) {
-    return body.replace(regex, '');
-}
+module.exports = function bodyCleaner(body) {
+    return body.replace(githubConfig.content.regex, '');
+};
