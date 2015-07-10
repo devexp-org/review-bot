@@ -1,6 +1,4 @@
 node_modules
-public
-!public/fonts
 data
 logs
 npm-debug.log

@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "scripts/postinstall.sh",
     "parallel": "./node_modules/.bin/parallelshell",
+    "forever": "./node_modules/.bin/forever",
     "test": "./node_modules/.bin/mocha -r ./tests/setup.js -R dot app/**/__tests__/**/*.test.js",
     "mongo:dev": "mongod --dbpath ./data",
     "mongo:deamon:start": "mongod --config ./scripts/mongod.conf",
@@ -16,15 +17,14 @@
     "dev:nowp": "npm run parallel -- 'npm run mongo:dev' 'npm run serve:dev'",
     "dev:tdd": "npm run dev -- 'npm test -- -w'",
     "build": "./node_modules/.bin/webpack --config ./.webpack/webpack.js",
-    "forever:start": "NODE_ENV=production ./node_modules/.bin/forever start app.js",
-    "forever:stop": "NODE_ENV=production ./node_modules/.bin/forever stop app.js",
-    "forever:restart": "NODE_ENV=production ./node_modules/.bin/forever restart app.js",
+    "forever:start": "NODE_ENV=production npm run forever -- start app.js",
+    "forever:stop": "NODE_ENV=production npm run forever -- stop app.js",
+    "forever:restart": "NODE_ENV=production npm run forever -- restart app.js",
     "forever:logs": "NODE_ENV=production ./node_modules/.bin/forever logs app.js"
   },
   "author": "Stanislav Sysoev <d4rkr00t@gmail.com> (http://sysoev.org)",
   "license": "MIT",
   "dependencies": {
-    "alt": "^0.17.0",
     "body-parser": "^1.13.1",
     "errorhandler": "^1.4.0",
     "express": "^4.13.0",
@@ -32,14 +32,11 @@
     "lodash": "^3.10.0",
     "mongoose": "^4.0.6",
     "proxy-express": "^1.1.2",
-    "react": "^0.13.3",
-    "react-router": "^0.13.3",
-    "react-timeago": "2.2.1",
     "response-time": "^2.3.1",
-    "whatwg-fetch": "^0.9.0",
     "winston": "^1.0.1"
   },
   "devDependencies": {
+    "alt": "^0.17.0",
     "autoprefixer-loader": "^2.0.0",
     "babel-eslint": "^3.1.20",
     "babel-loader": "^5.3.1",
@@ -53,11 +50,15 @@
     "node-sass": "^3.2.0",
     "parallelshell": "^1.2.0",
     "proxyquire": "^1.6.0",
+    "react": "^0.13.3",
+    "react-router": "^0.13.3",
+    "react-timeago": "2.2.1",
     "react-hot-loader": "^1.2.7",
     "sass-loader": "^1.0.2",
     "sinon": "^1.15.4",
     "style-loader": "^0.12.3",
     "webpack": "^1.10.1",
-    "webpack-dev-server": "^1.10.1"
+    "webpack-dev-server": "^1.10.1",
+    "whatwg-fetch": "^0.9.0"
   }
 }

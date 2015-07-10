@@ -1,8 +1,19 @@
 ## DEVEXP
 
 #### Getting started
-Requirements: mongodb, nodejs >= 0.12, gulp
+Requirements: mongodb, nodejs >= 0.12.
 
+##### Setup Prod:
+```bash
+npm install --production
+npm install forever
+
+// run
+npm run mongo:deamon:start
+npm run forever:start
+```
+
+##### Setup Dev:
 ```bash
 npm install
 
