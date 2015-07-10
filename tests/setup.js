@@ -1,3 +1,5 @@
+require('es6-promise').polyfill();
+
 var path = require('path');
 var assert = require('chai').assert;
 var sinon = require('sinon');

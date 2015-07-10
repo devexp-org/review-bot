@@ -19,9 +19,6 @@ npm install
 
 // run
 npm run dev
-
-// or
-npm run dev:tdd
 ```
 
 #### Structure

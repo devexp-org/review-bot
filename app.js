@@ -1,3 +1,5 @@
+require('es6-promise').polyfill();
+
 var path = require('path');
 var config = require('app/core/config');
 var mulilistener = require('app/server/multilistener');
