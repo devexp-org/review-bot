@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var logger = require('app/core/logger');
-var PullRequest = require('app/core/models').PullRequest;
+var PullRequest = require('app/core/models').get('PullRequest');
 
 /**
  * Creates review load processor.

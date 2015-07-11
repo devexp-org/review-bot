@@ -130,4 +130,6 @@ PullRequest.statics.findOpenReviewsByUser = function (login) {
     }, 'review');
 };
 
-module.exports = mongoose.model('PullRequest', PullRequest);
+try {
+    mongoose.model('PullRequest', PullRequest);
+} catch(e) { } // eslint-ignore-line

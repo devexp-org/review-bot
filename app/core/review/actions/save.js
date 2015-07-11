@@ -5,7 +5,7 @@ var _ = require('lodash');
 var logger = require('app/core/logger');
 var events = require('app/core/events');
 
-var PullRequest = require('app/core/models').PullRequest;
+var PullRequest = require('app/core/models').get('PullRequest');
 
 /**
  * Saves review.

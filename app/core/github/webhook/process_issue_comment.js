@@ -1,6 +1,6 @@
 var logger = require('app/core/logger');
 var events = require('app/core/events');
-var PullRequest = require('app/core/models').PullRequest;
+var PullRequest = require('app/core/models').get('PullRequest');
 
 /**
  * Handler for github web hook with type issue_comment.

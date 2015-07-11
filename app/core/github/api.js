@@ -2,7 +2,7 @@ var _ = require('lodash');
 var GitHub = require('github');
 var config = require('app/core/config');
 var logger = require('app/core/logger');
-var PullRequest = require('app/core/models').PullRequest;
+var PullRequest = require('app/core/models').get('PullRequest');
 
 var githubConfig = config.load('github');
 var start = githubConfig.content.start;

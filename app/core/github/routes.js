@@ -4,7 +4,7 @@ var Router = require('express').Router;
 var _ = require('lodash');
 var router = Router();
 
-var PullRequest = require('app/core/models').PullRequest;
+var PullRequest = require('app/core/models').get('PullRequest');
 
 var processCommitComment = require('app/core/github/webhook/process_commit_comment');
 var processPullRequestReviewComment = require('app/core/github/webhook/process_pull_request_review_comment');

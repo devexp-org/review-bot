@@ -7,7 +7,7 @@ var app;
 var port;
 var logger;
 
-config.init({ path: path.join(__dirname, 'app/config') });
+config.init({ path: path.join(__dirname, 'app/config'), cache: true });
 
 /**
  * Log

@@ -1,6 +1,6 @@
 var _ = require('lodash');
 var ranking = require('./ranking');
-var PullRequest = require('app/core/models').PullRequest;
+var PullRequest = require('app/core/models').get('PullRequest');
 
 /**
  * Runs next ranker from rankers list or resolve with ranking result.

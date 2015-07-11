@@ -3,7 +3,7 @@ var logger = require('app/core/logger');
 var events = require('app/core/events');
 var config = require('app/core/config');
 
-var PullRequest = require('app/core/models').PullRequest;
+var PullRequest = require('app/core/models').get('PullRequest');
 
 /**
  * Approves and complete review if approved reviewers count === review config approveCount.

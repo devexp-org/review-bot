@@ -1,5 +1,7 @@
-var PullRequest = require('./models/pull_request');
+require('./models/pull_request');
 
-module.exports = {
-    PullRequest: PullRequest
+var mongoose = require('mongoose');
+
+module.exports.get = function (modelName) {
+    return mongoose.model(modelName);
 };

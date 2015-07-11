@@ -1,6 +1,6 @@
 describe('core/github/webhook/process_issue_comment', function () {
     var proxyquire = require('proxyquire');
-    var PullRequest = require('app/core/models').PullRequest;
+    var PullRequest = require('app/core/models').get('PullRequest');
     var events;
     var payload;
     var proccessIssueComment;

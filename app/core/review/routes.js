@@ -2,7 +2,7 @@ var Router = require('express').Router;
 var _ = require('lodash');
 var router = Router();
 
-var PullRequest = require('app/core/models').PullRequest;
+var PullRequest = require('app/core/models').get('PullRequest');
 
 var review = require('./review');
 var saveReview = require('./actions/save');
