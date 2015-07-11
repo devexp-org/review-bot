@@ -14,8 +14,6 @@ else
             ;;
         nodemon) message="You should install ${YELLOW}'nodemon'${NORMAL} — ${MAGENTA}npm i nodemon ${NORMAL}or ${MAGENTA}npm i -g nodemon"
             ;;
-        mongod) message="You should install ${YELLOW}'mongo'${NORMAL} — ${MAGENTA}http://docs.mongodb.org/manual/installation/"
-            ;;
     esac
 
     echo " "
