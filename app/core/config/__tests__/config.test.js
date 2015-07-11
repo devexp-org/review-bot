@@ -1,7 +1,7 @@
 describe('Module: config', function () {
     var path = require('path');
     var config = require('../');
-    var options = { path: path.join(__dirname, 'mocks') };
+    var options = { path: path.join(__dirname, 'mocks'), cache: false };
 
     beforeEach(function () {
         config.init(options);
@@ -13,7 +13,7 @@ describe('Module: config', function () {
 
     describe('NODE_ENV === development', function () {
         it('should load dev configuration from complex config', function () {
-            assert.propertyVal(config.load('dev_and_prod'), 'option', 'dev');
+            assert.deepEqual(config.load('dev_and_prod'), { common: 1, option: 'dev' });
         });
     });
 
@@ -32,7 +32,7 @@ describe('Module: config', function () {
         });
 
         it('should load prod configuration from complex config', function () {
-            assert.propertyVal(config.load('dev_and_prod'), 'option', 'prod');
+            assert.deepEqual(config.load('dev_and_prod'), { common: 1, option: 'prod' });
         });
     });
 });

@@ -5,7 +5,7 @@ var assert = require('chai').assert;
 var sinon = require('sinon');
 var config = require('app/core/config');
 
-config.init({ path: path.join(__dirname, 'config') });
+config.init({ path: path.join(__dirname, '..', 'app', 'config'), test: true });
 
 sinon.assert.expose(assert, { prefix: '' });
 

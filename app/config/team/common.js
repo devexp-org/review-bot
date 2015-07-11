@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     repoToTeam: {
         'devexp-org/devexp': 'team1'
     },

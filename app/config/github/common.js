@@ -14,7 +14,7 @@ module.exports = {
     headers: {
         'user-agent': 'Devexp-GitHub-App'
     },
-    authenticate: require('./github_auth'),
+    authenticate: require('./auth'),
     content: {
         start: '<section id="info"><hr><span id="devexp-content-start"></span>',
         end: '<span id="devexp-content-end"></span>',

@@ -1,5 +1,11 @@
+var _ = require('lodash');
 var path = require('path');
-var isProduction, configsDirPath;
+var fs = require('fs');
+var configCache = {};
+var isProduction;
+var configsDirPath;
+var isTest;
+var isCache;
 
 module.exports = {
     /**
@@ -11,6 +17,8 @@ module.exports = {
     init: function (options) {
         isProduction = process.env.NODE_ENV === 'production';
         configsDirPath = options.path;
+        isTest = options.test;
+        isCache = options.cache;
     },
 
     /**
@@ -22,12 +30,25 @@ module.exports = {
      * @return {Object}
      */
     load: function (configName) {
-        var config = require(path.join(configsDirPath, '/', configName));
+        if (configCache[configName]) {
+            return configCache[configName];
+        }
 
-        if (isProduction && config.prod) {
-            return config.prod;
-        } else if (!isProduction && config.dev) {
-            return config.dev;
+        var cfgPath = path.join(configsDirPath, '/', configName);
+        var additionalCfgPath = isProduction ? path.join(cfgPath, '/prod.js') : path.join(cfgPath, '/dev.js');
+        var testCfgPath = isTest && testCfgPath;
+        var config = require(path.join(cfgPath, '/common.js'));
+
+        if (fs.existsSync(additionalCfgPath)) {
+            _.assign(config, require(additionalCfgPath));
+        }
+
+        if (testCfgPath && fs.existsSync(testCfgPath)) {
+            _.assign(config, require(testCfgPath));
+        }
+
+        if (isCache) {
+            configCache[configName] = config;
         }
 
         return config;

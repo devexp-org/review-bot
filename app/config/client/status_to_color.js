@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     'open': 'success',
     'closed': 'danger',
     'notstarted': 'default',
