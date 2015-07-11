@@ -1,3 +1,10 @@
+/**
+ * authenticate: {
+ *   type: 'token',
+ *   token: ''
+ * },
+ */
+
 module.exports = {
     version: '3.0.0',
     debug: false,
@@ -7,10 +14,7 @@ module.exports = {
     headers: {
         'user-agent': 'Devexp-GitHub-App'
     },
-    authenticate: {
-        type: 'token',
-        token: ''
-    },
+    authenticate: require('./github_auth'),
     content: {
         start: '<section id="info"><hr><span id="devexp-content-start"></span>',
         end: '<span id="devexp-content-end"></span>',
