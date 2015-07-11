@@ -1,8 +1,10 @@
 /**
- * authenticate: {
+ * Place in ./auth.js:
+ *
+ * module.exports = {
  *   type: 'token',
- *   token: ''
- * },
+ *   token: 'your_token_here'
+ * };
  */
 
 module.exports = {

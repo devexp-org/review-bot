@@ -3,4 +3,4 @@ data
 logs
 npm-debug.log
 coverage
-app/config/github_auth.js
+app/config/github/auth.js
