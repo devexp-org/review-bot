@@ -1,12 +1,11 @@
 ## DEVEXP
 
 #### Getting started
-Requirements: mongodb, nodejs >= 0.12.
+Requirements: mongodb, nodejs >= 0.12, nodemon, forever.
 
 ##### Setup Prod:
 ```bash
 npm install --production
-npm install forever
 
 // run
 npm run mongo:deamon:start

@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+source ./scripts/colors.sh 2>/dev/null;
+source ./colors.sh 2>/dev/null;
 
 NODE_MODULES=node_modules
 
@@ -8,13 +10,6 @@ fi
 
 mkdir -p data 2> /dev/null
 mkdir -p logs 2> /dev/null
-
-NORMAL='\033[0m'
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[0;33m'
-MAGENTA='\033[0;35m'
-GRAY='\033[0;37m'
 
 echo -en "
 ${GREEN}        /\_/\   ${GRAY}== -- == -- == -- ==
