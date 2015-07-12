@@ -2,7 +2,6 @@ var _ = require('lodash');
 var events = require('app/core/events');
 
 var commands = {};
-var command_regex;
 
 /**
  * Dispatch commands to handlers.
@@ -10,17 +9,19 @@ var command_regex;
  * @param {Object} payload - github webhook handler payload.
  */
 function commandsDispatcher(payload) {
-    var comment = _.get(payload, ['comment', 'body']),
-        cmd;
+    var comment = _.get(payload, ['comment', 'body']);
+    var cmd;
 
-    if (comment && comment.match(command_regex)) {
-        cmd = _.compact(comment.replace(command_regex, '').split(' '));
-        cmd = cmd.map(function (c) { return c.toLowerCase(); });
+    _.forEach(commands, function (command) {
+        if (comment.match(command.test)) {
+            cmd = _.compact(comment.replace(command.test, '').split(' '));
+            cmd = cmd.map(function (c) { return c.toLowerCase(); });
 
-        _.forEach(commands[cmd[0]], function (processor) {
-            processor(cmd, payload);
-        });
-    }
+            _.forEach(command.handlers, function (handler) {
+                handler(cmd, payload);
+            });
+        }
+    });
 }
 
 /**
@@ -33,7 +34,6 @@ function commandsDispatcher(payload) {
  */
 module.exports = function commandsDispatcherCreator(options) {
     commands = options.commands;
-    command_regex = options.regex;
 
     options.events.forEach(function (event) { events.on(event, commandsDispatcher); });
 };

@@ -18,10 +18,12 @@ function reviewStatusBadge(review) {
 }
 
 function reviewerBadge(reviewer) {
+    console.log(reviewer);
+
     return badges.create(
         reviewer.login,
-        reviewer.aproved ? 'ok' : '...',
-        reviewer.aproved ? 'green' : 'yellow',
+        reviewer.approved ? 'ok' : '...',
+        reviewer.approved ? 'green' : 'yellow',
         reviewer.html_url
     );
 }

@@ -5,4 +5,4 @@ var config = require('app/core/config');
  */
 require('app/plugins/review_autoassign')();
 require('app/plugins/review_badges')();
-require('app/plugins/review_commands/dispatcher')(config.load('review_commands'));
+require('app/plugins/commands')(config.load('commands'));

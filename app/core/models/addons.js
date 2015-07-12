@@ -61,11 +61,11 @@ module.exports = {
      * @returns {this}
      */
     setupHooks: function setupHooks(model, schema) {
-        var _this = this;
         var hooks = this.get(model).hooks;
 
         if (hooks.preSave) {
             schema.pre('save', function (next) {
+                var _this = this;
                 var hooksPromiseList = [];
 
                 _.forEach(hooks.preSave, function (hook) {

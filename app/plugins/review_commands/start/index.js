@@ -9,13 +9,7 @@ module.exports = function startCommandCreator() {
      * @param {Object} payload - github webhook handler payload.
      */
     return function startCommand(cmd, payload) {
-        logger.info('/review start command ' + payload.pullRequest.id + ' — ' + payload.pullRequest.title);
-
-        if (payload.pullRequest.user.login === payload.comment.user.login && payload.pullRequest.state === 'open') {
-            saveReview({ status: 'inprogress' }, payload.pullRequest.id);
-
-            return;
-        }
+        logger.info('start command ' + payload.pullRequest.id + ' — ' + payload.pullRequest.title);
 
         if (payload.pullRequest.state !== 'open') {
             logger.error(
@@ -23,13 +17,23 @@ module.exports = function startCommandCreator() {
                     payload.pullRequest.id + ' — ' + payload.pullRequest.title +
                 ']'
             );
+
+            return;
         }
 
-        if(payload.pullRequest.user.login === payload.comment.user.login) {
+        if(payload.pullRequest.user.login !== payload.comment.user.login) {
             logger.error(
                 payload.comment.user.login +
                 ' try to start review but author is ' +
                 payload.pullRequest.user.login);
+
+            return;
+        }
+
+        if (payload.pullRequest.user.login === payload.comment.user.login) {
+            saveReview({ status: 'inprogress' }, payload.pullRequest.id);
+
+            return;
         }
     };
 };

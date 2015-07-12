@@ -31,10 +31,10 @@ module.exports = function saveReview(review, pullId) {
             }
 
             if (_.isEmpty(review.reviewers)) {
-                review.reviewers = pullRequest.review.reviewers;
+                review.reviewers = pullRequest.get('review.reviewers');
             }
 
-            review = _.assign({}, pullRequest.review, review);
+            review = _.assign({}, pullRequest.get('review'), review);
 
             if (review.status === 'started' && isNew) {
                 review.started_at = new Date();
@@ -51,7 +51,7 @@ module.exports = function saveReview(review, pullId) {
                 );
             }
 
-            pullRequest.review = review;
+            pullRequest.set('review', review);
 
             return pullRequest.save();
         }).then(function (pullRequest) {

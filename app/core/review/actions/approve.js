@@ -25,9 +25,11 @@ module.exports = function approveReview(login, pullId) {
                 throw new Error('Pull request not found!');
             }
 
-            var reviewers = pullRequest.review.reviewers;
+            var review = pullRequest.get('review');
 
-            reviewers.forEach(function (reviewer) {
+            console.log(review);
+
+            review.reviewers.forEach(function (reviewer) {
                 if (reviewer.login === login) {
                     reviewer.approved = true;
                 }
@@ -43,8 +45,9 @@ module.exports = function approveReview(login, pullId) {
                 }
             });
 
-            pullRequest.review.updated_at = new Date();
-            pullRequest.review.reviewers = reviewers;
+            review.updated_at = new Date();
+
+            pullRequest.set('review', review);
 
             return pullRequest.save();
         }).then(function (pullRequest) {
