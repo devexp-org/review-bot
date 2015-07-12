@@ -6,6 +6,7 @@ module.exports = {
         require('app/plugins/review_choose_reviewers/github_org_team')(config.load('github_org_team')),
         require('app/plugins/review_choose_reviewers/remove_author')(),
         require('app/plugins/review_choose_reviewers/remove_already_reviewers')(),
+        require('app/plugins/review_choose_reviewers/commiters')(4, config.load('commiters')),
         require('app/plugins/review_choose_reviewers/random')(5),
         require('app/plugins/review_choose_reviewers/load')(1),
         require('app/plugins/review_choose_reviewers/sort')(),

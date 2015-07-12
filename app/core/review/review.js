@@ -1,4 +1,5 @@
 var _ = require('lodash');
+var logger = require('app/core/logger');
 var ranking = require('./ranking');
 var PullRequest = require('app/core/models').get('PullRequest');
 
@@ -12,6 +13,8 @@ var PullRequest = require('app/core/models').get('PullRequest');
  */
 function addNextRanker(review, rankers, resolve, reject) {
     var ranker = rankers.splice(0, 1)[0];
+
+    logger.info('Choose reviewer step: ', ranker.name);
 
     ranker(review).then(function (resultReview) {
         if (rankers.length === 0) {

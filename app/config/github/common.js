@@ -12,7 +12,7 @@ module.exports = {
     debug: false,
     protocol: 'https',
     host: 'api.github.com',
-    timeout: 5000,
+    timeout: 3000,
     headers: {
         'user-agent': 'Devexp-GitHub-App'
     },
