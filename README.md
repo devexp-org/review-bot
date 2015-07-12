@@ -43,7 +43,6 @@ npm run dev
 ├── public // Compiled assets
 ├── scripts // Some post/pre install scripts
 └── tests // Test setup
-    ├── config // Test config for modules
     └── setup.js // Initial setup for tests
 ```
 
