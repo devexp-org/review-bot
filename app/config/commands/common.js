@@ -7,6 +7,10 @@ module.exports = {
         {
             test: /^\/ok/,
             handlers: [require('app/plugins/review_commands/ok')()]
+        },
+        {
+            test: /^\/busy/,
+            handlers: [require('app/plugins/review_commands/busy')()]
         }
     ],
 
