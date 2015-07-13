@@ -2,6 +2,13 @@ var github = require('app/core/github/api');
 var badges = require('app/core/badges');
 var events = require('app/core/events');
 
+/**
+ * Maps review status to color.
+ *
+ * @param {String} status
+ *
+ * @returns {String}
+ */
 function statusToColor(status) {
     switch (status) {
         case 'inprogress':
@@ -13,13 +20,47 @@ function statusToColor(status) {
     }
 }
 
-function reviewStatusBadge(review) {
-    return badges.create('review', review.status, statusToColor(review.status));
+/**
+ * Maps review status to badge title.
+ *
+ * @param {String} status
+ *
+ * @returns {String}
+ */
+function statusToTitle(status) {
+    switch (status) {
+        case 'inprogress':
+            return 'in progress';
+        case 'notstarted':
+            return 'not started';
+        default:
+            return status;
+    }
 }
 
-function reviewerBadge(reviewer) {
-    console.log(reviewer);
+/**
+ * Creates review status badge.
+ *
+ * @param {Object} review
+ * @param {String} review.status
+ *
+ * @returns {String}
+ */
+function reviewStatusBadge(review) {
+    return badges.create('review', statusToTitle(review.status), statusToColor(review.status));
+}
 
+/**
+ * Creates reviewer badge.
+ *
+ * @param {Object} reviewer
+ * @param {String} reviewer.login
+ * @param {Boolean} reviewer.approved
+ * @param {String} reviewer.html_url
+ *
+ * @returns {String}
+ */
+function reviewerBadge(reviewer) {
     return badges.create(
         reviewer.login,
         reviewer.approved ? 'ok' : '...',
@@ -28,6 +69,13 @@ function reviewerBadge(reviewer) {
     );
 }
 
+/**
+ * Concat review status badge and reviewers badges.
+ *
+ * @param {Object} review
+ *
+ * @returns {String}
+ */
 function buildReviewBadges(review) {
     var status = reviewStatusBadge(review),
         reviewers = review.reviewers.map(reviewerBadge).join(' ');
@@ -35,6 +83,11 @@ function buildReviewBadges(review) {
     return '<div>' + status + ' ' + reviewers + '</div>';
 }
 
+/**
+ * Calls method for updateing pull request body with review badges.
+ *
+ * @param {Object} payload
+ */
 function updateReviewBadges(payload) {
     github.setBodyContent(
         payload.pullRequest.id,
@@ -43,6 +96,9 @@ function updateReviewBadges(payload) {
     );
 }
 
+/**
+ * Subscribe on events for creating review badges.
+ */
 module.exports = function reviewBadgesPluginCreator() {
     events.on('review:updated', updateReviewBadges);
     events.on('review:started', updateReviewBadges);
