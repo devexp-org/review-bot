@@ -42,6 +42,8 @@ module.exports = function startCommandCreator(options) {
                 ' can`t set himself\\herself as reviewer for ' +
                 payload.pullRequest.id + ' — ' + payload.pullRequest.title
             );
+
+            return;
         }
 
         if (_.find(payload.pullRequest.review.reviewers, { login: newReviewer })) {
