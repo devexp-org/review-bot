@@ -176,7 +176,7 @@ export default class ReviewCard {
                             </Label>
                         </div>
 
-                        <p className='lead'>{ pullRequest.body }</p>
+                        <p className='lead' dangerouslySetInnerHTML={{__html: pullRequest.body}}></p>
 
                         { btnsList }
 
