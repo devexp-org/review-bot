@@ -20,7 +20,7 @@ module.exports = function processIssueComment(body) {
 
             if (!pullRequest) return;
 
-            pullRequest.title = pullRequestTitle;
+            pullRequest.set('title', pullRequestTitle);
 
             return pullRequest.save();
         })
