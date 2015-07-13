@@ -11,7 +11,7 @@ module.exports = function startCommandCreator() {
      * @param {Array} cmd - [command, ...params]
      * @param {Object} payload - github webhook handler payload.
      */
-    return function startCommand(cmd, payload) {
+    return function busyCommand(cmd, payload) {
         logger.info('busy command ' + payload.pullRequest.id + ' — ' + payload.pullRequest.title);
 
         if (payload.pullRequest.state !== 'open') {
@@ -29,7 +29,7 @@ module.exports = function startCommandCreator() {
                 .then(
                     function (resultReview) {
                         var newReviewer = resultReview.team[0];
-                        var reviewers = _.reject(payload.pullRequest.review.reviewers, {
+                        var reviewers = _.reject(payload.pullRequest.get('review.reviewers'), {
                             login: payload.comment.user.login
                         });
 

@@ -30,10 +30,6 @@ module.exports = function startCommandCreator() {
             return;
         }
 
-        if (payload.pullRequest.user.login === payload.comment.user.login) {
-            saveReview({ status: 'inprogress' }, payload.pullRequest.id);
-
-            return;
-        }
+        saveReview({ status: 'inprogress' }, payload.pullRequest.id);
     };
 };
