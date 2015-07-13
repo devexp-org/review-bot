@@ -117,8 +117,7 @@ PullRequest.statics.findByNumberAndRepo = function (number, fullName) {
  */
 PullRequest.statics.findByUsername = function (login) {
     return this.model('PullRequest').find({
-        'user.login': login,
-        'state': 'opened'
+        'user.login': login
     }).sort('-updated_at');
 };
 

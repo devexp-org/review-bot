@@ -52,7 +52,7 @@ router.post('/webhook', function (req, res) {
 
 router.get('/pulls/:username', function (req, res) {
     PullRequest
-        .find()
+        .find({ 'state': 'open' })
         .sort({ updated_at: -1 })
         .exec()
         .then(function (pullRequests) {
