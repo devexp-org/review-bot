@@ -2,9 +2,14 @@ describe('Module: config', function () {
     var path = require('path');
     var config = require('../');
     var options = { path: path.join(__dirname, 'mocks'), cache: false };
+    var oldOptions = config.options;
 
     beforeEach(function () {
         config.init(options);
+    });
+
+    afterEach(function () {
+        config.init(oldOptions);
     });
 
     it('should load simple config', function () {

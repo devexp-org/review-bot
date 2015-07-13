@@ -3,11 +3,10 @@ var path = require('path');
 var fs = require('fs');
 var configCache = {};
 var isProduction;
-var configsDirPath;
-var isTest;
-var isCache;
 
 module.exports = {
+    options: {},
+
     /**
      * Initialize config module with path to configs directory.
      *
@@ -15,10 +14,9 @@ module.exports = {
      * @param {String} options.path - path to configs directory
      */
     init: function (options) {
+        this.options = options;
+
         isProduction = process.env.NODE_ENV === 'production';
-        configsDirPath = options.path;
-        isTest = options.test;
-        isCache = options.cache;
     },
 
     /**
@@ -33,10 +31,10 @@ module.exports = {
         if (configCache[configName]) {
             return configCache[configName];
         }
-
+        var configsDirPath = this.options.path;
         var cfgPath = path.join(configsDirPath, '/', configName);
         var additionalCfgPath = isProduction ? path.join(cfgPath, '/prod.js') : path.join(cfgPath, '/dev.js');
-        var testCfgPath = isTest && testCfgPath;
+        var testCfgPath = this.options.isTest && testCfgPath;
         var config = require(path.join(cfgPath, '/common.js'));
 
         if (fs.existsSync(additionalCfgPath)) {
@@ -47,7 +45,7 @@ module.exports = {
             _.assign(config, require(testCfgPath));
         }
 
-        if (isCache) {
+        if (this.options.isCache) {
             configCache[configName] = config;
         }
 

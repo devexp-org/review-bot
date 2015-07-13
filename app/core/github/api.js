@@ -1,12 +1,10 @@
 var _ = require('lodash');
 var GitHub = require('github');
-var config = require('app/core/config');
 var logger = require('app/core/logger');
 var PullRequest = require('app/core/models').get('PullRequest');
 
-var githubConfig = config.load('github');
-var start = githubConfig.content.start;
-var end = githubConfig.content.end;
+var start;
+var end;
 
 var github = {
     api: {},
@@ -22,6 +20,9 @@ var github = {
         var api = new GitHub(options);
         api.authenticate(options.authenticate);
 
+        start = options.content.start;
+        end = options.content.end;
+
         this.api = api;
 
         return this;
@@ -33,22 +34,29 @@ var github = {
      * @param {Number} pullId
      * @param {String} id - unique content id.
      * @param {String} content - any content which will be placed in pull request body.
+     *
+     * @returns {Promise}
      */
     setBodyContent: function setBodyContent(pullId, id, content) {
         var _this = this;
 
-        PullRequest
+        return PullRequest
             .findById(pullId)
             .then(function (pullRequest) {
+                if (!pullRequest) {
+                    throw new Error('PullRequest not found');
+                }
+
                 pullRequest.extra_body = pullRequest.extra_body || {};
                 pullRequest.extra_body[id] = content;
 
-                pullRequest.save(function (err, pullRequest) {
-                    if (err) logger.error(err);
+                return pullRequest.save();
+            })
+            .then(function (pullRequest) {
+                _this._updatePullRequestBody(pullRequest);
 
-                    _this._updatePullRequestBody(pullRequest);
-                });
-            }, logger.error.bind(logger));
+                return pullRequest;
+            });
     },
 
     /**
@@ -58,7 +66,7 @@ var github = {
      *
      * @returns {Promise}
      */
-    updatePullRequestInfo: function setBodyContent(pullRequest) {
+    updatePullRequestInfo: function updatePullRequestInfo(pullRequest) {
         var _this = this;
 
         return new Promise(function (resolve, reject) {

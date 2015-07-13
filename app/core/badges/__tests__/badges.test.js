@@ -1,4 +1,4 @@
-describe('Core Badges', function () {
+describe('core/badges', function () {
     var badges = require('../');
 
     beforeEach(function () {

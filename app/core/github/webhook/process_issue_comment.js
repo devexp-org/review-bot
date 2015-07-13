@@ -17,7 +17,6 @@ module.exports = function processIssueComment(body) {
     return PullRequest
         .findByNumberAndRepo(pullRequestNumber, repositoryName)
         .then(function (pullRequest) {
-
             if (!pullRequest) return;
 
             pullRequest.set('title', pullRequestTitle);
