@@ -4,8 +4,8 @@ var github = require('app/core/github/api');
 function getPullRequestFiles(pullRequest) {
     return new Promise(function (resolve, reject) {
         github.api.pullRequests.getFiles({
-            user: pullRequest.head.repo.owner.login,
-            repo: pullRequest.head.repo.name,
+            user: pullRequest.org,
+            repo: pullRequest.repo,
             number: pullRequest.number,
             per_page: 100
         }, function (err, files) {
@@ -43,19 +43,14 @@ function cleanFiles(ignore, filesToCheck) {
 
 function getLastCommits(commitsCount, pullRequest) {
     return function (files) {
-
-        console.log(files);
-
         return new Promise(function (resolve) {
             var promiseList = [];
-            var user = pullRequest.head.repo.owner.login;
-            var repo = pullRequest.head.repo.name;
 
             _.forEach(files, function (file) {
                 promiseList.push(new Promise(function (res) {
                     github.api.repos.getCommits({
-                        user: user,
-                        repo: repo,
+                        user: pullRequest.org,
+                        repo: pullRequest.repo,
                         path: file.filename,
                         per_page: commitsCount
                     }, function (err, commits) {
@@ -125,6 +120,8 @@ module.exports = function commitersProcessorCreator(max, options) {
                 .then(function (team) {
                     review.team = team;
 
+                    resolve(review);
+                }, function () {
                     resolve(review);
                 });
         });

@@ -1,3 +1,5 @@
+const REPO_REGEX = /repos\/(.*\/.*)\/pulls/;
+
 var mongoose = require('mongoose');
 var addons = require('./../addons');
 var Schema = mongoose.Schema;
@@ -70,6 +72,20 @@ PullRequest.path('id').set(function (v) {
     return v;
 });
 
+PullRequest.path('url').set(function (v) {
+    var repo = v.match(REPO_REGEX) || [];
+
+    if (repo[1]) {
+        repo = repo[1];
+
+        this.full_name = repo;
+        this.repo = repo.split('/')[1];
+        this.org = repo.split('/')[0];
+    }
+
+    return v;
+});
+
 /**
  * Model static methods
  */
@@ -98,7 +114,8 @@ PullRequest.statics.findByNumberAndRepo = function (number, fullName) {
  */
 PullRequest.statics.findByUsername = function (login) {
     return this.model('PullRequest').find({
-        'user.login': login
+        'user.login': login,
+        'state': 'opened'
     }).sort('-updated_at');
 };
 

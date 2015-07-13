@@ -63,8 +63,8 @@ var github = {
 
         return new Promise(function (resolve, reject) {
             _this.api.pullRequests.get({
-                user: pullRequest.head.repo.owner.login,
-                repo: pullRequest.head.repo.name,
+                user: pullRequest.org,
+                repo: pullRequest.repo,
                 number: pullRequest.number
             }, function (err, pullRequestInfo) {
                 if (err) {
@@ -119,8 +119,8 @@ var github = {
      */
     _updateBody: function _updateBody(pullRequest, extraBody) {
         this.api.pullRequests.update({
-            user: pullRequest.head.repo.owner.login,
-            repo: pullRequest.head.repo.name,
+            user: pullRequest.org,
+            repo: pullRequest.repo,
             number: pullRequest.number,
             title: pullRequest.title,
             body: pullRequest.body + extraBody

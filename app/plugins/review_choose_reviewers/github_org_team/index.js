@@ -1,8 +1,6 @@
 var _ = require('lodash');
 var github = require('app/core/github/api');
 
-const REPO_REGEX = /repos\/(.*\/.*)\/pulls/;
-
 /**
  * Gets github team id from org name and team name.
  *
@@ -72,8 +70,7 @@ module.exports = function reviewGithubOrgTeamCreator(options) {
      * @returns {Promise}
      */
     return function reviewGithubOrgTeam(review) {
-        var repo = _.get(review.pull.url.match(REPO_REGEX), '0');
-        var opts = options[repo];
+        var opts = options[review.pull.full_name];
 
         return new Promise(function (resolve) {
             if (!opts) resolve(review);

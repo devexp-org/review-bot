@@ -17,7 +17,7 @@ module.exports = function reviewSimpleTeamCreator(team) {
      */
     return function reviewSimpleTeam(review) {
         return new Promise(function (resolve, reject) {
-            var repo = review.pull.head.repo.full_name,
+            var repo = review.pull.full_name,
                 teamName = team.repoToTeam[repo];
 
             if (teamName && team.teams[teamName]) {

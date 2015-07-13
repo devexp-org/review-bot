@@ -9,7 +9,7 @@ export default function (list) {
     var listByRepo = {};
 
     list.forEach((item) => {
-        var fullName = item.head.repo.full_name;
+        var fullName = item.full_name;
 
         listByRepo[fullName] = listByRepo[fullName] || [];
         listByRepo[fullName].push(item);
