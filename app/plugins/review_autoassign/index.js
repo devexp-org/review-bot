@@ -13,7 +13,9 @@ var events = require('app/core/events');
  * @returns {Boolean}
  */
 function shouldStartReview(pullRequest) {
-    if (_.isEmpty(pullRequest.review.reviewrs)) return true;
+    if (!_.isEmpty(pullRequest.review.reviewers)) return false;
+
+    return true;
 }
 
 /**
