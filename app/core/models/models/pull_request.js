@@ -104,7 +104,7 @@ PullRequest.path('url').set(function (v) {
 PullRequest.statics.findByNumberAndRepo = function (number, fullName) {
     return this.model('PullRequest').findOne({
         number: number,
-        'head.repo.full_name': fullName
+        'full_name': fullName
     });
 };
 
