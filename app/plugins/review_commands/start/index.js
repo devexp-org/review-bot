@@ -3,7 +3,7 @@ var saveReview = require('app/core/review/actions/save');
 
 module.exports = function startCommandCreator() {
     /**
-     * Handles '/review start' command.
+     * Handles '/start' command.
      *
      * @param {Array} cmd - [command, ...params]
      * @param {Object} payload - github webhook handler payload.

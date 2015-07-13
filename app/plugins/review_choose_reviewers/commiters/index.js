@@ -1,6 +1,13 @@
 var _ = require('lodash');
 var github = require('app/core/github/api');
 
+/**
+ * Gets pull request files.
+ *
+ * @param {Object} pullRequest
+ *
+ * @returns {Promise}
+ */
 function getPullRequestFiles(pullRequest) {
     return new Promise(function (resolve, reject) {
         github.api.pullRequests.getFiles({
@@ -19,6 +26,14 @@ function getPullRequestFiles(pullRequest) {
     });
 }
 
+/**
+ * Clean files if they match ignore pattern.
+ *
+ * @param {Array} ignore - patterns to ignore.
+ * @param {Number} filesToCheck - number of files to keep for futher processing.
+ *
+ * @returns {Promise}
+ */
 function cleanFiles(ignore, filesToCheck) {
     return function (files) {
         return new Promise(function (resolve) {
@@ -41,6 +56,14 @@ function cleanFiles(ignore, filesToCheck) {
     };
 }
 
+/**
+ * Gets last commits for files.
+ *
+ * @param {Number} commitsCount - number of commits to get.
+ * @param {Object} pullRequest
+ *
+ * @returns {Promise}
+ */
 function getLastCommits(commitsCount, pullRequest) {
     return function (files) {
         return new Promise(function (resolve) {
@@ -71,6 +94,13 @@ function getLastCommits(commitsCount, pullRequest) {
     };
 }
 
+/**
+ * Process commits and find most commiters for changed files.
+ *
+ * @param {Array} commits
+ *
+ * @returns {Promise}
+ */
 function processCommits(commits) {
     commits = _.flatten(commits);
 
@@ -87,6 +117,13 @@ function processCommits(commits) {
     });
 }
 
+/**
+ * Adds rank to most commiters.
+ *
+ * @param {Number} maxRank
+ *
+ * @param {Array} team
+ */
 function addRank(maxRank, team) {
     return function (commiters) {
         return new Promise(function (resolve) {
@@ -105,7 +142,25 @@ function addRank(maxRank, team) {
     };
 }
 
+/**
+ * Creates commiters processor for suggesting reviewrs.
+ *
+ * @param {Number} max - max rank for current step.
+ * @param {Object} options
+ * @param {Array} options.ignore - list of patterns to ignore.
+ * @param {Number} options.filesToCheck - number files to get commits in.
+ * @param {Numbers} options.commitsCount - number of commits to inspect.
+ *
+ * @returns {Function}
+ */
 module.exports = function commitersProcessorCreator(max, options) {
+    /**
+     * Commits processor adds rank for commiters in same files as current pull request.
+     *
+     * @param {Object} review
+     *
+     * @returns {Promise}
+     */
     return function commitersProcessor(review) {
         return new Promise(function (resolve) {
             if (_.isEmpty(review.team)) {

@@ -63,7 +63,10 @@ module.exports = function review(pullRequestId) {
         var reviewQueue = startQueue(pullRequestId, reject);
 
         reviewQueue.then(function (resultReview) {
-            addNextRanker(resultReview, rankers, resolve, reject);
+            addNextRanker(resultReview, rankers, resolve, function (err) {
+                reject(err);
+                logger.error(err);
+            });
         });
     });
 };

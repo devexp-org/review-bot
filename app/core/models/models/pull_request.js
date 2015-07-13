@@ -3,7 +3,6 @@ const REPO_REGEX = /repos\/(.*\/.*)\/pulls/;
 var mongoose = require('mongoose');
 var addons = require('./../addons');
 var Schema = mongoose.Schema;
-
 var baseSchema = {
     _id: Number,
     id: Number,
@@ -69,12 +68,26 @@ addons.setupHooks('PullRequest', PullRequest);
  * Setup properties hooks
  */
 
+/**
+ * Replace mongo id with pull request id.
+ *
+ * @param {Number} 'id' - pull requiest id.
+ *
+ * @returns {Number}
+ */
 PullRequest.path('id').set(function (v) {
     this._id = v;
 
     return v;
 });
 
+/**
+ * Parse url and get owner/repo.
+ *
+ * @param {String} 'url' - pull request url.
+ *
+ * @returns {String}
+ */
 PullRequest.path('url').set(function (v) {
     var repo = v.match(REPO_REGEX) || [];
 

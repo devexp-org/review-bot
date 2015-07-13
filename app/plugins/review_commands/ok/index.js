@@ -5,7 +5,7 @@ var approveReview = require('app/core/review/actions/approve');
 
 module.exports = function okCommandCreator() {
     /**
-     * Handles '/review ok' command.
+     * Handles '/ok' command.
      *
      * @param {Array} cmd - [command, ...params]
      * @param {Object} payload - github webhook handler payload.

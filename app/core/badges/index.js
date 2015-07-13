@@ -2,11 +2,28 @@ module.exports = {
     types: {},
     style: '',
 
+    /**
+     * Init for badges module.
+     *
+     * @param {Object} options
+     * @param {String} options.url
+     * @param {String} [options.style] - style for badges, default: flat
+     */
     init: function init(options) {
         this.url = options.url;
         this.style = options.style || 'flat';
     },
 
+    /**
+     * Creates badge. [subject|status].
+     *
+     * @param {String} subject
+     * @param {String} status
+     * @param {String} color - color of badge
+     * @param {String} url - url from badge
+     *
+     * @returns {String} img or a tag with propper url and img src.
+     */
     create: function create(subject, status, color, url) {
         if (!subject) throw new Error('Badge should have at least subject!');
 
