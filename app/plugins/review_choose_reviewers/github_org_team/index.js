@@ -75,13 +75,17 @@ module.exports = function reviewGithubOrgTeamCreator(options) {
         var repo = _.get(review.pull.url.match(REPO_REGEX), '0');
         var opts = options[repo];
 
-        return getTeamId(opts.org, opts.team)
-            .then(getTeamMembers)
-            .then(addRank)
-            .then(function (team) {
-                review.team = team;
+        return new Promise(function (resolve) {
+            if (!opts) resolve(review);
 
-                return review;
-            });
+            getTeamId(opts.org, opts.team)
+                .then(getTeamMembers)
+                .then(addRank)
+                .then(function (team) {
+                    review.team = team;
+
+                    resolve(review);
+                });
+        });
     };
 };
