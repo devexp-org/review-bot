@@ -13,8 +13,6 @@ module.exports = function okCommandCreator() {
     return function okCommand(cmd, payload) {
         logger.info('ok command ' + payload.pullRequest.id + ' — ' + payload.pullRequest.title);
 
-        payload.comment.user.login = 'mishanga';
-
         if (_.find(payload.pullRequest.review.reviewers, { login: payload.comment.user.login })) {
             approveReview(payload.comment.user.login, payload.pullRequest.id);
         } else {
