@@ -20,9 +20,9 @@ export default class Complexity {
 
         return (
             <div>
-                <div className='text-muted'>Additions: <Label type='success'>{ additions }</Label></div>
-                <div className='text-muted'>Deletions: <Label type='danger'>{ deletions }</Label></div>
-                <div className='text-muted'>Commits: <Label type='info'>{ commits }</Label></div>
+                <div className='text-muted'>Additions:&nbsp;<Label type='success'>{ additions }</Label></div>
+                <div className='text-muted'>Deletions:&nbsp;<Label type='danger'>{ deletions }</Label></div>
+                <div className='text-muted'>Commits:&nbsp;<Label type='info'>{ commits }</Label></div>
                 <p>
                     <ProgressBar value={ complexity }/>
                 </p>
