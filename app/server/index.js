@@ -3,21 +3,17 @@ var express = require('express');
 var path = require('path');
 var responseTime = require('response-time');
 var bodyParser = require('body-parser');
-var errorhandler = require('errorhandler');
 var proxy = require('proxy-express');
 
 var app = express();
 var domain = require('app/core/utils/domain');
+var logger = require('app/core/logger');
 var config = require('app/core/config');
 var serverConfig = config.load('server');
 
 /**
  * Setup server
  */
-if (process.env.NODE_ENV !== 'production') {
-    app.use(errorhandler());
-}
-
 if (process.env.WEBPACK_DEV) {
     app.use(proxy('localhost:' + (process.env.WEBPACK_DEV_PORT || 8080) + '/public/app.js', '/public/app.js'));
 }
@@ -40,14 +36,11 @@ domain('Core modules initializers', function () {
 /**
  * Routes / Middlewares
  */
-domain('Core modules routes and middlewares', function () {
-    app.use(require('app/core/response')());
-    app.use(require('app/core/badges/proxy'));
+app.use(require('app/core/response')());
+app.use(require('app/core/badges/proxy'));
 
-    app.use('/api/github', require('app/core/github/routes'));
-    app.use('/api/review', require('app/core/review/routes'));
-});
-
+app.use('/api/github', require('app/core/github/routes'));
+app.use('/api/review', require('app/core/review/routes'));
 /**
  * Plugins
  */
@@ -60,6 +53,11 @@ require('app/plugins');
 
 app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'views', 'layout.html'));
+});
+
+app.use(function (err, req, res, next) { // eslint-disable-line
+    logger.error(err);
+    res.error(err.stack);
 });
 
 module.exports = app;
