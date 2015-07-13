@@ -13,6 +13,9 @@ module.exports = {
         color = color || 'lightgrey';
         status = status || '...';
 
+        subject = subject.replace(/-/g, '--');
+        status = status.replace(/-/g, '--');
+
         var img = '<img src="' + this.url + subject + '-' + status + '-' + color + '.svg?style=' + this.style + '" />';
 
         if (url) {
