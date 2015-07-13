@@ -70,6 +70,7 @@ var github = {
                 if (err) {
                     logger.error(err);
                     reject(err);
+                    return;
                 }
 
                 PullRequest

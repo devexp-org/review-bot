@@ -10,6 +10,9 @@ var baseSchema = {
     title: String,
     body: String,
     url: String,
+    org: String,
+    repo: String,
+    full_name: String,
     html_url: String,
     number: Number,
     state: {
