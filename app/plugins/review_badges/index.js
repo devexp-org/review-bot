@@ -48,4 +48,4 @@ module.exports = function reviewBadgesPluginCreator() {
     events.on('review:started', updateReviewBadges);
     events.on('review:approved', updateReviewBadges);
     events.on('review:complete', updateReviewBadges);
-}
+};
