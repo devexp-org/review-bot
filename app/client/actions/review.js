@@ -16,12 +16,10 @@ class ReviewActions {
     loadUserReviews(login) {
         this.dispatch();
 
-        setTimeout(() => {
-            fetch('/api/review/reviews/' + login)
-                .then(res => res.json())
-                .then(res => this.actions.userReviewsLoaded(res.data))
-                .catch(err => this.actions.loadingReviewsFailed(err));
-        }, 1000);
+        fetch('/api/review/reviews/' + login)
+            .then(res => res.json())
+            .then(res => this.actions.userReviewsLoaded(res.data))
+            .catch(err => this.actions.loadingReviewsFailed(err));
     }
 
     /**

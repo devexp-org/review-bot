@@ -18,12 +18,10 @@ class PullRequestsActions {
     loadUserPulls(username) {
         this.dispatch();
 
-        setTimeout(() => {
-            fetch('/api/github/pulls/' + username)
-                .then(res => res.json())
-                .then(res => this.actions.userPullsLoaded(res.data))
-                .catch(err => this.actions.userPullsLoadingFailed(err));
-        }, 1000);
+        fetch('/api/github/pulls/' + username)
+            .then(res => res.json())
+            .then(res => this.actions.userPullsLoaded(res.data))
+            .catch(err => this.actions.userPullsLoadingFailed(err));
     }
 
     /**
