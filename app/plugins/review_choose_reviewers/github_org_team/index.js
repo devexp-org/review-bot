@@ -47,6 +47,43 @@ function getTeamMembers(id) {
 }
 
 /**
+ * Get organisation members.
+ *
+ * @param {String} org
+ *
+ * @returns {Promise}
+ */
+function getOrgsMembers(org) {
+    return new Promise(function (resolve, reject) {
+        github.api.orgs.getMembers({ org: org, per_page: 100 }, function (err, res) {
+            if (err) {
+                reject(err);
+                return;
+            }
+
+            resolve(res);
+        });
+    });
+}
+
+/**
+ * Remove members which are in ignore list.
+ *
+ * @param {Array} ignore
+ *
+ * @returns {Promise}
+ */
+function cleanMembers(ignore) {
+    return function (members) {
+        return new Promise(function (resolve) {
+            resolve(_.reject(members, function (member) {
+                return _.includes(ignore, member.login);
+            }));
+        });
+    };
+}
+
+/**
  * Adds rank property to every team member.
  *
  * @param {Array} team
@@ -75,14 +112,23 @@ module.exports = function reviewGithubOrgTeamCreator(options) {
         return new Promise(function (resolve) {
             if (!opts) resolve(review);
 
-            getTeamId(opts.org, opts.team)
-                .then(getTeamMembers)
-                .then(addRank)
-                .then(function (team) {
-                    review.team = team;
+            var promise;
 
-                    resolve(review);
-                });
+            if (!opts.team) {
+                promise = getOrgsMembers(opts.org)
+                    .then(cleanMembers(opts.ignore || []))
+                    .then(addRank);
+            } else {
+                promise = getTeamId(opts.org, opts.team)
+                    .then(getTeamMembers)
+                    .then(addRank);
+            }
+
+            promise.then(function (team) {
+                review.team = team;
+
+                resolve(review);
+            });
         });
     };
 };
