@@ -1,5 +1,6 @@
 var config = require('app/core/config');
 
+// TODO: Aliases
 module.exports = {
     commands: [
         {
@@ -8,6 +9,10 @@ module.exports = {
         },
         {
             test: /^\/ok/,
+            handlers: [require('app/plugins/review_commands/ok')()]
+        },
+        {
+            test: /ok/,
             handlers: [require('app/plugins/review_commands/ok')()]
         },
         {
