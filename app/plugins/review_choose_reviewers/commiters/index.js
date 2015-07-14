@@ -119,8 +119,6 @@ function processCommits(commits) {
             commiters[commit.author.login] = commiters[commit.author.login] + 1 || 1;
         });
 
-        console.log(commiters);
-
         resolve(commiters);
     });
 }
