@@ -1,5 +1,6 @@
 var _ = require('lodash');
 var github = require('app/core/github/api');
+var getSinceDate = require('app/core/github/utils/date').getSinceDate;
 
 /**
  * Gets pull request files.
@@ -59,24 +60,31 @@ function cleanFiles(ignore, filesToCheck) {
 /**
  * Gets last commits for files.
  *
+ * @param {String} since - get commits which newer then since date.
  * @param {Number} commitsCount - number of commits to get.
  * @param {Object} pullRequest
  *
  * @returns {Promise}
  */
-function getLastCommits(commitsCount, pullRequest) {
+function getLastCommits(since, commitsCount, pullRequest) {
     return function (files) {
         return new Promise(function (resolve) {
             var promiseList = [];
 
             _.forEach(files, function (file) {
+                var options = {
+                    user: pullRequest.org,
+                    repo: pullRequest.repo,
+                    path: file.filename,
+                    per_page: commitsCount
+                };
+
+                if (since) {
+                    options.since = since;
+                }
+
                 promiseList.push(new Promise(function (res) {
-                    github.api.repos.getCommits({
-                        user: pullRequest.org,
-                        repo: pullRequest.repo,
-                        path: file.filename,
-                        per_page: commitsCount
-                    }, function (err, commits) {
+                    github.api.repos.getCommits(options, function (err, commits) {
                         if (err) {
                             res([]);
                             return;
@@ -121,8 +129,9 @@ function processCommits(commits) {
  * Adds rank to most commiters.
  *
  * @param {Number} maxRank
- *
  * @param {Array} team
+ *
+ * @returns {Array} team
  */
 function addRank(maxRank, team) {
     return function (commiters) {
@@ -169,7 +178,7 @@ module.exports = function commitersProcessorCreator(max, options) {
 
             getPullRequestFiles(review.pull)
                 .then(cleanFiles(options.ignore, options.filesToCheck))
-                .then(getLastCommits(options.commitsCount, review.pull))
+                .then(getLastCommits(getSinceDate(options.since), options.commitsCount, review.pull))
                 .then(processCommits)
                 .then(addRank(max, review.team))
                 .then(function (team) {
