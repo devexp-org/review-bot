@@ -43,4 +43,5 @@ function reviewAutoStart(payload) {
  */
 module.exports = function reviewAutoAssignCreator() {
     events.on('github:pull_request:opened', reviewAutoStart);
+    events.on('github:pull_request:synchronize', reviewAutoStart);
 };
