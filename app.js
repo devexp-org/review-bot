@@ -15,6 +15,13 @@ config.init({ path: path.join(__dirname, 'app/config'), cache: true });
 logger = require('app/core/logger');
 
 /**
+ * Handler for uncaught exceptions
+ */
+process.on('uncaughtException', function (err) {
+    logger.error(err);
+});
+
+/**
  * Main Server Module
  */
 app = require('app/server');
