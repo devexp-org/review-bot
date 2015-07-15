@@ -71,14 +71,12 @@ function getOrgsMembers(org) {
  *
  * @param {Array} ignore
  *
- * @returns {Promise}
+ * @returns {Array}
  */
 function cleanMembers(ignore) {
     return function (members) {
-        return new Promise(function (resolve) {
-            resolve(_.reject(members, function (member) {
-                return _.includes(ignore, member.login);
-            }));
+        return _.reject(members, function (member) {
+            return _.includes(ignore, member.login);
         });
     };
 }
@@ -102,33 +100,32 @@ module.exports = function reviewGithubOrgTeamCreator(options) {
     /**
      * Gets team for review from github repo organization.
      *
-     * @param {Object} review
+     * @param {Review} review
      *
      * @returns {Promise}
      */
     return function reviewGithubOrgTeam(review) {
         var opts = options[review.pull.full_name];
+        var promise;
 
-        return new Promise(function (resolve) {
-            if (!opts) resolve(review);
+        if (!opts) return Promise.reject('There is no team for repo: ' + review.pull.full_name);
 
-            var promise;
+        if (!opts.team) {
+            promise = getOrgsMembers(opts.org)
+                .then(cleanMembers(opts.ignore || []))
+                .then(addRank);
+        } else {
+            promise = getTeamId(opts.org, opts.team)
+                .then(getTeamMembers)
+                .then(addRank);
+        }
 
-            if (!opts.team) {
-                promise = getOrgsMembers(opts.org)
-                    .then(cleanMembers(opts.ignore || []))
-                    .then(addRank);
-            } else {
-                promise = getTeamId(opts.org, opts.team)
-                    .then(getTeamMembers)
-                    .then(addRank);
-            }
+        promise = promise.then(function (team) {
+            review.team = team;
 
-            promise.then(function (team) {
-                review.team = team;
-
-                resolve(review);
-            });
+            return review;
         });
+
+        return promise;
     };
 };

@@ -2,19 +2,17 @@ module.exports = function reviewRemoveAuthorCreator() {
     /**
      * Removes pull author from team.
      *
-     * @param {Object} review
+     * @param {Review} review
      *
-     * @returns {Promise}
+     * @returns {Review} review
      */
     return function reviewRemoveAuthor(review) {
-        return new Promise(function (resolve) {
-            var pullAuthor = review.pull.user.login;
+        var pullAuthor = review.pull.user.login;
 
-            review.team = review.team.filter(function (item) {
-                return item.login !== pullAuthor;
-            });
-
-            resolve(review);
+        review.team = review.team.filter(function (item) {
+            return item.login !== pullAuthor;
         });
+
+        return review;
     };
 };

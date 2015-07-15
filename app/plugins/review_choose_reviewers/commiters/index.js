@@ -9,30 +9,30 @@ var getSinceDate = require('app/core/github/utils/date').getSinceDate;
  * @param {Array} ignore - patterns to ignore.
  * @param {Number} filesToCheck - number of files to keep for futher processing.
  *
- * @returns {Promise}
+ * @returns {Array} files
  */
 function getPullRequestFiles(pullRequest, ignore, filesToCheck) {
-    return new Promise(function (resolve) {
-        var files = _.clone(pullRequest.get('files'));
+    var files = _.clone(pullRequest.get('files'));
 
-        if (!_.isEmpty(files)) {
-            files = _(files).filter(function (file) {
-                var keep = true;
+    if (_.isEmpty(files)) {
+        return Promise.resolve([]);
+    }
 
-                _.forEach(ignore, function (pattern) {
-                    if (file.filename.match(pattern)) {
-                        keep = false;
+    files = _(files).filter(function (file) {
+        var keep = true;
 
-                        return false;
-                    }
-                });
+        _.forEach(ignore, function (pattern) {
+            if (file.filename.match(pattern)) {
+                keep = false;
 
-                return keep;
-            }).sample(filesToCheck).value();
-        }
+                return false;
+            }
+        });
 
-        resolve(files || []);
-    });
+        return keep;
+    }).sample(filesToCheck).value();
+
+    return Promise.resolve(files);
 }
 
 /**
@@ -46,37 +46,32 @@ function getPullRequestFiles(pullRequest, ignore, filesToCheck) {
  */
 function getLastCommits(since, commitsCount, pullRequest) {
     return function (files) {
-        return new Promise(function (resolve) {
-            var promiseList = [];
+        var promiseList = [];
+        var options = {
+            user: pullRequest.org,
+            repo: pullRequest.repo,
+            per_page: commitsCount
+        };
 
-            _.forEach(files, function (file) {
-                var options = {
-                    user: pullRequest.org,
-                    repo: pullRequest.repo,
-                    path: file.filename,
-                    per_page: commitsCount
-                };
+        if (since) {
+            options.since = since;
+        }
 
-                if (since) {
-                    options.since = since;
-                }
+        _.forEach(files, function (file) {
+            options.path = file.filename;
 
-                promiseList.push(new Promise(function (res) {
-                    github.api.repos.getCommits(options, function (err, commits) {
-                        if (err) {
-                            res([]);
-                            return;
-                        }
-
-                        res(commits);
-                    });
-                }));
-            });
-
-            Promise
-                .all(promiseList)
-                .then(resolve);
+            promiseList.push(new Promise(function (resolve) {
+                github.api.repos.getCommits(options, function (err, commits) {
+                    if (err) {
+                        resolve([]);
+                    } else {
+                        resolve(commits);
+                    }
+                });
+            }));
         });
+
+        return Promise.all(promiseList);
     };
 }
 
@@ -85,20 +80,18 @@ function getLastCommits(since, commitsCount, pullRequest) {
  *
  * @param {Array} commits
  *
- * @returns {Promise}
+ * @returns {Object} { author: number_of_commits }
  */
 function processCommits(commits) {
-    commits = _.flatten(commits);
-
     var commiters = {};
 
-    return new Promise(function (resolve) {
-        _.forEach(commits, function (commit) {
-            commiters[commit.author.login] = commiters[commit.author.login] + 1 || 1;
-        });
+    commits = _.flatten(commits);
 
-        resolve(commiters);
+    _.forEach(commits, function (commit) {
+        commiters[commit.author.login] = commiters[commit.author.login] + 1 || 1;
     });
+
+    return commiters;
 }
 
 /**
@@ -111,19 +104,17 @@ function processCommits(commits) {
  */
 function addRank(maxRank, team) {
     return function (commiters) {
-        return new Promise(function (resolve) {
-            var max = 0;
+        var max = 0;
 
-            _.forIn(commiters, function (rank) {
-                if (rank > max) max = rank;
-            });
-
-            _.forEach(team, function (member) {
-                member.rank += (commiters[member.login] || 0) / ((max * maxRank) || 1);
-            });
-
-            resolve(team);
+        _.forIn(commiters, function (rank) {
+            if (rank > max) max = rank;
         });
+
+        _.forEach(team, function (member) {
+            member.rank += (commiters[member.login] || 0) / ((max * maxRank) || 1);
+        });
+
+        return team;
     };
 }
 
@@ -142,27 +133,23 @@ module.exports = function commitersProcessorCreator(max, options) {
     /**
      * Commits processor adds rank for commiters in same files as current pull request.
      *
-     * @param {Object} review
+     * @param {Review} review
      *
      * @returns {Promise}
      */
     return function commitersProcessor(review) {
-        return new Promise(function (resolve) {
-            if (_.isEmpty(review.team)) {
-                resolve(review);
-            }
+        if (_.isEmpty(review.team)) {
+            return Promise.resolve(review);
+        }
 
-            getPullRequestFiles(review.pull, options.ignore, options.filesToCheck)
-                .then(getLastCommits(getSinceDate(options.since), options.commitsCount, review.pull))
-                .then(processCommits)
-                .then(addRank(max, review.team))
-                .then(function (team) {
-                    review.team = team;
+        return getPullRequestFiles(review.pull, options.ignore, options.filesToCheck)
+            .then(getLastCommits(getSinceDate(options.since), options.commitsCount, review.pull))
+            .then(processCommits)
+            .then(addRank(max, review.team))
+            .then(function (team) {
+                review.team = team;
 
-                    resolve(review);
-                }, function () {
-                    resolve(review);
-                });
-        });
+                return review;
+            });
     };
 };

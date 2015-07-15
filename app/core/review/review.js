@@ -7,7 +7,6 @@ var PullRequest = require('app/core/models').get('PullRequest');
  * Starts ranking queue.
  *
  * @param {Number} pullRequestId
- * @param {Function} reject
  *
  * @returns {Promise}
  */
@@ -29,7 +28,7 @@ function startQueue(pullRequestId) {
 
 /**
  * Main review suggestion method.
- * Creates queue of promises from processor and retruns suggested reviewrs.
+ * Creates queue of promises from processor and retruns suggested reviewers.
  *
  * @param {Number} pullRequestId
  *
@@ -50,10 +49,22 @@ module.exports = function review(pullRequestId) {
         .then(function (review) {
             logger.info(
                 'Choosing reviewers complete for pull request: ' + review.pull.title + ' — ' + review.pull.html_url,
-                'Reviewers are: ' + review.team.map(function (r) { return r.login + ' rank: ' + r.rank + ' '; })
+                'Reviewers are: ' + (
+                    review.team ?
+                        review.team.map(function (r) { return r.login + ' rank: ' + r.rank + ' '; }) :
+                        'ooops no reviewers were selected...'
+                )
             );
         })
         .catch(logger.error.bind(logger, 'Error in choosing reviewer: '));
 
     return reviewQueue;
 };
+
+/**
+ * Review.
+ *
+ * @typedef {Object} Review
+ * @property {Array} team - Team members for review.
+ * @property {Object} pull - Pull Request.
+ */

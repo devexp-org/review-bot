@@ -4,32 +4,28 @@ module.exports = function removeAlreadyReviewersCreator() {
     /**
      * Removes team members which are already reviewers.
      *
-     * @param {Object} review
+     * @param {Review} review
      *
-     * @returns {Promise}
+     * @returns {Review} review
      */
     return function removeAlreadyReviewers(review) {
-        return new Promise(function (resolve) {
-            var reviewers = review.pull.review.reviewers;
+        var reviewers = review.pull.review.reviewers;
 
-            if (_.isEmpty(reviewers)) {
-                resolve(review);
-            }
+        if (_.isEmpty(reviewers)) return review;
 
-            review.team = _.filter(review.team, function (member) {
-                var keep = true;
+        review.team = _.filter(review.team, function (member) {
+            var keep = true;
 
-                reviewers.forEach(function (reviewer) {
-                    if (reviewer.login === member.login) {
-                        keep = false;
-                        return false;
-                    }
-                });
-
-                return keep;
+            reviewers.forEach(function (reviewer) {
+                if (reviewer.login === member.login) {
+                    keep = false;
+                    return false;
+                }
             });
 
-            resolve(review);
+            return keep;
         });
+
+        return review;
     };
 };

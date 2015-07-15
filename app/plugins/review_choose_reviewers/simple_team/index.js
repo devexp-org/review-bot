@@ -11,22 +11,19 @@ module.exports = function reviewSimpleTeamCreator(team) {
     /**
      * Adds team to review fom simple config.
      *
-     * @param {Object} review
+     * @param {Review} review
      *
-     * @returns {Promise}
+     * @returns {Review|Promise} review
      */
     return function reviewSimpleTeam(review) {
-        return new Promise(function (resolve, reject) {
-            var repo = review.pull.full_name,
-                teamName = team.repoToTeam[repo];
+        var repo = review.pull.full_name;
+        var teamName = team.repoToTeam[repo];
 
-            if (teamName && team.teams[teamName]) {
-                review.team = _.clone(team.teams[teamName], true);
+        if (teamName && team.teams[teamName]) {
+            review.team = _.clone(team.teams[teamName], true);
+            return review;
+        }
 
-                resolve(review);
-            } else {
-                reject('Team for repo: ' + repo + ' not found!');
-            }
-        });
+        return Promise.reject('There is no team for repo: ' + repo);
     };
 };
