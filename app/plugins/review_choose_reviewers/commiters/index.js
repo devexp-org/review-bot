@@ -3,41 +3,19 @@ var github = require('app/core/github/api');
 var getSinceDate = require('app/core/github/utils/date').getSinceDate;
 
 /**
- * Gets pull request files.
+ * Returns pull reqest files.
  *
  * @param {Object} pullRequest
- *
- * @returns {Promise}
- */
-function getPullRequestFiles(pullRequest) {
-    return new Promise(function (resolve, reject) {
-        github.api.pullRequests.getFiles({
-            user: pullRequest.org,
-            repo: pullRequest.repo,
-            number: pullRequest.number,
-            per_page: 100
-        }, function (err, files) {
-            if (err) {
-                reject(err);
-                return;
-            }
-
-            resolve(files);
-        });
-    });
-}
-
-/**
- * Clean files if they match ignore pattern.
- *
  * @param {Array} ignore - patterns to ignore.
  * @param {Number} filesToCheck - number of files to keep for futher processing.
  *
  * @returns {Promise}
  */
-function cleanFiles(ignore, filesToCheck) {
-    return function (files) {
-        return new Promise(function (resolve) {
+function getPullRequestFiles(pullRequest, ignore, filesToCheck) {
+    return new Promise(function (resolve) {
+        var files = _.clone(pullRequest.get('files'));
+
+        if (!_.isEmpty(files)) {
             files = _(files).filter(function (file) {
                 var keep = true;
 
@@ -51,10 +29,10 @@ function cleanFiles(ignore, filesToCheck) {
 
                 return keep;
             }).sample(filesToCheck).value();
+        }
 
-            resolve(files);
-        });
-    };
+        resolve(files || []);
+    });
 }
 
 /**
@@ -141,7 +119,7 @@ function addRank(maxRank, team) {
             });
 
             _.forEach(team, function (member) {
-                member.rank += (commiters[member.login] || 0) / max * maxRank;
+                member.rank += (commiters[member.login] || 0) / ((max * maxRank) || 1);
             });
 
             resolve(team);
@@ -174,8 +152,7 @@ module.exports = function commitersProcessorCreator(max, options) {
                 resolve(review);
             }
 
-            getPullRequestFiles(review.pull)
-                .then(cleanFiles(options.ignore, options.filesToCheck))
+            getPullRequestFiles(review.pull, options.ignore, options.filesToCheck)
                 .then(getLastCommits(getSinceDate(options.since), options.commitsCount, review.pull))
                 .then(processCommits)
                 .then(addRank(max, review.team))

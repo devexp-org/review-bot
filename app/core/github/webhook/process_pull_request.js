@@ -1,6 +1,7 @@
 var logger = require('app/core/logger');
 var events = require('app/core/events');
 var PullRequest = require('app/core/models').get('PullRequest');
+var github = require('../api');
 
 /**
  * Handler for github web hook with type pull_request.
@@ -20,7 +21,31 @@ module.exports = function processPullRequest(body) {
                 pullRequest.set(body.pull_request);
             }
 
-            return pullRequest.save();
+            return new Promise(function (resolve, reject) {
+                github.api.pullRequests.getFiles({
+                    user: pullRequest.org,
+                    repo: pullRequest.repo,
+                    number: pullRequest.number,
+                    per_page: 100
+                }, function (err, files) {
+                    if (!err) {
+                        pullRequest.set('files', files.map(function (file) {
+                            file.patch = '';
+
+                            return file;
+                        }));
+                    }
+
+                    pullRequest.save(function (err, pullRequest) {
+                        if (err) {
+                            reject(err);
+                            return;
+                        }
+
+                        resolve(pullRequest);
+                    });
+                });
+            });
         })
         .then(function (pullRequest) {
             events.emit('github:pull_request:' + body.action, { pullRequest: pullRequest });

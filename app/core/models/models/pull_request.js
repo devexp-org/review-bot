@@ -52,7 +52,11 @@ var baseSchema = {
     additions: Number,
     deletions: Number,
     changed_files: Number,
-    head: Schema.Types.Mixed
+    head: Schema.Types.Mixed,
+    files: {
+        type: Array,
+        'default': []
+    }
 };
 
 /**
