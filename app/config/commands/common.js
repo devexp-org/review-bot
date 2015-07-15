@@ -4,23 +4,23 @@ var config = require('app/core/config');
 module.exports = {
     commands: [
         {
-            test: /^\/start(\W|$)/,
+            test: /^\/start(\W|$)/i,
             handlers: [require('app/plugins/review_commands/start')()]
         },
         {
-            test: /^\/ok$|^ok$|^ок$|^\/ок$/,
+            test: /^\/ok$|^ok$|^ок$|^\/ок$/i,
             handlers: [require('app/plugins/review_commands/ok')()]
         },
         {
-            test: /^\/!ok$|^!ok$|^\/!ок$|^!ок$/,
+            test: /^\/!ok$|^!ok$|^\/!ок$|^!ок$/i,
             handlers: [require('app/plugins/review_commands/not_ok')()]
         },
         {
-            test: /^\/busy(\W|$)/,
+            test: /^\/busy(\W|$)/i,
             handlers: [require('app/plugins/review_commands/busy')()]
         },
         {
-            test: /^\/change(\W|$)/,
+            test: /^\/change(\W|$)/i,
             handlers: [require('app/plugins/review_commands/change')({
                 getTeam: require('app/plugins/review_choose_reviewers/github_org_team')(config.load('github_org_team'))
             })]
