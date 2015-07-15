@@ -43,9 +43,7 @@ var github = {
         return PullRequest
             .findById(pullId)
             .then(function (pullRequest) {
-                if (!pullRequest) {
-                    throw new Error('PullRequest not found');
-                }
+                if (!pullRequest) return Promise.reject(new Error('PullRequest not found'));
 
                 pullRequest.extra_body = pullRequest.extra_body || {};
                 pullRequest.extra_body[id] = content;
@@ -56,7 +54,53 @@ var github = {
                 _this._updatePullRequestBody(pullRequest);
 
                 return pullRequest;
+            }, logger.error.bind(logger, 'core/github/api#setBodyContent: '));
+    },
+
+    /**
+     * Requests info for given pull request from github api.
+     *
+     * @param {Object} pullRequest
+     *
+     * @returns {Promise}
+     */
+    getPullRequestInfo: function getPullRequestInfo(pullRequest) {
+        var _this = this;
+
+        return new Promise(function (resolve, reject) {
+            _this.api.pullRequests.get({
+                user: pullRequest.org,
+                repo: pullRequest.repo,
+                number: pullRequest.number
+            }, function (err, pullRequestInfo) {
+                if (err) return reject(err);
+
+                resolve(pullRequestInfo);
             });
+        });
+    },
+
+    /**
+     * Saves pull request info.
+     *
+     * @param {Object} pullRequestInfo
+     *
+     * @returns {Promise}
+     */
+    savePullRequestInfo: function savePullRequestInfo(pullRequestInfo) {
+        return new Promise(function (resolve, reject) {
+            PullRequest
+                .findById(pullRequestInfo.id)
+                .then(function (pullRequest) {
+                    pullRequest.set(pullRequestInfo);
+
+                    pullRequest.save(function (err, pullRequest) {
+                        if (err) return reject(err);
+
+                        resolve(pullRequest);
+                    });
+                });
+        });
     },
 
     /**
@@ -67,36 +111,9 @@ var github = {
      * @returns {Promise}
      */
     updatePullRequestInfo: function updatePullRequestInfo(pullRequest) {
-        var _this = this;
-
-        return new Promise(function (resolve, reject) {
-            _this.api.pullRequests.get({
-                user: pullRequest.org,
-                repo: pullRequest.repo,
-                number: pullRequest.number
-            }, function (err, pullRequestInfo) {
-                if (err) {
-                    logger.error(err);
-                    reject(err);
-                    return;
-                }
-
-                PullRequest
-                    .findById(pullRequest.id)
-                    .then(function (pullRequest) {
-                        pullRequest.set(pullRequestInfo);
-
-                        pullRequest.save(function (err, pullRequest) {
-                            if (err) {
-                                logger.error(err);
-                                reject(err);
-                            }
-
-                            resolve(pullRequest);
-                        });
-                    });
-            });
-        });
+        return this.getPullRequestInfo(pullRequest)
+            .then(this.savePullRequestInfo)
+            .catch(logger.error.bind(logger, 'core/github/api#updatePullRequestInfo: '));
     },
 
     /**
@@ -116,7 +133,8 @@ var github = {
             .updatePullRequestInfo(pullRequest)
             .then(function (pullRequest) {
                 _this._updateBody(pullRequest, extraBody);
-            });
+            })
+            .catch(logger.error.bind(logger, 'core/github/api#_updatePullRequestBody: '));
     },
 
     /**
@@ -133,6 +151,10 @@ var github = {
             number: pullRequest.number,
             title: pullRequest.title,
             body: pullRequest.body + extraBody
+        }, function (err) {
+            if (err) {
+                logger.error('core/github/api#_updateBody: ', err);
+            }
         });
     }
 };
