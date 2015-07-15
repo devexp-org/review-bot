@@ -4,29 +4,6 @@ var ranking = require('./ranking');
 var PullRequest = require('app/core/models').get('PullRequest');
 
 /**
- * Runs next ranker from rankers list or resolve with ranking result.
- *
- * @param {Object} review
- * @param {Function[]} rankers
- * @param {Function} resolve
- * @param {Function} reject
- */
-function addNextRanker(review, rankers, resolve, reject) {
-    var ranker = rankers.splice(0, 1)[0];
-
-    logger.info('Choose reviewer step: ', ranker.name);
-
-    ranker(review).then(function (resultReview) {
-        if (rankers.length === 0) {
-            resolve(resultReview);
-            return;
-        }
-
-        addNextRanker(resultReview, rankers, resolve);
-    }, reject);
-}
-
-/**
  * Starts ranking queue.
  *
  * @param {Number} pullRequestId
@@ -34,18 +11,20 @@ function addNextRanker(review, rankers, resolve, reject) {
  *
  * @returns {Promise}
  */
-function startQueue(pullRequestId, reject) {
-    return PullRequest
-        .findById(pullRequestId)
-        .then(function (pullRequest) {
-            if (!pullRequest) {
-                reject('Pull Request with id = ' + pullRequestId + ' not found!');
+function startQueue(pullRequestId) {
+    return new Promise(function (resolve, reject) {
+        PullRequest
+            .findById(pullRequestId)
+            .then(function (pullRequest) {
+                if (!pullRequest) {
+                    reject('Pull Request with id = ' + pullRequestId + ' not found!');
 
-                return;
-            }
+                    return;
+                }
 
-            return { pull: pullRequest, team: [] };
-        });
+                resolve({ pull: pullRequest, team: [] });
+            });
+    });
 }
 
 /**
@@ -57,16 +36,24 @@ function startQueue(pullRequestId, reject) {
  * @returns {Promise}
  */
 module.exports = function review(pullRequestId) {
-    var rankers = _.clone(ranking.get());
+    var rankers = ranking.get();
+    var reviewQueue = startQueue(pullRequestId);
 
-    return new Promise(function (resolve, reject) {
-        var reviewQueue = startQueue(pullRequestId, reject);
-
-        reviewQueue.then(function (resultReview) {
-            addNextRanker(resultReview, rankers, resolve, function (err) {
-                reject(err);
-                logger.error(err);
-            });
+    _.forEach(rankers, function (ranker) {
+        reviewQueue = reviewQueue.then(function (review) {
+            logger.info('Choose reviewer step: ', ranker.name);
+            return ranker(review);
         });
     });
+
+    reviewQueue
+        .then(function (review) {
+            logger.info(
+                'Choosing reviewers complete for pull request: ' + review.pull.title + ' — ' + review.pull.html_url,
+                'Reviewers are: ' + review.team.map(function (r) { return r.login + ' rank: ' + r.rank + ' '; })
+            );
+        })
+        .catch(logger.error.bind(logger, 'Error in choosing reviewer: '));
+
+    return reviewQueue;
 };
