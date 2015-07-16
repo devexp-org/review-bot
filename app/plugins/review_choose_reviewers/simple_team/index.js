@@ -20,7 +20,12 @@ module.exports = function reviewSimpleTeamCreator(team) {
         var teamName = team.repoToTeam[repo];
 
         if (teamName && team.teams[teamName]) {
-            review.team = _.clone(team.teams[teamName], true);
+            review.team = _.clone(team.teams[teamName], true).map(function (member) {
+                member.rank = 0;
+
+                return member;
+            });
+
             return review;
         }
 
