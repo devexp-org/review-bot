@@ -55,7 +55,7 @@ app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'views', 'layout.html'));
 });
 
-app.use(function (err, req, res) {
+app.use(function (err, req, res, next) { // eslint-disable-line
     logger.error(err);
     res.error(err.stack);
 });
