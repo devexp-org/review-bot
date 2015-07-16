@@ -47,7 +47,7 @@ app.use('/api/review', require('app/core/review/routes'));
 require('app/plugins');
 
 /**
- * Default Route
+ * Default Routes
  * Should always be last
  */
 
@@ -55,7 +55,7 @@ app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'views', 'layout.html'));
 });
 
-app.use(function (err, req, res, next) { // eslint-disable-line
+app.use(function (err, req, res) {
     logger.error(err);
     res.error(err.stack);
 });

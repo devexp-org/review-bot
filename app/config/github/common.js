@@ -20,9 +20,6 @@ module.exports = {
     content: {
         start: '<section id="info"><hr><span id="devexp-content-start"></span>',
         end: '<span id="devexp-content-end"></span>',
-
-        /* eslint-disable max-len */
-        regex: /<section id="info"><hr><span id="devexp-content-start"><\/span>([\s\S]*)<span id="devexp-content-end"><\/span>/g
-        /* eslint-enable max-len */
+        regex: /<hr><span id="devexp-content-start"><\/span>([\s\S]*)<span id="devexp-content-end"><\/span>/g
     }
 };

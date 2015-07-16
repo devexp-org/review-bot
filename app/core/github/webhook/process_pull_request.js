@@ -37,10 +37,7 @@ module.exports = function processPullRequest(body) {
                     }
 
                     pullRequest.save(function (err, pullRequest) {
-                        if (err) {
-                            reject(err);
-                            return;
-                        }
+                        if (err) return reject(err);
 
                         resolve(pullRequest);
                     });

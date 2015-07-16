@@ -55,8 +55,7 @@ describe('core/github/api', function () {
 
         it('should throw an error if pull request not found', function () {
             assert.isRejected(
-                api.setBodyContent(123123123, 'test:content', 'test content for pull request body'),
-                Error
+                api.setBodyContent(123123123, 'test:content', 'test content for pull request body')
             );
         });
 

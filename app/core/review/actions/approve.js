@@ -27,8 +27,6 @@ module.exports = function approveReview(login, pullId) {
 
             var review = pullRequest.get('review');
 
-            console.log(review);
-
             review.reviewers.forEach(function (reviewer) {
                 if (reviewer.login === login) {
                     reviewer.approved = true;
