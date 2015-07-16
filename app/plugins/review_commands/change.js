@@ -3,78 +3,78 @@ var _ = require('lodash');
 var logger = require('app/core/logger');
 var saveReview = require('app/core/review/actions/save');
 
+var Err = require('terror').create('app/plugins/review_commands/change', {
+    CANT_CHANGE: 'Can`t change reviewer — "%reason%"'
+});
+
 module.exports = function startCommandCreator(options) {
     /**
      * Handles '/change name to name' command.
      *
      * @param {Array} cmd - [command, ...params]
-     * @param {Object} payload - github webhook handler payload.
+     * @param {Object} payload - github webhook hndler payload.
+     *
+     * @returns {Promise}
      */
     return function changeCommand(cmd, payload) {
-        logger.info('change command ' + payload.pullRequest.id + ' — ' + payload.pullRequest.title);
+        var pullRequest = payload.pullRequest;
+        var comment = payload.comment;
+        var message = pullRequest.id + ' — ' + pullRequest.title + ' [' + pullRequest.html_url + ']';
 
-        if (payload.pullRequest.state !== 'open') {
-            logger.error(
-                'Can\'t change reviewer for closed pull request [' +
-                    payload.pullRequest.id + ' — ' + payload.pullRequest.title +
-                ']'
-            );
+        logger.info('[/change] ' + message);
+        Err.CODES.CANT_CHANGE += ' | ' + message;
 
-            return;
+        if (pullRequest.state !== 'open') {
+            throw Err.createError(Err.CODES.CANT_CHANGE, {
+                reason: 'pull request is closed'
+            });
         }
 
-        if(payload.pullRequest.user.login !== payload.comment.user.login) {
-            logger.error(
-                payload.comment.user.login +
-                ' try to change reviewer but author is ' +
-                payload.pullRequest.user.login
-            );
-
-            return;
+        if(pullRequest.user.login !== comment.user.login) {
+            throw Err.createError(Err.CODES.CANT_CHANGE, {
+                reason: comment.user.login +
+                    ' try to change reviewer but author is ' +
+                    pullRequest.user.login
+            });
         }
 
         var oldReviewer = cmd[0].replace('@', '');
-        var newReviewer = cmd[2].replace('@', '');
+        var newReviewer;
 
-        if (newReviewer === payload.pullRequest.user.login) {
-            logger.error(
-                newReviewer +
-                ' can`t set himself\\herself as reviewer for ' +
-                payload.pullRequest.id + ' — ' + payload.pullRequest.title
-            );
-
-            return;
+        if (!cmd[2] || cmd[1] !== 'to') {
+            newReviewer = cmd[1].replace('@', '');
+        } else {
+            newReviewer = cmd[2].replace('@', '');
         }
 
-        if (_.find(payload.pullRequest.review.reviewers, { login: newReviewer })) {
-            logger.error(
-                payload.comment.user.login +
-                ' try to set ' + newReviewer + ' as reviewer but he\\she is already in reviewers list for ' +
-                payload.pullRequest.id + ' — ' + payload.pullRequest.title
-            );
-
-            return;
+        if (newReviewer === pullRequest.user.login) {
+            throw Err.createError(Err.CODES.CANT_CHANGE, {
+                reason: newReviewer + ' can`t set himself\\herself as reviewer'
+            });
         }
 
-        options
-            .getTeam({ pull: payload.pullRequest, team: [] })
+        if (_.find(pullRequest.get('review.reviewers'), { login: newReviewer })) {
+            throw Err.createError(Err.CODES.CANT_CHANGE, {
+                reason: 'try to set ' + newReviewer + ' as reviewer but he\\she is already in reviewers'
+            });
+        }
+
+        return options
+            .getTeam({ pull: pullRequest, team: [] })
             .then(function (result) {
                 var newReviewerInfo = _.find(result.team, { login: newReviewer });
-                var reviewers = _.reject(payload.pullRequest.get('review.reviewers'), { login: oldReviewer });
+                var reviewers = _.reject(pullRequest.get('review.reviewers'), { login: oldReviewer });
 
                 if (!newReviewerInfo) {
-                    logger.error(
-                        payload.comment.user.login +
-                        ' try to set ' + newReviewer + ' but there`s no user with this login in team for ' +
-                        payload.pullRequest.id + ' — ' + payload.pullRequest.title
-                    );
-
-                    return;
+                    throw Err.createError(Err.CODES.CANT_CHANGE, {
+                        reason: comment.user.login +
+                            ' try to set ' + newReviewer + ' but there`s no user with this login in team'
+                    });
                 }
 
                 reviewers.push(newReviewerInfo);
 
-                saveReview({ reviewers: reviewers }, payload.pullRequest.id);
+                return saveReview({ reviewers: reviewers }, pullRequest.id);
             });
     };
 };
