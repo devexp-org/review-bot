@@ -9,18 +9,20 @@ var commands = {};
  * @param {Object} payload - github webhook handler payload.
  */
 function commandsDispatcher(payload) {
-    var comment = _.get(payload, ['comment', 'body']);
+    var commentBody = _.get(payload, ['comment', 'body']);
     var cmd;
 
-    _.forEach(commands, function (command) {
-        if (comment.match(command.test)) {
-            cmd = _.compact(comment.replace(command.test, '').split(' '));
-            cmd = cmd.map(function (c) { return c.toLowerCase(); });
+    _.forEach(commentBody.split('\r\n'), function (comment) {
+        _.forEach(commands, function (command) {
+            if (comment.match(command.test)) {
+                cmd = _.compact(comment.replace(command.test, '').split(' '));
+                cmd = cmd.map(function (c) { return c.toLowerCase(); });
 
-            _.forEach(command.handlers, function (handler) {
-                handler(cmd, payload);
-            });
-        }
+                _.forEach(command.handlers, function (handler) {
+                    handler(cmd, payload);
+                });
+            }
+        });
     });
 }
 
@@ -29,7 +31,6 @@ function commandsDispatcher(payload) {
  *
  * @param {Object} options
  * @param {Object} options.commands - list of handlers for command
- * @param {RegExp} options.regex - regex wich match command
  * @param {String[]} options.events - name of events for subscribe to.
  */
 module.exports = function commandsDispatcherCreator(options) {
