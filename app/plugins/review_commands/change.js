@@ -4,7 +4,7 @@ var logger = require('app/core/logger');
 var saveReview = require('app/core/review/actions/save');
 
 var Err = require('terror').create('app/plugins/review_commands/change', {
-    CANT_CHANGE: 'Can`t change reviewer — "%reason%"'
+    CANT_CHANGE: 'Can`t change reviewer'
 });
 
 module.exports = function startCommandCreator(options) {
@@ -25,17 +25,13 @@ module.exports = function startCommandCreator(options) {
         Err.CODES.CANT_CHANGE += ' | ' + message;
 
         if (pullRequest.state !== 'open') {
-            throw Err.createError(Err.CODES.CANT_CHANGE, {
-                reason: 'pull request is closed'
-            });
+            throw Err.createError(Err.CODES.CANT_CHANGE, 'pull request is closed');
         }
 
         if(pullRequest.user.login !== comment.user.login) {
-            throw Err.createError(Err.CODES.CANT_CHANGE, {
-                reason: comment.user.login +
-                    ' try to change reviewer but author is ' +
-                    pullRequest.user.login
-            });
+            throw Err.createError(Err.CODES.CANT_CHANGE,
+                comment.user.login + ' try to change reviewer but author is ' + pullRequest.user.login
+            );
         }
 
         var oldReviewer = cmd[0].replace('@', '');
@@ -48,15 +44,15 @@ module.exports = function startCommandCreator(options) {
         }
 
         if (newReviewer === pullRequest.user.login) {
-            throw Err.createError(Err.CODES.CANT_CHANGE, {
-                reason: newReviewer + ' can`t set himself\\herself as reviewer'
-            });
+            throw Err.createError(Err.CODES.CANT_CHANGE,
+                newReviewer + ' can`t set himself\\herself as reviewer'
+            );
         }
 
         if (_.find(pullRequest.get('review.reviewers'), { login: newReviewer })) {
-            throw Err.createError(Err.CODES.CANT_CHANGE, {
-                reason: 'try to set ' + newReviewer + ' as reviewer but he\\she is already in reviewers'
-            });
+            throw Err.createError(Err.CODES.CANT_CHANGE,
+                'try to set ' + newReviewer + ' as reviewer but he\\she is already in reviewers'
+            );
         }
 
         return options
@@ -66,14 +62,12 @@ module.exports = function startCommandCreator(options) {
                 var reviewers = _.reject(pullRequest.get('review.reviewers'), { login: oldReviewer });
 
                 if (!newReviewerInfo) {
-                    throw Err.createError(Err.CODES.CANT_CHANGE, {
-                        reason: comment.user.login +
-                            ' try to set ' + newReviewer + ' but there`s no user with this login in team'
-                    });
+                    throw Err.createError(Err.CODES.CANT_CHANGE,
+                        'try to set ' + newReviewer + ' but there`s no user with this login in team'
+                    );
                 }
 
                 reviewers.push(newReviewerInfo);
-
                 return saveReview({ reviewers: reviewers }, pullRequest.id);
             });
     };
