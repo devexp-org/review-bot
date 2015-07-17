@@ -19,7 +19,7 @@ module.exports = function startCommandCreator(options) {
     return function changeCommand(cmd, payload) {
         var pullRequest = payload.pullRequest;
         var comment = payload.comment;
-        var message = pullRequest.id + ' — ' + pullRequest.title + ' [' + pullRequest.html_url + ']';
+        var message = cmd + ' — ' + pullRequest.title + ' [' + pullRequest.html_url + ']';
 
         logger.info('[/change] ' + message);
         Err.CODES.CANT_CHANGE += ' | ' + message;
