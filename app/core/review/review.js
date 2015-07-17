@@ -3,6 +3,10 @@ var logger = require('app/core/logger');
 var ranking = require('./ranking');
 var PullRequest = require('app/core/models').get('PullRequest');
 
+var Err = require('terror').create('app/core/review/review', {
+    PULL_NOT_FOUND: 'Pull Request with id = %id% not found!'
+});
+
 /**
  * Starts ranking queue.
  *
@@ -15,11 +19,7 @@ function startQueue(pullRequestId) {
         PullRequest
             .findById(pullRequestId)
             .then(function (pullRequest) {
-                if (!pullRequest) {
-                    reject('Pull Request with id = ' + pullRequestId + ' not found!');
-
-                    return;
-                }
+                if (!pullRequest) return reject(Err.createError(Err.CODE.PULL_NOT_FOUND, { id: pullRequestId }));
 
                 resolve({ pull: pullRequest, team: [] });
             });
@@ -38,6 +38,8 @@ module.exports = function review(pullRequestId) {
     var rankers = ranking.get();
     var reviewQueue = startQueue(pullRequestId);
 
+    console.log(reviewQueue);
+
     _.forEach(rankers, function (ranker) {
         reviewQueue = reviewQueue.then(function (review) {
             logger.info('Choose reviewer step: ', ranker.name);
@@ -45,7 +47,7 @@ module.exports = function review(pullRequestId) {
         });
     });
 
-    reviewQueue
+    reviewQueue = reviewQueue
         .then(function (review) {
             logger.info(
                 'Choosing reviewers complete for pull request: ' + review.pull.title + ' — ' + review.pull.html_url,
@@ -55,8 +57,9 @@ module.exports = function review(pullRequestId) {
                         'ooops no reviewers were selected...'
                 )
             );
-        })
-        .catch(logger.error.bind(logger, 'Error in choosing reviewer: '));
+
+            return review;
+        });
 
     return reviewQueue;
 };
