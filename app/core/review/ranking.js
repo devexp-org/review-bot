@@ -1,3 +1,7 @@
+var Err = require('terror').create('app/core/review/ranking', {
+    NO_PROCESSORS: 'At least 1 processors should be added.'
+});
+
 module.exports = {
     rankingProcessorsList: [],
 
@@ -11,7 +15,7 @@ module.exports = {
      */
     init: function init(options) {
         if (!options.processors) {
-            throw new Error('At least 1 processors should be added.');
+            throw Err.createError(Err.CODES.NO_PROCESSORS);
         }
 
         this.rankingProcessorsList = options.processors;
