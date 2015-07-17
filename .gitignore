@@ -4,3 +4,4 @@ logs
 npm-debug.log
 coverage
 app/config/github/auth.js
+app/config/jabber/auth.js
