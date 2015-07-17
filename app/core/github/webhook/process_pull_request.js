@@ -19,35 +19,25 @@ module.exports = function processPullRequest(body) {
                 pullRequest = new PullRequest(body.pull_request);
             } else {
                 pullRequest.set(body.pull_request);
+                github._updatePullRequestBody(pullRequest);
             }
 
-            return new Promise(function (resolve, reject) {
-                github.api.pullRequests.getFiles({
-                    user: pullRequest.org,
-                    repo: pullRequest.repo,
-                    number: pullRequest.number,
-                    per_page: 100
-                }, function (err, files) {
-                    if (!err) {
-                        pullRequest.set('files', files.map(function (file) {
-                            file.patch = '';
-
-                            return file;
-                        }));
-                    }
-
-                    pullRequest.save(function (err, pullRequest) {
-                        if (err) return reject(err);
-
-                        resolve(pullRequest);
-                    });
+            return pullRequest;
+        })
+        .then(function (pullRequest) {
+            return github.getPullRequestFiles(pullRequest)
+                .then(function (files) {
+                    pullRequest.set('files', files);
+                    return pullRequest;
                 });
-            });
+        })
+        .then(function (pullRequest) {
+            return pullRequest.save();
         })
         .then(function (pullRequest) {
             events.emit('github:pull_request:' + body.action, { pullRequest: pullRequest });
-            logger.info('Pull request saved:', pullRequest.title, pullRequest._id);
+            logger.info('Pull request saved:', pullRequest.title, pullRequest._id, pullRequest.html_url);
 
             return pullRequest;
-        }, logger.error.bind(logger, 'Process pull request: '));
+        });
 };

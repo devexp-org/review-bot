@@ -6,7 +6,8 @@ var Err = require('terror').create('app/core/github/api', {
     PULL_INFO: '#getPullRequestInfo — pull request info error',
     PULL_NOT_FOUND: '#%method% — pull request not found — %id%',
     UPDATE_BODY: '#_updateBody',
-    SAVE_PULL: '#savePullRequestInfo — cannot save pull'
+    SAVE_PULL: '#savePullRequestInfo — cannot save pull',
+    API_ERR: 'Github api error'
 });
 
 var start;
@@ -128,8 +129,33 @@ var github = {
     },
 
     /**
+     * Get files changed in pull requets.
+     *
+     * @param {Object} pullRequest
+     *
+     * @returns {Promise}
+     */
+    getPullRequestFiles: function getPullRequestFiles(pullRequest) {
+        return new Promise(function (resolve, reject) {
+            github.api.pullRequests.getFiles({
+                user: pullRequest.org,
+                repo: pullRequest.repo,
+                number: pullRequest.number,
+                per_page: 100
+            }, function (err, files) {
+                if (err) return reject(Err.createError(Err.CODES.API_ERR, err));
+
+                resolve(files.map(function (file) {
+                    file.patch = '';
+
+                    return file;
+                }));
+            });
+        });
+    },
+
+    /**
      * Updates pull request body with extra body content.
-     * @private
      *
      * @param {Object} pullRequest
      */
@@ -167,6 +193,6 @@ var github = {
     }
 };
 
-github._updatePullRequestBody = _.debounce(github._updatePullRequestBody.bind(github), 2000);
+github._updatePullRequestBody = _.debounce(github._updatePullRequestBody.bind(github), 4000);
 
 module.exports = github;
