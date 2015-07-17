@@ -46,7 +46,7 @@ var baseSchema = {
         reviewers: Array,
         started_at: Date,
         updated_at: Date,
-        finished_at: Date
+        completed_at: Date
     },
     commits: Number,
     additions: Number,

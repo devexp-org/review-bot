@@ -38,7 +38,10 @@ describe('app/core/review/review', function () {
 
     it('should call all ranking processors', function (done) {
         review().then(function () {
-            console.log(arguments);
+            processors.forEach(function (p) {
+                assert.calledOnce(p);
+            });
+
             done();
         }, function (err) {
             done(err);

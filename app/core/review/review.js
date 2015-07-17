@@ -38,8 +38,6 @@ module.exports = function review(pullRequestId) {
     var rankers = ranking.get();
     var reviewQueue = startQueue(pullRequestId);
 
-    console.log(reviewQueue);
-
     _.forEach(rankers, function (ranker) {
         reviewQueue = reviewQueue.then(function (review) {
             logger.info('Choose reviewer step: ', ranker.name);

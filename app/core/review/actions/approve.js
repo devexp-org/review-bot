@@ -1,9 +1,12 @@
-// TODO: Refactor
 var logger = require('app/core/logger');
 var events = require('app/core/events');
 var config = require('app/core/config');
 
 var PullRequest = require('app/core/models').get('PullRequest');
+
+var Err = require('terror').create('app/core/review/actions/approve', {
+    PULL_NOT_FOUND: 'Pull request with id = %id% not found.'
+});
 
 /**
  * Approves and complete review if approved reviewers count === review config approveCount.
@@ -21,9 +24,7 @@ module.exports = function approveReview(login, pullId) {
         .findById(pullId)
         .exec()
         .then(function (pullRequest) {
-            if (!pullRequest) {
-                throw new Error('Pull request not found!');
-            }
+            if (!pullRequest) throw Err(Err.CODES.PULL_NOT_FOUND, { id: pullId });
 
             var review = pullRequest.get('review');
 
@@ -37,7 +38,7 @@ module.exports = function approveReview(login, pullId) {
                 }
 
                 if (approvedCount === reviewConfig.approveCount) {
-                    pullRequest.review.status = 'complete';
+                    review.status = 'complete';
 
                     return false;
                 }
@@ -45,18 +46,22 @@ module.exports = function approveReview(login, pullId) {
 
             review.updated_at = new Date();
 
+            if (review.status === 'complete') {
+                review.completed_at = new Date();
+            }
+
             pullRequest.set('review', review);
 
             return pullRequest.save();
         }).then(function (pullRequest) {
-            events.emit('review:approved', { pullRequest: pullRequest, review: pullRequest.review, login: login });
-            logger.info('Review approved:', pullRequest.id, login);
-
             if (pullRequest.review.status === 'complete') {
                 events.emit('review:complete', { pullRequest: pullRequest, review: pullRequest.review });
                 logger.info('Review complete:', pullId);
+            } else {
+                events.emit('review:approved', { pullRequest: pullRequest, review: pullRequest.review, login: login });
+                logger.info('Review approved:', pullRequest.id, login);
             }
 
             return pullRequest;
-        }, logger.error.bind(logger));
+        });
 };
