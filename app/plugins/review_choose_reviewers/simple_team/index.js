@@ -26,7 +26,7 @@ module.exports = function reviewSimpleTeamCreator(team) {
                 return member;
             });
 
-            return review;
+            return Promise.resolve(review);
         }
 
         return Promise.reject('There is no team for repo: ' + repo);

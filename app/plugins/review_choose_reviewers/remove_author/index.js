@@ -13,6 +13,6 @@ module.exports = function reviewRemoveAuthorCreator() {
             return item.login !== pullAuthor;
         });
 
-        return review;
+        return Promise.resolve(review);
     };
 };

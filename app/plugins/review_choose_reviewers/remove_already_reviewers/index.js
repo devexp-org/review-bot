@@ -26,6 +26,6 @@ module.exports = function removeAlreadyReviewersCreator() {
             return keep;
         });
 
-        return review;
+        return Promise.resolve(review);
     };
 };

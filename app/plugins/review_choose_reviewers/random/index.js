@@ -18,6 +18,6 @@ module.exports = function reviewRandomCreator(max) {
             member.rank += Math.floor(Math.random() * (max + 1));
         });
 
-        return review;
+        return Promise.resolve(review);
     };
 };

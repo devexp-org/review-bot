@@ -13,6 +13,6 @@ module.exports = function reviewSortCreator() {
             return 0;
         });
 
-        return review;
+        return Promise.resolve(review);
     };
 };

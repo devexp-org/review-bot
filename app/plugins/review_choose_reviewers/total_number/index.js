@@ -16,6 +16,6 @@ module.exports = function reviewTotalNumberCreator(max) {
     return function reviewTotalNumber(review) {
         review.team = review.team.slice(0, max);
 
-        return review;
+        return Promise.resolve(review);
     };
 };
