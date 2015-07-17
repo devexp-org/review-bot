@@ -13,12 +13,9 @@ describe('core/github/webhook/process_pull_request', function () {
         processPullRequest = proxyquire('../../webhook/process_pull_request', {
             'app/core/events': events,
             '../api': {
-                api: {
-                    pullRequests: {
-                        getFiles: function (opts, cb) {
-                            cb(null, []);
-                        }
-                    }
+                _updatePullRequestBody: sinon.stub(),
+                getPullRequestFiles: function () {
+                    return Promise.resolve([]);
                 }
             }
         });

@@ -10,7 +10,12 @@ describe('core/github/webhook/process_issue_comment', function () {
         events = { emit: sinon.stub() };
 
         payload = require('../mocks/payloads/issue_comment.json');
-        proccessIssueComment = proxyquire('../../webhook/process_issue_comment', { 'app/core/events': events });
+        proccessIssueComment = proxyquire('../../webhook/process_issue_comment', {
+            'app/core/events': events,
+            '../api': {
+                _updatePullRequestBody: sinon.stub()
+            }
+        });
 
         new PullRequest(require('app/core/models/__tests__/mocks/pull_request.json'))
             .save()
