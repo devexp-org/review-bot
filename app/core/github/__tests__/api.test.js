@@ -68,4 +68,24 @@ describe('core/github/api', function () {
                 });
         });
     });
+
+    describe('#getPullRequestFiles', function () {
+        beforeEach(function () {
+            api.api = { pullRequests: {} };
+        });
+
+        it('should reject with error if api responses with error', function () {
+            api.api.pullRequests.getFiles = function (params, cb) { cb('error'); };
+
+            assert.isRejected(api.getPullRequestFiles({}));
+        });
+
+        it('should fulfil with pull request files', function () {
+            var result = [{ patch: '' }, { patch: '' }, { patch: '' }];
+
+            api.api.pullRequests.getFiles = function (params, cb) { cb(null, result); };
+
+            assert.becomes(api.getPullRequestFiles({}), result);
+        });
+    });
 });
