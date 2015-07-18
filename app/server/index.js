@@ -29,6 +29,7 @@ domain('Core modules initializers', function () {
     require('app/core/mongoose').init(config.load('mongoose'));
     require('app/core/models/addons').init(config.load('models'));
     require('app/core/github/api').init(config.load('github'));
+    require('app/core/team').init(config.load('team'));
     require('app/core/review/ranking').init(config.load('review'));
     require('app/core/badges').init(config.load('badges'));
 });
