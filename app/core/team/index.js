@@ -50,3 +50,18 @@ module.exports = {
         return this._options[repo].params || {};
     }
 };
+
+/**
+ * Team.
+ *
+ * @typedef {Array<Member>} Team
+ */
+
+ /**
+  * Member.
+  *
+  * @typedef {Object} Member
+  * @property {String} login
+  * @property {String} avatar_url
+  * @property {String} html_url
+  */
