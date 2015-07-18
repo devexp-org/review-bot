@@ -1,0 +1,38 @@
+var Err = require('terror').create('app/core/team', {
+    NOT_FOUND: 'Team for repo "%repo%" not found.',
+    NOT_TRANSPORT: 'Transport is required for getting team for "%repo%".'
+});
+
+module.exports = {
+    /**
+     * Init team module.
+     *
+     * @param {Object} options
+     *
+     * @returns {this}
+     */
+    init: function init(options) {
+        this._options = options;
+
+        return this;
+    },
+
+    /**
+     * Loads team for given repo.
+     *
+     * @param {String} repo - repository full name org/repo.
+     *
+     * @returns {Promise}
+     */
+    get: function get(repo) {
+        if (!this._options[repo]) return Promise.reject(
+            Err.createError(Err.CODES.NOT_FOUND, { repo: repo })
+        );
+
+        if (!this._options[repo].transport) return Promise.reject(
+            Err.createError(Err.CODES.NOT_TRANSPORT, { repo: repo })
+        );
+
+        return this._options[repo].transport(this._options[repo].params || {});
+    }
+};
