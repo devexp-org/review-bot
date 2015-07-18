@@ -34,5 +34,19 @@ module.exports = {
         );
 
         return this._options[repo].transport(this._options[repo].params || {});
+    },
+
+    /**
+     * Returns params for team which assigned to given repo.
+     * Might be useful for storing some team related configuration.
+     *
+     * @param {String} repo - repository full name org/repo.
+     *
+     * @returns {Object}
+     */
+    getParams: function (repo) {
+        if (!this._options[repo]) throw Err.createError(Err.CODES.NOT_FOUND, { repo: repo });
+
+        return this._options[repo].params || {};
     }
 };

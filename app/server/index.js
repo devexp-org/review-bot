@@ -42,6 +42,7 @@ app.use(require('app/core/badges/proxy'));
 
 app.use('/api/github', require('app/core/github/routes'));
 app.use('/api/review', require('app/core/review/routes'));
+
 /**
  * Plugins
  */
