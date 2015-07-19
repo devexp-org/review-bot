@@ -2,12 +2,13 @@ var _ = require('lodash');
 
 var logger = require('app/core/logger');
 var saveReview = require('app/core/review/actions/save');
+var team = require('app/core/team');
 
 var Err = require('terror').create('app/plugins/review_commands/change', {
     CANT_CHANGE: 'Can`t change reviewer'
 });
 
-module.exports = function startCommandCreator(options) {
+module.exports = function startCommandCreator() {
     /**
      * Handles '/change name to name' command.
      *
@@ -55,10 +56,10 @@ module.exports = function startCommandCreator(options) {
             );
         }
 
-        return options
-            .getTeam({ pull: pullRequest, team: [] })
-            .then(function (result) {
-                var newReviewerInfo = _.find(result.team, { login: newReviewer });
+        return team
+            .get(pullRequest.full_name)
+            .then(function (team) {
+                var newReviewerInfo = _.find(team, { login: newReviewer });
                 var reviewers = _.reject(pullRequest.get('review.reviewers'), { login: oldReviewer });
 
                 if (!newReviewerInfo) {

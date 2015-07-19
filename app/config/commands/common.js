@@ -1,6 +1,3 @@
-var config = require('app/core/config');
-
-// TODO: Aliases
 module.exports = {
     commands: [
         {
@@ -21,9 +18,7 @@ module.exports = {
         },
         {
             test: /^\/change(\W|$)/i,
-            handlers: [require('app/plugins/review_commands/change')({
-                getTeam: require('app/plugins/review_choose_reviewers/github_org_team')(config.load('github_org_team'))
-            })]
+            handlers: [require('app/plugins/review_commands/change')()]
         }
     ],
 
