@@ -43,7 +43,7 @@ describe('app/core/review/actions/save', function () {
     });
 
     it('should be rejected if pull request not found', function () {
-        assert.isRejected(approveReview('user', 0));
+        return assert.isRejected(approveReview('user', 0));
     });
 
     it('should approve review for passed user name', function (done) {

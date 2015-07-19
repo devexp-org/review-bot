@@ -32,7 +32,7 @@ describe('app/core/review/actions/save', function () {
     });
 
     it('should be rejected if pull request not found', function () {
-        assert.isRejected(saveReview({}, 0));
+        return assert.isRejected(saveReview({}, 0));
     });
 
     it('should set status to notstarted if empty status passed to review', function (done) {
@@ -63,14 +63,14 @@ describe('app/core/review/actions/save', function () {
     });
 
     it('should be rejected if unknown status', function () {
-        assert.isRejected(
+        return assert.isRejected(
             saveReview({ status: 'my custom status', reviewers: review.reviewers }, pullRequest._id)
         );
     });
 
     describe('status === inprogress', function () {
         it('should be rejected when trying to start review without reviewers', function () {
-            assert.isRejected(saveReview({ status: 'inprogress' }, pullRequest._id));
+            return assert.isRejected(saveReview({ status: 'inprogress' }, pullRequest._id));
         });
 
         it('should set start date if there is no reviewers', function (done) {

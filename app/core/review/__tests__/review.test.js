@@ -26,14 +26,19 @@ describe('app/core/review/review', function () {
                 get: function () {
                     return processors;
                 }
+            },
+            'app/core/team': {
+                get: function () {
+                    return Promise.resolve(team);
+                }
             }
         });
     });
 
     it('should be rejected if pull request not found', function () {
-        PullRequest.findById = Promise.resolve();
+        PullRequest.findById = _.constant(Promise.resolve());
 
-        assert.isRejected(review());
+        return assert.isRejected(review());
     });
 
     it('should call all ranking processors', function (done) {

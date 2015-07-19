@@ -10,13 +10,13 @@ describe('app/core/team', function () {
         it('should be rejected if there is no team for given repo', function () {
             team.init({});
 
-            assert.isRejected(team.get());
+            return assert.isRejected(team.get());
         });
 
         it('should be rejected if there is no transport for team for given repo', function () {
             team.init({ 'org/team': {} });
 
-            assert.isRejected(team.get());
+            return assert.isRejected(team.get());
         });
 
         it('should be resolved with team', function (done) {

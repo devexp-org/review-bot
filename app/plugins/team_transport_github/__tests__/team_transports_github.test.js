@@ -27,8 +27,11 @@ describe('app/plugins/team_transport_github', function () {
     });
 
     it('should rejected if there is no params passed', function () {
-        assert.isRejected(transport());
-        assert.isRejected(transport({}));
+        return assert.isRejected(transport());
+    });
+
+    it('should rejected if there is no at least org in params', function () {
+        return assert.isRejected(transport({}));
     });
 
     describe('no team passed', function () {
@@ -53,7 +56,7 @@ describe('app/plugins/team_transport_github', function () {
         });
 
         it('should be rejected if there is no such team in github organisation', function () {
-            assert.isRejected(transport({ org: 'org', team: 'team2' }));
+            return assert.isRejected(transport({ org: 'org', team: 'team2' }));
         });
     });
 });

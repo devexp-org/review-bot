@@ -5,27 +5,19 @@ describe('app/plugins/review_commands/change', function () {
     var pullRequest;
     var cmd;
     var comment;
-    var save;
 
     beforeEach(function () {
-        save = sinon.stub();
-
         change = proxyquire('../change', {
-            'app/core/review/actions/save': _.identity
-        })({
-            getTeam: function () {
-                return Promise.resolve({
-                    team: [
-                        {
-                            login: 'new_reviewer'
-                        },
-                        {
-                            login: 'other_reviewr'
-                        }
-                    ]
-                });
+            'app/core/review/actions/save': _.identity,
+            'app/core/team': {
+                get: function () {
+                    return Promise.resolve([
+                        { login: 'new_reviewer' },
+                        { login: 'other_reviewr' }
+                    ]);
+                }
             }
-        });
+        })();
 
         pullRequest = {
             id: 1234,
@@ -76,7 +68,7 @@ describe('app/plugins/review_commands/change', function () {
     });
 
     it('should throw an error if new reviewer isn`t found in team for this pull request', function () {
-        assert.isRejected(change(
+        return assert.isRejected(change(
             ['other_reviewer', 'to', 'old_reviewer2'],
             { pullRequest: pullRequest, comment: comment }
         ));

@@ -54,7 +54,7 @@ describe('core/github/api', function () {
         });
 
         it('should throw an error if pull request not found', function () {
-            assert.isRejected(
+            return assert.isRejected(
                 api.setBodyContent(123123123, 'test:content', 'test content for pull request body')
             );
         });
@@ -77,7 +77,7 @@ describe('core/github/api', function () {
         it('should reject with error if api responses with error', function () {
             api.api.pullRequests.getFiles = function (params, cb) { cb('error'); };
 
-            assert.isRejected(api.getPullRequestFiles({}));
+            return assert.isRejected(api.getPullRequestFiles({}));
         });
 
         it('should fulfil with pull request files', function () {
@@ -85,7 +85,7 @@ describe('core/github/api', function () {
 
             api.api.pullRequests.getFiles = function (params, cb) { cb(null, result); };
 
-            assert.becomes(api.getPullRequestFiles({}), result);
+            return assert.becomes(api.getPullRequestFiles({}), result);
         });
     });
 });
