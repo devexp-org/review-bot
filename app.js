@@ -1,7 +1,7 @@
 require('es6-promise').polyfill();
 
 var path = require('path');
-var config = require('app/core/config');
+var config = require('app/modules/config');
 var mulilistener = require('app/server/multilistener');
 var app, port, logger;
 
@@ -10,7 +10,7 @@ config.init({ path: path.join(__dirname, 'app/config'), cache: true });
 /**
  * Log
  */
-logger = require('app/core/logger');
+logger = require('app/modules/logger');
 
 /**
  * Handler for uncaught exceptions
@@ -18,6 +18,11 @@ logger = require('app/core/logger');
 process.on('uncaughtException', function (err) {
     logger.error(err);
 });
+
+/**
+ * Modules
+ */
+require('app/modules');
 
 /**
  * Main Server Module
