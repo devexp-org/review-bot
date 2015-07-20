@@ -55,8 +55,10 @@ var github = {
                     );
                 }
 
-                pullRequest.extra_body = pullRequest.extra_body || {};
-                pullRequest.extra_body[id] = content;
+                var extraBody = _.clone(pullRequest.get('extra_body') || {});
+                extraBody[id] = content;
+
+                pullRequest.set('extra_body', extraBody);
 
                 return pullRequest.save();
             })
