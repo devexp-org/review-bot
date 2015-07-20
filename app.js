@@ -3,9 +3,7 @@ require('es6-promise').polyfill();
 var path = require('path');
 var config = require('app/core/config');
 var mulilistener = require('app/server/multilistener');
-var app;
-var port;
-var logger;
+var app, port, logger;
 
 config.init({ path: path.join(__dirname, 'app/config'), cache: true });
 

@@ -1,6 +1,6 @@
 var Router = require('express').Router;
 var _ = require('lodash');
-var router = Router();
+var router = Router(); // eslint-disable-line new-cap
 
 var PullRequest = require('app/core/models').get('PullRequest');
 

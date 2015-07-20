@@ -1,10 +1,7 @@
 describe('app/plugins/review_commands/change', function () {
     var _ = require('lodash');
     var proxyquire = require('proxyquire');
-    var change;
-    var pullRequest;
-    var cmd;
-    var comment;
+    var change, pullRequest, cmd, comment;
 
     beforeEach(function () {
         change = proxyquire('../change', {

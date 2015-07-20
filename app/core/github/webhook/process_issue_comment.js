@@ -15,16 +15,18 @@ var Err = require('terror').create('app/core/github/webhook/process_issue_commen
  * @returns {Promise}
  */
 module.exports = function processIssueComment(body) {
-    var pullRequestTitle = body.issue.title,
-        pullRequestNumber = body.issue.number,
-        repositoryName = body.repository.full_name;
+    var pullRequestTitle = body.issue.title;
+    var pullRequestNumber = body.issue.number;
+    var repositoryName = body.repository.full_name;
 
     return PullRequest
         .findByNumberAndRepo(pullRequestNumber, repositoryName)
         .then(function (pullRequest) {
-            if (!pullRequest) return Promise.reject(
-                Err.createError(Err.CODES.NOT_FOUND, { title: pullRequestTitle, number: pullRequestNumber })
-            );
+            if (!pullRequest) {
+                return Promise.reject(
+                    Err.createError(Err.CODES.NOT_FOUND, { title: pullRequestTitle, number: pullRequestNumber })
+                );
+            }
 
             github._updatePullRequestBody(pullRequest);
 

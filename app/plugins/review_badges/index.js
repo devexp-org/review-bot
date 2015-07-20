@@ -77,8 +77,8 @@ function reviewerBadge(reviewer) {
  * @returns {String}
  */
 function buildReviewBadges(review) {
-    var status = reviewStatusBadge(review),
-        reviewers = review.reviewers.map(reviewerBadge).join(' ');
+    var status = reviewStatusBadge(review);
+    var reviewers = review.reviewers.map(reviewerBadge).join(' ');
 
     return '<div>' + status + ' ' + reviewers + '</div>';
 }

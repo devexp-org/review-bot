@@ -9,6 +9,7 @@ var Err = require('terror').create('app/plugins/review_commands/change', {
 });
 
 module.exports = function startCommandCreator() {
+
     /**
      * Handles '/change name to name' command.
      *
@@ -29,7 +30,7 @@ module.exports = function startCommandCreator() {
             throw Err.createError(Err.CODES.CANT_CHANGE, 'pull request is closed');
         }
 
-        if(pullRequest.user.login !== comment.user.login) {
+        if (pullRequest.user.login !== comment.user.login) {
             throw Err.createError(Err.CODES.CANT_CHANGE,
                 comment.user.login + ' try to change reviewer but author is ' + pullRequest.user.login
             );

@@ -25,7 +25,7 @@ module.exports = function saveReview(review, pullId) {
         .findById(pullId)
         .exec()
         .then(function (pullRequest) {
-            if (!pullRequest) throw Err(Err.CODES.PULL_NOT_FOUND, { id: pullId });
+            if (!pullRequest) throw Err.createError(Err.CODES.PULL_NOT_FOUND, { id: pullId });
 
             if (_.isEmpty(pullRequest.review.reviewers)) {
                 isNew = true;
@@ -42,7 +42,7 @@ module.exports = function saveReview(review, pullId) {
             }
 
             if (review.status === 'inprogress' && _.isEmpty(review.reviewers)) {
-                throw Err(Err.CODES.START_ERR, {
+                throw Err.createError(Err.CODES.START_ERR, {
                     id: pullRequest.id,
                     title: pullRequest.title,
                     url: pullRequest.html_url

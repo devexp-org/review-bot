@@ -5,6 +5,7 @@ var review = require('app/core/review/review');
 var saveReview = require('app/core/review/actions/save');
 
 module.exports = function startCommandCreator() {
+
     /**
      * Handles '/busy' command.
      *

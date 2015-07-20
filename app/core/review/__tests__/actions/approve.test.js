@@ -4,10 +4,7 @@ describe('app/core/review/actions/save', function () {
     var PullRequest = require('app/core/models').get('PullRequest');
     var saveReview = require('../../actions/save');
     var pullId = 37112129;
-    var events;
-    var reviewConfig;
-    var approveReview;
-    var review;
+    var events, reviewConfig, approveReview, review;
 
     beforeEach(function (done) {
         reviewConfig = {

@@ -1,4 +1,5 @@
 module.exports = function reviewSortCreator() {
+
     /**
      * Sorts reviewers by rank.
      *

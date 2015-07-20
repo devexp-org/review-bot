@@ -2,7 +2,7 @@ const GITHUB_HEADER_EVENT = 'x-github-event';
 
 var Router = require('express').Router;
 var _ = require('lodash');
-var router = Router();
+var router = Router(); // eslint-disable-line new-cap
 
 var PullRequest = require('app/core/models').get('PullRequest');
 
@@ -21,7 +21,7 @@ router.post('/webhook', function (req, res) {
         return;
     }
 
-    switch(req.headers[GITHUB_HEADER_EVENT]) {
+    switch (req.headers[GITHUB_HEADER_EVENT]) {
         case 'commit_comment':
             processCommitComment(req.body);
             break;

@@ -1,5 +1,6 @@
 module.exports = function middleware() {
     return function customResponseMiddleware(req, res, next) {
+
         /**
          * Sends success response.
          *

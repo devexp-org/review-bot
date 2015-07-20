@@ -130,6 +130,7 @@ function addRank(maxRank, team) {
  * @returns {Function}
  */
 module.exports = function commitersProcessorCreator(max, options) {
+
     /**
      * Commits processor adds rank for commiters in same files as current pull request.
      *

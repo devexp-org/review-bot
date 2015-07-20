@@ -1,9 +1,7 @@
 describe('core/github/api', function () {
     var PullRequest = require('app/core/models').get('PullRequest');
     var proxyquire = require('proxyquire');
-    var api;
-    var githubStub;
-    var authStub;
+    var api, githubStub, authStub;
 
     beforeEach(function () {
         authStub = sinon.stub();

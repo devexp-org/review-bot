@@ -67,10 +67,10 @@ class ReviewStore {
     }
 
     onAssign(index) {
-        var review = this.review,
-            reviewInfo = review.review,
-            suggestedReviewers = review.suggestedReviewers,
-            reviewer = suggestedReviewers.splice(index, 1)[0];
+        var review = this.review;
+        var reviewInfo = review.review;
+        var suggestedReviewers = review.suggestedReviewers;
+        var reviewer = suggestedReviewers.splice(index, 1)[0];
 
         reviewer.index = index;
         reviewInfo.changed = true;
@@ -80,9 +80,9 @@ class ReviewStore {
     }
 
     onRemoveReviewer(data) {
-        var review = this.review,
-            reviewInfo = review.review,
-            reviewers = reviewInfo.reviewers;
+        var review = this.review;
+        var reviewInfo = review.review;
+        var reviewers = reviewInfo.reviewers;
 
         reviewers.splice(data.index, 1);
 

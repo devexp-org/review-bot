@@ -22,10 +22,12 @@ function getTeamId(org, team) {
 
             var repoTeam = _(res).filter({ slug: team }).first();
 
-            if (!repoTeam) return reject(Err.createError(Err.CODES.GITHUB_API_ERR, {
-                team: team,
-                org: org
-            }));
+            if (!repoTeam) {
+                return reject(Err.createError(Err.CODES.GITHUB_API_ERR, {
+                    team: team,
+                    org: org
+                }));
+            }
 
             resolve(repoTeam.id);
         });

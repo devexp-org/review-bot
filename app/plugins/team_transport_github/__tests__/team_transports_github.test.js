@@ -1,9 +1,7 @@
 describe('app/plugins/team_transport_github', function () {
     var githubApi = { api: {} };
     var proxyquire = require('proxyquire');
-    var transport;
-    var team;
-    var org;
+    var transport, team, org;
 
     beforeEach(function () {
         team = [1, 2, 3, 4];

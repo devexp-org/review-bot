@@ -9,6 +9,7 @@ var PullRequest = require('app/core/models').get('PullRequest');
  * @returns {Function}
  */
 module.exports = function reviewLoadCreator(max) {
+
     /**
      * Substract rank if member has some active reviews.
      *
