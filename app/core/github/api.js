@@ -160,8 +160,9 @@ var github = {
      * @param {Object} pullRequest
      */
     _updatePullRequestBody: function _updatePullRequestBody(pullRequest) {
-        var _this = this;
+        if (!pullRequest.extra_body) return;
 
+        var _this = this;
         var extraBody = start + Object.keys(pullRequest.extra_body).map(function (key) {
             return '<div>' + pullRequest.extra_body[key] + '</div>';
         }) + end;
