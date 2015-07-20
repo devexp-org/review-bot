@@ -199,6 +199,4 @@ var github = {
     }
 };
 
-github._updatePullRequestBody = _.debounce(github._updatePullRequestBody.bind(github), 4000);
-
 module.exports = github;
