@@ -32,7 +32,8 @@ function reviewAutoStart(payload) {
     logger.info('Autostart review for pull "' + pullRequest.id + ' — ' + pullRequest.title + '"');
 
     review(pullRequest.id)
-        .then(function (resultReview) { saveReview({ reviewers: resultReview.team }, pullRequest.id); });
+        .then(function (resultReview) { saveReview({ reviewers: resultReview.team }, pullRequest.id); })
+        .catch(logger.error.bind(logger));
 }
 
 /**
