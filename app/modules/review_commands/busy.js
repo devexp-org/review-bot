@@ -1,10 +1,10 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-var logger = require('app/modules/logger');
-var review = require('app/modules/review/review');
-var saveReview = require('app/modules/review/actions/save');
+import logger from 'app/modules/logger';
+import review from 'app/modules/review/review';
+import saveReview from 'app/modules/review/actions/save';
 
-module.exports = function startCommandCreator() {
+export default function startCommandCreator() {
 
     /**
      * Handles '/busy' command.
@@ -48,4 +48,4 @@ module.exports = function startCommandCreator() {
             );
         }
     };
-};
+}

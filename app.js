@@ -1,4 +1,4 @@
-require('es6-promise').polyfill();
+require('babel/register');
 
 var path = require('path');
 var config = require('app/modules/config');
@@ -15,9 +15,7 @@ logger = require('app/modules/logger');
 /**
  * Handler for uncaught exceptions
  */
-process.on('uncaughtException', function (err) {
-    logger.error(err);
-});
+process.on('uncaughtException', logger.error.bind(logger));
 
 /**
  * Modules
@@ -34,4 +32,4 @@ port = process.env.PORT || config.load('server').port;
  * Start Server
  */
 mulilistener(app, port);
-logger.info('App started on http://localhost:' + port);
+logger.info('Server listening at http://localhost:%s', port);

@@ -1,8 +1,10 @@
-var Err = require('terror').create('app/modules/review/ranking', {
+import Terror from 'terror';
+
+const Err = Terror.create('app/modules/review/ranking', {
     NO_PROCESSORS: 'At least 1 processors should be added.'
 });
 
-module.exports = {
+export default {
     rankingProcessorsList: [],
 
     /**
@@ -13,7 +15,7 @@ module.exports = {
      *
      * @returns {this}
      */
-    init: function init(options) {
+    init(options) {
         if (!options.processors) {
             throw Err.createError(Err.CODES.NO_PROCESSORS);
         }
@@ -28,7 +30,7 @@ module.exports = {
      *
      * @returns {Function[]}
      */
-    get: function get() {
+    get() {
         return this.rankingProcessorsList;
     }
 };

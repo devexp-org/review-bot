@@ -1,6 +1,6 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-module.exports = function removeAlreadyReviewersCreator() {
+export default function removeAlreadyReviewersCreator() {
 
     /**
      * Removes team members which are already reviewers.
@@ -29,4 +29,4 @@ module.exports = function removeAlreadyReviewersCreator() {
 
         return Promise.resolve(review);
     };
-};
+}

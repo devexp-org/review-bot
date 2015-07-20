@@ -1,5 +1,5 @@
-var domain = require('domain');
-var logger = require('app/modules/logger');
+import domain from 'domain';
+import logger from 'app/modules/logger';
 
 /**
  * Wrapps anything in domain and handle uncaught errors.
@@ -8,11 +8,11 @@ var logger = require('app/modules/logger');
  * @param {Function} wrapped - Function which contant should be wrapped in domain.
  * @param {Function} customErrorHandler - Custom error handler.
  */
-module.exports = function wrapInDomain(name, wrapped, customErrorHandler) {
+export default function (name, wrapped, customErrorHandler) {
     var d = domain.create();
 
     d.on('error', function (err) {
-        logger.error('Error in "' + name + '" — ', err);
+        logger.error('Error in %s — %s', name, err);
 
         if (customErrorHandler) {
             customErrorHandler(err);
@@ -20,4 +20,4 @@ module.exports = function wrapInDomain(name, wrapped, customErrorHandler) {
     });
 
     d.run(wrapped);
-};
+}

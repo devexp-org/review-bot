@@ -1,12 +1,16 @@
-var _ = require('lodash');
-var logger = require('app/modules/logger');
-var team = require('app/modules/team');
-var PullRequest = require('app/modules/models').get('PullRequest');
-var ranking = require('./ranking');
+import _ from 'lodash';
+import Terror from 'terror';
 
-var Err = require('terror').create('app/modules/review/review', {
+import logger from 'app/modules/logger';
+import team from 'app/modules/team';
+import ranking from './ranking';
+import * as models from 'app/modules/models';
+
+const Err = Terror.create('app/modules/review/review', {
     PULL_NOT_FOUND: 'Pull Request with id = %id% not found!'
 });
+
+const PullRequest = models.get('PullRequest');
 
 /**
  * Get team for pull request repo.
@@ -18,7 +22,7 @@ var Err = require('terror').create('app/modules/review/review', {
 function getTeam(review) {
     return team
         .get(review.pull.full_name)
-        .then(function (team) {
+        .then(team => {
             review.team = team;
 
             return review;
@@ -33,7 +37,7 @@ function getTeam(review) {
  * @returns {Promise}
  */
 function addZeroRank(review) {
-    _.forEach(review.team, function (member) {
+    _.forEach(review.team, member => {
         member.rank = 0;
     });
 
@@ -48,10 +52,10 @@ function addZeroRank(review) {
  * @returns {Promise}
  */
 function startQueue(pullRequestId) {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
         PullRequest
             .findById(pullRequestId)
-            .then(function (pullRequest) {
+            .then(pullRequest => {
                 if (!pullRequest) {
                     return reject(Err.createError(Err.CODES.PULL_NOT_FOUND, {
                         id: pullRequestId
@@ -71,21 +75,22 @@ function startQueue(pullRequestId) {
  *
  * @returns {Promise}
  */
-module.exports = function review(pullRequestId) {
-    var rankers = ranking.get();
-    var reviewQueue = startQueue(pullRequestId)
+export default function review(pullRequestId) {
+    const rankers = ranking.get();
+
+    let reviewQueue = startQueue(pullRequestId)
         .then(getTeam)
         .then(addZeroRank);
 
-    _.forEach(rankers, function (ranker) {
-        reviewQueue = reviewQueue.then(function (review) {
+    _.forEach(rankers, ranker => {
+        reviewQueue = reviewQueue.then(review => {
             logger.info('Choose reviewer step: ', ranker.name);
             return ranker(review);
         });
     });
 
     reviewQueue = reviewQueue
-        .then(function (review) {
+        .then(review => {
             logger.info(
                 'Choosing reviewers complete for pull request: ' + review.pull.title + ' — ' + review.pull.html_url,
                 'Reviewers are: ' + (
@@ -99,7 +104,7 @@ module.exports = function review(pullRequestId) {
         });
 
     return reviewQueue;
-};
+}
 
 /**
  * Review.

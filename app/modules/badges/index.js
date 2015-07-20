@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     types: {},
     style: '',
 
@@ -9,7 +9,7 @@ module.exports = {
      * @param {String} options.url
      * @param {String} [options.style] - style for badges, default: flat
      */
-    init: function init(options) {
+    init(options) {
         this.url = options.url;
         this.style = options.style || 'flat';
     },
@@ -24,7 +24,7 @@ module.exports = {
      *
      * @returns {String} img or a tag with propper url and img src.
      */
-    create: function create(subject, status, color, url) {
+    create(subject, status, color, url) {
         if (!subject) throw new Error('Badge should have at least subject!');
 
         color = color || 'lightgrey';
@@ -33,10 +33,10 @@ module.exports = {
         subject = subject.replace(/-/g, '--');
         status = status.replace(/-/g, '--');
 
-        var img = '<img src="' + this.url + subject + '-' + status + '-' + color + '.svg?style=' + this.style + '" />';
+        const img = `<img src="${this.url}${subject}-${status}-${color}.svg?style=${this.style}" />`;
 
         if (url) {
-            return '<a href="' + url + '">' + img + '</a>';
+            return `<a href="${url}">${img}</a>`;
         }
 
         return img;

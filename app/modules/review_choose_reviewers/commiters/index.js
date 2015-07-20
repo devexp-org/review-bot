@@ -1,6 +1,6 @@
-var _ = require('lodash');
-var github = require('app/modules/github/api');
-var getSinceDate = require('app/modules/github/utils/date').getSinceDate;
+import _ from 'lodash';
+import github from 'app/modules/github/api';
+import { getSinceDate } from 'app/modules/github/utils/date';
 
 /**
  * Returns pull reqest files.
@@ -129,7 +129,7 @@ function addRank(maxRank, team) {
  *
  * @returns {Function}
  */
-module.exports = function commitersProcessorCreator(max, options) {
+export default function commitersProcessorCreator(max, options) {
 
     /**
      * Commits processor adds rank for commiters in same files as current pull request.
@@ -153,4 +153,4 @@ module.exports = function commitersProcessorCreator(max, options) {
                 return review;
             });
     };
-};
+}

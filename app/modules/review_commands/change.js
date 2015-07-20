@@ -1,14 +1,15 @@
-var _ = require('lodash');
+import _ from 'lodash';
+import Terror from 'terror';
 
-var logger = require('app/modules/logger');
-var saveReview = require('app/modules/review/actions/save');
-var team = require('app/modules/team');
+import logger from 'app/modules/logger';
+import saveReview from 'app/modules/review/actions/save';
+import team from 'app/modules/team';
 
-var Err = require('terror').create('app/modules/review_commands/change', {
+const Err = Terror.create('app/modules/review_commands/change', {
     CANT_CHANGE: 'Can`t change reviewer'
 });
 
-module.exports = function startCommandCreator() {
+export default function startCommandCreator() {
 
     /**
      * Handles '/change name to name' command.
@@ -73,4 +74,4 @@ module.exports = function startCommandCreator() {
                 return saveReview({ reviewers: reviewers }, pullRequest.id);
             });
     };
-};
+}

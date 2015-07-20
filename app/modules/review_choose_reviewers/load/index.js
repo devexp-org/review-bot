@@ -1,5 +1,7 @@
-var _ = require('lodash');
-var PullRequest = require('app/modules/models').get('PullRequest');
+import _ from 'lodash';
+import * as models from 'app/modules/models';
+
+const PullRequest = models.get('PullRequest');
 
 /**
  * Creates review load processor.
@@ -8,7 +10,7 @@ var PullRequest = require('app/modules/models').get('PullRequest');
  *
  * @returns {Function}
  */
-module.exports = function reviewLoadCreator(max) {
+export default function reviewLoadCreator(max) {
 
     /**
      * Substract rank if member has some active reviews.
@@ -45,4 +47,4 @@ module.exports = function reviewLoadCreator(max) {
                 return review;
             });
     };
-};
+}

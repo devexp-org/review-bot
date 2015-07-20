@@ -1,10 +1,12 @@
-var logger = require('app/modules/logger');
-var events = require('app/modules/events');
-var config = require('app/modules/config');
+import logger from 'app/modules/logger';
+import events from 'app/modules/events';
+import config from 'app/modules/config';
+import Terror from 'terror';
+import * as models from 'app/modules/models';
 
-var PullRequest = require('app/modules/models').get('PullRequest');
+const PullRequest = models.get('PullRequest');
 
-var Err = require('terror').create('app/modules/review/actions/approve', {
+const Err = Terror.create('app/modules/review/actions/approve', {
     PULL_NOT_FOUND: 'Pull request with id = %id% not found.'
 });
 
@@ -16,19 +18,22 @@ var Err = require('terror').create('app/modules/review/actions/approve', {
  *
  * @returns {Promise}
  */
-module.exports = function approveReview(login, pullId) {
-    var reviewConfig = config.load('review');
-    var approvedCount = 0;
+export default function approveReview(login, pullId) {
+    let approvedCount = 0;
+    const reviewConfig = config.load('review');
 
     return PullRequest
         .findById(pullId)
         .exec()
-        .then(function (pullRequest) {
-            if (!pullRequest) throw Err.createError(Err.CODES.PULL_NOT_FOUND, { id: pullId });
+        .then(pullRequest => {
 
-            var review = pullRequest.get('review');
+            if (!pullRequest) {
+                throw Err.createError(Err.CODES.PULL_NOT_FOUND, { id: pullId });
+            }
 
-            review.reviewers.forEach(function (reviewer) {
+            const review = pullRequest.get('review');
+
+            review.reviewers.forEach(reviewer => {
                 if (reviewer.login === login) {
                     reviewer.approved = true;
                 }
@@ -53,7 +58,9 @@ module.exports = function approveReview(login, pullId) {
             pullRequest.set('review', review);
 
             return pullRequest.save();
-        }).then(function (pullRequest) {
+
+        }).then(pullRequest => {
+
             if (pullRequest.review.status === 'complete') {
                 events.emit('review:complete', { pullRequest: pullRequest, review: pullRequest.review });
                 logger.info('Review complete:', pullId);
@@ -63,5 +70,6 @@ module.exports = function approveReview(login, pullId) {
             }
 
             return pullRequest;
+
         });
-};
+}

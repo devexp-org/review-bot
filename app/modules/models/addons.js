@@ -1,8 +1,8 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-module.exports = {
-    extenders: {},
+export default {
     hooks: {},
+    extenders: {},
 
     /**
      * Register extenders and hooks for models.
@@ -13,7 +13,7 @@ module.exports = {
      *
      * @returns {this}
      */
-    init: function init(options) {
+    init(options) {
         this.extenders = options.extenders || {};
         this.hooks = options.hooks || {};
 
@@ -27,7 +27,7 @@ module.exports = {
      *
      * @returns {Object}
      */
-    get: function get(model) {
+    get(model) {
         return {
             extenders: this.extenders[model] || [],
             hooks: this.hooks[model] || []
@@ -42,8 +42,8 @@ module.exports = {
      *
      * @returns {this}
      */
-    setupExtenders: function setupExtenders(model, baseSchema) {
-        var extenders = this.get(model).extenders;
+    setupExtenders(model, baseSchema) {
+        const extenders = this.get(model).extenders;
 
         _.forEach(extenders, function (extender) {
             _.extend(baseSchema, extender);
@@ -60,13 +60,13 @@ module.exports = {
      *
      * @returns {this}
      */
-    setupHooks: function setupHooks(model, schema) {
-        var hooks = this.get(model).hooks;
+    setupHooks(model, schema) {
+        const hooks = this.get(model).hooks;
 
         if (hooks.preSave) {
             schema.pre('save', function (next) {
-                var _this = this;
-                var hooksPromiseList = [];
+                const _this = this;
+                const hooksPromiseList = [];
 
                 _.forEach(hooks.preSave, function (hook) {
                     hooksPromiseList.push(hook(_this));

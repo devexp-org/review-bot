@@ -1,7 +1,8 @@
-var _ = require('lodash');
-var github = require('app/modules/github/api');
+import _ from 'lodash';
+import Terror from 'terror';
+import github from 'app/modules/github/api';
 
-var Err = require('terror').create('app/modules/team_transport_github', {
+const Err = Terror.create('app/modules/team_transport_github', {
     TEAM_NOT_FOUND: 'Team %team% for organisation %org% not found.',
     NO_PARAMS: 'There is no required params: { org, [team] }',
     GITHUB_API_ERR: 'Github api error'
@@ -77,7 +78,7 @@ function getOrgMembers(org) {
  *
  * @returns {Promise}
  */
-module.exports = function teamTransportGithub(params) {
+export default function teamTransportGithub(params) {
     if (!params || !params.org) return Promise.reject(Err.createError(Err.CODES.NO_PARAMS));
 
     if (!params.team) {
@@ -86,4 +87,4 @@ module.exports = function teamTransportGithub(params) {
 
     return getTeamId(params.org, params.team)
         .then(getTeamMembers);
-};
+}

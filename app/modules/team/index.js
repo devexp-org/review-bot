@@ -1,4 +1,6 @@
-var Err = require('terror').create('app/modules/team', {
+import Terror from 'terror';
+
+const Err = Terror.create('app/modules/team', {
     NOT_FOUND: 'Team for repo "%repo%" not found.',
     NOT_TRANSPORT: 'Transport is required for getting team for "%repo%".'
 });
@@ -50,7 +52,9 @@ module.exports = {
      * @returns {Object}
      */
     getParams: function (repo) {
-        if (!this._options[repo]) throw Err.createError(Err.CODES.NOT_FOUND, { repo: repo });
+        if (!this._options[repo]) {
+            throw Err.createError(Err.CODES.NOT_FOUND, { repo: repo });
+        }
 
         return this._options[repo].params || {};
     }

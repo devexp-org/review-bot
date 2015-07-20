@@ -1,9 +1,9 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-var logger = require('app/modules/logger');
-var review = require('app/modules/review/review');
-var saveReview = require('app/modules/review/actions/save');
-var events = require('app/modules/events');
+import logger from 'app/modules/logger';
+import events from 'app/modules/events';
+import review from 'app/modules/review/review';
+import saveReview from 'app/modules/review/actions/save';
 
 /**
  * Few checks for autostarting review.
@@ -32,14 +32,16 @@ function reviewAutoStart(payload) {
     logger.info('Autostart review for pull "' + pullRequest.id + ' — ' + pullRequest.title + '"');
 
     review(pullRequest.id)
-        .then(function (resultReview) { saveReview({ reviewers: resultReview.team }, pullRequest.id); })
+        .then(resultReview => {
+            saveReview({ reviewers: resultReview.team }, pullRequest.id);
+        })
         .catch(logger.error.bind(logger));
 }
 
 /**
  * Creates review autoassign plugin.
  */
-module.exports = function reviewAutoAssignCreator() {
+export default function reviewAutoAssignCreator() {
     events.on('github:pull_request:opened', reviewAutoStart);
     events.on('github:pull_request:synchronize', reviewAutoStart);
-};
+}

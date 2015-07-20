@@ -1,9 +1,9 @@
-const REPO_REGEX = /repos\/(.*\/.*)\/pulls/;
+import mongoose from 'mongoose';
+import addons from './../addons';
 
-var mongoose = require('mongoose');
-var addons = require('./../addons');
-var Schema = mongoose.Schema;
-var baseSchema = {
+const REPO_REGEX = /repos\/(.*\/.*)\/pulls/;
+const Schema = mongoose.Schema;
+const baseSchema = {
     _id: Number,
     id: Number,
     title: String,
@@ -64,7 +64,7 @@ var baseSchema = {
  */
 addons.setupExtenders('PullRequest', baseSchema);
 
-var PullRequest = new Schema(baseSchema);
+const PullRequest = new Schema(baseSchema);
 
 addons.setupHooks('PullRequest', PullRequest);
 
@@ -119,10 +119,7 @@ PullRequest.path('url').set(function (v) {
  * @returns {Promise}
  */
 PullRequest.statics.findByNumberAndRepo = function (number, fullName) {
-    return this.model('PullRequest').findOne({
-        number: number,
-        'full_name': fullName
-    });
+    return this.model('PullRequest').findOne({ number, full_name: fullName });
 };
 
 /**
@@ -133,9 +130,9 @@ PullRequest.statics.findByNumberAndRepo = function (number, fullName) {
  * @returns {Promise}
  */
 PullRequest.statics.findByUsername = function (login) {
-    return this.model('PullRequest').find({
-        'user.login': login
-    }).sort('-updated_at');
+    return this.model('PullRequest')
+        .find({ 'user.login': login })
+        .sort('-updated_at');
 };
 
 /**
@@ -146,9 +143,9 @@ PullRequest.statics.findByUsername = function (login) {
  * @returns {Promise}
  */
 PullRequest.statics.findByReviewer = function (login) {
-    return this.model('PullRequest').find({
-        'review.reviewers.login': login
-    }).sort('-updated_at');
+    return this.model('PullRequest')
+        .find({ 'review.reviewers.login': login })
+        .sort('-updated_at');
 };
 
 /**
@@ -159,13 +156,16 @@ PullRequest.statics.findByReviewer = function (login) {
  * @returns {Promise}
  */
 PullRequest.statics.findOpenReviewsByUser = function (login) {
-    return this.model('PullRequest').find({
-        'state': 'open',
-        'review.reviewers.login': login,
-        'review.status': 'inprogress'
-    }, 'review');
+    return this.model('PullRequest')
+        .find({
+            'state': 'open',
+            'review.reviewers.login': login,
+            'review.status': 'inprogress'
+        }, 'review');
 };
 
 try {
     mongoose.model('PullRequest', PullRequest);
-} catch(e) { } // eslint-ignore-line
+} catch (error) {} // eslint-disable-line no-empty
+
+export default PullRequest;

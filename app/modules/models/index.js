@@ -1,6 +1,5 @@
-require('./models/pull_request');
-
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
+import * as pullRequestModel from './models/pull_request'; // eslint-disable-line no-unused-vars
 
 /**
  * Returns model by name.
@@ -9,6 +8,6 @@ var mongoose = require('mongoose');
  *
  * @returns {Object} mongoose model.
  */
-module.exports.get = function (modelName) {
+export function get(modelName) {
     return mongoose.model(modelName);
-};
+}

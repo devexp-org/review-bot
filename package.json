@@ -26,6 +26,7 @@
   "author": "Stanislav Sysoev <d4rkr00t@gmail.com> (http://sysoev.org)",
   "license": "MIT",
   "dependencies": {
+    "babel": "^5.6.23",
     "body-parser": "^1.13.2",
     "es6-promise": "^2.3.0",
     "express": "^4.13.1",

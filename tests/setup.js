@@ -1,4 +1,4 @@
-require('es6-promise').polyfill();
+require('babel/register');
 
 var path = require('path');
 var chai = require('chai');
