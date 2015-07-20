@@ -52,9 +52,11 @@ function startQueue(pullRequestId) {
         PullRequest
             .findById(pullRequestId)
             .then(function (pullRequest) {
-                if (!pullRequest) return reject(Err.createError(Err.CODES.PULL_NOT_FOUND, {
-                    id: pullRequestId
-                }));
+                if (!pullRequest) {
+                    return reject(Err.createError(Err.CODES.PULL_NOT_FOUND, {
+                        id: pullRequestId
+                    }));
+                }
 
                 resolve({ pull: pullRequest, team: [] });
             });

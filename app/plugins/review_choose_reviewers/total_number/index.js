@@ -6,6 +6,7 @@
  * @returns {Function}
  */
 module.exports = function reviewTotalNumberCreator(max) {
+
     /**
      * Takes defined amount of team member for review.
      *

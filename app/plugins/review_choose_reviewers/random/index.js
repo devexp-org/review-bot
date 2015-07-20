@@ -6,6 +6,7 @@
  * @returns {Function}
  */
 module.exports = function reviewRandomCreator(max) {
+
     /**
      * Adds random rank to every team member.
      *

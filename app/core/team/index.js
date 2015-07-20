@@ -4,6 +4,7 @@ var Err = require('terror').create('app/core/team', {
 });
 
 module.exports = {
+
     /**
      * Init team module.
      *
@@ -25,13 +26,17 @@ module.exports = {
      * @returns {Promise}
      */
     get: function get(repo) {
-        if (!this._options[repo]) return Promise.reject(
-            Err.createError(Err.CODES.NOT_FOUND, { repo: repo })
-        );
+        if (!this._options[repo]) {
+            return Promise.reject(
+                Err.createError(Err.CODES.NOT_FOUND, { repo: repo })
+            );
+        }
 
-        if (!this._options[repo].transport) return Promise.reject(
-            Err.createError(Err.CODES.NOT_TRANSPORT, { repo: repo })
-        );
+        if (!this._options[repo].transport) {
+            return Promise.reject(
+                Err.createError(Err.CODES.NOT_TRANSPORT, { repo: repo })
+            );
+        }
 
         return this._options[repo].transport(this._options[repo].params || {});
     },

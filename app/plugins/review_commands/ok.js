@@ -4,6 +4,7 @@ var logger = require('app/core/logger');
 var approveReview = require('app/core/review/actions/approve');
 
 module.exports = function okCommandCreator() {
+
     /**
      * Handles '/ok' command.
      *

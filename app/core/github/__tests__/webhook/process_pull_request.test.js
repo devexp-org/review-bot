@@ -1,9 +1,7 @@
 describe('core/github/webhook/process_pull_request', function () {
     var proxyquire = require('proxyquire');
     var PullRequest = require('app/core/models').get('PullRequest');
-    var events;
-    var payload;
-    var processPullRequest;
+    var events, payload, processPullRequest;
 
     beforeEach(function () {
         events = { emit: sinon.stub() };

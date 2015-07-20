@@ -1,4 +1,5 @@
 module.exports = function reviewRemoveAuthorCreator() {
+
     /**
      * Removes pull author from team.
      *

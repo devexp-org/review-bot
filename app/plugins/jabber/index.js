@@ -57,7 +57,7 @@ module.exports = {
         do {
             var message = queue.shift();
             this.sendMessage(message.to, message.body);
-        } while(queue.length > 0);
+        } while (queue.length > 0);
     },
 
     /**

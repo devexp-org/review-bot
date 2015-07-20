@@ -2,10 +2,7 @@ describe('app/core/review/actions/save', function () {
     var _ = require('lodash');
     var proxyquire = require('proxyquire');
     var PullRequest = require('app/core/models').get('PullRequest');
-    var events;
-    var saveReview;
-    var pullRequest;
-    var review;
+    var events, saveReview, pullRequest, review;
 
     beforeEach(function (done) {
         events = { emit: sinon.stub() };

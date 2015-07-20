@@ -1,21 +1,17 @@
 describe('app/core/review/review', function () {
     var _ = require('lodash');
     var proxyquire = require('proxyquire');
-    var review;
-    var PullRequest;
-    var pullRequest;
-    var processors;
-    var team;
+    var review, PullRequest, pullRequest, processors, team;
 
     beforeEach(function () {
         pullRequest = {};
         team = [{ login: 'user', rank: 0 }];
         PullRequest = { findById: _.constant(Promise.resolve(pullRequest)) };
         processors = [
-            sinon.stub().returns(Promise.resolve({pull: pullRequest, team: team})),
-            sinon.stub().returns(Promise.resolve({pull: pullRequest, team: team})),
-            sinon.stub().returns(Promise.resolve({pull: pullRequest, team: team})),
-            sinon.stub().returns(Promise.resolve({pull: pullRequest, team: team}))
+            sinon.stub().returns(Promise.resolve({ pull: pullRequest, team: team })),
+            sinon.stub().returns(Promise.resolve({ pull: pullRequest, team: team })),
+            sinon.stub().returns(Promise.resolve({ pull: pullRequest, team: team })),
+            sinon.stub().returns(Promise.resolve({ pull: pullRequest, team: team }))
         ];
 
         review = proxyquire('../review', {

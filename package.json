@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "postinstall": "scripts/postinstall.sh",
+    "lint": "eslint . || true",
     "test": "./scripts/run mocha -r ./tests/setup.js -R spec app/**/__tests__/**/*.test.js",
     "test:only": "npm run mongo:dev | ./scripts/run mocha -w -r ./tests/setup.js -R spec app/**/__tests__/**/*.test.js",
     "cover": "npm run mongo:dev | ./scripts/run babel-istanbul cover ./node_modules/.bin/_mocha --babel-stage 0 --include-all-sources -x '**/__tests__/**' -x 'public/app.js' -x 'app/config/**/**' --report text --report html -- -r ./tests/setup.js -R dot app/**/__tests__/**/*.test.js",

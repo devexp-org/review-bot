@@ -1,6 +1,7 @@
 var _ = require('lodash');
 
 module.exports = function removeAlreadyReviewersCreator() {
+
     /**
      * Removes team members which are already reviewers.
      *

@@ -1,8 +1,6 @@
 describe('app/plugins/commands', function () {
     var events = require('app/core/events');
-    var options;
-    var bodyList;
-    var commandHandler;
+    var options, bodyList, commandHandler;
 
     beforeEach(function () {
         commandHandler = sinon.stub();

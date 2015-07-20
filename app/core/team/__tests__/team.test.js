@@ -39,7 +39,7 @@ describe('app/core/team', function () {
             });
 
             team.get('org/repo').then(function () {
-                assert.calledWith(transport, { param1: '1'});
+                assert.calledWith(transport, { param1: '1' });
                 done();
             }, done);
         });

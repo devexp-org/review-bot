@@ -7,8 +7,8 @@ var http = require('http');
  * @returns {http.Server}
  */
 module.exports = function multilistener(handler, port) {
-    var srv = http.createServer(handler),
-        srv4;
+    var srv = http.createServer(handler);
+    var srv4;
 
     if (isNaN(port)) {
         // port is not a number, suppose it's a path of unix-socket

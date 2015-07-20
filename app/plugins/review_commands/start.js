@@ -2,6 +2,7 @@ var logger = require('app/core/logger');
 var saveReview = require('app/core/review/actions/save');
 
 module.exports = function startCommandCreator() {
+
     /**
      * Handles '/start' command.
      *
@@ -21,7 +22,7 @@ module.exports = function startCommandCreator() {
             return;
         }
 
-        if(payload.pullRequest.user.login !== payload.comment.user.login) {
+        if (payload.pullRequest.user.login !== payload.comment.user.login) {
             logger.error(
                 payload.comment.user.login +
                 ' try to start review but author is ' +

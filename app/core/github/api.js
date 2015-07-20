@@ -10,8 +10,7 @@ var Err = require('terror').create('app/core/github/api', {
     API_ERR: 'Github api error'
 });
 
-var start;
-var end;
+var start, end;
 
 var github = {
     api: {},
@@ -50,9 +49,11 @@ var github = {
         return PullRequest
             .findById(pullId)
             .then(function (pullRequest) {
-                if (!pullRequest) return Promise.reject(
-                    Err.createError(Err.CODES.PULL_NOT_FOUND, { method: 'setBodyContent', id: pullId })
-                );
+                if (!pullRequest) {
+                    return Promise.reject(
+                        Err.createError(Err.CODES.PULL_NOT_FOUND, { method: 'setBodyContent', id: pullId })
+                    );
+                }
 
                 pullRequest.extra_body = pullRequest.extra_body || {};
                 pullRequest.extra_body[id] = content;
@@ -101,9 +102,11 @@ var github = {
             PullRequest
                 .findById(pullRequestInfo.id)
                 .then(function (pullRequest) {
-                    if (!pullRequest) return reject(
-                        Err.createError(Err.CODES.PULL_NOT_FOUND, { method: 'savePullRequestInfo', id: pullRequest.id })
-                    );
+                    if (!pullRequest) {
+                        return reject(
+                            Err.createError(Err.CODES.PULL_NOT_FOUND, { method: 'savePullRequestInfo', id: pullRequest.id })
+                        );
+                    }
 
                     pullRequest.set(pullRequestInfo);
 

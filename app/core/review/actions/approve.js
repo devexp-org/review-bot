@@ -24,7 +24,7 @@ module.exports = function approveReview(login, pullId) {
         .findById(pullId)
         .exec()
         .then(function (pullRequest) {
-            if (!pullRequest) throw Err(Err.CODES.PULL_NOT_FOUND, { id: pullId });
+            if (!pullRequest) throw Err.createError(Err.CODES.PULL_NOT_FOUND, { id: pullId });
 
             var review = pullRequest.get('review');
 
