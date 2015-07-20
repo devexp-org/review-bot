@@ -58,7 +58,7 @@ var github = {
                 var extraBody = _.clone(pullRequest.get('extra_body') || {});
                 extraBody[id] = content;
 
-                pullRequest.set('extra_body', extraBody);
+                pullRequest.extra_body = extraBody;
 
                 return pullRequest.save();
             })
