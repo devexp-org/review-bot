@@ -32,10 +32,9 @@ npm run dev
 │   │   ├── stores // Flux stores
 │   │   ├── styles // App styles
 │   │   └── utils // Some utils for using in client side components
-│   ├── core // Core modules like: github, review, models, logger, etc
+│   ├── modules // Modules like: github, review, models, logger, etc
+│   │   └── index.js // Modules registry
 |   ├── config // Configs for modules and plugins
-│   ├── plugins // Modules which extends core functionality
-│   │   └── index.js // Plugins registry
 │   └── server // Express server
 |       └── views // Server side views
 ├── app.js // App entry point

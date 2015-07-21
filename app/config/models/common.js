@@ -1,5 +1,5 @@
-var complexity = require('app/plugins/complexity');
-var githubModelAddons = require('app/core/github/pull_request_model_addons');
+var complexity = require('app/modules/complexity');
+var githubModelAddons = require('app/modules/github/pull_request_model_addons');
 
 module.exports = {
     extenders: {

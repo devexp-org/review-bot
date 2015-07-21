@@ -6,9 +6,8 @@ var bodyParser = require('body-parser');
 var proxy = require('proxy-express');
 
 var app = express();
-var domain = require('app/core/utils/domain');
-var logger = require('app/core/logger');
-var config = require('app/core/config');
+var logger = require('app/modules/logger');
+var config = require('app/modules/config');
 var serverConfig = config.load('server');
 
 /**
@@ -23,30 +22,13 @@ app.use(bodyParser.json());
 app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
 
 /**
- * Core modules
- */
-domain('Core modules initializers', function () {
-    require('app/core/mongoose').init(config.load('mongoose'));
-    require('app/core/models/addons').init(config.load('models'));
-    require('app/core/github/api').init(config.load('github'));
-    require('app/core/team').init(config.load('team'));
-    require('app/core/review/ranking').init(config.load('review'));
-    require('app/core/badges').init(config.load('badges'));
-});
-
-/**
  * Routes / Middlewares
  */
-app.use(require('app/core/response')());
-app.use(require('app/core/badges/proxy'));
+app.use(require('app/modules/response')());
+app.use(require('app/modules/badges/proxy'));
 
-app.use('/api/github', require('app/core/github/routes'));
-app.use('/api/review', require('app/core/review/routes'));
-
-/**
- * Plugins
- */
-require('app/plugins');
+app.use('/api/github', require('app/modules/github/routes'));
+app.use('/api/review', require('app/modules/review/routes'));
 
 /**
  * Default Routes

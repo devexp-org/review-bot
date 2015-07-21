@@ -9,7 +9,7 @@ import Button from 'app/client/components/button.jsx';
 import Label from 'app/client/components/label.jsx';
 import ReviewerBadge from 'app/client/components/review/reviewer_type_badge.jsx';
 import TimeAgo from 'react-timeago';
-import Complexity from 'app/plugins/complexity/client/components/complexity.jsx';
+import Complexity from 'app/modules/complexity/client/components/complexity.jsx';
 
 import statusToColor from 'app/client/utils/status_to_color_mapper';
 
