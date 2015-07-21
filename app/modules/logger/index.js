@@ -22,4 +22,18 @@ if (isProduction) {
     );
 }
 
-export default new winston.Logger({ transports: transports });
+const logger = new winston.Logger({ transports: transports });
+
+function pullInfoMsg(pullRequest) {
+    return `${pullRequest.title} — ${pullRequest.number} [${pullRequest.html_url}]`;
+}
+
+export default logger;
+
+export function pullInfoLogger(msg, pullRequest) {
+    logger.info(msg, pullInfoMsg(pullRequest));
+}
+
+export function pullErrorLogger(msg, pullRequest) {
+    logger.error(msg, pullInfoMsg(pullRequest));
+}
