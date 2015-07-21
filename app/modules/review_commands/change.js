@@ -1,6 +1,7 @@
 import _ from 'lodash';
-import devExpErr from 'app/modules/utils/error';
 
+import devExpErr from 'app/modules/utils/error';
+import catchHandler from 'app/modules/utils/catch_handler';
 import { pullInfoLogger } from 'app/modules/logger';
 import saveReview from 'app/modules/review/actions/save';
 import team from 'app/modules/team';
@@ -128,6 +129,7 @@ export default function startCommandCreator() {
 
                 reviewers.push(newReviewerInfo);
                 return saveReview({ reviewers }, pullRequest.id);
-            });
+            })
+            .catch(catchHandler);
     };
 }

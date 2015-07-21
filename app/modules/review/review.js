@@ -1,16 +1,14 @@
 import _ from 'lodash';
-import Terror from 'terror';
 
-import logger from 'app/modules/logger';
+import logger, { pullInfoLogger } from 'app/modules/logger';
 import team from 'app/modules/team';
 import ranking from './ranking';
 import * as models from 'app/modules/models';
-
-const Err = Terror.create('app/modules/review/review', {
-    PULL_NOT_FOUND: 'Pull Request with id = %id% not found!'
-});
+import catchHandler from 'app/modules/utils/catch_handler';
+import devExpErr from 'app/modules/utils/error';
 
 const PullRequest = models.get('PullRequest');
+const Err = devExpErr('app/modules/review/review');
 
 /**
  * Get team for pull request repo.
@@ -57,9 +55,7 @@ function startQueue(pullRequestId) {
             .findById(pullRequestId)
             .then(pullRequest => {
                 if (!pullRequest) {
-                    return reject(Err.createError(Err.CODES.PULL_NOT_FOUND, {
-                        id: pullRequestId
-                    }));
+                    return reject(new Err('PULL', 'Not found', pullRequestId));
                 }
 
                 resolve({ pull: pullRequest, team: [] });
@@ -91,8 +87,8 @@ export default function review(pullRequestId) {
 
     reviewQueue = reviewQueue
         .then(review => {
+            pullInfoLogger('Choosing reviewers complete', review.pull);
             logger.info(
-                'Choosing reviewers complete for pull request: ' + review.pull.title + ' — ' + review.pull.html_url,
                 'Reviewers are: ' + (
                     review.team ?
                         review.team.map(function (r) { return r.login + ' rank: ' + r.rank + ' '; }) :
@@ -101,7 +97,8 @@ export default function review(pullRequestId) {
             );
 
             return review;
-        });
+        })
+        .catch(catchHandler);
 
     return reviewQueue;
 }

@@ -12,7 +12,7 @@ function pullInfo(pullRequest) {
         return `— #${pullRequest.number} ${pullRequest.title} [ ${pullRequest.html_url} ]`;
     }
 
-    return `— #pull_id: ${pullRequest.html_url}`;
+    return `— #pull_id: ${pullRequest}`;
 }
 
 /**
@@ -23,8 +23,10 @@ function pullInfo(pullRequest) {
  *
  * @returns {String}
  */
-function cmd(cmd, pullRequest) {
-    return `— ${JSON.stringify(cmd)} ${pullInfo(pullRequest)}`;
+function command(cmd, pullRequest) {
+    cmd = _.isEmpty(cmd) ? '' : `— ${JSON.stringify(cmd)}`;
+
+    return `${cmd} ${pullInfo(pullRequest)}`;
 }
 
 /**
@@ -34,7 +36,7 @@ function cmd(cmd, pullRequest) {
  */
 const CODE_MAP = {
     PULL: pullInfo,
-    CMD: cmd
+    CMD: command
 };
 
 /**
@@ -54,14 +56,18 @@ export default function createError(scope) {
 
         msg = msg || '';
 
-        if (!(meta[0] instanceof Error)) {
+        if (!(meta[0] instanceof Error) && !CODE_MAP[code]) {
             meta = JSON.stringify(meta);
+        }
+
+        if (CODE_MAP[code]) {
+            meta = CODE_MAP[code](...meta);
         }
 
         Error.captureStackTrace(this);
 
         this.name = 'DevExpErr';
-        this.message = `[ ${scope} ] ${msg} ${(CODE_MAP[code] ? CODE_MAP[code](...meta) : meta)}`;
+        this.message = `[ ${scope} ] ${msg} ${meta}`;
     }
 
     DevExpErr.prototype = Object.create(Error.prototype);

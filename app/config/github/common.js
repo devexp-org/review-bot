@@ -18,7 +18,7 @@ module.exports = {
     },
     authenticate: require('./auth'),
     content: {
-        start: '<section id="info"><hr><span id="devexp-content-start"></span>',
+        start: '<hr><span id="devexp-content-start"></span>',
         end: '<span id="devexp-content-end"></span>',
         regex: /<hr><span id="devexp-content-start"><\/span>([\s\S]*)<span id="devexp-content-end"><\/span>/g
     }

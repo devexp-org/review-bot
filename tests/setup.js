@@ -1,5 +1,7 @@
 require('babel/register');
 
+process.env.NODE_ENV = 'testing';
+
 var path = require('path');
 var chai = require('chai');
 var assert = chai.assert;
