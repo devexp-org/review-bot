@@ -1,9 +1,12 @@
-var logger = require('app/modules/logger');
-var events = require('app/modules/events');
-var PullRequest = require('app/modules/models').get('PullRequest');
-var github = require('../api');
+import logger from 'app/modules/logger';
+import events from 'app/modules/events';
+import github from '../api';
+import Terror from 'terror';
+import * as models from 'app/modules/models';
 
-var Err = require('terror').create('app/modules/github/webhook/process_issue_comment', {
+const PullRequest = models.get('PullRequest');
+
+const Err = Terror.create('app/modules/github/webhook/process_issue_comment', {
     NOT_FOUND: 'Pull request not found'
 });
 
@@ -14,18 +17,19 @@ var Err = require('terror').create('app/modules/github/webhook/process_issue_com
  *
  * @returns {Promise}
  */
-module.exports = function processIssueComment(body) {
-    var pullRequestTitle = body.issue.title;
-    var pullRequestNumber = body.issue.number;
-    var repositoryName = body.repository.full_name;
+export default function processIssueComment(body) {
+    const repositoryName = body.repository.full_name;
+    const pullRequestTitle = body.issue.title;
+    const pullRequestNumber = body.issue.number;
 
     return PullRequest
         .findByNumberAndRepo(pullRequestNumber, repositoryName)
-        .then(function (pullRequest) {
+        .then(pullRequest => {
             if (!pullRequest) {
-                return Promise.reject(
-                    Err.createError(Err.CODES.NOT_FOUND, { title: pullRequestTitle, number: pullRequestNumber })
-                );
+                return Promise.reject(Err.createError(
+                    Err.CODES.NOT_FOUND,
+                    { title: pullRequestTitle, number: pullRequestNumber }
+                ));
             }
 
             github._updatePullRequestBody(pullRequest);
@@ -34,10 +38,10 @@ module.exports = function processIssueComment(body) {
 
             return pullRequest.save();
         })
-        .then(function (pullRequest) {
+        .then(pullRequest => {
             logger.info('Pull request updated:', pullRequest.title, pullRequest._id, pullRequest.html_url);
-            events.emit('github:issue_comment', { pullRequest: pullRequest, comment: body.comment });
+            events.emit('github:issue_comment', { pullRequest, comment: body.comment });
 
             return pullRequest;
         });
-};
+}

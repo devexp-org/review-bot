@@ -1,4 +1,18 @@
-var bodyCleaner = require('app/modules/github/utils/body_cleaner');
+import bodyCleaner from 'app/modules/github/utils/body_cleaner';
+
+/**
+ * Pre save hook for PullRequest model which clear body from additional content.
+ *
+ * @returns {Function}
+ */
+export function hook() {
+    return function (model) {
+        return new Promise(resolve => {
+            model.body = bodyCleaner(model.body);
+            resolve();
+        });
+    };
+}
 
 /**
  * Extender for PullRequest model which adds extra body content field.
@@ -6,22 +20,8 @@ var bodyCleaner = require('app/modules/github/utils/body_cleaner');
  *
  * @returns {Object}
  */
-module.exports.extender = function extender() {
+export function extender() {
     return {
         extra_body: Object
     };
-};
-
-/**
- * Pre save hook for PullRequest model which clear body from additional content.
- *
- * @returns {Function}
- */
-module.exports.hook = function hook() {
-    return function (model) {
-        return new Promise(function (resolve) {
-            model.body = bodyCleaner(model.body);
-            resolve();
-        });
-    };
-};
+}

@@ -1,18 +1,27 @@
-var domain = require('app/modules/utils/domain');
-var config = require('app/modules/config');
+import domain from 'app/modules/utils/domain';
+import config from 'app/modules/config';
 
-/**
- * Review
- */
+// Import modules
+import mongoose from 'app/modules/mongoose';
+import githubApi from 'app/modules/github/api';
+import modelsAddons from 'app/modules/models/addons';
+import team from 'app/modules/team';
+import badges from 'app/modules/badges';
+import ranking from 'app/modules/review/ranking';
+
+import reivewBadges from 'app/modules/review_badges';
+import reviewAutoassign from 'app/modules/review_autoassign';
+import reviewCommands from 'app/modules/commands';
+
 domain('Modules', function () {
-    require('app/modules/mongoose').init(config.load('mongoose'));
-    require('app/modules/models/addons').init(config.load('models'));
-    require('app/modules/github/api').init(config.load('github'));
-    require('app/modules/team').init(config.load('team'));
-    require('app/modules/review/ranking').init(config.load('review'));
-    require('app/modules/badges').init(config.load('badges'));
+    mongoose.init(config.load('mongoose'));
+    githubApi.init(config.load('github'));
+    modelsAddons.init(config.load('models'));
+    team.init(config.load('team'));
+    badges.init(config.load('badges'));
+    ranking.init(config.load('review'));
 
-    require('app/modules/review_autoassign')();
-    require('app/modules/review_badges')();
-    require('app/modules/commands')(config.load('commands'));
+    reviewAutoassign();
+    reivewBadges();
+    reviewCommands(config.load('commands'));
 });

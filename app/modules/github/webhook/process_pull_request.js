@@ -1,7 +1,9 @@
-var logger = require('app/modules/logger');
-var events = require('app/modules/events');
-var PullRequest = require('app/modules/models').get('PullRequest');
-var github = require('../api');
+import logger from 'app/modules/logger';
+import events from 'app/modules/events';
+import github from '../api';
+import * as models from 'app/modules/models';
+
+const PullRequest = models.get('PullRequest');
 
 /**
  * Handler for github web hook with type pull_request.
@@ -10,11 +12,11 @@ var github = require('../api');
  *
  * @returns {Promise}
  */
-module.exports = function processPullRequest(body) {
+export default function processPullRequest(body) {
     return PullRequest
         .findById(body.pull_request.id)
         .exec()
-        .then(function (pullRequest) {
+        .then(pullRequest => {
             if (!pullRequest) {
                 pullRequest = new PullRequest(body.pull_request);
             } else {
@@ -24,20 +26,20 @@ module.exports = function processPullRequest(body) {
 
             return pullRequest;
         })
-        .then(function (pullRequest) {
+        .then(pullRequest => {
             return github.getPullRequestFiles(pullRequest)
-                .then(function (files) {
+                .then(files => {
                     pullRequest.set('files', files);
                     return pullRequest;
                 });
         })
-        .then(function (pullRequest) {
+        .then(pullRequest => {
             return pullRequest.save();
         })
-        .then(function (pullRequest) {
-            events.emit('github:pull_request:' + body.action, { pullRequest: pullRequest });
+        .then(pullRequest => {
             logger.info('Pull request saved:', pullRequest.title, pullRequest._id, pullRequest.html_url);
+            events.emit('github:pull_request:' + body.action, { pullRequest: pullRequest });
 
             return pullRequest;
         });
-};
+}

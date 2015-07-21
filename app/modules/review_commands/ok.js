@@ -1,9 +1,9 @@
-var _ = require('lodash');
+import _ from 'lodash';
 
-var logger = require('app/modules/logger');
-var approveReview = require('app/modules/review/actions/approve');
+import logger from 'app/modules/logger';
+import approveReview from 'app/modules/review/actions/approve';
 
-module.exports = function okCommandCreator() {
+export default function okCommandCreator() {
 
     /**
      * Handles '/ok' command.
@@ -24,4 +24,4 @@ module.exports = function okCommandCreator() {
             );
         }
     };
-};
+}

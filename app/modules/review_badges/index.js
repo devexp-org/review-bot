@@ -1,6 +1,6 @@
-var github = require('app/modules/github/api');
-var badges = require('app/modules/badges');
-var events = require('app/modules/events');
+import github from 'app/modules/github/api';
+import badges from 'app/modules/badges';
+import events from 'app/modules/events';
 
 /**
  * Maps review status to color.
@@ -99,9 +99,9 @@ function updateReviewBadges(payload) {
 /**
  * Subscribe on events for creating review badges.
  */
-module.exports = function reviewBadgesPluginCreator() {
+export default function reviewBadgesPluginCreator() {
     events.on('review:updated', updateReviewBadges);
     events.on('review:started', updateReviewBadges);
     events.on('review:approved', updateReviewBadges);
     events.on('review:complete', updateReviewBadges);
-};
+}

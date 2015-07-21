@@ -1,7 +1,7 @@
-var logger = require('app/modules/logger');
-var saveReview = require('app/modules/review/actions/save');
+import logger from 'app/modules/logger';
+import saveReview from 'app/modules/review/actions/save';
 
-module.exports = function startCommandCreator() {
+export default function startCommandCreator() {
 
     /**
      * Handles '/start' command.
@@ -33,4 +33,4 @@ module.exports = function startCommandCreator() {
 
         saveReview({ status: 'inprogress' }, payload.pullRequest.id);
     };
-};
+}

@@ -1,10 +1,11 @@
-var winston = require('winston');
-var isProduction = process.env.NODE_ENV === 'production';
-var transports = [];
+import winston from 'winston';
+
+const transports = [];
+const isProduction = process.env.NODE_ENV === 'production';
 
 if (isProduction) {
     transports.push(
-        new (winston.transports.File)({
+        new winston.transports.File({
             filename: 'logs/error.log',
             level: 'error',
             timestamp: true,
@@ -14,11 +15,11 @@ if (isProduction) {
     );
 } else {
     transports.push(
-        new (winston.transports.Console)({
+        new winston.transports.Console({
             exitOnError: false,
             colorize: true
         })
     );
 }
 
-module.exports = new winston.Logger({ transports: transports });
+export default new winston.Logger({ transports: transports });

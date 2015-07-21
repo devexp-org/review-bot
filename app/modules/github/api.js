@@ -1,8 +1,11 @@
-var _ = require('lodash');
-var GitHub = require('github');
-var PullRequest = require('app/modules/models').get('PullRequest');
+import _ from 'lodash';
+import GitHub from 'github';
+import Terror from 'terror';
+import * as models from 'app/modules/models';
 
-var Err = require('terror').create('app/modules/github/api', {
+const PullRequest = models.get('PullRequest');
+
+const Err = Terror.create('app/modules/github/api', {
     PULL_INFO: '#getPullRequestInfo — pull request info error',
     PULL_NOT_FOUND: '#%method% — pull request not found — %id%',
     UPDATE_BODY: '#_updateBody',
@@ -10,9 +13,9 @@ var Err = require('terror').create('app/modules/github/api', {
     API_ERR: 'Github api error'
 });
 
-var start, end;
+let start, end;
 
-var github = {
+const github = {
     api: {},
 
     /**
@@ -22,8 +25,8 @@ var github = {
      *
      * @returns {this}
      */
-    init: function init(options) {
-        var api = new GitHub(options);
+    init(options) {
+        const api = new GitHub(options);
         api.authenticate(options.authenticate);
 
         start = options.content.start;
@@ -43,12 +46,12 @@ var github = {
      *
      * @returns {Promise}
      */
-    setBodyContent: function setBodyContent(pullId, id, content) {
+    setBodyContent(pullId, id, content) {
         var _this = this;
 
         return PullRequest
             .findById(pullId)
-            .then(function (pullRequest) {
+            .then(pullRequest => {
                 if (!pullRequest) {
                     return Promise.reject(
                         Err.createError(Err.CODES.PULL_NOT_FOUND, { method: 'setBodyContent', id: pullId })
@@ -62,7 +65,7 @@ var github = {
 
                 return pullRequest.save();
             })
-            .then(function (pullRequest) {
+            .then(pullRequest => {
                 _this._updatePullRequestBody(pullRequest);
 
                 return pullRequest;
@@ -76,18 +79,16 @@ var github = {
      *
      * @returns {Promise}
      */
-    getPullRequestInfo: function getPullRequestInfo(pullRequest) {
-        var _this = this;
-
-        return new Promise(function (resolve, reject) {
-            _this.api.pullRequests.get({
+    getPullRequestInfo(pullRequest) {
+        return new Promise((resolve, reject) => {
+            this.api.pullRequests.get({
                 user: pullRequest.org,
                 repo: pullRequest.repo,
                 number: pullRequest.number
-            }, function (err, pullRequestInfo) {
-                if (err) return reject(Err.createError(Err.CODES.PULL_INFO, err));
-
-                resolve(pullRequestInfo);
+            }, function (error, pullRequestInfo) {
+                error
+                    ? reject(Err.createError(Err.CODES.PULL_INFO, error))
+                    : resolve(pullRequestInfo);
             });
         });
     },
@@ -99,11 +100,11 @@ var github = {
      *
      * @returns {Promise}
      */
-    savePullRequestInfo: function savePullRequestInfo(pullRequestInfo) {
-        return new Promise(function (resolve, reject) {
+    savePullRequestInfo(pullRequestInfo) {
+        return new Promise((resolve, reject) => {
             PullRequest
                 .findById(pullRequestInfo.id)
-                .then(function (pullRequest) {
+                .then(pullRequest => {
                     if (!pullRequest) {
                         return reject(
                             Err.createError(Err.CODES.PULL_NOT_FOUND, { method: 'savePullRequestInfo', id: pullRequest.id })
@@ -111,11 +112,10 @@ var github = {
                     }
 
                     pullRequest.set(pullRequestInfo);
-
-                    pullRequest.save(function (err, pullRequest) {
-                        if (err) return reject(Err.createError(Err.CODE.SAVE_PULL, err));
-
-                        resolve(pullRequest);
+                    pullRequest.save((error, pullRequest) => {
+                        error
+                            ? reject(Err.createError(Err.CODE.SAVE_PULL, error))
+                            : resolve(pullRequest);
                     });
                 });
         });
@@ -128,7 +128,7 @@ var github = {
      *
      * @returns {Promise}
      */
-    updatePullRequestInfo: function updatePullRequestInfo(pullRequest) {
+    updatePullRequestInfo(pullRequest) {
         return this.getPullRequestInfo(pullRequest)
             .then(this.savePullRequestInfo);
     },
@@ -140,21 +140,20 @@ var github = {
      *
      * @returns {Promise}
      */
-    getPullRequestFiles: function getPullRequestFiles(pullRequest) {
-        return new Promise(function (resolve, reject) {
+    getPullRequestFiles(pullRequest) {
+        return new Promise((resolve, reject) => {
             github.api.pullRequests.getFiles({
                 user: pullRequest.org,
                 repo: pullRequest.repo,
                 number: pullRequest.number,
                 per_page: 100
-            }, function (err, files) {
-                if (err) return reject(Err.createError(Err.CODES.API_ERR, err));
-
-                resolve(files.map(function (file) {
-                    file.patch = '';
-
-                    return file;
-                }));
+            }, function (error, files) {
+                error
+                    ? reject(Err.createError(Err.CODES.API_ERR, error))
+                    : resolve(files.map(function (file) {
+                        file.patch = '';
+                        return file;
+                    }));
             });
         });
     },
@@ -166,7 +165,7 @@ var github = {
      *
      * @returns {Promise}
      */
-    _updatePullRequestBody: function _updatePullRequestBody(pullRequest) {
+    _updatePullRequestBody(pullRequest) {
         if (!pullRequest.extra_body) return false;
 
         var _this = this;
@@ -176,7 +175,7 @@ var github = {
 
         return this
             .updatePullRequestInfo(pullRequest)
-            .then(function (pullRequest) {
+            .then(pullRequest => {
                 _this._updateBody(pullRequest, extraBody);
 
                 return pullRequest;
@@ -190,7 +189,7 @@ var github = {
      * @param {Object} pullRequest
      * @param {String} extraBody
      */
-    _updateBody: function _updateBody(pullRequest, extraBody) {
+    _updateBody(pullRequest, extraBody) {
         this.api.pullRequests.update({
             user: pullRequest.org,
             repo: pullRequest.repo,
@@ -198,7 +197,9 @@ var github = {
             title: pullRequest.title,
             body: pullRequest.body + extraBody
         }, function (err) {
-            if (err) throw Err.createError(Err.CODES.UPDATE_BODY, err);
+            if (err) {
+                throw Err.createError(Err.CODES.UPDATE_BODY, err);
+            }
         });
     }
 };

@@ -1,14 +1,23 @@
-/* global __dirname */
-var express = require('express');
-var path = require('path');
-var responseTime = require('response-time');
-var bodyParser = require('body-parser');
-var proxy = require('proxy-express');
+import path from 'path';
+import express from 'express';
+import proxy from 'proxy-express';
+import bodyParser from 'body-parser';
+import responseTime from 'response-time';
 
-var app = express();
-var logger = require('app/modules/logger');
-var config = require('app/modules/config');
-var serverConfig = config.load('server');
+import logger from 'app/modules/logger';
+import config from 'app/modules/config';
+
+// Import middlewere and routes
+import response from 'app/modules/response';
+import badgeProxy from 'app/modules/badges/proxy';
+import githubRoutes from 'app/modules/github/routes';
+import reviewRoutes from 'app/modules/review/routes';
+
+// Import modules
+import * as modules from 'app/modules'; // eslint-disable-line no-unused-vars
+
+const app = express();
+const serverConfig = config.load('server');
 
 /**
  * Setup server
@@ -24,24 +33,23 @@ app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
 /**
  * Routes / Middlewares
  */
-app.use(require('app/modules/response')());
-app.use(require('app/modules/badges/proxy'));
+app.use(response());
+app.use(badgeProxy);
 
-app.use('/api/github', require('app/modules/github/routes'));
-app.use('/api/review', require('app/modules/review/routes'));
+app.use('/api/github', githubRoutes);
+app.use('/api/review', reviewRoutes);
 
 /**
  * Default Routes
  * Should always be last
  */
-
 app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname, 'views', 'layout.html'));
 });
 
-app.use(function (err, req, res, next) { // eslint-disable-line
+app.use(function (err, req, res, next) { // eslint-disable-line no-unused-vars
     logger.error(err);
     res.error(err.stack);
 });
 
-module.exports = app;
+export default app;

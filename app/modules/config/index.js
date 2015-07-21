@@ -1,10 +1,11 @@
-var _ = require('lodash');
-var path = require('path');
-var fs = require('fs');
-var configCache = {};
-var isProduction;
+import _ from 'lodash';
+import fs from 'fs';
+import path from 'path';
 
-module.exports = {
+let isProduction;
+const configCache = {};
+
+export default {
     options: {},
 
     /**
@@ -13,7 +14,7 @@ module.exports = {
      * @param {Object} options
      * @param {String} options.path - path to configs directory
      */
-    init: function (options) {
+    init(options) {
         this.options = options;
 
         isProduction = process.env.NODE_ENV === 'production';
@@ -27,18 +28,21 @@ module.exports = {
      *
      * @return {Object}
      */
-    load: function (configName) {
+    load(configName) {
         if (configCache[configName]) {
             return configCache[configName];
         }
-        var configsDirPath = this.options.path;
-        var cfgPath = path.join(configsDirPath, '/', configName);
-        var additionalCfgPath = isProduction ? path.join(cfgPath, '/prod.js') : path.join(cfgPath, '/dev.js');
-        var testCfgPath = this.options.isTest && testCfgPath;
-        var config = require(path.join(cfgPath, '/common.js'));
 
-        if (fs.existsSync(additionalCfgPath)) {
-            _.assign(config, require(additionalCfgPath));
+        const cfgPath = path.join(this.options.path, configName);
+        const envCfgPath = isProduction
+            ? path.join(cfgPath, '/prod.js')
+            : path.join(cfgPath, '/dev.js');
+        const testCfgPath = this.options.isTest && testCfgPath;
+
+        const config = require(path.join(cfgPath, '/common.js'));
+
+        if (fs.existsSync(envCfgPath)) {
+            _.assign(config, require(envCfgPath));
         }
 
         if (testCfgPath && fs.existsSync(testCfgPath)) {

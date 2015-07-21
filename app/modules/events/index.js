@@ -1,7 +1,8 @@
-var EventEmitter = require('events').EventEmitter;
-var ee = new EventEmitter();
+import { EventEmitter } from 'events';
 
-module.exports = {
+const ee = new EventEmitter();
+
+export default {
 
     /**
      * Subscribes on event.
@@ -11,7 +12,7 @@ module.exports = {
      *
      * @returns {this}
      */
-    on: function on(event, callback) {
+    on(event, callback) {
         ee.on(event, callback);
 
         return this;
@@ -25,7 +26,7 @@ module.exports = {
      *
      * @returns {this}
      */
-    off: function off(event, callback) {
+    off(event, callback) {
         ee.removeListener(event, callback);
 
         return this;
@@ -36,7 +37,7 @@ module.exports = {
      *
      * @returns {this}
      */
-    emit: function emit() {
+    emit() {
         ee.emit.apply(ee, arguments);
 
         return this;
