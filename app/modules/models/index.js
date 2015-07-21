@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import * as pullRequestModel from './models/pull_request'; // eslint-disable-line no-unused-vars
+import pullRequestModel from './models/pull_request'; // eslint-disable-line no-unused-vars
 
 /**
  * Returns model by name.
