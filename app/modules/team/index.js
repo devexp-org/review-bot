@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Terror from 'terror';
 
 const Err = Terror.create('app/modules/team', {
@@ -40,7 +41,9 @@ module.exports = {
             );
         }
 
-        return this._options[repo].transport(this._options[repo].params || {});
+        return this._options[repo]
+          .transport(this._options[repo].params || {})
+          .then(team => _.clone(team, true));
     },
 
     /**
