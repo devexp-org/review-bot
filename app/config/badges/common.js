@@ -1,5 +1,5 @@
 module.exports = {
     host: 'img.shields.io',
-    url: 'https://img.shields.io/badge/',
+    url: 'http://localhost/badges/',
     style: 'flat'
 };

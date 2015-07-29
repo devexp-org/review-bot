@@ -9,7 +9,7 @@ import config from 'app/modules/config';
 
 // Import middlewere and routes
 import response from 'app/modules/response';
-import badgeProxy from 'app/modules/badges/proxy';
+import badgeRoute from 'app/modules/badges/route';
 import githubRoutes from 'app/modules/github/routes';
 import reviewRoutes from 'app/modules/review/routes';
 
@@ -34,8 +34,8 @@ app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
  * Routes / Middlewares
  */
 app.use(response());
-app.use(badgeProxy);
 
+app.use('/badges', badgeRoute(config.load('badges')));
 app.use('/api/github', githubRoutes);
 app.use('/api/review', reviewRoutes);
 

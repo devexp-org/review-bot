@@ -7,11 +7,10 @@ export default {
      *
      * @param {Object} options
      * @param {String} options.url
-     * @param {String} [options.style] - style for badges, default: flat
+     * @param {String} [options.style] - default flat
      */
     init(options) {
         this.url = options.url;
-        this.style = options.style || 'flat';
     },
 
     /**
@@ -33,7 +32,7 @@ export default {
         subject = subject.replace(/-/g, '--');
         status = status.replace(/-/g, '--');
 
-        const img = `<img src="${this.url}${subject}-${status}-${color}.svg?style=${this.style}" />`;
+        const img = `<img src="${this.url}${subject}-${status}-${color}.svg" />`;
 
         if (url) {
             return `<a href="${url}">${img}</a>`;
