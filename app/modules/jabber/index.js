@@ -2,7 +2,7 @@ import logger from 'app/modules/logger';
 import Client from 'node-xmpp-client';
 
 const ltx = Client.ltx;
-const queue = [];
+let queue = [];
 
 export default {
 
@@ -74,7 +74,6 @@ export default {
      * @param {String} body - message body
      */
     sendMessage(to, body) {
-
         if (this._client && this._online) {
             const stanza = new ltx.Element('message', { to: to, type: 'chat' })
                 .c('body')

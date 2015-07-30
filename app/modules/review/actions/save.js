@@ -64,7 +64,6 @@ export default function saveReview(review, pullId) {
             pullRequest.set('review', review);
 
             return pullRequest.save();
-
         }).then(pullRequest => {
             let eventName = 'review:updated';
 
