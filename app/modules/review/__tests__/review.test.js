@@ -38,14 +38,14 @@ describe('app/modules/review/review', function () {
     });
 
     it('should call all ranking processors', function (done) {
-        review().then(function () {
-            processors.forEach(function (p) {
-                assert.calledOnce(p);
-            });
+        review()
+            .then(function () {
+                processors.forEach(function (p) {
+                    assert.calledOnce(p);
+                });
 
-            done();
-        }, function (err) {
-            done(err);
-        });
+                done();
+            })
+            .catch(done);
     });
 });

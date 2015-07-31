@@ -10,7 +10,7 @@ config.init({ path: path.join(__dirname, 'app/config'), cache: true });
 /**
  * Log
  */
-logger = require('app/modules/logger');
+logger = require('app/modules/logger').default;
 
 /**
  * Handler for uncaught exceptions

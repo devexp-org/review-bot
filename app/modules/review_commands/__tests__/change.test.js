@@ -37,17 +37,17 @@ describe('app/modules/review_commands/change', function () {
     it('should throw an error if pull request isn`t open', function () {
         pullRequest.state = 'closed';
 
-        assert.throw(() => change(cmd, { pullRequest }));
+        return assert.isRejected(change(cmd, { pullRequest }));
     });
 
     it('should throw an error if pull request author isn`t equal to comment author', function () {
         comment.user.login = 'user2';
 
-        assert.throw(() => change(cmd, { pullRequest, comment }));
+        return assert.isRejected(change(cmd, { pullRequest, comment }));
     });
 
     it('should throw an error if new reviewer is equals to pull request author', function () {
-        assert.throw(() => change(['old_reviewer', 'to', 'user1'], { pullRequest, comment }));
+        return assert.isRejected(change(['old_reviewer', 'to', 'user1'], { pullRequest, comment }));
     });
 
     it('should throw an error if new reviewer isn`t found in team for this pull request', function () {
@@ -74,6 +74,6 @@ describe('app/modules/review_commands/change', function () {
     });
 
     it('should throw an error if there is no old reviewer in reviewers list', function () {
-        assert.throw(() => change(['old_reviewer3', 'to', 'old_reviewer'], { pullRequest, comment }));
+        return assert.isRejected(change(['old_reviewer3', 'to', 'old_reviewer'], { pullRequest, comment }));
     });
 });

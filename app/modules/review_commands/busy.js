@@ -1,8 +1,43 @@
 import _ from 'lodash';
 
-import logger from 'app/modules/logger';
+import devExpErr from 'app/modules/utils/error';
+import catchHandler from 'app/modules/utils/catch_handler';
+import { pullInfoLogger } from 'app/modules/logger';
 import review from 'app/modules/review/review';
 import saveReview from 'app/modules/review/actions/save';
+
+const Err = devExpErr('app/modules/review_commands/busy');
+
+/**
+ * Checks if pull request is open.
+ *
+ * @param {Object} param
+ * @param {Array} param.cmd
+ * @param {Object} param.pullRequest
+ */
+function shouldPrBeOpened({ cmd, pullRequest }) {
+    if (pullRequest.state !== 'open') {
+        throw new Err('CMD', 'Pull request is closed', cmd, pullRequest);
+    }
+}
+
+/**
+ * Initiator should be in reviewers list to replace himself with new reviewer.
+ *
+ * @param {Object} param
+ * @param {Array} param.cmd
+ * @param {Object} param.pullRequest
+ * @param {Object} param.comment
+ */
+function shouldBeInReviewersList({ cmd, pullRequest, comment }) {
+    if (pullRequest.state !== 'open') {
+        throw new Err(
+            'CMD',
+            `${comment.user.login} tries to change reviewer but not in reviewers list`,
+            cmd, pullRequest
+        );
+    }
+}
 
 export default function startCommandCreator() {
 
@@ -13,39 +48,29 @@ export default function startCommandCreator() {
      * @param {Object} payload - github webhook handler payload.
      */
     return function busyCommand(cmd, payload) {
-        logger.info('busy command ' + payload.pullRequest.id + ' — ' + payload.pullRequest.title);
+        pullInfoLogger('[/busy] ' + cmd, payload.pullRequest);
 
-        if (payload.pullRequest.state !== 'open') {
-            logger.error(
-                'Can\'t change reviewer for closed pull request [' +
-                    payload.pullRequest.id + ' — ' + payload.pullRequest.title +
-                ']'
-            );
+        const checkParams = { cmd, pullRequest: payload.pullRequest, comment: payload.comment };
 
-            return;
-        }
+        return Promise
+            .resolve()
+            .then(() => {
+                _.forEach([
+                    shouldPrBeOpened,
+                    shouldBeInReviewersList
+                ], check => check(checkParams));
+            })
+            .then(() => review(payload.pullRequest.id))
+            .then(resultReview => {
+                const newReviewer = resultReview.team[0];
+                const reviewers = _.reject(payload.pullRequest.get('review.reviewers'), {
+                    login: payload.comment.user.login
+                });
 
-        if (_.find(payload.pullRequest.review.reviewers, { login: payload.comment.user.login })) {
-            review(payload.pullRequest.id)
-                .then(
-                    function (resultReview) {
-                        var newReviewer = resultReview.team[0];
-                        var reviewers = _.reject(payload.pullRequest.get('review.reviewers'), {
-                            login: payload.comment.user.login
-                        });
+                reviewers.push(newReviewer);
 
-                        reviewers.push(newReviewer);
-
-                        saveReview({ reviewers: reviewers }, payload.pullRequest.id);
-                    },
-                    logger.error.bind(logger)
-                );
-        } else {
-            logger.error(
-                payload.comment.user.login +
-                ' try to change reviewer but not in reviewers list for ' +
-                payload.pullRequest.id + ' — ' + payload.pullRequest.title
-            );
-        }
+                return saveReview({ reviewers }, payload.pullRequest.id);
+            })
+            .catch(catchHandler);
     };
 }
