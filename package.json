@@ -4,7 +4,6 @@
   "description": "DevExp",
   "main": "app.js",
   "scripts": {
-    "postinstall": "scripts/postinstall.sh",
     "lint": "eslint . || true",
     "test": "./scripts/run mocha -r ./tests/setup.js -R spec app/**/__tests__/**/*.test.js",
     "test:only": "npm run mongo:dev | ./scripts/run mocha -w -r ./tests/setup.js -R spec app/**/__tests__/**/*.test.js",
