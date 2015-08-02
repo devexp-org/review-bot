@@ -12,7 +12,8 @@ export default function (name, wrapped, customErrorHandler) {
     var d = domain.create();
 
     d.on('error', function (err) {
-        logger.error('Error in %s — %s', name, err);
+        logger.error('Error in %s — %s', name, err.name);
+        logger.error(err);
 
         if (customErrorHandler) {
             customErrorHandler(err);

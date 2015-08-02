@@ -1,6 +1,6 @@
-import config from 'app/modules/config';
+import config from 'config';
 
-const githubConfig = config.load('github');
+const githubConfig = config.get('github');
 
 /**
  * Clears Pull Request body from generated content.

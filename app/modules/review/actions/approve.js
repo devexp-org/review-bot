@@ -1,6 +1,6 @@
 import logger from 'app/modules/logger';
 import events from 'app/modules/events';
-import config from 'app/modules/config';
+import config from 'config';
 import Terror from 'terror';
 import * as models from 'app/modules/models';
 
@@ -20,7 +20,7 @@ const Err = Terror.create('app/modules/review/actions/approve', {
  */
 export default function approveReview(login, pullId) {
     let approvedCount = 0;
-    const reviewConfig = config.load('review');
+    const reviewConfig = config.get('review');
 
     return PullRequest
         .findById(pullId)

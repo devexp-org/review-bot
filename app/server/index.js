@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import responseTime from 'response-time';
 
 import logger from 'app/modules/logger';
-import config from 'app/modules/config';
+import config from 'config';
 
 // Import middlewere and routes
 import response from 'app/modules/response';
@@ -17,7 +17,7 @@ import reviewRoutes from 'app/modules/review/routes';
 import * as modules from 'app/modules'; // eslint-disable-line no-unused-vars
 
 const app = express();
-const serverConfig = config.load('server');
+const serverConfig = config.get('server');
 
 /**
  * Setup server
@@ -35,7 +35,7 @@ app.use(serverConfig.staticBase, express.static(serverConfig.staticPath));
  */
 app.use(response());
 
-app.use('/badges', badgeRoute(config.load('badges')));
+app.use('/badges', badgeRoute(config.get('badges')));
 app.use('/api/github', githubRoutes);
 app.use('/api/review', reviewRoutes);
 

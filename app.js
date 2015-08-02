@@ -1,11 +1,9 @@
 require('babel/register');
 
 var path = require('path');
-var config = require('app/modules/config');
+var config = require('config');
 var mulilistener = require('app/server/multilistener');
 var app, port, logger;
-
-config.init({ path: path.join(__dirname, 'app/config'), cache: true });
 
 /**
  * Log
@@ -26,7 +24,7 @@ require('app/modules');
  * Main Server Module
  */
 app = require('app/server');
-port = process.env.PORT || config.load('server').port;
+port = process.env.PORT || config.get('server').port;
 
 /**
  * Start Server
