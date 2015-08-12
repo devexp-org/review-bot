@@ -1,0 +1,23 @@
+{
+  "cluster": {
+    "workers": 1
+  },
+
+  "services": {
+    "logger": {
+      "options": {
+        "transports": []
+      }
+    },
+    "http": {
+      "options": {
+        "port": "7070"
+      }
+    },
+    "mongoose": {
+      "options": {
+        "host": "mongodb://localhost/devexp_test"
+      }
+    }
+  }
+}

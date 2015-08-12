@@ -1,0 +1,229 @@
+{
+  "cluster": {
+    "workers": 4
+  },
+  "services": {
+    "events": {
+      "path": "./services/events"
+    },
+    "logger": {
+      "path": "./services/logger",
+      "options": {
+        "transports": [
+          { "name": "console", "timestamp": true, "colorize": true }
+        ]
+      }
+    },
+    "mongoose": {
+      "path": "./services/mongoose",
+      "options": {
+        "host": "mongodb://localhost/devexp"
+      },
+      "dependencies": ["logger"]
+    },
+    "model": {
+      "path": "./services/model",
+      "options": {
+        "addons": {
+          "pull_request": [
+            "../services/complexity/addon",
+            "../services/pull-request-github/addon"
+          ]
+        }
+      },
+      "dependencies": ["mongoose"]
+    },
+    "github": {
+      "path": "./services/github",
+      "options": {
+        "host": "api.github.com",
+        "debug": false,
+        "version": "3.0.0",
+        "protocol": "https",
+        "timeout": 5000,
+        "headers": {
+          "user-agent": "DevKit-App"
+        }
+      },
+      "dependencies": []
+    },
+    "badge-constructor": {
+      "path": "./services/badge-constructor",
+      "options": {
+        "templatePath": "./assets/shields/"
+      },
+      "dependencies": ["logger"]
+    },
+    "team-github": {
+      "path": "./services/team-github",
+      "options": {
+        "team": "owners"
+      },
+      "dependencies": [
+        "github"
+      ]
+    },
+    "team-static": {
+      "path": "./services/team-static",
+      "options": {
+        "members": [
+          "artems",
+          "d4rkr00t",
+          "mishanga",
+          "sbmaxx"
+        ]
+      }
+    },
+    "choose-team": {
+      "path": "./services/choose-team",
+      "options": {
+        "routes": [
+          { "team-github": ["*/*"] }
+        ]
+      },
+      "dependencies": [
+        "logger",
+        "team-github"
+      ]
+    },
+    "pull-request-github": {
+      "path": "./services/pull-request-github",
+      "options": {
+        "separator": {
+          "top": "<div id='devexp-content-top'></div><hr>",
+          "bottom": "<div id='devexp-content-bottom'></div>"
+        }
+      },
+      "dependencies": [
+        "github",
+        "model"
+      ]
+    },
+    "pull-request-action": {
+      "path": "./services/pull-request-action",
+      "dependencies": [
+        "events",
+        "logger",
+        "model"
+      ]
+    },
+    "http": {
+      "path": "./services/http",
+      "options": {
+        "port": "8080",
+        "routes": {
+          "/api": "../services/client/routes",
+          "/badges": "../services/badge-constructor/routes",
+          "/github": "../services/pull-request-github/routes"
+        }
+      },
+      "dependencies": [
+        "events",
+        "logger",
+        "model",
+        "badge-constructor",
+        "pull-request-github"
+      ],
+      "alias": {
+        "badge-constructor": "badge",
+        "pull-request-github": "github"
+      }
+    },
+    "choose-reviewer": {
+      "path": "./services/choose-reviewer",
+      "options": {
+        "steps": [
+          "./choose-reviewer/remove_author",
+          "./choose-reviewer/remove_already_reviewers",
+          "./choose-reviewer/commiters",
+          "./choose-reviewer/random",
+          "./choose-reviewer/load",
+          "./choose-reviewer/sort",
+          "./choose-reviewer/total_number"
+        ],
+        "stepOptions": {
+          "load": { "max": 1 },
+          "random": { "max": 5 },
+          "commiters": {
+            "max": 4,
+            "since": [4, "month"],
+            "filesToCheck": 5,
+            "commitsCount": 10,
+            "ignore": [
+              "config"
+            ]
+          },
+          "totalNumber": { "max": 1 }
+        }
+      },
+      "dependencies": [
+        "logger",
+        "events",
+        "model",
+        "pull-request-github",
+        "choose-team"
+      ],
+      "alias": {
+        "choose-team": "team",
+        "pull-request-github": "github"
+      }
+    },
+    "review-autoassign": {
+      "path": "./services/review-autoassign",
+      "dependencies": [
+        "events",
+        "logger",
+        "choose-reviewer",
+        "pull-request-action"
+      ]
+    },
+
+    "command": {
+      "path": "./services/command",
+      "options": {
+        "events": ["github:issue_comment"],
+        "commands": [
+          {
+            "test": "\/start",
+            "handlers": ["./command/start"]
+          },
+          {
+            "test": "\/?ok|\/?ок",
+            "handlers": ["./command/ok"]
+          },
+          {
+            "test": "\/?!ok|\/?!ок$$",
+            "handlers": ["./command/not_ok"]
+          },
+          {
+            "test": "\/busy",
+            "handlers": ["./command/busy"]
+          },
+          {
+            "test": "\/change",
+            "handlers": ["./command/change"]
+          }
+        ]
+      },
+      "dependencies": [
+        "events",
+        "logger",
+        "choose-team",
+        "choose-reviewer",
+        "pull-request-action"
+      ]
+    },
+
+    "review-badges": {
+      "path": "./services/review-badges",
+      "options": {
+        "url": "http://localhost:8080/badges/",
+        "style": "flat"
+      },
+      "dependencies": [
+        "events",
+        "pull-request-github"
+      ]
+    }
+  }
+}

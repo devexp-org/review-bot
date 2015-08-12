@@ -1,7 +1,5 @@
-node_modules
-data
 logs
-npm-debug.log
 coverage
-app/config/github/auth.js
-app/config/jabber/auth.js
+node_modules
+npm-debug.log
+config/secret.json
