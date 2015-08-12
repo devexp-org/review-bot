@@ -224,6 +224,26 @@
         "events",
         "pull-request-github"
       ]
+    },
+
+    "jabber": {
+      "path": "./services/jabber",
+      "dependencies": [
+        "logger"
+      ]
+    },
+    "review-notification": {
+      "path": "./services/review-notification",
+      "options": {
+        "events": {
+          "review:started": "./review-notification/start"
+        },
+        "transport": "jabber"
+      },
+      "dependencies": [
+        "events",
+        "jabber"
+      ]
     }
   }
 }

@@ -17,3 +17,7 @@ application
     console.error(error.stack ? error.stack : error);
     process.exit(1);
   });
+
+process.on('exit', function() {
+  application.shutdown();
+});
