@@ -50,11 +50,11 @@ BODY TEXT
 
     gpr.fillPullRequestBody(pullRequest);
 
-    const expected = 'BODY TEXT'
-                   + '<div id="top"></div>'
-                   + '<div>ID1</div>'
-                   + '<div>ID2</div>'
-                   + '<div id="bottom"></div>';
+    const expected = 'BODY TEXT' +
+                     '<div id="top"></div>' +
+                     '<div>ID1</div>' +
+                     '<div>ID2</div>' +
+                     '<div id="bottom"></div>';
 
     assert.equal(pullRequest.body, expected);
   });

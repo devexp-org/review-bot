@@ -1,3 +1,7 @@
+'use strict';
+
+/* eslint-disable no-console */
+
 import Client, { ltx } from 'node-xmpp-client';
 
 export default class Jabber {

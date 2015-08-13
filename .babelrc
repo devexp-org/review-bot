@@ -5,8 +5,6 @@
   ],
   "optional": [
     "es7.functionBind"
-  ],
-  "ignore": [
   ]
 }
 

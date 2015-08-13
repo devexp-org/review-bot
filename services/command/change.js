@@ -3,8 +3,8 @@
 import util from 'util';
 import { find, reject } from 'lodash';
 
-const COMMAND_REGEXP
-  = /(?:^|\W)\/?change\s+@?([-0-9a-z]+)\s+(?:to\s+)?@?([-0-9a-z]+)(?:\W|$)/;
+const COMMAND_REGEXP =
+  /(?:^|\W)\/?change\s+@?([-0-9a-z]+)\s+(?:to\s+)?@?([-0-9a-z]+)(?:\W|$)/;
 
 /**
  * Handle '/change' command.

@@ -14,8 +14,8 @@ describe('modules/complexity', function () {
 
     it('should calculate complexity', function () {
       _.range(0, 2000, 50).reduce((acc, v) => {
-        assert.ok(complexity.additionsComplexity(v)
-          >= complexity.additionsComplexity(acc));
+        assert.ok(complexity.additionsComplexity(v) >=
+          complexity.additionsComplexity(acc));
         return v;
       }, 0);
 
@@ -35,8 +35,8 @@ describe('modules/complexity', function () {
 
     it('should calculate complexity', function () {
       _.range(0, 2000, 50).reduce((acc, v) => {
-        assert.ok(complexity.deletionsComplexity(v)
-          >= complexity.deletionsComplexity(acc));
+        assert.ok(complexity.deletionsComplexity(v) >=
+          complexity.deletionsComplexity(acc));
         return v;
       }, 0);
 
@@ -56,8 +56,8 @@ describe('modules/complexity', function () {
 
     it('should calculate complexity', function () {
       _.range(0, 100, 3).reduce((acc, v) => {
-        assert.ok(complexity.commitsComplexity(v)
-          >= complexity.commitsComplexity(acc));
+        assert.ok(complexity.commitsComplexity(v) >=
+          complexity.commitsComplexity(acc));
         return v;
       }, 0);
 

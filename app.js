@@ -18,6 +18,6 @@ application
     process.exit(1);
   });
 
-process.on('exit', function() {
+process.on('exit', function () {
   application.shutdown();
 });

@@ -1,9 +1,14 @@
+'use strict';
+
 /**
  * Notification service
  *
  * @param {Object} options
  * @param {Object} options.transport - notification transport.
  * @param {String[]} options.events - map events to notifications.
+ * @param {Object} imports
+ *
+ * @return {Promise}
  */
 export default function (options, imports) {
 

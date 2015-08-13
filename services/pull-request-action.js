@@ -45,8 +45,8 @@ export class PullRequestAction {
 
         if (review.status === 'inprogress' && _.isEmpty(review.reviewers)) {
           throw new Error(
-            'Try to start review where reviewers were not selected,'
-            + ' id - ' + pullId + ', title - ' + pullRequest.title
+            'Try to start review where reviewers were not selected,' +
+            ' id - ' + pullId + ', title - ' + pullRequest.title
           );
         }
 

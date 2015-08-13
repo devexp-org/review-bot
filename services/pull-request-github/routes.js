@@ -10,9 +10,7 @@ const GITHUB_HEADER_EVENT = 'x-github-event';
 
 export default function (imports) {
 
-  const model = imports.model;
   const logger = imports.logger;
-  const PullRequestModel = model.get('pull_request');
 
   const githubRouter = router();
 

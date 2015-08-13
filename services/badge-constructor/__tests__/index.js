@@ -1,3 +1,5 @@
+'use strict';
+
 import { decode, handleRequest } from '../routes';
 
 describe('services/badge-costructor', function () {
@@ -5,7 +7,7 @@ describe('services/badge-costructor', function () {
   describe('#decode', function () {
 
     it('should split into chunks by `-`', function () {
-        assert.deepEqual(decode('foo-bar-baz'), ['foo', 'bar', 'baz']);
+      assert.deepEqual(decode('foo-bar-baz'), ['foo', 'bar', 'baz']);
     });
 
     describe('should replace `_` to space', function () {
@@ -20,7 +22,7 @@ describe('services/badge-costructor', function () {
 
       it('... in the middle', function () {
         assert.deepEqual(decode('foo_bar'), ['foo bar']);
-      })
+      });
 
     });
 
@@ -36,7 +38,7 @@ describe('services/badge-costructor', function () {
 
       it('... in the middle', function () {
         assert.deepEqual(decode('foo--bar'), ['foo-bar']);
-      })
+      });
 
     });
 
@@ -52,16 +54,16 @@ describe('services/badge-costructor', function () {
 
       it('... in the middle', function () {
         assert.deepEqual(decode('foo__bar'), ['foo_bar']);
-      })
+      });
 
     });
 
     it('should combine replacements', function () {
-        assert.deepEqual(decode('__foo_bar--'), ['_foo bar-']);
+      assert.deepEqual(decode('__foo_bar--'), ['_foo bar-']);
     });
 
     it('should make multiple replacements', function () {
-        assert.deepEqual(decode('__foo__bar__'), ['_foo_bar_']);
+      assert.deepEqual(decode('__foo__bar__'), ['_foo_bar_']);
     });
 
   });

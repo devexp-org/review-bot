@@ -18,10 +18,10 @@ export class PullRequestGitHub {
     this.pullRequest = pullRequest;
 
     this.separator = {
-      top: options.separator && options.separator.top
-        || '<div id="devkit-top"></div><hr>',
-      bottom: options.separator && options.separator.bottom
-        || '<div id="devkit-bottom"></div>'
+      top: options.separator && options.separator.top ||
+        '<div id="devkit-top"></div><hr>',
+      bottom: options.separator && options.separator.bottom ||
+        '<div id="devkit-bottom"></div>'
     };
   }
 
@@ -131,11 +131,11 @@ export class PullRequestGitHub {
     const bodyContent = allSections
       .map(key => '<div>' + local.section[key] + '</div>')
       .join('');
-    const bodyContentWithSeparators
-      = this.separator.top + bodyContent + this.separator.bottom;
+    const bodyContentWithSeparators =
+      this.separator.top + bodyContent + this.separator.bottom;
 
-    local.body = this.cleanPullRequestBody(local.body)
-      + bodyContentWithSeparators;
+    local.body = this.cleanPullRequestBody(local.body) +
+      bodyContentWithSeparators;
   }
 
   cleanPullRequestBody(body) {

@@ -15,7 +15,7 @@ export default function (imports) {
 
   clientRouter.get('/github/pulls/:username', function (req, res) {
     PullRequestModel
-      .find({ 'state': 'open' })
+      .find({ state: 'open' })
       .sort({ updated_at: -1 })
       .exec()
       .then(result => {

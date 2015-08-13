@@ -110,8 +110,8 @@ export default class Application {
     if (startedInThisRound === 0) {
       if (Object.keys(this.starting).length === 0) {
         this.promise.reject(new Error(
-          'Circular dependency detected while resolving '
-            + this.awaiting.join(', ')
+          'Circular dependency detected while resolving ' +
+            this.awaiting.join(', ')
         ));
       }
     }
@@ -212,8 +212,8 @@ export default class Application {
           clearTimeout(startupTimer);
 
           this.resolved[name] = result.service;
-          this.teardown[name] = result.shutdown
-            || function () { return Promise.resolve(); };
+          this.teardown[name] = result.shutdown ||
+            function () { return Promise.resolve(); };
           this.nextRound();
         });
     } catch (error) {

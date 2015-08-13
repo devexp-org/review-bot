@@ -47,8 +47,6 @@ describe('modules/command', function () {
 
   it('should not throw an error if commands does not provied', function (done) {
     const payload = {};
-    const comment = 'first line\n/fireball\nthird line';
-
     const dispatcher = new CommandDispatcher();
 
     dispatcher.dispatch(payload).then(done);
