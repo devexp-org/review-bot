@@ -4,5 +4,5 @@ instrumentation:
       - "tests/**"
       - "app.js"
       - "start.js"
-      - "cluster.js"
+      - "client/**"
     include-all-sources: true
