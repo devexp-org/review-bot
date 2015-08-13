@@ -121,8 +121,10 @@
         "events",
         "logger",
         "model",
+        "choose-reviewer",
         "badge-constructor",
-        "pull-request-github"
+        "pull-request-github",
+        "pull-request-action"
       ],
       "alias": {
         "badge-constructor": "badge",

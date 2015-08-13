@@ -7,6 +7,8 @@ export default function (imports) {
 
   const model = imports.model;
   const logger = imports.logger;
+  const action = imports['pull-request-action'];
+  const chooseReviewer = imports['choose-reviewer'];
   const PullRequestModel = model.get('pull_request');
 
   const clientRouter = router();
@@ -36,6 +38,40 @@ export default function (imports) {
           res.success(result);
         }
       });
+  });
+
+  clientRouter.get('/reviews/:username', (req, res) => {
+    PullRequestModel
+      .findByReviewer(req.params.username)
+      .then(reviews => {
+        _.isEmpty(reviews)
+          ? res.error('Reviews not found!')
+          : res.success(reviews);
+      });
+  });
+
+  clientRouter.get('/reviewers/choose/:id', (req, res) => {
+    chooseReviewer.review(req.params.id)
+      .then(
+        res.success.bind(res),
+        res.error.bind(res)
+      );
+  });
+
+  clientRouter.post('/save', (req, res) => {
+    action.save(req.body.review, req.body.id)
+      .then(() => {
+        res.success('review saved');
+      })
+      .catch(res.error.bind(res));
+  });
+
+  clientRouter.post('/approve', (req, res) => {
+    action.approve(req.body.user.login, req.body.id)
+      .then(() => {
+        res.success('review approved');
+      })
+      .catch(res.error.bind(res));
   });
 
   return clientRouter;

@@ -91,7 +91,8 @@ export function setupModel(modelName, model) {
     return this
       .model(modelName)
       .find({ 'user.login': login })
-      .sort('-updated_at');
+      .sort('-updated_at')
+      .exec();
   };
 
   /**
@@ -105,7 +106,8 @@ export function setupModel(modelName, model) {
     return this
       .model(modelName)
       .find({ 'review.reviewers.login': login })
-      .sort('-updated_at');
+      .sort('-updated_at')
+      .exec();
   };
 
   /**

@@ -32,7 +32,7 @@
     "minimatch": "^2.0.10",
     "moment": "^2.10.6",
     "mongoose": "^4.1.1",
-    "node-xmpp-client": "^1.0.0-alpha23",
+    "node-xmpp-client": "1.0.0-alpha23",
     "object-assign": "^3.0.0",
     "proxy-express": "^1.1.2",
     "react": "^0.13.3",
