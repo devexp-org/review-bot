@@ -18,7 +18,7 @@
     "_test:heavy": "npm run test:heavy --silent || true",
     "eslint": "eslint .",
     "_eslint": "npm run eslint --silent || true",
-    "coverage": "babel-node ./node_modules/.bin/isparta cover --report text --report html ./node_modules/.bin/_mocha -- -r ./tests/setup.js -R dot */**/__tests__/*.js tests/heavy/**.js",
+    "coverage": "babel-node ./node_modules/.bin/isparta cover --report text --report html ./node_modules/.bin/_mocha -- -r ./tests/setup.js -R dot */**/__tests__/*.js",
     "_coverage": "npm run coverage --silent || true",
     "start": "nodemon start.js -e js,json,ejs,html --ignore node_modules/ --ignore public/ --ignore client/",
     "webpack:dev": "WEBPACK_DEV=1 webpack-dev-server --config ./.webpack/webpack.js --hot",

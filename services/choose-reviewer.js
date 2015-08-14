@@ -1,6 +1,6 @@
 'use strict';
 
-export default class Review {
+export class Review {
 
   /**
    * @constructor
@@ -10,7 +10,7 @@ export default class Review {
    */
   constructor(steps, payload) {
     if (!Array.isArray(steps)) {
-      throw new Error('No stages provided');
+      throw new Error('No steps provided');
     }
     this.steps = steps;
     this.payload = payload;

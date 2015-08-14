@@ -38,15 +38,18 @@ export default function load(options) {
       .all(promise)
       .then(openReviews => {
         _(openReviews)
-          .uniq(item => item.id)
-          .first()
+          .flatten()
+          .uniq('id')
           .forEach(activeReview => {
             activeReview.review.reviewers.forEach(reviewer => {
               reviewer = _.find(review.team, { login: reviewer.login });
 
-              reviewer.rank -= max;
+              if (reviewer) {
+                reviewer.rank -= max;
+              }
             });
-          });
+          })
+          .value();
 
         return review;
       });

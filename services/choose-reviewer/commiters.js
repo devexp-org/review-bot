@@ -8,21 +8,23 @@ import moment from 'moment';
  *
  * @param {Object} pullRequest
  * @param {Number} filesToCheck - number of files to keep for futher processing.
- * @param {Array}  ignore - patterns to ignore.
+ * @param {Array}  ignorePattern - patterns to ignore.
  *
  * @return {Promise}
  */
-function getFiles(pullRequest, filesToCheck, ignore) {
+export function getFiles(pullRequest, ignorePatterns, filesToCheck) {
   let files = pullRequest.get('files');
 
   if (_.isEmpty(files)) {
     return Promise.resolve([]);
   }
 
+  ignorePatterns = ignorePatterns || [];
+
   files = _(files)
     .filter(file => {
       let keep = true;
-      _.forEach(ignore, pattern => {
+      _.forEach(ignorePatterns, pattern => {
         // TODO use minimatch
         if (file.filename.match(pattern)) {
           keep = false;
@@ -47,7 +49,7 @@ function getFiles(pullRequest, filesToCheck, ignore) {
  *
  * @return {Promise}
  */
-function getCommits(github, pullRequest, since, commitsCount) {
+export function getCommits(github, pullRequest, since, commitsCount) {
 
   return function (files) {
     const promise = [];
@@ -63,16 +65,17 @@ function getCommits(github, pullRequest, since, commitsCount) {
     }
 
     _.forEach(files, file => {
-      options.path = file.filename;
+      const req = _.assign({}, { path: file.filename }, options);
 
       promise.push(new Promise(resolve => {
-        github.repos.getCommits(options, (error, commits) => {
+        github.repos.getCommits(req, (error, commits) => {
           error ? resolve([]) : resolve(commits);
         });
       }));
     });
 
-    return Promise.all(promise);
+    return Promise.all(promise)
+      .then(result => _.flatten(result));
   };
 
 }
@@ -84,10 +87,10 @@ function getCommits(github, pullRequest, since, commitsCount) {
  *
  * @return {Promise} { author: number_of_commits }
  */
-function getCommiters(commits) {
+export function getCommiters(commits) {
   const members = {};
 
-  _.forEach(_.flatten(commits), (commit) => {
+  _.forEach(commits, (commit) => {
     members[commit.author.login] = members[commit.author.login] + 1 || 1;
   });
 
@@ -140,6 +143,7 @@ function getSinceDate(date) {
  *
  * @param {Object} options
  * @param {Number} options.max - max rank for current step.
+ * @param {Array}  options.since - how old commits need to retrieve
  * @param {Array}  options.ignore - list of patterns to ignore.
  * @param {Number} options.commitsCount - number of commits to inspect.
  * @param {Number} options.filesToCheck - number files to get commits in.
