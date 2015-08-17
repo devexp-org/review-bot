@@ -23,8 +23,7 @@ describe('modules/team/static', function () {
 
     team.getTeam()
       .then(result => {
-        members[0].login = 'A';
-        assert.notDeepEqual(result, members);
+        assert.notEqual(result, members);
         done();
       })
       .catch(done);

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * Map amount of addtioions to complexity rate.
+ * Map amount of additions to complexity rate.
  *
  * @param {Number} additions
  *

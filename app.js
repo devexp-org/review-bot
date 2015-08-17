@@ -1,8 +1,6 @@
 /* eslint-disable no-console, no-process-exit */
 'use strict';
 
-import 'setimmediate';
-
 import Application from './modules/application';
 import parseConfig from './modules/config';
 
