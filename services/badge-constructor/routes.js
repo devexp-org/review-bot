@@ -8,7 +8,7 @@ export default function badgeRouterCreator(imports) {
   const badge = imports.badge;
   const badgeRouter = router();
 
-  badgeRouter.get('*', middleware(badge));
+  badgeRouter.use(middleware(badge));
 
   return badgeRouter;
 }
