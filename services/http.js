@@ -30,12 +30,9 @@ export default function (options, imports) {
   });
 
   _.forEach(options.routes || {}, (router, route) => {
-    let routerModule = require(router);
-    if (routerModule.__esModule) {
-      routerModule = routerModule.default;
-    }
+    const routerModule = imports[router];
 
-    app.use(route, routerModule(imports));
+    app.use(route, routerModule);
   });
 
   if (process.env.WEBPACK) {

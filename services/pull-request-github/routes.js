@@ -8,7 +8,7 @@ import issueCommentHook from './webhooks/issue_comment';
 
 const GITHUB_HEADER_EVENT = 'x-github-event';
 
-export default function (imports) {
+export default function (options, imports) {
 
   const logger = imports.logger;
 
@@ -56,6 +56,6 @@ export default function (imports) {
 
   });
 
-  return githubRouter;
+  return Promise.resolve({ service: githubRouter });
 
 }

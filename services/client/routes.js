@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import { Router as router } from 'express';
 
-export default function (imports) {
+export default function (options, imports) {
 
   const model = imports.model;
   const logger = imports.logger;
@@ -74,6 +74,6 @@ export default function (imports) {
       .catch(res.error.bind(res));
   });
 
-  return clientRouter;
+  return Promise.resolve({ service: clientRouter });
 
 }
