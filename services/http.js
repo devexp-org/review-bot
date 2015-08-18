@@ -24,11 +24,6 @@ export default function (options, imports) {
 
   app.use(responseJSON());
 
-  const indexFile = path.join(assetsPath, 'index.html');
-  app.get('/', function (req, res) {
-    res.sendFile(indexFile);
-  });
-
   const faviconFile = path.join(assetsPath, 'favicon.ico');
   app.get('/favicon.ico', function (req, res) {
     res.sendFile(faviconFile);
@@ -48,6 +43,11 @@ export default function (options, imports) {
   } else {
     app.use('/public', express.static(publicPath));
   }
+
+  const indexFile = path.join(assetsPath, 'index.html');
+  app.get('*', function (req, res) {
+    res.sendFile(indexFile);
+  });
 
   return new Promise(provide => {
     const server = app.listen(port, () => {
