@@ -165,10 +165,10 @@ describe('services/choose-reviewer/commiters', function () {
 
     const membersAltered = [
       { login: 'Black Widow', rank: 10 },
-      { login: 'Captain America', rank: 5.25 },
+      { login: 'Captain America', rank: 9 },
       { login: 'Hawkeye', rank: 3 },
       { login: 'Hulk', rank: 8 },
-      { login: 'Iron Man', rank: 7.25 },
+      { login: 'Iron Man', rank: 11 },
       { login: 'Spider-Man', rank: 6 },
       { login: 'Thor', rank: 3 }
     ];
