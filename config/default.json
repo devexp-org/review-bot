@@ -117,18 +117,14 @@
           "/github": "../services/pull-request-github/routes"
         }
       },
-      "dependencies": [
-        "events",
-        "logger",
-        "model",
-        "choose-reviewer",
-        "badge-constructor",
-        "pull-request-github",
-        "pull-request-action"
-      ],
-      "alias": {
-        "badge-constructor": "badge",
-        "pull-request-github": "github"
+      "dependencies": {
+        "model": "model",
+        "badge": "badge-constructor",
+        "events": "events",
+        "logger": "logger",
+        "github": "pull-request-github",
+        "choose-reviewer": "choose-reviewer",
+        "pull-request-action": "pull-request-action"
       }
     },
     "choose-reviewer": {
@@ -158,15 +154,12 @@
           "totalNumber": { "max": 1 }
         }
       },
-      "dependencies": [
-        "logger",
-        "events",
-        "model",
-        "github",
-        "choose-team"
-      ],
-      "alias": {
-        "choose-team": "team"
+      "dependencies": {
+        "team": "choose-team",
+        "model": "model",
+        "logger": "logger",
+        "events": "events",
+        "github": "github"
       }
     },
     "review-autoassign": {
@@ -178,7 +171,6 @@
         "pull-request-action"
       ]
     },
-
     "command": {
       "path": "./services/command",
       "options": {
@@ -214,7 +206,6 @@
         "pull-request-action"
       ]
     },
-
     "review-badges": {
       "path": "./services/review-badges",
       "options": {
@@ -226,7 +217,6 @@
         "pull-request-github"
       ]
     },
-
     "jabber": {
       "path": "./services/jabber",
       "dependencies": [
