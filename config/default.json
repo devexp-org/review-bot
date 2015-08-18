@@ -162,12 +162,11 @@
         "logger",
         "events",
         "model",
-        "pull-request-github",
+        "github",
         "choose-team"
       ],
       "alias": {
-        "choose-team": "team",
-        "pull-request-github": "github"
+        "choose-team": "team"
       }
     },
     "review-autoassign": {

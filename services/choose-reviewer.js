@@ -131,8 +131,10 @@ export default function (options, imports) {
   const team = imports.team;
   const model = imports.model;
   const logger = imports.logger;
+  const github = imports.github;
 
   const payload = {
+    github,
     team,
     logger,
     pullRequestModel: model.get('pull_request')
