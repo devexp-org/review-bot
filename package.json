@@ -8,7 +8,10 @@
     "url": "https://github.com/devexp-org/devexp"
   },
   "main": "app.js",
-  "pre-commit": ["test", "eslint"],
+  "pre-commit": [
+    "test",
+    "eslint"
+  ],
   "precommit.silent": true,
   "scripts": {
     "test": "mocha --compilers js:babel/register -r ./tests/setup.js -R spec */**/__tests__/**.js",
@@ -28,7 +31,8 @@
     "forever:stop": "NODE_ENV=production forever stop app.js",
     "forever:restart": "NODE_ENV=production forever restart app.js",
     "forever:logs": "forever logs app.js",
-    "postinstall": "scripts/postinstall.sh"
+    "postinstall": "scripts/postinstall.sh",
+    "readme": "node ./node_modules/node-readme/bin/node-readme.js"
   },
   "dependencies": {
     "alt": "^0.17.1",
@@ -67,6 +71,7 @@
     "isparta": "^3.0.3",
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
+    "node-readme": "^0.1.8",
     "node-sass": "^3.2.0",
     "nodemon": "^1.4.1",
     "parallelshell": "^2.0.0",
