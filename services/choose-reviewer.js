@@ -139,7 +139,12 @@ export default function (options, imports) {
   };
 
   const steps = options.steps.map(path => {
-    const ranker = require(path);
+    let ranker = require(path);
+
+    if (ranker.__esModule) {
+      ranker = ranker.default;
+    }
+
     return ranker(options.stepOptions[ranker.name]);
   });
 
