@@ -5,7 +5,7 @@ source ./colors.sh 2>/dev/null;
 NODE_MODULES=node_modules
 
 if [ ! -d $NODE_MODULES/app ]; then
-    ln -s ../app $NODE_MODULES/app
+    ln -s ../client $NODE_MODULES/client
 fi
 
 mkdir -p data 2> /dev/null

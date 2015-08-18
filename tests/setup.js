@@ -1,18 +1,12 @@
-require('babel/register');
+'use strict';
 
-var path = require('path');
-var chai = require('chai');
-var assert = chai.assert;
-var sinon = require('sinon');
-var config = require('app/modules/config');
-var chaiAsPromised = require('chai-as-promised');
+import chai from 'chai';
+import sinon from 'sinon';
 
-config.init({ path: path.join(__dirname, '..', 'app', 'config'), test: true });
+const assert = chai.assert;
 
-chai.use(chaiAsPromised);
 sinon.assert.expose(assert, { prefix: '' });
 
-require('app/modules/mongoose').init(config.load('mongoose'));
-
+global.chai = chai;
 global.sinon = sinon;
 global.assert = assert;

@@ -1,35 +1,21 @@
-require('babel/register');
+/* eslint-disable no-console, no-process-exit */
+'use strict';
 
-var path = require('path');
-var config = require('app/modules/config');
-var mulilistener = require('app/server/multilistener');
-var app, port, logger;
+import Application from './modules/application';
+import parseConfig from './modules/config';
 
-config.init({ path: path.join(__dirname, 'app/config'), cache: true });
+const basePath = __dirname;
+const appConfig = parseConfig(basePath);
+const application = new Application(appConfig, basePath);
 
-/**
- * Log
- */
-logger = require('app/modules/logger');
+// `catch` only needed to catch errors during application startup
+application
+  .execute()
+  .catch(function (error) {
+    console.error(error.stack ? error.stack : error);
+    process.exit(1);
+  });
 
-/**
- * Handler for uncaught exceptions
- */
-process.on('uncaughtException', logger.error.bind(logger));
-
-/**
- * Modules
- */
-require('app/modules');
-
-/**
- * Main Server Module
- */
-app = require('app/server');
-port = process.env.PORT || config.load('server').port;
-
-/**
- * Start Server
- */
-mulilistener(app, port);
-logger.info('Server listening at http://localhost:%s', port);
+process.on('exit', function () {
+  application.shutdown();
+});

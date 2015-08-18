@@ -1,6 +1,6 @@
 var configBuilder = require('./webpack-config.js'),
     options = {
-        entryPoint: 'app/client/index.jsx',
+        entryPoint: './client/index.jsx',
         autoprefixer: ['last 2 versions'],
         debug: !!process.env.WEBPACK_DEV,
         devServer: {

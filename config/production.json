@@ -1,0 +1,11 @@
+{
+  "services": {
+    "logger": {
+      "options": {
+        "transports": [
+          { "name": "file", "timestamp": true, "filename": "logs/main.log" }
+        ]
+      }
+    }
+  }
+}
