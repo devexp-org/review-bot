@@ -29,7 +29,6 @@ Package | Version | Dev
 [babel](https://www.npmjs.com/package/babel) | ^5.8.21 | ✖
 [badgs](https://www.npmjs.com/package/badgs) | ^1.0.0 | ✖
 [body-parser](https://www.npmjs.com/package/body-parser) | ^1.13.3 | ✖
-[ejs](https://www.npmjs.com/package/ejs) | ^2.3.3 | ✖
 [express](https://www.npmjs.com/package/express) | ^4.13.3 | ✖
 [github](https://www.npmjs.com/package/github) | ^0.2.4 | ✖
 [lodash](https://www.npmjs.com/package/lodash) | ^3.10.1 | ✖
@@ -37,16 +36,15 @@ Package | Version | Dev
 [moment](https://www.npmjs.com/package/moment) | ^2.10.6 | ✖
 [mongoose](https://www.npmjs.com/package/mongoose) | ^4.1.3 | ✖
 [node-xmpp-client](https://www.npmjs.com/package/node-xmpp-client) | 1.0.0-alpha23 | ✖
-[object-assign](https://www.npmjs.com/package/object-assign) | ^3.0.0 | ✖
 [proxy-express](https://www.npmjs.com/package/proxy-express) | ^1.1.2 | ✖
 [react](https://www.npmjs.com/package/react) | ^0.13.3 | ✖
 [react-hot-loader](https://www.npmjs.com/package/react-hot-loader) | ^1.2.8 | ✖
 [react-router](https://www.npmjs.com/package/react-router) | ^0.13.3 | ✖
 [react-timeago](https://www.npmjs.com/package/react-timeago) | 2.2.1 | ✖
-[recluster](https://www.npmjs.com/package/recluster) | ^0.4.0 | ✖
 [response-time](https://www.npmjs.com/package/response-time) | ^2.3.1 | ✖
 [terror](https://www.npmjs.com/package/terror) | ^1.3.0 | ✖
 [winston](https://www.npmjs.com/package/winston) | ^1.0.1 | ✖
+[whatwg-fetch](https://www.npmjs.com/package/whatwg-fetch) | ^0.9.0 | ✖
 [autoprefixer-loader](https://www.npmjs.com/package/autoprefixer-loader) | ^2.0.0 | ✔
 [babel-eslint](https://www.npmjs.com/package/babel-eslint) | ^4.0.10 | ✔
 [babel-loader](https://www.npmjs.com/package/babel-loader) | ^5.3.2 | ✔
@@ -62,7 +60,6 @@ Package | Version | Dev
 [node-readme](https://www.npmjs.com/package/node-readme) | ^0.1.8 | ✔
 [node-sass](https://www.npmjs.com/package/node-sass) | ^3.2.0 | ✔
 [nodemon](https://www.npmjs.com/package/nodemon) | ^1.4.1 | ✔
-[parallelshell](https://www.npmjs.com/package/parallelshell) | ^2.0.0 | ✔
 [pre-commit](https://www.npmjs.com/package/pre-commit) | ^1.1.1 | ✔
 [proxyquire](https://www.npmjs.com/package/proxyquire) | ^1.7.0 | ✔
 [sass-loader](https://www.npmjs.com/package/sass-loader) | ^2.0.1 | ✔
@@ -70,7 +67,6 @@ Package | Version | Dev
 [style-loader](https://www.npmjs.com/package/style-loader) | ^0.12.3 | ✔
 [webpack](https://www.npmjs.com/package/webpack) | ^1.11.0 | ✔
 [webpack-dev-server](https://www.npmjs.com/package/webpack-dev-server) | ^1.10.1 | ✔
-[whatwg-fetch](https://www.npmjs.com/package/whatwg-fetch) | ^0.9.0 | ✔
 
 
 ## License
