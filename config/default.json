@@ -50,7 +50,7 @@
     "badge-constructor": {
       "path": "./services/badge-constructor",
       "options": {
-        "templatePath": "./assets/shields/"
+        "template": "flat"
       },
       "dependencies": ["logger"]
     },

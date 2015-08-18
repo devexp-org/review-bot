@@ -1,10 +1,10 @@
 'use strict';
 
-import BadgeConstructor from '../modules/badge-constructor';
+import Badgs from 'badgs';
 
 export default function (options, imports) {
 
-  const service = new BadgeConstructor(options);
+  const service = new Badgs(options.template);
 
   return Promise.resolve({ service });
 
