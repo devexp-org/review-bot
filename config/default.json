@@ -47,13 +47,6 @@
       },
       "dependencies": []
     },
-    "badge-constructor": {
-      "path": "./services/badge-constructor",
-      "options": {
-        "template": "flat"
-      },
-      "dependencies": ["logger"]
-    },
     "team-github": {
       "path": "./services/team-github",
       "options": {
@@ -112,14 +105,40 @@
       "options": {
         "port": "8080",
         "routes": {
-          "/api": "../services/client/routes",
-          "/badges": "../services/badge-constructor/routes",
-          "/github": "../services/pull-request-github/routes"
+          "/api": "http-routes-client",
+          "/badges": "http-routes-badges",
+          "/github": "http-routes-github"
         }
       },
+      "dependencies": [
+        "logger",
+        "http-routes-client",
+        "http-routes-badges",
+        "http-routes-github"
+      ]
+    },
+    "http-routes-client": {
+      "path": "./services/client/routes",
+      "dependencies": [
+        "model",
+        "logger",
+        "choose-reviewer",
+        "pull-request-action"
+      ]
+    },
+    "http-routes-badges": {
+      "path": "./services/badge-constructor/routes",
+      "options": {
+        "template": "flat"
+      },
+      "dependencies": [
+        "logger"
+      ]
+    },
+    "http-routes-github": {
+      "path": "./services/pull-request-github/routes",
       "dependencies": {
         "model": "model",
-        "badge": "badge-constructor",
         "events": "events",
         "logger": "logger",
         "github": "pull-request-github",
