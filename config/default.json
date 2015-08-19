@@ -47,13 +47,6 @@
       },
       "dependencies": []
     },
-    "badge-constructor": {
-      "path": "./services/badge-constructor",
-      "options": {
-        "template": "flat"
-      },
-      "dependencies": ["logger"]
-    },
     "team-github": {
       "path": "./services/team-github",
       "options": {
@@ -135,8 +128,11 @@
     },
     "http-routes-badges": {
       "path": "./services/badge-constructor/routes",
+      "options": {
+        "template": "flat"
+      },
       "dependencies": [
-        "badge-constructor"
+        "logger"
       ]
     },
     "http-routes-github": {
