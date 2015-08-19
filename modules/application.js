@@ -28,6 +28,29 @@ export default class Application {
     this.executed = false;
     this.basePath = basePath || '.';
     this.awaiting = Object.keys(this.services);
+
+    this._require = this.require.bind(this);
+    this._requireDefault = this.requireDefault.bind(this);
+  }
+
+  require(modulePath) {
+
+    const realPath = modulePath[0] === '/'
+      ? modulePath
+      : path.join(this.basePath, modulePath);
+
+    return require(realPath);
+
+  }
+
+  requireDefault(modulePath) {
+    let module = this.require(modulePath);
+
+    if (module.__esModule) {
+      module = module.default;
+    }
+
+    return module;
   }
 
   /**
@@ -38,6 +61,12 @@ export default class Application {
   execute() {
     if (this.executed) {
       throw new Error('Cannot execute the application twice');
+    }
+
+    try {
+      this.checkConstraints();
+    } catch (e) {
+      return Promise.reject(e);
     }
 
     return new Promise((resolve, reject) => {
@@ -105,7 +134,7 @@ export default class Application {
       this.awaiting.splice(this.awaiting.indexOf(name), 1);
     });
 
-    if (this.awaiting.length === 0) {
+    if (this.awaiting.length === 0 && Object.keys(this.starting).length === 0) {
       this.started = true;
       this.promise.resolve(this.resolved);
       return;
@@ -154,6 +183,33 @@ export default class Application {
     return resolved;
   }
 
+  checkConstraints() {
+
+    this.checkNameConstraints(this.awaiting);
+
+    this.awaiting.forEach(name => {
+      const service = this.services[name];
+      const dependencies = this.getDependencyNames(service);
+
+      this.checkNameConstraints(dependencies);
+    });
+
+  }
+
+  checkNameConstraints(dependencies) {
+
+    dependencies.forEach(name => {
+      if (name === 'require') {
+        throw new Error('Service name `require` is forbidden');
+      }
+
+      if (name === 'requireDefault') {
+        throw new Error('Service name `requireDefault` is forbidden');
+      }
+    });
+
+  }
+
   getDependencyNames(service) {
     if (!service.dependencies) {
       return [];
@@ -166,29 +222,28 @@ export default class Application {
 
   obtainModule(name, service) {
     let serviceModule;
-    const servicePath = path.join(this.basePath, service.path || '');
 
     try {
-      serviceModule = service.module || require(servicePath);
+      serviceModule = service.module || this.requireDefault(service.path);
     } catch (error) {
       this.promise.reject(new Error(
         'Error occurs during module requiring (' + name + ').\n' + error.stack
       ));
     }
 
-    if (serviceModule.__esModule) {
-      serviceModule = serviceModule.default;
-    }
-
     return serviceModule;
   }
 
   obtainDepenedcies(name, service) {
+    const imports = {
+      require: this._require,
+      requireDefault: this._requireDefault
+    };
+
     if (!service.dependencies) {
-      return {};
+      return imports;
     }
 
-    const imports = {};
     if (Array.isArray(service.dependencies)) {
       service.dependencies.forEach(name => {
         imports[name] = this.resolved[name];

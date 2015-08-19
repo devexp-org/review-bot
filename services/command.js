@@ -15,7 +15,7 @@ export default function (options, imports) {
     return {
       regexp: new RegExp('(^|\\W)(' + command.regexp + ')(\\W|$)', 'i'),
       handers: command.handlers.map(path => {
-        return require(path);
+        return imports.requireDefault(path);
       })
     };
   });
