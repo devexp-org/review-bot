@@ -46,8 +46,8 @@ export default function changeCommand(command, payload) {
     )));
   }
 
-  const oldReviewer = participant[1];
-  const newReviewer = participant[2];
+  const oldReviewerLogin = participant[1];
+  const newReviewerLogin = participant[2];
 
   let reviewers = pullRequest.get('review.reviewers');
 
@@ -59,35 +59,35 @@ export default function changeCommand(command, payload) {
     )));
   }
 
-  if (!find(reviewers, { login: oldReviewer })) {
+  if (!find(reviewers, { login: oldReviewerLogin })) {
     return Promise.reject(new Error(util.format(
       '%s tried to change reviewer %s but he is not in reviewers list',
       payload.comment.user.login,
-      oldReviewer
+      oldReviewerLogin
     )));
   }
 
-  if (newReviewer === pullRequest.user.login) {
+  if (newReviewerLogin === pullRequest.user.login) {
     return Promise.reject(new Error(util.format(
       '%s cannot set himself as reviewer',
-      newReviewer
+      newReviewerLogin
     )));
   }
 
   return team
     .findByPullRequest(pullRequest)
     .then(result => {
-      const isNewReviewerInTeam = find(result, { login: newReviewer });
+      const newReviewer = find(result, { login: newReviewerLogin });
 
-      if (!isNewReviewerInTeam) {
+      if (!newReviewer) {
         return Promise.reject(new Error(util.format(
           '%s tried to set %s, but there are no user with the same login in team',
           payload.comment.user.login,
-          newReviewer
+          newReviewerLogin
         )));
       }
 
-      reviewers = reject(reviewers, { login: oldReviewer });
+      reviewers = reject(reviewers, { login: oldReviewerLogin });
       reviewers.push(newReviewer);
 
       return action.save({ reviewers }, pullRequest.id);
