@@ -4,6 +4,10 @@ import path from 'path';
 
 export default class Application {
 
+  static values(object) {
+    return Object.keys(object).map(key => object[key]);
+  }
+
   /**
    * @constructor
    *
@@ -135,7 +139,7 @@ export default class Application {
 
     let resolved = true;
 
-    service.dependencies.forEach((dependency) => {
+    this.getDependencyNames(service).forEach(dependency => {
       if (!(dependency in this.resolved)) {
         resolved = false;
       }
@@ -148,6 +152,16 @@ export default class Application {
     });
 
     return resolved;
+  }
+
+  getDependencyNames(service) {
+    if (!service.dependencies) {
+      return [];
+    }
+
+    return Array.isArray(service.dependencies)
+      ? service.dependencies
+      : this.constructor.values(service.dependencies);
   }
 
   obtainModule(name, service) {
@@ -170,13 +184,21 @@ export default class Application {
   }
 
   obtainDepenedcies(name, service) {
-    const alias = service.alias || {};
-    const imports = {};
+    if (!service.dependencies) {
+      return {};
+    }
 
-    (service.dependencies || []).forEach(dependency => {
-      const dependencyName = alias[dependency] || dependency;
-      imports[dependencyName] = this.resolved[dependency];
-    });
+    const imports = {};
+    if (Array.isArray(service.dependencies)) {
+      service.dependencies.forEach(name => {
+        imports[name] = this.resolved[name];
+      });
+    } else {
+      Object.keys(service.dependencies).forEach(alias => {
+        const name = service.dependencies[alias];
+        imports[alias] = this.resolved[name];
+      });
+    }
 
     return imports;
   }
