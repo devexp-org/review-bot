@@ -119,7 +119,7 @@ export class ReviewBadgeBuilder {
    *
    * @param {Object} review
    *
-   * @returns {String}
+   * @return {String}
    */
   build(review) {
     const status = this.buildStatusBadge(review);

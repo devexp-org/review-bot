@@ -7,8 +7,8 @@ import moment from 'moment';
  * Return pull reqest files.
  *
  * @param {Object} pullRequest
+ * @param {Array}  ignorePatterns - patterns to ignore.
  * @param {Number} filesToCheck - number of files to keep for futher processing.
- * @param {Array}  ignorePattern - patterns to ignore.
  *
  * @return {Promise}
  */
