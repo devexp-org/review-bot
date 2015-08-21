@@ -15,7 +15,7 @@ export default function (options, imports) {
 
   _.forEach(options.addons, (list, modelName) => {
     _.forEach(list, addon => {
-      const m = require(addon);
+      const m = imports.require(addon);
 
       if (!saveHooks[modelName]) {
         saveHooks[modelName] = [];

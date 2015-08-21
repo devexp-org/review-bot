@@ -18,7 +18,7 @@ export default function (options, imports) {
   Object
     .keys(options.events)
     .forEach(event => {
-      const notify = require(options.events[event]);
+      const notify = imports.requireDefault(options.events[event]);
 
       events.on(event, (payload) => {
         notify(transport, payload);

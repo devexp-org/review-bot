@@ -26,8 +26,8 @@
       "options": {
         "addons": {
           "pull_request": [
-            "../services/complexity/addon",
-            "../services/pull-request-github/addon"
+            "./services/complexity/addon",
+            "./services/pull-request-github/addon"
           ]
         }
       },
@@ -150,13 +150,13 @@
       "path": "./services/choose-reviewer",
       "options": {
         "steps": [
-          "./choose-reviewer/remove_author",
-          "./choose-reviewer/remove_already_reviewers",
-          "./choose-reviewer/commiters",
-          "./choose-reviewer/random",
-          "./choose-reviewer/load",
-          "./choose-reviewer/sort",
-          "./choose-reviewer/total_number"
+          "./services/choose-reviewer/remove_author",
+          "./services/choose-reviewer/remove_already_reviewers",
+          "./services/choose-reviewer/commiters",
+          "./services/choose-reviewer/random",
+          "./services/choose-reviewer/load",
+          "./services/choose-reviewer/sort",
+          "./services/choose-reviewer/total_number"
         ],
         "stepOptions": {
           "load": { "max": 1 },
@@ -197,23 +197,23 @@
         "commands": [
           {
             "test": "\/start",
-            "handlers": ["./command/start"]
+            "handlers": ["./services/command/start"]
           },
           {
             "test": "\/?ok|\/?ок",
-            "handlers": ["./command/ok"]
+            "handlers": ["./services/command/ok"]
           },
           {
             "test": "\/?!ok|\/?!ок$$",
-            "handlers": ["./command/not_ok"]
+            "handlers": ["./services/command/not_ok"]
           },
           {
             "test": "\/busy",
-            "handlers": ["./command/busy"]
+            "handlers": ["./services/command/busy"]
           },
           {
             "test": "\/change",
-            "handlers": ["./command/change"]
+            "handlers": ["./services/command/change"]
           }
         ]
       },
@@ -246,7 +246,7 @@
       "path": "./services/review-notification",
       "options": {
         "events": {
-          "review:started": "./review-notification/start"
+          "review:started": "./services/review-notification/start"
         },
         "transport": "jabber"
       },
