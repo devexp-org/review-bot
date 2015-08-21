@@ -98,6 +98,21 @@ describe('services/choose-reviewer', function () {
           .catch(done);
       });
 
+      it('should not throw error if reviewers will not selected', function (done) {
+        const steps = [
+          function (review) {
+            review.team = [];
+            return Promise.resolve(review);
+          }
+        ];
+
+        const review = new Review(steps, payload);
+
+        review.review(123456)
+          .then(() => done())
+          .catch(done);
+      });
+
     });
 
     describe('each step', function () {
@@ -148,8 +163,14 @@ describe('services/choose-reviewer', function () {
 
     it('should return resolved promise', function () {
       const model = { get: sinon.stub().returns({}) };
-      const options = { steps: [] };
-      const imports = { model };
+      const options = { steps: ['step1', 'step2'] };
+      const requireDefault = sinon.stub();
+      const imports = {
+        model,
+        requireDefault
+      };
+
+      requireDefault.returns(function step() {});
 
       service(options, imports)
         .then(() => null)
