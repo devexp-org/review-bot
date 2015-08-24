@@ -6,6 +6,7 @@
     "events": {
       "path": "./services/events"
     },
+
     "logger": {
       "path": "./services/logger",
       "options": {
@@ -14,6 +15,7 @@
         ]
       }
     },
+
     "mongoose": {
       "path": "./services/mongoose",
       "options": {
@@ -21,6 +23,7 @@
       },
       "dependencies": ["logger"]
     },
+
     "model": {
       "path": "./services/model",
       "options": {
@@ -33,6 +36,7 @@
       },
       "dependencies": ["mongoose"]
     },
+
     "github": {
       "path": "./services/github",
       "options": {
@@ -47,6 +51,7 @@
       },
       "dependencies": []
     },
+
     "team-github": {
       "path": "./services/team-github",
       "options": {
@@ -56,6 +61,7 @@
         "github"
       ]
     },
+
     "team-static": {
       "path": "./services/team-static",
       "options": {
@@ -67,6 +73,7 @@
         ]
       }
     },
+
     "choose-team": {
       "path": "./services/choose-team",
       "options": {
@@ -79,6 +86,7 @@
         "team-github"
       ]
     },
+
     "pull-request-github": {
       "path": "./services/pull-request-github",
       "options": {
@@ -92,6 +100,7 @@
         "model"
       ]
     },
+
     "pull-request-action": {
       "path": "./services/pull-request-action",
       "dependencies": [
@@ -100,6 +109,7 @@
         "model"
       ]
     },
+
     "http": {
       "path": "./services/http",
       "options": {
@@ -117,6 +127,7 @@
         "http-routes-github"
       ]
     },
+
     "http-routes-client": {
       "path": "./services/client/routes",
       "dependencies": [
@@ -126,6 +137,7 @@
         "pull-request-action"
       ]
     },
+
     "http-routes-badges": {
       "path": "./services/badge-constructor/routes",
       "options": {
@@ -135,6 +147,7 @@
         "logger"
       ]
     },
+
     "http-routes-github": {
       "path": "./services/pull-request-github/routes",
       "dependencies": {
@@ -146,6 +159,7 @@
         "pull-request-action": "pull-request-action"
       }
     },
+
     "choose-reviewer": {
       "path": "./services/choose-reviewer",
       "options": {
@@ -170,7 +184,7 @@
               "config"
             ]
           },
-          "totalNumber": { "max": 1 }
+          "totalNumber": { "max": 2 }
         }
       },
       "dependencies": {
@@ -181,6 +195,7 @@
         "github": "github"
       }
     },
+
     "review-autoassign": {
       "path": "./services/review-autoassign",
       "dependencies": [
@@ -190,6 +205,7 @@
         "pull-request-action"
       ]
     },
+
     "command": {
       "path": "./services/command",
       "options": {
@@ -225,6 +241,7 @@
         "pull-request-action"
       ]
     },
+
     "review-badges": {
       "path": "./services/review-badges",
       "options": {
@@ -236,12 +253,14 @@
         "pull-request-github"
       ]
     },
+
     "jabber": {
       "path": "./services/jabber",
       "dependencies": [
         "logger"
       ]
     },
+
     "review-notification": {
       "path": "./services/review-notification",
       "options": {
