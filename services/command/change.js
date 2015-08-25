@@ -67,6 +67,15 @@ export default function changeCommand(command, payload) {
     )));
   }
 
+  if (find(reviewers, { login: newReviewerLogin })) {
+    return Promise.reject(new Error(util.format(
+      '%s tried to change reviewer %s to %s but he is already in reviewers list',
+      payload.comment.user.login,
+      oldReviewerLogin,
+      newReviewerLogin
+    )));
+  }
+
   if (newReviewerLogin === pullRequest.user.login) {
     return Promise.reject(new Error(util.format(
       '%s cannot set himself as reviewer',
