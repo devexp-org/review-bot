@@ -1,5 +1,7 @@
 'use strict';
 
+import { isEmpty } from 'lodash';
+
 export class Review {
 
   /**
@@ -115,7 +117,7 @@ export class Review {
         );
 
         this.logger.info('Reviewers are: %s',
-          (review.team && review.team.length > 0)
+          (!isEmpty(review.team))
               ? review.team.map(x => x.login + '#' + x.rank).join(' ')
               : 'ooops, no reviewers were selected...'
         );

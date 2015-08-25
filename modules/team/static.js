@@ -21,7 +21,7 @@ export default class StaticTeam {
   }
 
   getTeam() {
-    const members = _.clone(this.members, true);
+    const members = _.cloneDeep(this.members);
     return Promise.resolve(members);
   }
 
