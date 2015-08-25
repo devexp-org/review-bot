@@ -166,6 +166,7 @@
         "steps": [
           "./services/choose-reviewer/remove_author",
           "./services/choose-reviewer/remove_already_reviewers",
+          "./services/choose-reviewer/ignore",
           "./services/choose-reviewer/commiters",
           "./services/choose-reviewer/random",
           "./services/choose-reviewer/load",
