@@ -13,8 +13,8 @@ export default function (options, imports) {
 
   const commands = options.commands.map(command => {
     return {
-      regexp: new RegExp('(^|\\W)(' + command.regexp + ')(\\W|$)', 'i'),
-      handers: command.handlers.map(path => {
+      test: new RegExp('(^|\\W)(' + command.test + ')(\\W|$)', 'i'),
+      handlers: command.handlers.map(path => {
         return imports.requireDefault(path);
       })
     };
@@ -34,7 +34,7 @@ export default function (options, imports) {
 
       dispatcher
         .dispatch(comment, payload)
-        .catch(logger.error.bind(logger));
+        .catch(::logger.error);
     });
   });
 
