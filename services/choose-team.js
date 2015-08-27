@@ -31,14 +31,21 @@ export default function (options, imports) {
 
   const routes = [];
 
-  (options.routes || []).forEach(route => {
+  if (!Array.isArray(options.routes) || options.routes.length === 0) {
+    throw new Error('Routes for service is not provided');
+  }
+
+  options.routes.forEach(route => {
+
     _.forEach(route, (pattern, sourceName) => {
+
       const source = imports[sourceName];
-      const getTeam = source.getTeam.bind(source);
 
       if (!source) {
         throw new Error(`Source '${sourceName}' for team service is not provided`);
       }
+
+      const getTeam = source.getTeam.bind(source);
 
       if (!Array.isArray(pattern)) {
         routes.push({ source: getTeam, pattern });
@@ -47,7 +54,9 @@ export default function (options, imports) {
           routes.push({ source: getTeam, pattern: sourcePattern });
         });
       }
+
     });
+
   });
 
   const service = new Team(routes);

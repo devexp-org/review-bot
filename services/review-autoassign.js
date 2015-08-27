@@ -33,7 +33,11 @@ export default function (options, imports) {
       return;
     }
 
-    logger.info('Autostart review [%s – %s]', pullRequest.id, pullRequest.title);
+    logger.info(
+      'Autostart review [%s – %s]',
+      pullRequest.id,
+      pullRequest.title
+    );
 
     chooseReviewer.review(pullRequest.id)
       .then(resultReview => {

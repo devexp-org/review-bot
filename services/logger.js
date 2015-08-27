@@ -6,7 +6,7 @@ export default function (options, imports) {
 
   const transports = options.transports.map(transport => {
     if (!('timestamp' in transport)) {
-      transport.timestamp = function () { return new Date(); };
+      transport.timestamp = true;
     }
 
     switch (transport.name) {
@@ -20,7 +20,7 @@ export default function (options, imports) {
         return new winston.transports.Console(transport);
 
       default:
-        throw new Error('Invalid transport name ' + transport.name);
+        throw new Error(`Invalid transport name "${transport.name}"`);
     }
   });
 

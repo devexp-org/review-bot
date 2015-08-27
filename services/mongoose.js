@@ -8,10 +8,8 @@ export default function (options, imports) {
   const connection = mongoose.createConnection(options.host);
 
   const shutdown = function () {
-    return new Promise((resolve, reject) => {
-      connection.close(function (error) {
-        error ? reject(error) : resolve();
-      });
+    return new Promise(resolve => {
+      connection.close(resolve);
     });
   };
 

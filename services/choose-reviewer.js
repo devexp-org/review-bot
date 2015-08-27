@@ -1,5 +1,7 @@
 'use strict';
 
+import { isEmpty } from 'lodash';
+
 export class Review {
 
   /**
@@ -115,7 +117,7 @@ export class Review {
         );
 
         this.logger.info('Reviewers are: %s',
-          review.team
+          (!isEmpty(review.team))
               ? review.team.map(x => x.login + '#' + x.rank).join(' ')
               : 'ooops, no reviewers were selected...'
         );
@@ -139,6 +141,8 @@ export default function (options, imports) {
     logger,
     pullRequestModel: model.get('pull_request')
   };
+
+  options.stepOptions || (options.stepOptions = {});
 
   const steps = options.steps.map(path => {
     const ranker = imports.requireDefault(path);
