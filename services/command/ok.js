@@ -27,7 +27,7 @@ export default function okCommand(command, payload) {
   const reviewer = find(pullRequest.review.reviewers, { login });
 
   if (reviewer) {
-    return action.approve(login, pullRequest.id);
+    return action.approveReview(login, pullRequest.id);
   } else {
     return Promise.reject(new Error(util.format(
       '%s tried to approve review, but he is not in reviewers list [%s – %s]',

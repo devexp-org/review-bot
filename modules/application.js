@@ -35,9 +35,9 @@ export default class Application {
 
   require(modulePath) {
 
-    const realPath = modulePath[0] === '/'
-      ? modulePath
-      : path.join(this.basePath, modulePath);
+    const realPath = modulePath[0] === '/' ?
+      modulePath :
+      path.join(this.basePath, modulePath);
 
     return require(realPath);
 
@@ -215,9 +215,9 @@ export default class Application {
       return [];
     }
 
-    return Array.isArray(service.dependencies)
-      ? service.dependencies
-      : this.constructor.values(service.dependencies);
+    return Array.isArray(service.dependencies) ?
+      service.dependencies :
+      this.constructor.values(service.dependencies);
   }
 
   obtainModule(name, service) {

@@ -34,9 +34,9 @@ export class PullRequestGitHub {
       };
 
       this.github.pullRequests.get(req, (error, remote) => {
-        error
-          ? reject(new Error('Cannot receive a pull request from github:\n' + error))
-          : resolve(remote);
+        error ?
+          reject(new Error('Cannot receive a pull request from github:\n' + error)) :
+          resolve(remote);
       });
     });
   }
@@ -52,9 +52,9 @@ export class PullRequestGitHub {
 
           local.set(remote);
           local.save(error => {
-            error
-              ? reject(new Error('Cannot save a pull request from github:\n' + error))
-              : resolve(local);
+            error ?
+              reject(new Error('Cannot save a pull request from github:\n' + error)) :
+              resolve(local);
           });
         });
     });
@@ -90,9 +90,9 @@ export class PullRequestGitHub {
       };
 
       this.github.pullRequests.getFiles(req, (error, files) => {
-        error
-          ? reject(new Error('Cannot receive files from the pull request:\n' + error))
-          : resolve(files.map(file => { delete file.patch; return file; }));
+        error ?
+          reject(new Error('Cannot receive files from the pull request:\n' + error)) :
+          resolve(files.map(file => { delete file.patch; return file; }));
       });
     });
   }
