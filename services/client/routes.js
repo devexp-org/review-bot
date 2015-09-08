@@ -44,9 +44,9 @@ export default function (options, imports) {
     PullRequestModel
       .findByReviewer(req.params.username)
       .then(reviews => {
-        _.isEmpty(reviews)
-          ? res.error('Reviews not found!')
-          : res.success(reviews);
+        _.isEmpty(reviews) ?
+          res.error('Reviews not found!') :
+          res.success(reviews);
       });
   });
 

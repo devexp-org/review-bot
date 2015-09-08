@@ -116,9 +116,9 @@ function addRank(maxRank, team) {
     });
 
     _.forEach(team, (member) => {
-      member.rank += members[member.login]
-        ? maxRank / (max / members[member.login])
-        : 0;
+      member.rank += members[member.login] ?
+        maxRank / (max / members[member.login]) :
+        0;
     });
 
     return team;
