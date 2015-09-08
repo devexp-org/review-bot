@@ -29,47 +29,52 @@ export class PullRequestAction {
 
     let startReview = false;
 
-    return this.pullRequest
-      .findById(pullId).exec()
-      .then(pullRequest => {
+    return new Promise((resolve, reject) => {
 
-        if (!pullRequest) {
-          throw new Error('Pull request `' + pullId + '` not found');
-        }
+      this.pullRequest
+        .findById(pullId).exec()
+        .then(pullRequest => {
 
-        review = _.merge({}, pullRequest.review, review);
+          if (!pullRequest) {
+            throw new Error('Pull request `' + pullId + '` not found');
+          }
 
-        if (!review.status) {
-          review.status = 'notstarted';
-        }
+          review = _.merge({}, pullRequest.review, review);
 
-        if (review.status === 'inprogress' && _.isEmpty(review.reviewers)) {
-          throw new Error(
-            'Try to start review where reviewers were not selected,' +
-            ' id - ' + pullId + ', title - ' + pullRequest.title
-          );
-        }
+          if (!review.status) {
+            review.status = 'notstarted';
+          }
 
-        if (review.status === 'start') {
-          startReview = true;
-          review.status = 'inprogress';
-          review.started_at = new Date();
-        }
+          if (review.status === 'inprogress' && _.isEmpty(review.reviewers)) {
+            throw new Error(
+              'Try to start review where reviewers were not selected,' +
+              ' id - ' + pullId + ', title - ' + pullRequest.title
+            );
+          }
 
-        pullRequest.set('review', review);
+          if (review.status === 'start') {
+            startReview = true;
+            review.status = 'inprogress';
+            review.started_at = new Date();
+          }
 
-        return pullRequest.save();
+          pullRequest.set('review', review);
 
-      }).then(pullRequest => {
+          return new Promise((resolve, reject) => pullRequest.save().then(resolve, reject));
 
-        const eventName = startReview ? 'review:started' : 'review:updated';
+        }).then(pullRequest => {
 
-        this.events.emit(eventName, { pullRequest: pullRequest });
-        this.logger.info('review saved: %s %s', eventName, pullId);
+          const eventName = startReview ? 'review:started' : 'review:updated';
 
-        return pullRequest;
+          this.events.emit(eventName, { pullRequest: pullRequest });
+          this.logger.info('review saved: %s %s', eventName, pullId);
 
-      });
+          return pullRequest;
+
+        }).then(resolve, reject);
+
+    });
+
   }
 
   /**
@@ -84,52 +89,56 @@ export class PullRequestAction {
 
     let approvedCount = 0;
 
-    return this.pullRequest
-      .findById(pullId).exec()
-      .then(pullRequest => {
+    return new Promise((resolve, reject) => {
 
-        if (!pullRequest) {
-          throw new Error('Pull request `' + pullId + '` not found');
-        }
+      this.pullRequest
+        .findById(pullId).exec()
+        .then(pullRequest => {
 
-        const review = pullRequest.get('review');
-
-        review.reviewers.forEach(reviewer => {
-          if (reviewer.login === login) {
-            reviewer.approved = true;
+          if (!pullRequest) {
+            throw new Error('Pull request `' + pullId + '` not found');
           }
 
-          if (reviewer.approved) {
-            approvedCount += 1;
+          const review = pullRequest.get('review');
+
+          review.reviewers.forEach(reviewer => {
+            if (reviewer.login === login) {
+              reviewer.approved = true;
+            }
+
+            if (reviewer.approved) {
+              approvedCount += 1;
+            }
+
+            if (approvedCount === 2) {
+              review.status = 'complete';
+            }
+          });
+
+          review.updated_at = new Date();
+          if (review.status === 'complete') {
+            review.completed_at = new Date();
           }
 
-          if (approvedCount === 2) {
-            review.status = 'complete';
+          pullRequest.set('review', review);
+
+          return pullRequest.save();
+
+        }).then(pullRequest => {
+
+          if (pullRequest.review.status === 'complete') {
+            this.logger.info('review complete #%s', pullId);
+            this.events.emit('review:complete', { pullRequest: pullRequest });
+          } else {
+            this.logger.info('review approved #%s by %s', pullId, login);
+            this.events.emit('review:approved', { pullRequest: pullRequest, login: login });
           }
-        });
 
-        review.updated_at = new Date();
-        if (review.status === 'complete') {
-          review.completed_at = new Date();
-        }
+          return pullRequest;
 
-        pullRequest.set('review', review);
+        }).then(resolve, reject);
 
-        return pullRequest.save();
-
-      }).then(pullRequest => {
-
-        if (pullRequest.review.status === 'complete') {
-          this.logger.info('review complete #%s', pullId);
-          this.events.emit('review:complete', { pullRequest: pullRequest });
-        } else {
-          this.logger.info('review approved #%s by %s', pullId, login);
-          this.events.emit('review:approved', { pullRequest: pullRequest, login: login });
-        }
-
-        return pullRequest;
-
-      });
+    });
 
   }
 
