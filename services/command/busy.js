@@ -35,7 +35,7 @@ export default function busyCommand(command, payload) {
   const reviewer = find(pullRequest.review.reviewers, { login });
 
   if (reviewer) {
-    return payload.review(payload.pullRequest.id)
+    return payload.review.review(payload.pullRequest.id)
       .then(result => {
         const candidate = result.team[0];
         const reviewers = reject(
