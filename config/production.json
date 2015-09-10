@@ -3,7 +3,7 @@
     "logger": {
       "options": {
         "transports": [
-          { "name": "file", "timestamp": true, "filename": "logs/main.log" }
+          { "name": "file", "timestamp": true, "filename": "logs/main.log", "json": false }
         ]
       }
     }
