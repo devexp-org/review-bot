@@ -231,6 +231,10 @@
           {
             "test": "\/change",
             "handlers": ["./services/command/change"]
+          },
+          {
+            "test": "\/add|\\+@?[\\w]+",
+            "handlers": ["./services/command/add"]
           }
         ]
       },
