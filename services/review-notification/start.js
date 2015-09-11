@@ -9,7 +9,7 @@ function message(payload) {
 }
 
 export default function startNotification(transport, payload) {
-  const reviewers = payload.review.reviewers;
+  const reviewers = payload.pullRequest.review.reviewers;
 
   reviewers.forEach(member => {
     transport.send(member.login, message(payload));

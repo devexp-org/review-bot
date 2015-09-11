@@ -3,6 +3,7 @@
 import util from 'util';
 import { find, reject } from 'lodash';
 
+const EVENT_NAME = 'review:command:change';
 const COMMAND_REGEXP =
   /(?:^|\W)\/?change\s+@?([-0-9a-z]+)\s+(?:to\s+)?@?([-0-9a-z]+)(?:\W|$)/;
 
@@ -19,6 +20,7 @@ export default function changeCommand(command, payload) {
   const team = payload.team;
   const action = payload.action;
   const logger = payload.logger;
+  const events = payload.events;
 
   logger.info(
     '"/change" [%s – %s]',
@@ -98,6 +100,8 @@ export default function changeCommand(command, payload) {
 
       reviewers = reject(reviewers, { login: oldReviewerLogin });
       reviewers.push(newReviewer);
+
+      events.emit(EVENT_NAME, { pullRequest });
 
       return action.save({ reviewers }, pullRequest.id);
     });

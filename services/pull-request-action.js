@@ -52,9 +52,8 @@ export class PullRequestAction {
             );
           }
 
-          if (review.status === 'start') {
+          if (pullRequest.review.status !== 'inprogress' && review.status === 'inprogress') {
             startReview = true;
-            review.status = 'inprogress';
             review.started_at = new Date();
           }
 
@@ -66,7 +65,7 @@ export class PullRequestAction {
 
           const eventName = startReview ? 'review:started' : 'review:updated';
 
-          this.events.emit(eventName, { pullRequest: pullRequest });
+          this.events.emit(eventName, { pullRequest });
           this.logger.info('review saved: %s %s', eventName, pullId);
 
           return pullRequest;
