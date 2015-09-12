@@ -217,7 +217,7 @@
             "handlers": ["./services/command/start"]
           },
           {
-            "test": "\/?ok|\/?ок",
+            "test": "\/?[^!]ok|\/?[^!]ок",
             "handlers": ["./services/command/ok"]
           },
           {

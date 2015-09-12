@@ -13,7 +13,7 @@ export default function (options, imports) {
 
   const commands = options.commands.map(command => {
     return {
-      test: new RegExp('(^|\\W)(' + command.test + ')(\\W|$)', 'i'),
+      test: new RegExp('(^|\\b|\\s?)(' + command.test + ')(?=\\s|$)', 'i'),
       handlers: command.handlers.map(path => {
         return imports.requireDefault(path);
       })
