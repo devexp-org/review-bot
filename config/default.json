@@ -239,7 +239,8 @@
         "logger",
         "choose-team",
         "choose-reviewer",
-        "pull-request-action"
+        "pull-request-action",
+        "base-command-error"
       ]
     },
 
@@ -266,13 +267,24 @@
       "path": "./services/review-notification",
       "options": {
         "events": {
-          "review:started": "./services/review-notification/start"
+          "review:started": "./services/review-notification/start",
+          "review:command:error": "./services/review-notification/command-error"
         },
         "transport": "jabber"
       },
       "dependencies": [
         "events",
         "jabber"
+      ]
+    },
+
+    "base-command-error": {
+      "path": "./services/base-command-error",
+      "options": {
+        "event": "review:command:error"
+      },
+      "dependencies": [
+        "events"
       ]
     }
   }

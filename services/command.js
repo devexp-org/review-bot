@@ -10,6 +10,7 @@ export default function (options, imports) {
   const action = imports['pull-request-action'];
   const review = imports['choose-reviewer'];
   const team = imports['choose-team'];
+  const baseError = imports['base-command-error'];
 
   const commands = options.commands.map(command => {
     return {
@@ -29,6 +30,7 @@ export default function (options, imports) {
       payload.action = action;
       payload.review = review;
       payload.team = team;
+      payload.baseError = baseError;
 
       const comment = _.get(payload, 'comment.body', '');
 

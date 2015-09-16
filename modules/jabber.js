@@ -104,6 +104,8 @@ export default class Jabber {
    * @param {String} body - message body
    */
   send(to, body) {
+    console.log(body);
+
     if (this._client && this._online) {
       const stanza = new ltx.Element('message', { to: to, type: 'chat' })
         .c('body').t(body);
