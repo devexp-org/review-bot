@@ -1,5 +1,3 @@
-'use strict';
-
 import util from 'util';
 import { find } from 'lodash';
 
@@ -9,6 +7,12 @@ const COMMAND_REGEXP = new RegExp(
   'i'
 );
 const EVENT_NAME = 'review:command:add';
+
+export function getParticipant(command) {
+  const participant = command.match(COMMAND_REGEXP);
+
+  return participant[1] || participant[2];
+}
 
 export default function addCommand(command, payload) {
 
@@ -27,8 +31,7 @@ export default function addCommand(command, payload) {
     pullRequest.title
   );
 
-  const participant = command.match(COMMAND_REGEXP);
-  const newReviewerLogin = participant[1] || participant[2];
+  const newReviewerLogin = getParticipant(command);
 
   if (find(reviewers, { login: newReviewerLogin })) {
     return Promise.reject(new Error(util.format(
