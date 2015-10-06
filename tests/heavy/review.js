@@ -16,7 +16,7 @@ describe('review', function () {
           .review(40503811)
           .then(result => {
             assert.isArray(result.team);
-            assert.lengthOf(result.team, 1);
+            assert.lengthOf(result.team, 2);
           });
 
       }, done);
