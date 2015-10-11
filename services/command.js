@@ -3,6 +3,8 @@
 import _ from 'lodash';
 import CommandDispatcher from '../modules/command';
 
+export const constructRegexp = commandRegexp => new RegExp('(^|\\b|\\s?)(' + commandRegexp + ')(?=\\s|$)', 'i');
+
 export default function (options, imports) {
 
   const events = imports.events;
@@ -13,7 +15,7 @@ export default function (options, imports) {
 
   const commands = options.commands.map(command => {
     return {
-      test: new RegExp('(^|\\b|\\s?)(' + command.test + ')(?=\\s|$)', 'i'),
+      test: constructRegexp(command.test),
       handlers: command.handlers.map(path => {
         return imports.requireDefault(path);
       })
