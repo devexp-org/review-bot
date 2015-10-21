@@ -91,7 +91,11 @@ export function getCommiters(commits) {
   const members = {};
 
   _.forEach(commits, (commit) => {
-    members[commit.author.login] = members[commit.author.login] + 1 || 1;
+    const author = commit.author;
+
+    if (!author) return;
+
+    members[author.login] = members[author.login] + 1 || 1;
   });
 
   return Promise.resolve(members);
