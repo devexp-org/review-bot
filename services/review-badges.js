@@ -151,7 +151,8 @@ export default function (options, imports) {
     github.setBodySection(
       payload.pullRequest.id,
       'review:badge',
-      badgeContent
+      badgeContent,
+      100 // position
     );
   }
 

@@ -103,20 +103,19 @@ export class PullRequestGitHub {
       .then(remote => this.savePullRequest(remote));
   }
 
-  setBodySection(id, sectionId, content) {
+  setBodySection(id, sectionId, content, pos = 99999) {
     return this.pullRequest
       .findById(id)
       .then(local => {
         if (!local) {
-          return Promise.reject(new Error(
-            'Pull request `' + id + '` not found'
-          ));
+          return Promise.reject(new Error(`Pull request '${id}' not found`));
         }
+
         return this.syncPullRequest(local);
       })
       .then(local => {
         const section = _.clone(local.get('section') || {});
-        section[sectionId] = content;
+        section[sectionId] = { content, pos };
         local.section = section;
 
         this.fillPullRequestBody(local);
@@ -126,11 +125,17 @@ export class PullRequestGitHub {
       .then(this.updatePullRequest.bind(this));
   }
 
-  fillPullRequestBody(local) {
-    const allSections = Object.keys(local.section);
-    const bodyContent = allSections
-      .map(key => '<div>' + local.section[key] + '</div>')
+  buildBodyContent(section) {
+    return _.values(section)
+      .map(s => { return s.pos ? s : { pos: 99999, content: s }; })
+      .sort((a, b) => a.pos > b.pos ? 1 : a.pos < b.pos ? -1 : 0) // eslint-disable-line
+      .map(s => '<div>' + s.content + '</div>')
       .join('');
+  }
+
+  fillPullRequestBody(local) {
+    const bodyContent = this.buildBodyContent(local.section);
+
     const bodyContentWithSeparators =
       this.separator.top + bodyContent + this.separator.bottom;
 
