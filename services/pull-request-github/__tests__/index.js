@@ -2,11 +2,11 @@
 
 import { PullRequestGitHub } from '../../pull-request-github';
 
-describe('services/pull-request-github', function () {
+describe('services/pull-request-github', () => {
 
   let github, model, options;
 
-  beforeEach(function () {
+  beforeEach(() => {
     model = sinon.stub();
     github = sinon.stub();
     options = {
@@ -17,7 +17,7 @@ describe('services/pull-request-github', function () {
     };
   });
 
-  it('should be able to clean pull request body from old content', function () {
+  it('should be able to clean pull request body from old content', () => {
     const gpr = new PullRequestGitHub(model, github, options);
     const body = `
 BODY TEXT
@@ -31,7 +31,7 @@ EXTRA BODY TEXT
     assert.equal(result, 'BODY TEXT');
   });
 
-  it('should be able to replace pull request body', function () {
+  it('should be able to replace pull request body', () => {
     const gpr = new PullRequestGitHub(model, github, options);
     const body = `
 BODY TEXT
@@ -57,6 +57,26 @@ BODY TEXT
                      '<div id="bottom"></div>';
 
     assert.equal(pullRequest.body, expected);
+  });
+
+  describe('#buildBodyContent', () => {
+    const sections = {
+      id1: 'content 1',
+      id2: {
+        pos: 1,
+        content: 'content 2'
+      },
+      id3: {
+        pos: 10,
+        content: 'content 3'
+      }
+    };
+
+    it('should put sections in correct order in body content', () => {
+      const gpr = new PullRequestGitHub(model, github, options);
+
+      assert.equal(gpr.buildBodyContent(sections), '<div>content 2</div><div>content 3</div><div>content 1</div>');
+    });
   });
 
 });
