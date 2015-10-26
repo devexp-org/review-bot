@@ -1,46 +1,14 @@
-'use strict';
+import BadgeBase from '../modules/badge-base';
 
-export class ReviewBadgeBuilder {
+export class ReviewBadgeBuilder extends BadgeBase {
 
   /**
    * @constructor
    *
    * @param {String} url
-   * @param {String} [style] - default flat
    */
   constructor(url) {
-    this.url = url;
-  }
-
-  /**
-   * Creates badge. [subject|status].
-   *
-   * @param {String} subject
-   * @param {String} status
-   * @param {String} color - color of badge
-   * @param {String} url - url from badge
-   *
-   * @return {String} img or a tag with propper url and img src.
-   */
-  create(subject, status, color, url) {
-    if (!subject) {
-      throw new Error('Badge should have at least subject!');
-    }
-
-    status = status
-      .replace(/-/g, '--')
-      .replace(/\s/g, '_');
-    subject = subject
-      .replace(/-/g, '--')
-      .replace(/\s/g, '_');
-
-    const img = `<img src="${this.url}${subject}-${status}-${color}.svg" />`;
-
-    if (url) {
-      return `<a href="${url}">${img}</a>`;
-    }
-
-    return img;
+    super(url);
   }
 
   /**
@@ -124,8 +92,8 @@ export class ReviewBadgeBuilder {
   build(review) {
     const status = this.buildStatusBadge(review);
     const reviewers = review.reviewers
-    .map(::this.buildReviewerBadge)
-    .join(' ');
+      .map(::this.buildReviewerBadge)
+      .join(' ');
 
     return status + ' ' + reviewers;
   }
@@ -134,7 +102,6 @@ export class ReviewBadgeBuilder {
 
 
 export default function (options, imports) {
-
   const events = imports.events;
   const github = imports['pull-request-github'];
 
