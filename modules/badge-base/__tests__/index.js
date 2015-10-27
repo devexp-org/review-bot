@@ -25,5 +25,6 @@ describe('modules/badge-base', () => {
     it('should replace - to --', () => assert.equal(badgeBase._escape('sta-tus'), 'sta--tus'));
     it('should replace space to _', () => assert.equal(badgeBase._escape('sta tus'), 'sta_tus'));
     it('should replace _ to __', () => assert.equal(badgeBase._escape('sta_tus'), 'sta__tus'));
+    it('should handles numbers', () => assert.equal(badgeBase._escape(1), '1'));
   });
 });

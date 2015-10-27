@@ -17,7 +17,7 @@ export default class BadgeBase {
    * @return {String}
    */
   _escape(text) {
-    return text
+    return String(text)
       .replace(/-/g, '--')
       .replace(/_/g, '__')
       .replace(/\s/g, '_');
