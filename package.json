@@ -31,8 +31,7 @@
     "forever:stop": "NODE_ENV=production forever stop app.js",
     "forever:restart": "NODE_ENV=production forever restart app.js",
     "forever:logs": "forever logs app.js",
-    "postinstall": "scripts/postinstall.sh",
-    "readme": "node ./node_modules/node-readme/bin/node-readme.js"
+    "postinstall": "scripts/postinstall.sh"
   },
   "dependencies": {
     "alt": "^0.17.6",
@@ -68,7 +67,6 @@
     "isparta": "^3.1.0",
     "mocha": "^2.3.3",
     "node-libs-browser": "^0.5.3",
-    "node-readme": "^0.1.9",
     "node-sass": "^3.3.3",
     "nodemon": "^1.7.3",
     "pre-commit": "^1.1.2",
