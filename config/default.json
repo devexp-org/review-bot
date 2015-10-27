@@ -217,6 +217,10 @@
             "handlers": ["./services/command/start"]
           },
           {
+            "test": "\/?ping",
+            "handlers": ["./services/command/ping"]
+          },
+          {
             "test": "\/?([^!]|^)ok|\/?([^!]|^)ок",
             "handlers": ["./services/command/ok"]
           },
@@ -270,7 +274,8 @@
       "path": "./services/review-notification",
       "options": {
         "events": {
-          "review:started": "./services/review-notification/start"
+          "review:started": "./services/review-notification/start",
+          "review:command:ping": "./services/review-notification/ping"
         },
         "transport": "jabber"
       },
