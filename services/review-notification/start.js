@@ -4,7 +4,7 @@ function message(payload) {
   const pullRequest = payload.pullRequest;
 
   return '' +
-`Your were assigned to review pull request:
+`You were assigned to review pull request:
   ${pullRequest.title} — ${pullRequest.html_url}`;
 }
 

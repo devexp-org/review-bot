@@ -45,6 +45,13 @@ describe('service/command#constructRegexp', () => {
         makeCommonCases('/add user'), makeCommonCases('/add @user'),
         makeCommonCases('+user'), makeCommonCases('+@user')
       )
+    },
+    {
+      test: '\/?ping',
+      positive: [].concat(
+        makeCommonCases('/ping'),
+        makeCommonCases('ping')
+      )
     }
   ];
 
