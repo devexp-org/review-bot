@@ -251,6 +251,13 @@
       ]
     },
 
+    "pull-request-body-queue": {
+      "path": "./services/pull-request-body-section-queue",
+      "dependencies": [
+        "pull-request-github"
+      ]
+    },
+
     "review-badges": {
       "path": "./services/review-badges",
       "options": {
@@ -259,7 +266,7 @@
       },
       "dependencies": [
         "events",
-        "pull-request-github"
+        "pull-request-body-queue"
       ]
     },
 
