@@ -116,7 +116,7 @@ export class PullRequestGitHub {
       .then(local => {
         const section = _.clone(local.get('section') || {});
         section[sectionId] = { content, pos };
-        local.section = section;
+        local.set('section', section);
 
         this.fillPullRequestBody(local);
 

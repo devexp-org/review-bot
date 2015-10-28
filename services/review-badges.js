@@ -103,7 +103,7 @@ export class ReviewBadgeBuilder extends BadgeBase {
 
 export default function (options, imports) {
   const events = imports.events;
-  const github = imports['pull-request-github'];
+  const bodyUpdateDispatcher = imports['pull-request-body-queue'];
 
   const builder = new ReviewBadgeBuilder(options.url);
 
@@ -115,7 +115,7 @@ export default function (options, imports) {
   function updateReviewBadges(payload) {
     const badgeContent = builder.build(payload.pullRequest.review);
 
-    github.setBodySection(
+    bodyUpdateDispatcher.setSection(
       payload.pullRequest.id,
       'review:badge',
       badgeContent,
