@@ -94,6 +94,23 @@ describe('modules/team/github', function () {
 
   });
 
+  describe('getMember', function () {
+
+    it('should return a team member with given login', done => {
+      const members = [{ login: 'a' }, { login: 'b' }];
+      const gt = new GitHubTeam(members);
+      gt.getTeam = sinon.stub().returns(Promise.resolve(members));
+
+      gt.getMember({}, 'b')
+        .then(result => {
+          assert.deepEqual(result, members[1]);
+          done();
+        })
+        .catch(done);
+    });
+
+  });
+
   describe('#getTeamId', function () {
 
     it('should return rejected promise if github return error', function (done) {
