@@ -46,12 +46,13 @@ export default function (options, imports) {
       }
 
       const getTeam = source.getTeam.bind(source);
+      const getMember = source.getMember.bind(source);
 
       if (!Array.isArray(pattern)) {
-        routes.push({ source: getTeam, pattern });
+        routes.push({ getTeam, getMember, pattern });
       } else {
         pattern.forEach(sourcePattern => {
-          routes.push({ source: getTeam, pattern: sourcePattern });
+          routes.push({ getTeam, getMember, pattern: sourcePattern });
         });
       }
 

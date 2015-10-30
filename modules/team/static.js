@@ -25,4 +25,8 @@ export default class StaticTeam {
     return Promise.resolve(members);
   }
 
+  getMember(pullRequest, login) {
+    return Promise.resolve(_.find(this.members, { login }));
+  }
+
 }
