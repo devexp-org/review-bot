@@ -2,70 +2,79 @@
 
 import Team from '../../team';
 
-describe('modules/team', function () {
+describe('modules/team', () => {
 
   const pull = {
     repository: { full_name: 'devexp-org/devexp' }
   };
 
-  it('should use the first matched route', function () {
-    const source1 = sinon.stub();
-    const source2 = sinon.stub();
-    const source3 = sinon.stub();
+  const methods = ['findByPullRequest', 'findTeamMemberByPullRequest'];
 
-    const routes = [
-      { pattern: 'otherorg-org/devexp', source: source1 },
-      { pattern: 'devexp-org/devexp', source: source2 },
-      { pattern: '*', source: source3 }
-    ];
+  methods.forEach(method => {
 
-    (new Team(routes)).findByPullRequest(pull);
+    describe('#' + method, () => {
+      let getData1;
+      let getData2;
+      let getData3;
 
-    assert.called(source2);
-    assert.notCalled(source1);
-    assert.notCalled(source3);
-  });
+      beforeEach(() => {
+        getData1 = sinon.stub();
+        getData2 = sinon.stub();
+        getData3 = sinon.stub();
+      });
 
-  it('should interpret "*" as "always match"', function () {
-    const source = sinon.stub();
+      it('should use the first matched route', () => {
+        const routes = [
+          { pattern: 'otherorg-org/devexp', getTeam: getData1, getMember: getData1 },
+          { pattern: 'devexp-org/devexp', getTeam: getData2, getMember: getData2 },
+          { pattern: '*', getTeam: getData3, getMember: getData3 }
+        ];
 
-    const routes = [
-      { pattern: '*', source: source }
-    ];
+        (new Team(routes))[method](pull);
 
-    new Team(routes).findByPullRequest(pull);
+        assert.called(getData2);
+        assert.notCalled(getData1);
+        assert.notCalled(getData3);
+      });
 
-    assert.called(source);
-  });
+      it('should interpret "*" as "always match"', () => {
+        const routes = [
+          { pattern: '*', getTeam: getData1, getMember: getData1 }
+        ];
 
-  it('should understand wildcard', function () {
-    const source = sinon.stub();
+        new Team(routes)[method](pull);
 
-    const routes = [
-      { pattern: 'devexp-*/*', source: source }
-    ];
+        assert.called(getData1);
+      });
 
-    new Team(routes).findByPullRequest(pull);
+      it('should understand wildcard', () => {
+        const routes = [
+          { pattern: 'devexp-*/*', getTeam: getData1, getMember: getData1 }
+        ];
 
-    assert.called(source);
-  });
+        new Team(routes)[method](pull);
 
-  it('should return an empty array if there are no matched routes', function () {
-    const source = sinon.stub();
+        assert.called(getData1);
+      });
 
-    const routes = [
-      { pattern: 'other-org/other-repo', source: source }
-    ];
+      it('should return an empty array if there are no matched routes', () => {
+        const routes = [
+          { pattern: 'other-org/other-repo', getTeam: getData1, getMember: getData1 }
+        ];
 
-    const team = new Team(routes).findByPullRequest(pull);
+        const team = new Team(routes)[method](pull);
 
-    assert.lengthOf(team, 0);
-    assert.notCalled(source);
-  });
+        assert.lengthOf(team, 0);
+        assert.notCalled(getData1);
+      });
 
-  it('should not throw an error if routes does not provied', function () {
-    const team = new Team();
-    assert.doesNotThrow(team.findByPullRequest.bind(team, pull));
+      it('should not throw an error if routes does not provied', () => {
+        const team = new Team();
+        assert.doesNotThrow(team[method].bind(team, pull));
+      });
+
+    });
+
   });
 
 });

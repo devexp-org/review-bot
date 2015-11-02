@@ -24,7 +24,26 @@ export default class Team {
       const route = this.routes[i];
 
       if (this.matchRoute(route.pattern, pullRequest)) {
-        return route.source(pullRequest);
+        return route.getTeam(pullRequest);
+      }
+    }
+
+    return [];
+  }
+
+  /**
+   *
+   * @param {PullRequest} pullRequest
+   * @param {String} login
+   *
+   * @return {Developer}
+   */
+  findTeamMemberByPullRequest(pullRequest, login) {
+    for (let i = 0; i < this.routes.length; i++) {
+      const route = this.routes[i];
+
+      if (this.matchRoute(route.pattern, pullRequest)) {
+        return route.getMember(pullRequest, login);
       }
     }
 

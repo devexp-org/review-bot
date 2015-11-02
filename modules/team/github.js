@@ -27,6 +27,12 @@ export default class GitHubTeam {
     }
   }
 
+  getMember(pullRequest, login) {
+    return this
+      .getTeam(pullRequest)
+      .then(team => _.find(team, { login }));
+  }
+
   getOrgMembers(orgName) {
     return new Promise((resolve, reject) => {
       const req = { org: orgName, per_page: 100 };
