@@ -3,6 +3,8 @@
 import util from 'util';
 import { find, reject } from 'lodash';
 
+const EVENT_NAME = 'review:command:busy';
+
 /**
  * Handle '/busy' command.
  *
@@ -13,44 +15,48 @@ import { find, reject } from 'lodash';
  */
 export default function busyCommand(command, payload) {
 
-  const action = payload.action;
-  const logger = payload.logger;
+  const { action, logger, events, pullRequest } = payload;
 
   logger.info(
     '"/busy" [%s – %s]',
-    payload.pullRequest.id,
-    payload.pullRequest.title
+    pullRequest.id,
+    pullRequest.title
   );
 
-  if (payload.pullRequest.state !== 'open') {
+  if (pullRequest.state !== 'open') {
     return Promise.reject(new Error(util.format(
       'Cannot change reviewer for closed pull request [%s – %s]',
-      payload.pullRequest.id,
-      payload.pullRequest.title
+      pullRequest.id,
+      pullRequest.title
     )));
   }
 
   const login = payload.comment.user.login;
-  const pullRequest = payload.pullRequest;
   const reviewer = find(pullRequest.review.reviewers, { login });
 
   if (reviewer) {
-    return payload.review.review(payload.pullRequest.id)
+    return payload.review.review(pullRequest.id)
       .then(result => {
         const candidate = result.team[0];
         const reviewers = reject(
-          payload.pullRequest.review.reviewers,
+          pullRequest.review.reviewers,
           { login: payload.comment.user.login }
         );
 
         reviewers.push(candidate);
 
-        return action.save({ reviewers: reviewers }, payload.pullRequest.id);
+        return action
+          .save({ reviewers: reviewers }, pullRequest.id)
+          .then(pullRequest => {
+            events.emit(EVENT_NAME, pullRequest);
+
+            return pullRequest;
+          });
       });
   } else {
     return Promise.reject(new Error(util.format(
       '%s tried to change reviewer, but he is not in reviewers list [%s – %s]',
-      login, pullRequest.id, payload.pullRequest.title
+      login, pullRequest.id, pullRequest.title
     )));
   }
 
