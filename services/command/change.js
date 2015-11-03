@@ -1,11 +1,19 @@
 'use strict';
 
 import util from 'util';
-import { find, reject } from 'lodash';
+import { find, reject, cloneDeep, isEmpty } from 'lodash';
 
 const EVENT_NAME = 'review:command:change';
 const COMMAND_REGEXP =
-  /(?:^|\W)\/?change\s+@?([-0-9a-z]+)\s+(?:to\s+)?@?([-0-9a-z]+)(?:\W|$)/;
+  /(?:^|\W)\/?change\s+@?([-0-9a-zA-Z]+)\s+(?:to\s+)?@?([-0-9a-zA-Z]+)(?:\W|$)/;
+
+export function getParticipant(command) {
+  const participant = command.match(COMMAND_REGEXP);
+
+  if (isEmpty(participant)) return {};
+
+  return { oldReviewerLogin: participant[1], newReviewerLogin: participant[2] };
+}
 
 /**
  * Handle '/change' command.
@@ -17,15 +25,21 @@ const COMMAND_REGEXP =
  */
 export default function changeCommand(command, payload) {
 
-  const team = payload.team;
-  const action = payload.action;
-  const logger = payload.logger;
-  const events = payload.events;
+  const {
+    team,
+    action,
+    logger,
+    events,
+    pullRequest
+  } = payload;
+
+  const { oldReviewerLogin, newReviewerLogin } = getParticipant(command);
 
   logger.info(
-    '"/change" [%s – %s]',
-    payload.pullRequest.id,
-    payload.pullRequest.title
+    '"/change" [%s – %s] %s',
+    pullRequest.id,
+    pullRequest.title,
+    pullRequest.html_url
   );
 
   if (payload.pullRequest.state !== 'open') {
@@ -36,10 +50,7 @@ export default function changeCommand(command, payload) {
     )));
   }
 
-  const pullRequest = payload.pullRequest;
-  const participant = command.match(COMMAND_REGEXP);
-
-  if (!participant) {
+  if (!oldReviewerLogin || !newReviewerLogin) {
     return Promise.reject(new Error(util.format(
       'Panic! Cannot parse user `change` command `%s` [%s – %s]',
       command,
@@ -47,9 +58,6 @@ export default function changeCommand(command, payload) {
       payload.pullRequest.title
     )));
   }
-
-  const oldReviewerLogin = participant[1];
-  const newReviewerLogin = participant[2];
 
   let reviewers = pullRequest.get('review.reviewers');
 
@@ -86,11 +94,9 @@ export default function changeCommand(command, payload) {
   }
 
   return team
-    .findByPullRequest(pullRequest)
-    .then(result => {
-      const newReviewer = find(result, { login: newReviewerLogin });
-
-      if (!newReviewer) {
+    .findTeamMemberByPullRequest(pullRequest, newReviewerLogin)
+    .then(([user]) => {
+      if (!user) {
         return Promise.reject(new Error(util.format(
           '%s tried to set %s, but there are no user with the same login in team',
           payload.comment.user.login,
@@ -98,12 +104,15 @@ export default function changeCommand(command, payload) {
         )));
       }
 
+      const newReviewer = cloneDeep(user);
+
       reviewers = reject(reviewers, { login: oldReviewerLogin });
       reviewers.push(newReviewer);
 
+      return action.save({ reviewers }, pullRequest.id);
+    }).then(pullRequest => {
       events.emit(EVENT_NAME, { pullRequest });
 
-      return action.save({ reviewers }, pullRequest.id);
+      return pullRequest;
     });
-
 }

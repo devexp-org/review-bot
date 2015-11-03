@@ -2,7 +2,7 @@ import { clone } from 'lodash';
 
 import command from '../add';
 import { getParticipant } from '../add';
-import { mockReviewers, mockTeam } from './mocks';
+import { mockReviewers } from './mocks';
 
 describe('services/command/add', () => {
   describe('#getParticipant', () => {
@@ -42,7 +42,7 @@ describe('services/command/add', () => {
 
     beforeEach(() => {
       pullRequest = { get: sinon.stub().returns(clone(mockReviewers)), id: 1 };
-      team = { findByPullRequest: sinon.stub().returns(Promise.resolve(mockTeam)) };
+      team = { findTeamMemberByPullRequest: sinon.stub().returns(Promise.resolve([{ login: 'Hawkeye' }])) };
       action = { save: sinon.stub().returns(Promise.resolve(pullRequest)) };
       events = { emit: sinon.stub() };
       logger = { info: sinon.stub() };
@@ -60,6 +60,8 @@ describe('services/command/add', () => {
     });
 
     it('should be rejected if no such user in team', done => {
+      team.findTeamMemberByPullRequest = sinon.stub().returns(Promise.resolve([]));
+
       command('/add Hulfk', payload).catch(() => done());
     });
 
