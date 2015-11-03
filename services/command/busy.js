@@ -48,7 +48,7 @@ export default function busyCommand(command, payload) {
         return action
           .save({ reviewers: reviewers }, pullRequest.id)
           .then(pullRequest => {
-            events.emit(EVENT_NAME, pullRequest);
+            events.emit(EVENT_NAME, { pullRequest });
 
             return pullRequest;
           });

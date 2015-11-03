@@ -40,7 +40,7 @@ export default function startCommand(command, payload) {
   return action
     .save({ status: 'inprogress' }, payload.pullRequest.id)
     .then(pullRequest => {
-      events.emit(EVENT_NAME, pullRequest);
+      events.emit(EVENT_NAME, { pullRequest });
 
       return pullRequest;
     });
