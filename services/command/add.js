@@ -1,5 +1,5 @@
 import util from 'util';
-import { find } from 'lodash';
+import { find, cloneDeep } from 'lodash';
 
 const COMMAND_REGEXP = new RegExp(
   '(?:^|\\W)' + '\\+@?([\\w]+)' + '(?:\\W|$)|' + // +username +@username
@@ -41,17 +41,18 @@ export default function addCommand(command, payload) {
     )));
   }
 
-  return team.findByPullRequest(pullRequest)
-    .then(team => {
-      newReviewer = find(team, { login: newReviewerLogin });
-
-      if (!newReviewer) {
+  return team
+    .findTeamMemberByPullRequest(pullRequest, newReviewerLogin)
+    .then(([user]) => {
+      if (!user) {
         return Promise.reject(new Error(util.format(
           '%s tried to set %s, but there are no user with the same login in team',
           payload.comment.user.login,
           newReviewerLogin
         )));
       }
+
+      const newReviewer = cloneDeep(user);
 
       reviewers.push(newReviewer);
 
