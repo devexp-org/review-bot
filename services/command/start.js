@@ -2,6 +2,8 @@
 
 import util from 'util';
 
+const EVENT_NAME = 'review:command:start';
+
 /**
  * Handle '/start' command.
  *
@@ -11,8 +13,7 @@ import util from 'util';
  * @return {Promise}
  */
 export default function startCommand(command, payload) {
-  const action = payload.action;
-  const logger = payload.logger;
+  const { action, logger, events } = payload;
 
   logger.info(
     '"/start" [%s – %s]',
@@ -36,6 +37,12 @@ export default function startCommand(command, payload) {
     )));
   }
 
-  return action.save({ status: 'inprogress' }, payload.pullRequest.id);
+  return action
+    .save({ status: 'inprogress' }, payload.pullRequest.id)
+    .then(pullRequest => {
+      events.emit(EVENT_NAME, pullRequest);
+
+      return pullRequest;
+    });
 
 }
