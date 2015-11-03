@@ -1,7 +1,48 @@
 'use strict';
 
 import util from 'util';
-import { find } from 'lodash';
+import { find, cloneDeep } from 'lodash';
+
+const EVENT_NAME_NEW_REVIEWER = 'review:command:ok:new_reviewer';
+
+/**
+ * Add new reviewer with already approved status.
+ *
+ * @param {Object} payload - github webhook payload.
+ * @param {String} login
+ *
+ * @return {Promise}
+ */
+export function addNewReviewerAndApprove(payload, login) {
+  const { action, pullRequest, team, events } = payload;
+
+  return team
+    .findTeamMemberByPullRequest(pullRequest, login)
+    .then(([user]) => {
+      if (!user) {
+        return Promise.reject(new Error(util.format(
+          '%s tried to approve review, but there isn`t a user with the same login in team [%s – %s] %s',
+          login,
+          pullRequest.id,
+          pullRequest.title,
+          pullRequest.html_url
+        )));
+      }
+
+      const newReviewer = cloneDeep(user);
+      const reviewers = pullRequest.get('review.reviewers');
+
+      reviewers.push(newReviewer);
+
+      return action.save({ reviewers }, pullRequest.id);
+    })
+    .then(pullRequest => action.approveReview(login, pullRequest.id))
+    .then(pullRequest => {
+      events.emit(EVENT_NAME_NEW_REVIEWER, { pullRequest });
+
+      return pullRequest;
+    });
+}
 
 /**
  * Handle '/ok' command.
@@ -12,29 +53,20 @@ import { find } from 'lodash';
  * @return {Promise}
  */
 export default function okCommand(command, payload) {
-
-  const action = payload.action;
-  const logger = payload.logger;
+  const { action, logger, pullRequest, comment } = payload;
+  const login = comment.user.login;
+  const reviewer = find(pullRequest.review.reviewers, { login });
 
   logger.info(
-    '"/ok" [%s – %s]',
-    payload.pullRequest.id,
-    payload.pullRequest.title
+    '"/ok" [%s – %s] %s',
+    pullRequest.id,
+    pullRequest.title,
+    pullRequest.html_url
   );
-
-  const login = payload.comment.user.login;
-  const pullRequest = payload.pullRequest;
-  const reviewer = find(pullRequest.review.reviewers, { login });
 
   if (reviewer) {
     return action.approveReview(login, pullRequest.id);
   } else {
-    return Promise.reject(new Error(util.format(
-      '%s tried to approve review, but he is not in reviewers list [%s – %s]',
-      login,
-      pullRequest.id,
-      payload.pullRequest.title
-    )));
+    return addNewReviewerAndApprove(payload, login);
   }
-
 }
