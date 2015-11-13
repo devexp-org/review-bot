@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import CommandDispatcher from '../modules/command';
 
-export const constructRegexp = commandRegexp => new RegExp('(^|\\b|\\s?)(' + commandRegexp + ')(?=\\s|$)', 'i');
+export const constructRegexp = commandRegexp => new RegExp('(^|\\b|\\W|\\s)(' + commandRegexp + ')(?=\\s|$)', 'i');
 
 export default function (options, imports) {
 

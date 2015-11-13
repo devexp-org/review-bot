@@ -16,6 +16,16 @@ const EVENT_NAME_NEW_REVIEWER = 'review:command:ok:new_reviewer';
 export function addNewReviewerAndApprove(payload, login) {
   const { action, pullRequest, team, events } = payload;
 
+  if (payload.pullRequest.state !== 'open') {
+    return Promise.reject(new Error(util.format(
+      '%s cannot approve review for closed pull request [%s – %s] %s',
+      login,
+      payload.pullRequest.id,
+      payload.pullRequest.title,
+      pullRequest.html_url
+    )));
+  }
+
   return team
     .findTeamMemberByPullRequest(pullRequest, login)
     .then(([user]) => {

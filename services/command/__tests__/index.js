@@ -12,6 +12,12 @@ function makeCommonCases(command) {
   ];
 }
 
+function makeNegativeCases(command) {
+  return [
+    `Lorem ipsum dolor sit amet${command}`
+  ];
+}
+
 describe('service/command#constructRegexp', () => {
   const testCases = [
     {
@@ -24,7 +30,12 @@ describe('service/command#constructRegexp', () => {
         makeCommonCases('/ok'), makeCommonCases('ok'),
         makeCommonCases('/ок'), makeCommonCases('ок')
       ),
-      negative: [].concat(makeCommonCases('/!ok'), makeCommonCases('!ok'))
+      negative: [].concat(
+        makeCommonCases('/!ok'),
+        makeCommonCases('!ok'),
+        makeNegativeCases('ok'),
+        makeNegativeCases('ок')
+      )
     },
     {
       test: '\/?!ok|\/?!ок$$',
@@ -51,7 +62,8 @@ describe('service/command#constructRegexp', () => {
       positive: [].concat(
         makeCommonCases('/ping'),
         makeCommonCases('ping')
-      )
+      ),
+      negative: makeNegativeCases('ping')
     }
   ];
 
