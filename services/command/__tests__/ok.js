@@ -8,7 +8,7 @@ describe('services/command/ok', () => {
     let action, pullRequest, team, events, payload;
 
     beforeEach(() => {
-      pullRequest = { get: sinon.stub().returns(clone(mockReviewers)), id: 1 };
+      pullRequest = { state: 'open', get: sinon.stub().returns(clone(mockReviewers)), id: 1 };
       team = { findTeamMemberByPullRequest: sinon.stub().returns(Promise.resolve([{ login: 'Hawkeye' }])) };
       events = { emit: sinon.stub() };
 
@@ -23,6 +23,12 @@ describe('services/command/ok', () => {
       };
 
       payload = { pullRequest, action, team, events };
+    });
+
+    it('should be rejected if pull request is not open', done => {
+      pullRequest.state = 'closed';
+
+      addNewReviewerAndApprove(payload, 'Hulk').catch(() => done());
     });
 
     it('should be rejected if there is no user with given login in team', done => {
