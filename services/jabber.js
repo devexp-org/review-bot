@@ -18,7 +18,6 @@ export default function (options, imports) {
     });
   };
 
-
   // Ignore promise and don't wait until client goes online.
   service.connect();
 

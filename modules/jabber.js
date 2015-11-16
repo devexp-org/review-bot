@@ -82,7 +82,7 @@ export default class Jabber {
 
     do {
       const message = this._queue.shift();
-      this.sendMessage(message.to, message.body);
+      this._send(message.to, message.body);
     } while (this._queue.length > 0);
   }
 
@@ -99,16 +99,14 @@ export default class Jabber {
 
   /**
    * Send a message to to a specific person.
+   * If client goes offline, stores message in queue.
    *
    * @param {String} to - user jid
    * @param {String} body - message body
    */
   send(to, body) {
     if (this._client && this._online) {
-      const stanza = new ltx.Element('message', { to: to, type: 'chat' })
-        .c('body').t(body);
-
-      this._client.send(stanza);
+      this._send(to, body);
     } else {
       this._queue.push({ to, body });
 
@@ -116,6 +114,20 @@ export default class Jabber {
         this._queue = this._queue.slice(-this.maxQueue);
       }
     }
+  }
+
+  /**
+   * Send a message to to a specific person.
+   *
+   * @param {String} to - user jid
+   * @param {String} body - message body
+   */
+  _send(to, body) {
+    const stanza = new ltx.Element('message', { to: to, type: 'chat' })
+      .c('body')
+      .t(body);
+
+    this._client.send(stanza);
   }
 
 }

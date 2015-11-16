@@ -11,11 +11,16 @@ const application = new Application(appConfig, basePath);
 // `catch` only needed to catch errors during application startup
 application
   .execute()
-  .catch(function (error) {
+  .catch(error => {
     console.error(error.stack ? error.stack : error);
     process.exit(1);
   });
 
-process.on('exit', function () {
-  application.shutdown();
+process.on('SIGINT', () => {
+  application
+    .shutdown()
+    .catch(error => {
+      console.error(error.stack ? error.stack : error);
+      process.exit(1);
+    });
 });
