@@ -3,45 +3,52 @@
 import util from 'util';
 import { find } from 'lodash';
 
-/**
- * Handle '/!ok' command.
- *
- * @param {String} command - line with user command.
- * @param {Object} payload - github webhook payload.
- *
- * @return {Promise}
- */
-export default function notOkCommand(command, payload) {
+const EVENT_NAME = 'review:command:not_ok';
 
-  const action = payload.action;
-  const logger = payload.logger;
+export default function commandService(options, imports) {
 
-  logger.info(
-    '"/!ok" [%s – %s]',
-    payload.pullRequest.id,
-    payload.pullRequest.title
-  );
+  const { action, logger, events } = imports;
 
-  const login = payload.comment.user.login;
-  const pullRequest = payload.pullRequest;
-  const reviewers = pullRequest.get('review.reviewers');
-  const actor = find(reviewers, { login });
+  /**
+   * Handle '/!ok' command.
+   *
+   * @param {String} command - line with user command.
+   * @param {Object} payload - github webhook payload.
+   *
+   * @return {Promise}
+   */
+  const notOkCommand = function notOkCommand(command, payload) {
 
-  let status = pullRequest.review.status;
+    const login = payload.comment.user.login;
+    const pullRequest = payload.pullRequest;
+    const reviewers = pullRequest.get('review.reviewers');
+    const commenter = find(reviewers, { login });
 
-  if (actor) {
-    actor.approved = false;
-    if (status === 'complete') {
-      status = 'inprogress';
+    logger.info('"/!ok" [%s – %s]', pullRequest.number, pullRequest.title);
+
+    let status = pullRequest.review.status;
+
+    if (commenter) {
+      commenter.approved = false;
+
+      if (status === 'complete') {
+        status = 'notstarted';
+      }
+
+      return action
+        .save({ reviewers, status }, pullRequest.id)
+        .then(pullRequest => {
+          events.emit(EVENT_NAME, { pullRequest });
+        });
+
+    } else {
+      return Promise.reject(new Error(util.format(
+        '%s tried to cancel approve, but he is not in reviewers list [%s – %s]',
+        login, pullRequest.id, payload.pullRequest.title
+      )));
     }
-    return action
-      .save({ reviewers: reviewers, status: status }, payload.pullRequest.id)
-      .then(null, logger.error.bind(logger));
-  } else {
-    return Promise.reject(new Error(util.format(
-      '%s tried to cancel approve, but he is not in reviewers list [%s – %s]',
-      login, pullRequest.id, payload.pullRequest.title
-    )));
-  }
 
+  };
+
+  return Promise.resolve({ service: notOkCommand });
 }

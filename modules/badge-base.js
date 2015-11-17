@@ -1,3 +1,5 @@
+'use strict';
+
 export default class BadgeBase {
 
   /**
@@ -34,13 +36,14 @@ export default class BadgeBase {
    * @return {String} img or a tag with propper url and img src.
    */
   create(subject, status, color = 'lightgrey', url) {
-    if (!subject) throw new Error('Badge should have subject!');
-    if (!status) throw new Error('Badge should have status!');
+    if (!subject) throw new Error('Badge should have a subject!');
+    if (!status) throw new Error('Badge should have a status!');
 
     status = this._escape(status);
     subject = this._escape(subject);
 
-    const img = `<img src="${this.url}${subject}-${status}-${color}.svg" />`;
+    const src = encodeURIComponent(`${subject}-${status}-${color}`);
+    const img = `<img src="${this.url}${src}.svg" />`;
 
     if (url) {
       return `<a href="${url}">${img}</a>`;

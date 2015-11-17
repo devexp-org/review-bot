@@ -12,107 +12,102 @@ export function getParticipant(command) {
 
   if (isEmpty(participant)) return {};
 
-  return { oldReviewerLogin: participant[1], newReviewerLogin: participant[2] };
+  return {
+    oldReviewerLogin: participant[1],
+    newReviewerLogin: participant[2]
+  };
 }
 
-/**
- * Handle '/change' command.
- *
- * @param {String} command - line with user command.
- * @param {Object} payload - github webhook payload.
- *
- * @return {Promise}
- */
-export default function changeCommand(command, payload) {
+export default function commandService(options, imports) {
+  const { team, action, logger, events } = imports;
 
-  const {
-    team,
-    action,
-    logger,
-    events,
-    pullRequest
-  } = payload;
+  /**
+   * Handle '/change' command.
+   *
+   * @param {String} command - line with user command.
+   * @param {Object} payload - github webhook payload.
+   *
+   * @return {Promise}
+   */
+  const changeCommand = function changeCommand(command, payload) {
 
-  const { oldReviewerLogin, newReviewerLogin } = getParticipant(command);
+    const pullRequest = payload.pullRequest;
+    const { oldReviewerLogin, newReviewerLogin } = getParticipant(command);
 
-  logger.info(
-    '"/change" [%s – %s] %s',
-    pullRequest.id,
-    pullRequest.title,
-    pullRequest.html_url
-  );
+    logger.info('"/change" [%s – %s]', pullRequest.number, pullRequest.title);
 
-  if (payload.pullRequest.state !== 'open') {
-    return Promise.reject(new Error(util.format(
-      'Cannot change reviewer for closed pull request [%s – %s]',
-      payload.pullRequest.id,
-      payload.pullRequest.title
-    )));
-  }
+    if (pullRequest.state !== 'open') {
+      return Promise.reject(new Error(util.format(
+        'Cannot change reviewer for closed pull request [%s – %s]',
+        pullRequest.id,
+        pullRequest.title
+      )));
+    }
 
-  if (!oldReviewerLogin || !newReviewerLogin) {
-    return Promise.reject(new Error(util.format(
-      'Panic! Cannot parse user `change` command `%s` [%s – %s]',
-      command,
-      payload.pullRequest.id,
-      payload.pullRequest.title
-    )));
-  }
+    if (!oldReviewerLogin || !newReviewerLogin) {
+      return Promise.reject(new Error(util.format(
+        'Panic! Cannot parse user `change` command `%s` [%s – %s]',
+        command,
+        payload.pullRequest.id,
+        payload.pullRequest.title
+      )));
+    }
 
-  let reviewers = pullRequest.get('review.reviewers');
+    let reviewers = pullRequest.get('review.reviewers');
 
-  if (pullRequest.user.login !== payload.comment.user.login) {
-    return Promise.reject(new Error(util.format(
-      '%s tried to change reviewer, but author is %s',
-      payload.comment.user.login,
-      pullRequest.user.login
-    )));
-  }
+    if (pullRequest.user.login !== payload.comment.user.login) {
+      return Promise.reject(new Error(util.format(
+        '%s tried to change reviewer, but author is %s',
+        payload.comment.user.login,
+        pullRequest.user.login
+      )));
+    }
 
-  if (!find(reviewers, { login: oldReviewerLogin })) {
-    return Promise.reject(new Error(util.format(
-      '%s tried to change reviewer %s but he is not in reviewers list',
-      payload.comment.user.login,
-      oldReviewerLogin
-    )));
-  }
+    if (!find(reviewers, { login: oldReviewerLogin })) {
+      return Promise.reject(new Error(util.format(
+        '%s tried to change reviewer %s but he is not in reviewers list',
+        payload.comment.user.login,
+        oldReviewerLogin
+      )));
+    }
 
-  if (find(reviewers, { login: newReviewerLogin })) {
-    return Promise.reject(new Error(util.format(
-      '%s tried to change reviewer %s to %s but he is already in reviewers list',
-      payload.comment.user.login,
-      oldReviewerLogin,
-      newReviewerLogin
-    )));
-  }
+    if (find(reviewers, { login: newReviewerLogin })) {
+      return Promise.reject(new Error(util.format(
+        '%s tried to change reviewer %s to %s but he is already in reviewers list',
+        payload.comment.user.login,
+        oldReviewerLogin,
+        newReviewerLogin
+      )));
+    }
 
-  if (newReviewerLogin === pullRequest.user.login) {
-    return Promise.reject(new Error(util.format(
-      '%s cannot set himself as reviewer',
-      newReviewerLogin
-    )));
-  }
+    if (newReviewerLogin === pullRequest.user.login) {
+      return Promise.reject(new Error(util.format(
+        '%s cannot set himself as reviewer',
+        newReviewerLogin
+      )));
+    }
 
-  return team
-    .findTeamMemberByPullRequest(pullRequest, newReviewerLogin)
-    .then((user) => {
-      if (!user) {
-        return Promise.reject(new Error(util.format(
-          '%s tried to set %s, but there are no user with the same login in team',
-          payload.comment.user.login,
-          newReviewerLogin
-        )));
-      }
+    return team
+      .findTeamMemberByPullRequest(pullRequest, newReviewerLogin)
+      .then(user => {
+        if (!user) {
+          return Promise.reject(new Error(util.format(
+            '%s tried to set %s, but there are no user with the same login in team',
+            payload.comment.user.login,
+            newReviewerLogin
+          )));
+        }
 
-      const newReviewer = cloneDeep(user);
+        const newReviewer = cloneDeep(user);
 
-      reviewers = reject(reviewers, { login: oldReviewerLogin });
-      reviewers.push(newReviewer);
+        reviewers = reject(reviewers, { login: oldReviewerLogin });
+        reviewers.push(newReviewer);
 
-      return action.save({ reviewers }, pullRequest.id);
-    }).then(pullRequest => {
-      events.emit(EVENT_NAME, { pullRequest });
+        return action.save({ reviewers }, pullRequest.id);
+      }).then(pullRequest => {
+        events.emit(EVENT_NAME, { pullRequest });
+      });
+  };
 
-      return pullRequest;
-    });
+  return Promise.resolve({ service: changeCommand });
 }

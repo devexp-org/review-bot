@@ -1,11 +1,13 @@
 import { clone } from 'lodash';
 
-import command from '../add';
+import service from '../add';
 import { getParticipant } from '../add';
 import { mockReviewers } from './mocks';
 
 describe('services/command/add', () => {
+
   describe('#getParticipant', () => {
+
     it('should get participant from command like /add @username', () => {
       assert.equal(getParticipant('/add @username'), 'username');
       assert.equal(getParticipant('Text \n/add @username\nOther text'), 'username');
@@ -32,6 +34,7 @@ describe('services/command/add', () => {
   });
 
   describe('#addCommand', () => {
+    let command;
     let pullRequest;
     let payload;
     let action;
@@ -41,8 +44,11 @@ describe('services/command/add', () => {
     let comment;
 
     beforeEach(() => {
-      pullRequest = { get: sinon.stub().returns(clone(mockReviewers)), id: 1 };
-      team = { findTeamMemberByPullRequest: sinon.stub().returns(Promise.resolve({ login: 'Hawkeye' })) };
+      team = {
+        findTeamMemberByPullRequest: sinon.stub().returns(
+          Promise.resolve({ login: 'Hawkeye' })
+        )
+      };
       action = { save: sinon.stub().returns(Promise.resolve(pullRequest)) };
       events = { emit: sinon.stub() };
       logger = { info: sinon.stub() };
@@ -51,8 +57,16 @@ describe('services/command/add', () => {
           login: 'd4rkr00t'
         }
       };
+      pullRequest = {
+        id: 1,
+        get: sinon.stub().returns(clone(mockReviewers))
+      };
 
-      payload = { pullRequest, action, events, logger, team, comment };
+      command = function (comment, payload) {
+        return service({}, { team, action, logger, events })
+          .then(resolved => resolved.service(comment, payload));
+      };
+      payload = { pullRequest, comment };
     });
 
     it('should be rejected if user is already in reviewers list', done => {
@@ -77,12 +91,14 @@ describe('services/command/add', () => {
       }, done);
     });
 
-    it('should emmit `review:command:add` event', done => {
+    it('should emit `review:command:add` event', done => {
       command('/add Hawkeye', payload).then(() => {
         assert.calledWith(events.emit, 'review:command:add');
 
         done();
       }, done);
     });
+
   });
+
 });

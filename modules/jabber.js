@@ -39,6 +39,7 @@ export default class Jabber {
     const client = new Client({
       jid: this.auth.login,
       password: this.auth.password,
+      autostart: false,
       reconnect: true
     });
 
@@ -68,6 +69,10 @@ export default class Jabber {
         this.info('Incoming message: ' + stanza.toString());
       });
 
+      client.connect();
+
+      // keep-alive
+      setInterval(() => { client.send(' '); }, 30000);
     });
 
   }

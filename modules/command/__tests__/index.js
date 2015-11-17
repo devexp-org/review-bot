@@ -12,19 +12,16 @@ describe('modules/command', () => {
   });
 
   describe('#dispatch', () => {
-    const payload = { pullRequest: { id: 123 }, logger: { error: sinon.stub() } };
+    const payload = {};
     const comment = 'first line\n/fireball\nthird line';
 
-    let h1;
-    let h2;
-    let h3;
-    let h4;
+    let h1, h2, h3, h4;
 
     beforeEach(() => {
-      h1 = sinon.stub().returns(Promise.resolve(payload.pullRequest));
-      h2 = sinon.stub().returns(Promise.resolve(payload.pullRequest));
-      h3 = sinon.stub().returns(Promise.resolve(payload.pullRequest));
-      h4 = sinon.stub().returns(Promise.reject('Error'));
+      h1 = sinon.stub().returns(Promise.resolve());
+      h2 = sinon.stub().returns(Promise.resolve());
+      h3 = sinon.stub().returns(Promise.resolve());
+      h4 = sinon.stub().returns(Promise.reject(new Error()));
     });
 
     it('should dispatch each line of user comment to each command', done => {
@@ -66,28 +63,6 @@ describe('modules/command', () => {
       dispatcher.dispatch(comment, payload).catch(() => done());
     });
 
-    it('should pass updated pull request for next command', done => {
-      const pullRequestUpdated = { id: 123, updated: true };
-      const h5 = sinon.stub().returns(Promise.resolve(pullRequestUpdated));
-      const h6 = (comment, payload) => {
-        assert.equal(payload.pullRequest, pullRequestUpdated);
-        done();
-      };
-      const store = [
-        {
-          test: /.*/,
-          handlers: [h5]
-        },
-        {
-          test: /\/fireball/,
-          handlers: [h6]
-        }
-      ];
-
-      const dispatcher = new CommandDispatcher(store);
-
-      dispatcher.dispatch(comment, payload).catch(done);
-    });
   });
 
 });

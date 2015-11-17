@@ -214,7 +214,7 @@
         "commands": [
           {
             "test": "\/start",
-            "handlers": ["./services/command/start"]
+            "handlers": ["command-start"]
           },
           {
             "test": "\/stop",
@@ -222,37 +222,114 @@
           },
           {
             "test": "\/?ping",
-            "handlers": ["./services/command/ping"]
+            "handlers": ["command-ping"]
           },
           {
             "test": "\/?([^!]|^)ok|\/?([^!]|^)ок",
-            "handlers": ["./services/command/ok"]
+            "handlers": ["command-ok"]
           },
           {
             "test": "\/?!ok|\/?!ок$$",
-            "handlers": ["./services/command/not_ok"]
+            "handlers": ["command-not-ok"]
           },
           {
             "test": "\/busy",
-            "handlers": ["./services/command/busy"]
+            "handlers": ["command-busy"]
           },
           {
             "test": "\/change",
-            "handlers": ["./services/command/change"]
+            "handlers": ["command-change"]
           },
           {
             "test": "\/add|\\+@?[\\w]+",
-            "handlers": ["./services/command/add"]
+            "handlers": ["command-add"]
           }
         ]
       },
       "dependencies": [
+        "queue",
+        "model",
         "events",
         "logger",
-        "choose-team",
-        "choose-reviewer",
-        "pull-request-action"
+        "command-start",
+        "command-ping",
+        "command-ok",
+        "command-not-ok",
+        "command-busy",
+        "command-change",
+        "command-add"
       ]
+    },
+
+    "command-add": {
+      "path": "./services/command/add",
+      "dependencies": {
+        "team": "choose-team",
+        "action": "pull-request-action",
+        "logger": "logger",
+        "events": "events"
+      }
+    },
+
+    "command-busy": {
+      "path": "./services/command/busy",
+      "dependencies": {
+        "team": "choose-team",
+        "review": "choose-reviewer",
+        "action": "pull-request-action",
+        "logger": "logger",
+        "events": "events"
+      }
+    },
+
+    "command-change": {
+      "path": "./services/command/change",
+      "dependencies": {
+        "team": "choose-team",
+        "action": "pull-request-action",
+        "logger": "logger",
+        "events": "events"
+      }
+    },
+
+    "command-not-ok": {
+      "path": "./services/command/not_ok",
+      "dependencies": {
+        "action": "pull-request-action",
+        "logger": "logger",
+        "events": "events"
+      }
+    },
+
+    "command-ok": {
+      "path": "./services/command/ok",
+      "dependencies": {
+        "team": "choose-team",
+        "action": "pull-request-action",
+        "logger": "logger",
+        "events": "events"
+      }
+    },
+
+    "command-ping": {
+      "path": "./services/command/ping",
+      "dependencies": {
+        "logger": "logger",
+        "events": "events"
+      }
+    },
+
+    "command-start": {
+      "path": "./services/command/start",
+      "dependencies": {
+        "action": "pull-request-action",
+        "logger": "logger",
+        "events": "events"
+      }
+    },
+
+    "queue": {
+      "path": "./services/queue"
     },
 
     "pull-request-body-queue": {
