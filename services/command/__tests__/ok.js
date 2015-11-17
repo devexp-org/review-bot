@@ -9,7 +9,7 @@ describe('services/command/ok', () => {
 
     beforeEach(() => {
       pullRequest = { state: 'open', get: sinon.stub().returns(clone(mockReviewers)), id: 1 };
-      team = { findTeamMemberByPullRequest: sinon.stub().returns(Promise.resolve([{ login: 'Hawkeye' }])) };
+      team = { findTeamMemberByPullRequest: sinon.stub().returns(Promise.resolve({ login: 'Hawkeye' })) };
       events = { emit: sinon.stub() };
 
       action = {
@@ -32,7 +32,7 @@ describe('services/command/ok', () => {
     });
 
     it('should be rejected if there is no user with given login in team', done => {
-      team.findTeamMemberByPullRequest = sinon.stub().returns(Promise.resolve([]));
+      team.findTeamMemberByPullRequest = sinon.stub().returns(Promise.resolve(null));
 
       addNewReviewerAndApprove(payload, 'Hulk').catch(() => done());
     });

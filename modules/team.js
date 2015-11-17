@@ -47,7 +47,7 @@ export default class Team {
       }
     }
 
-    return [];
+    return null;
   }
 
   matchRoute(pattern, pullRequest) {

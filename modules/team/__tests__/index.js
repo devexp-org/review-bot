@@ -10,18 +10,19 @@ describe('modules/team', () => {
 
   const methods = ['findByPullRequest', 'findTeamMemberByPullRequest'];
 
+  let getData1;
+  let getData2;
+  let getData3;
+
+  beforeEach(() => {
+    getData1 = sinon.stub();
+    getData2 = sinon.stub();
+    getData3 = sinon.stub();
+  });
+
   methods.forEach(method => {
 
-    describe('#' + method, () => {
-      let getData1;
-      let getData2;
-      let getData3;
-
-      beforeEach(() => {
-        getData1 = sinon.stub();
-        getData2 = sinon.stub();
-        getData3 = sinon.stub();
-      });
+    describe('#' + method + ' common', () => {
 
       it('should use the first matched route', () => {
         const routes = [
@@ -57,17 +58,6 @@ describe('modules/team', () => {
         assert.called(getData1);
       });
 
-      it('should return an empty array if there are no matched routes', () => {
-        const routes = [
-          { pattern: 'other-org/other-repo', getTeam: getData1, getMember: getData1 }
-        ];
-
-        const team = new Team(routes)[method](pull);
-
-        assert.lengthOf(team, 0);
-        assert.notCalled(getData1);
-      });
-
       it('should not throw an error if routes does not provied', () => {
         const team = new Team();
         assert.doesNotThrow(team[method].bind(team, pull));
@@ -75,6 +65,32 @@ describe('modules/team', () => {
 
     });
 
+  });
+
+  describe('#findByPullRequest', () => {
+    it('should return an empty array if there are no matched routes', () => {
+      const routes = [
+        { pattern: 'other-org/other-repo', getTeam: getData1, getMember: getData1 }
+      ];
+
+      const team = new Team(routes).findByPullRequest(pull);
+
+      assert.lengthOf(team, 0);
+      assert.notCalled(getData1);
+    });
+  });
+
+  describe('#findTeamMemberByPullRequest', () => {
+    it('should return an null if there are no matched routes', () => {
+      const routes = [
+        { pattern: 'other-org/other-repo', getTeam: getData1, getMember: getData1 }
+      ];
+
+      const team = new Team(routes).findTeamMemberByPullRequest(pull);
+
+      assert.isNull(team);
+      assert.notCalled(getData1);
+    });
   });
 
 });

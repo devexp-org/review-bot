@@ -43,7 +43,7 @@ export default function addCommand(command, payload) {
 
   return team
     .findTeamMemberByPullRequest(pullRequest, newReviewerLogin)
-    .then(([user]) => {
+    .then((user) => {
       if (!user) {
         return Promise.reject(new Error(util.format(
           '%s tried to set %s, but there are no user with the same login in team',
