@@ -28,7 +28,7 @@ export function addNewReviewerAndApprove(payload, login) {
 
   return team
     .findTeamMemberByPullRequest(pullRequest, login)
-    .then(([user]) => {
+    .then((user) => {
       if (!user) {
         return Promise.reject(new Error(util.format(
           '%s tried to approve review, but there isn`t a user with the same login in team [%s – %s] %s',

@@ -42,7 +42,7 @@ describe('services/command/add', () => {
 
     beforeEach(() => {
       pullRequest = { get: sinon.stub().returns(clone(mockReviewers)), id: 1 };
-      team = { findTeamMemberByPullRequest: sinon.stub().returns(Promise.resolve([{ login: 'Hawkeye' }])) };
+      team = { findTeamMemberByPullRequest: sinon.stub().returns(Promise.resolve({ login: 'Hawkeye' })) };
       action = { save: sinon.stub().returns(Promise.resolve(pullRequest)) };
       events = { emit: sinon.stub() };
       logger = { info: sinon.stub() };
@@ -60,7 +60,7 @@ describe('services/command/add', () => {
     });
 
     it('should be rejected if no such user in team', done => {
-      team.findTeamMemberByPullRequest = sinon.stub().returns(Promise.resolve([]));
+      team.findTeamMemberByPullRequest = sinon.stub().returns(Promise.resolve(null));
 
       command('/add Hulfk', payload).catch(() => done());
     });

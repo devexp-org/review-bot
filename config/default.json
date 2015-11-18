@@ -217,6 +217,10 @@
             "handlers": ["./services/command/start"]
           },
           {
+            "test": "\/stop",
+            "handlers": ["./services/command/stop"]
+          },
+          {
             "test": "\/?ping",
             "handlers": ["./services/command/ping"]
           },

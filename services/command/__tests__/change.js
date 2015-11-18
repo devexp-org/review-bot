@@ -47,7 +47,7 @@ describe('services/command/change', () => {
           user: { login: 'd4rkr00t' },
           state: 'open'
         };
-        team = { findTeamMemberByPullRequest: sinon.stub().returns(Promise.resolve([{ login: 'Spider-Man' }])) };
+        team = { findTeamMemberByPullRequest: sinon.stub().returns(Promise.resolve({ login: 'Spider-Man' })) };
         action = {
           save(reviewers) {
             pullRequest.review = reviewers;
@@ -95,7 +95,7 @@ describe('services/command/change', () => {
       });
 
       it('should be rejected if new reviewer is not in team', done => {
-        team.findTeamMemberByPullRequest = sinon.stub().returns(Promise.resolve([]));
+        team.findTeamMemberByPullRequest = sinon.stub().returns(Promise.resolve(null));
 
         command('/change Thor to blablabla', payload).catch(() => done());
       });
