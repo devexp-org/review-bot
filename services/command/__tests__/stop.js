@@ -1,20 +1,35 @@
-import command from '../stop';
+import service from '../stop';
 
 describe('services/command/stop', () => {
-  let payload;
+  let action, pullRequest, team, events, payload;
+  let logger;
+  let comment;
+  let command;
 
   beforeEach(() => {
-    payload = {
-      pullRequest: {
-        state: 'open',
-        user: { login: 'd4rkr00t' },
-        review: { status: 'inprogress' }
-      },
-      action: { save: sinon.stub().returns(Promise.resolve()) },
-      comment: { user: { login: 'd4rkr00t' } },
-      events: { emit: sinon.stub() },
-      logger: { info: sinon.stub() }
+    events = { emit: sinon.stub() };
+    logger = { info: sinon.stub() };
+
+    pullRequest = {
+      state: 'open',
+      user: { login: 'd4rkr00t' },
+      review: { status: 'inprogress' }
     };
+
+    comment = { user: { login: 'd4rkr00t' } };
+
+    action = {
+      save: sinon.stub().returns(Promise.resolve(pullRequest)),
+
+      approveReview: sinon.stub().returns(Promise.resolve(pullRequest))
+    };
+
+    command = function (comment, payload) {
+      return service({}, { action, team, events, logger })
+        .then(resolved => resolved.service(comment, payload));
+    };
+
+    payload = { pullRequest, comment };
   });
 
   it('should be rejected if pr is closed', done => {
@@ -35,7 +50,7 @@ describe('services/command/stop', () => {
   it('should trigger review:command:stop event', done => {
     command('', payload)
       .then(() => {
-        assert.calledWith(payload.events.emit, 'review:command:stop');
+        assert.calledWith(events.emit, 'review:command:stop');
         done();
       })
       .catch(done);

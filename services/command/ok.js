@@ -20,19 +20,21 @@ export default function commandService(options, imports) {
    */
   const okCommand = function okCommand(command, payload) {
 
-    const { pullRequest, comment } = payload;
-    const login = comment.user.login;
+    const login = payload.comment.user.login;
+    const pullRequest = payload.pullRequest;
     const reviewer = find(pullRequest.get('review.reviewers'), { login });
 
-    logger.info('"/ok" [%s – %s] %s', pullRequest.number, pullRequest.title);
+    logger.info(
+      '"/ok" [%s – %s] %s',
+      pullRequest.number,
+      pullRequest.title,
+      pullRequest.html_url
+    );
 
     if (pullRequest.state !== 'open') {
       return Promise.reject(new Error(util.format(
         '%s cannot approve review for closed pull request [%s – %s] %s',
-        login,
-        payload.pullRequest.id,
-        payload.pullRequest.title,
-        pullRequest.html_url
+        login, pullRequest.number, pullRequest.title, pullRequest.html_url
       )));
     }
 
@@ -50,7 +52,7 @@ export default function commandService(options, imports) {
             return Promise.reject(new Error(util.format(
               '%s tried to approve review, but there isn`t a user with the same login in team [%s – %s] %s',
               login,
-              pullRequest.id,
+              pullRequest.number,
               pullRequest.title,
               pullRequest.html_url
             )));

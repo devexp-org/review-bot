@@ -328,6 +328,15 @@
       }
     },
 
+    "command-stop": {
+      "path": "./services/command/stop",
+      "dependencies": {
+        "action": "pull-request-action",
+        "logger": "logger",
+        "events": "events"
+      }
+    },
+
     "queue": {
       "path": "./services/queue"
     },

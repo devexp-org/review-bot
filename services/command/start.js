@@ -19,13 +19,18 @@ export default function commandService(options, imports) {
   const startCommand = function startCommand(command, payload) {
     const pullRequest = payload.pullRequest;
 
-    logger.info('"/start" [%s – %s]', pullRequest.number, pullRequest.title);
+    logger.info(
+      '"/start" [%s – %s] %s',
+      pullRequest.number,
+      pullRequest.title,
+      pullRequest.html_url
+    );
 
     if (pullRequest.state !== 'open') {
       return Promise.reject(new Error(util.format(
         'Cannot start review for closed pull request [%s – %s]',
-        payload.pullRequest.id,
-        payload.pullRequest.title
+        pullRequest.id,
+        pullRequest.title
       )));
     }
 
