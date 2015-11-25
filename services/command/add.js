@@ -1,12 +1,15 @@
+'use strict';
+
 import util from 'util';
 import { find, cloneDeep } from 'lodash';
+
+const EVENT_NAME = 'review:command:add';
 
 const COMMAND_REGEXP = new RegExp(
   '(?:^|\\W)' + '\\+@?([\\w]+)' + '(?:\\W|$)|' + // +username +@username
   '(?:^|\\W)' + '\/?add\\s+@?([\\w]+)' + '(?:\\W|$)', // /add username /add @username
   'i'
 );
-const EVENT_NAME = 'review:command:add';
 
 export function getParticipant(command) {
   const participant = command.match(COMMAND_REGEXP);
@@ -14,52 +17,61 @@ export function getParticipant(command) {
   return participant[1] || participant[2];
 }
 
-export default function addCommand(command, payload) {
+export default function commandService(options, imports) {
+  const { team, action, logger, events } = imports;
 
-  const team = payload.team;
-  const action = payload.action;
-  const logger = payload.logger;
-  const events = payload.events;
-  const pullRequest = payload.pullRequest;
-  const reviewers = pullRequest.get('review.reviewers');
+  /**
+   * Handle '/add' command.
+   *
+   * @param {String} command - line with user command
+   * @param {Object} payload - github webhook payload.
+   *
+   * @return {Promise}
+   */
+  const addCommand = function addCommand(command, payload) {
 
-  let newReviewer;
+    let newReviewer;
 
-  logger.info(
-    '"/add" [%s – %s]',
-    pullRequest.number,
-    pullRequest.title
-  );
+    const pullRequest = payload.pullRequest;
+    const reviewers = pullRequest.get('review.reviewers');
 
-  const newReviewerLogin = getParticipant(command);
+    logger.info(
+      '"/add" [%s – %s] %s',
+      pullRequest.number,
+      pullRequest.title,
+      pullRequest.html_url
+    );
 
-  if (find(reviewers, { login: newReviewerLogin })) {
-    return Promise.reject(new Error(util.format(
-      '%s tried to add reviewer %s but he is already in reviewers list',
-      payload.comment.user.login,
-      newReviewerLogin
-    )));
-  }
+    const newReviewerLogin = getParticipant(command);
 
-  return team
-    .findTeamMemberByPullRequest(pullRequest, newReviewerLogin)
-    .then((user) => {
-      if (!user) {
-        return Promise.reject(new Error(util.format(
-          '%s tried to set %s, but there are no user with the same login in team',
-          payload.comment.user.login,
-          newReviewerLogin
-        )));
-      }
+    if (find(reviewers, { login: newReviewerLogin })) {
+      return Promise.reject(new Error(util.format(
+        '%s tried to add reviewer %s but he is already in reviewers list',
+        payload.comment.user.login,
+        newReviewerLogin
+      )));
+    }
 
-      const newReviewer = cloneDeep(user);
+    return team
+      .findTeamMemberByPullRequest(pullRequest, newReviewerLogin)
+      .then(user => {
+        if (!user) {
+          return Promise.reject(new Error(util.format(
+            '%s tried to set %s, but there are no user with the same login in team',
+            payload.comment.user.login,
+            newReviewerLogin
+          )));
+        }
 
-      reviewers.push(newReviewer);
+        newReviewer = cloneDeep(user);
+        reviewers.push(newReviewer);
 
-      return action.save({ reviewers }, pullRequest.id);
-    }).then(pullRequest => {
-      events.emit(EVENT_NAME, { pullRequest, newReviewer });
+        return action.save({ reviewers }, pullRequest.id);
+      }).then(pullRequest => {
+        events.emit(EVENT_NAME, { pullRequest, newReviewer });
+      });
 
-      return pullRequest;
-    });
+  };
+
+  return Promise.resolve({ service: addCommand });
 }

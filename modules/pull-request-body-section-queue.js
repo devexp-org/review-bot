@@ -48,7 +48,7 @@ export default class PullBodySectionDispatcher {
 
     this.github
       .setBodySection(pullId, itemQueueStep.sectionId, itemQueueStep.content, itemQueueStep.pos)
-      .catch(err => {
+      .then(null, err => {
         itemQueueStep.reject(err);
 
         return pullId;

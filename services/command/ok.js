@@ -3,80 +3,76 @@
 import util from 'util';
 import { find, cloneDeep } from 'lodash';
 
-const EVENT_NAME_NEW_REVIEWER = 'review:command:ok:new_reviewer';
+const EVENT_NAME = 'review:command:ok';
+const EVENT_NAME_NEW_REVIEWER = EVENT_NAME + ':new_reviewer';
 
-/**
- * Add new reviewer with already approved status.
- *
- * @param {Object} payload - github webhook payload.
- * @param {String} login
- *
- * @return {Promise}
- */
-export function addNewReviewerAndApprove(payload, login) {
-  const { action, pullRequest, team, events } = payload;
+export default function commandService(options, imports) {
 
-  if (payload.pullRequest.state !== 'open') {
-    return Promise.reject(new Error(util.format(
-      '%s cannot approve review for closed pull request [%s – %s] %s',
-      login,
-      payload.pullRequest.id,
-      payload.pullRequest.title,
+  const { action, logger, team, events } = imports;
+
+  /**
+   * Handle '/ok' command.
+   *
+   * @param {String} command - line with user command.
+   * @param {Object} payload - github webhook payload.
+   *
+   * @return {Promise}
+   */
+  const okCommand = function okCommand(command, payload) {
+
+    const login = payload.comment.user.login;
+    const pullRequest = payload.pullRequest;
+    const reviewer = find(pullRequest.get('review.reviewers'), { login });
+
+    logger.info(
+      '"/ok" [%s – %s] %s',
+      pullRequest.number,
+      pullRequest.title,
       pullRequest.html_url
-    )));
-  }
+    );
 
-  return team
-    .findTeamMemberByPullRequest(pullRequest, login)
-    .then((user) => {
-      if (!user) {
-        return Promise.reject(new Error(util.format(
-          '%s tried to approve review, but there isn`t a user with the same login in team [%s – %s] %s',
-          login,
-          pullRequest.id,
-          pullRequest.title,
-          pullRequest.html_url
-        )));
-      }
+    if (pullRequest.state !== 'open') {
+      return Promise.reject(new Error(util.format(
+        '%s cannot approve review for closed pull request [%s – %s] %s',
+        login, pullRequest.number, pullRequest.title, pullRequest.html_url
+      )));
+    }
 
-      const newReviewer = cloneDeep(user);
-      const reviewers = pullRequest.get('review.reviewers');
+    if (reviewer) {
+      return action
+        .approveReview(login, pullRequest.id)
+        .then(pullRequest => {
+          events.emit(EVENT_NAME, { pullRequest });
+        });
+    } else {
+      return team
+        .findTeamMemberByPullRequest(pullRequest, login)
+        .then(user => {
+          if (!user) {
+            return Promise.reject(new Error(util.format(
+              '%s tried to approve review, but there isn`t a user with the same login in team [%s – %s] %s',
+              login,
+              pullRequest.number,
+              pullRequest.title,
+              pullRequest.html_url
+            )));
+          }
 
-      reviewers.push(newReviewer);
+          const reviewers = pullRequest.get('review.reviewers');
+          const newReviewer = cloneDeep(user);
 
-      return action.save({ reviewers }, pullRequest.id);
-    })
-    .then(pullRequest => action.approveReview(login, pullRequest.id))
-    .then(pullRequest => {
-      events.emit(EVENT_NAME_NEW_REVIEWER, { pullRequest });
+          reviewers.push(newReviewer);
 
-      return pullRequest;
-    });
-}
+          return action.save({ reviewers }, pullRequest.id);
+        })
+        .then(pullRequest => action.approveReview(login, pullRequest.id))
+        .then(pullRequest => {
+          events.emit(EVENT_NAME_NEW_REVIEWER, { pullRequest });
 
-/**
- * Handle '/ok' command.
- *
- * @param {String} command - line with user command.
- * @param {Object} payload - github webhook payload.
- *
- * @return {Promise}
- */
-export default function okCommand(command, payload) {
-  const { action, logger, pullRequest, comment } = payload;
-  const login = comment.user.login;
-  const reviewer = find(pullRequest.review.reviewers, { login });
+          return pullRequest;
+        });
+    }
+  };
 
-  logger.info(
-    '"/ok" [%s – %s] %s',
-    pullRequest.id,
-    pullRequest.title,
-    pullRequest.html_url
-  );
-
-  if (reviewer) {
-    return action.approveReview(login, pullRequest.id);
-  } else {
-    return addNewReviewerAndApprove(payload, login);
-  }
+  return Promise.resolve({ service: okCommand });
 }

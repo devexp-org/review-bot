@@ -1,17 +1,27 @@
-import command from '../ping';
+import service from '../ping';
 
 describe('services/command/ping', () => {
+
+  let command;
   let payload;
+  let logger;
+  let events;
 
   beforeEach(() => {
+    events = { emit: sinon.stub() };
+    logger = { info: sinon.stub() };
+
+    command = function (comment, payload) {
+      return service({}, { logger, events })
+        .then(resolved => resolved.service(comment, payload));
+    };
+
     payload = {
       pullRequest: {
         state: 'open',
         user: { login: 'd4rkr00t' }
       },
-      comment: { user: { login: 'd4rkr00t' } },
-      events: { emit: sinon.stub() },
-      logger: { info: sinon.stub() }
+      comment: { user: { login: 'd4rkr00t' } }
     };
   });
 
@@ -28,9 +38,10 @@ describe('services/command/ping', () => {
   it('should trigger review:command:ping event', done => {
     command('', payload)
       .then(() => {
-        assert.calledWith(payload.events.emit, 'review:command:ping');
+        assert.calledWith(events.emit, 'review:command:ping');
         done();
       })
       .catch(done);
   });
+
 });

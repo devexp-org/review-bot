@@ -1,43 +1,52 @@
+'use strict';
+
 import util from 'util';
 
 const EVENT_NAME = 'review:command:ping';
 
-/**
- * Handle '/ping' command.
- *
- * @param {String} command - line with user command.
- * @param {Object} payload - github webhook payload.
- *
- * @return {Promise}
- */
-export default function startCommand(command, payload) {
-  const { pullRequest, events, logger } = payload;
+export default function commandService(options, imports) {
 
-  logger.info(
-    '"/ping" [%s – %s] %s',
-    pullRequest.id,
-    pullRequest.title,
-    pullRequest.html_url
-  );
+  const { events, logger } = imports;
 
-  if (payload.pullRequest.state !== 'open') {
-    return Promise.reject(new Error(util.format(
-      'Cannot ping for closed pull request [%s – %s] %s',
-      payload.pullRequest.id,
-      payload.pullRequest.title,
+  /**
+   * Handle '/ping' command.
+   *
+   * @param {String} command - line with user command.
+   * @param {Object} payload - github webhook payload.
+   *
+   * @return {Promise}
+   */
+  const pingCommand = function pingCommand(command, payload) {
+    const pullRequest = payload.pullRequest;
+
+    logger.info(
+      '"/ping" [%s – %s]',
+      pullRequest.number,
+      pullRequest.title,
       pullRequest.html_url
-    )));
-  }
+    );
 
-  if (payload.pullRequest.user.login !== payload.comment.user.login) {
-    return Promise.reject(new Error(util.format(
-      '%s tried to ping a review, but author is %s',
-      payload.comment.user.login,
-      payload.pullRequest.user.login
-    )));
-  }
+    if (pullRequest.state !== 'open') {
+      return Promise.reject(new Error(util.format(
+        'Cannot ping for closed pull request [%s – %s] %s',
+        pullRequest.number,
+        pullRequest.title,
+        pullRequest.html_url
+      )));
+    }
 
-  events.emit(EVENT_NAME, { pullRequest });
+    if (pullRequest.user.login !== payload.comment.user.login) {
+      return Promise.reject(new Error(util.format(
+        '%s tried to ping a review, but author is %s',
+        payload.comment.user.login,
+        pullRequest.user.login
+      )));
+    }
 
-  return Promise.resolve();
+    events.emit(EVENT_NAME, { pullRequest });
+
+    return Promise.resolve();
+  };
+
+  return Promise.resolve({ service: pingCommand });
 }
