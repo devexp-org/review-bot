@@ -1,6 +1,20 @@
-'use strict';
-
 export function setupSchema() {
+
+  /**
+   * Nested schema for reviewers list item.
+   * @type {Object}
+   */
+  const Reviewer = {
+    login: String,
+    rank: Number,
+    html_url: String,
+    avatar_url: String,
+    approved: {
+      type: Boolean,
+      'default': false
+    }
+  };
+
   return {
     id: Number,
     _id: Number,
@@ -57,7 +71,7 @@ export function setupSchema() {
         'enum': ['notstarted', 'inprogress', 'complete'],
         'default': 'notstarted'
       },
-      reviewers: Array,
+      reviewers: [Reviewer],
       started_at: Date,
       updated_at: Date,
       completed_at: Date
