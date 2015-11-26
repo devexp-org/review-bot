@@ -38,6 +38,13 @@ export default function commandService(options, imports) {
       )));
     }
 
+    if (login === pullRequest.user.login) {
+      return Promise.reject(new Error(util.format(
+        '%s cannot ok to his pull request',
+        login
+      )));
+    }
+
     if (reviewer) {
       return action
         .approveReview(login, pullRequest.id)

@@ -13,6 +13,7 @@ describe('services/command/ok', () => {
     pullRequest = {
       id: 1,
       state: 'open',
+      user: { login: 'Hulk' },
       get: sinon.stub().returns(clone(mockReviewers))
     };
     team = {
@@ -48,6 +49,12 @@ describe('services/command/ok', () => {
 
   it('should be rejected if pull request is not open', done => {
     pullRequest.state = 'closed';
+
+    command('/ok', payload).catch(() => done());
+  });
+
+  it('should be rejected if author of pull tried to /ok his own pull request', done => {
+    pullRequest.user = { login: 'Hawkeye' };
 
     command('/ok', payload).catch(() => done());
   });
