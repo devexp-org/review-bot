@@ -15,19 +15,6 @@ describe('service/mongoose', function () {
     };
   });
 
-  it('should be resolved to Mongoose', function (done) {
-
-    service(options, imports)
-      .then(result => {
-        const mongoose = result.service;
-        assert.property(mongoose, 'model');
-
-        result.shutdown().then(done);
-      })
-      .catch(done);
-
-  });
-
   it('should be rejected on error', function (done) {
     options.host = 'undefined';
 
