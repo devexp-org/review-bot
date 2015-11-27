@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Create review total number processor.
  *
@@ -8,8 +6,7 @@
  *
  * @return {Function}
  */
-export default function totalNumber(options) {
-
+export default function totalNumberService(options) {
   const max = options.max;
 
   /**
@@ -19,10 +16,11 @@ export default function totalNumber(options) {
    *
    * @return {Review} review
    */
-  return function totalNumberStep(review) {
+  function totalNumber(review) {
     review.team = review.team.slice(0, max);
 
     return Promise.resolve(review);
-  };
+  }
 
+  return Promise.resolve({ service: totalNumber });
 }

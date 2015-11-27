@@ -1,18 +1,23 @@
 import _ from 'lodash';
 
 import { mockMembers } from './mocks/index';
-import sort from '../sort';
+import service from '../sort';
 
-describe('services/choose-reviewer/sort', function () {
+describe('services/choose-reviewer-steps/sort', () => {
 
   let members, step, pullRequest;
-  beforeEach(function () {
-    step = sort();
+  beforeEach(done => {
     members = _.clone(mockMembers, true);
     pullRequest = {};
+
+    service().then(resolved => {
+      step = resolved.service;
+
+      done();
+    });
   });
 
-  it('should sort members by rank descending', function (done) {
+  it('should sort members by rank descending', done => {
     const review = { team: members, pullRequest };
     const membersSorted = [
       { login: 'Black Widow', rank: 10 },
@@ -32,7 +37,7 @@ describe('services/choose-reviewer/sort', function () {
       .catch(done);
   });
 
-  it('should do nothing if there are no team', function (done) {
+  it('should do nothing if there are no team', done => {
     const review = { team: [], pullRequest };
 
     step(review)

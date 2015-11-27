@@ -7,28 +7,15 @@ export class Review {
   /**
    * @constructor
    *
-   * @param {Array<Function>} steps — functions which returns promise which resolve with { pull, team } object.
    * @param {Object} payload
    */
-  constructor(steps, payload) {
-    if (!Array.isArray(steps)) {
-      throw new Error('No steps provided');
-    }
-    this.steps = steps;
+  constructor(payload) {
     this.payload = payload;
 
     this.team = payload.team;
+    this.steps = payload.steps;
     this.logger = payload.logger;
     this.pullRequestModel = payload.pullRequestModel;
-  }
-
-  /**
-   * Return registred processors for futher using.
-   *
-   * @return {Array<Function>}
-   */
-  get() {
-    return this.steps;
   }
 
   /**
@@ -43,6 +30,21 @@ export class Review {
       .findByPullRequest(review.pullRequest)
       .then(team => {
         review.team = team;
+        return review;
+      });
+  }
+
+  /**
+   * Find choose reviewer steps for team.
+   *
+   * @param {Review} review
+   *
+   * @return {Promise}
+   */
+  findSteps(review) {
+    return this.steps(review.pullRequest)
+      .then(steps => {
+        review.steps = steps;
         return review;
       });
   }
@@ -82,6 +84,23 @@ export class Review {
   }
 
   /**
+   * Build queue from steps.
+   *
+   * @param {Review} review
+   *
+   * @return {Promise}
+   */
+  stepsQueue(review) {
+    return review.steps.reduce((queue, ranker) => {
+      return queue.then(review => {
+        this.logger.info('choose reviewer phase is `%s`', ranker.name);
+
+        return ranker(review, this.payload);
+      });
+    }, Promise.resolve(review));
+  }
+
+  /**
    * Main review suggestion method.
    * Create queue of promises from processor and retrun suggested reviewers.
    *
@@ -90,24 +109,14 @@ export class Review {
    * @return {Promise}
    */
   review(pullId) {
-    const rankers = this.get();
-
     this.logger.info('Review started');
 
-    let reviewQueue = this
+    return this
       .start(pullId)
+      .then(::this.findSteps)
       .then(::this.findTeam)
-      .then(::this.addZeroRank);
-
-    reviewQueue = rankers.reduce((queue, ranker) => {
-      return queue.then(review => {
-        this.logger.info('choose reviewer phase is `%s`', ranker.name);
-
-        return ranker(review, this.payload);
-      });
-    }, reviewQueue);
-
-    return reviewQueue
+      .then(::this.addZeroRank)
+      .then(::this.stepsQueue)
       .then(review => {
         this.logger.info(
           'Choose reviewers complete [%s — %s] %s',
@@ -130,27 +139,16 @@ export class Review {
 
 export default function (options, imports) {
 
-  const team = imports.team;
-  const model = imports.model;
-  const logger = imports.logger;
-  const github = imports.github;
+  const { team, model, logger, steps } = imports;
 
   const payload = {
-    github,
+    steps,
     team,
     logger,
     pullRequestModel: model.get('pull_request')
   };
 
-  options.stepOptions || (options.stepOptions = {});
-
-  const steps = options.steps.map(path => {
-    const ranker = imports.requireDefault(path);
-
-    return ranker(options.stepOptions[ranker.name]);
-  });
-
-  const service = new Review(steps, payload);
+  const service = new Review(payload);
 
   return Promise.resolve({ service });
 
@@ -161,6 +159,7 @@ export default function (options, imports) {
  *
  * @typedef {Object} Review
  *
- * @property {Object} pull - Pull Request.
+ * @property {Object} pullRequest - Pull Request.
  * @property {Array}  team - Team members for review.
+ * @property {Array}  steps - Steps for choosing reviewer.
  */

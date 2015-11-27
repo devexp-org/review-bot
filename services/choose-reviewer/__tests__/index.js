@@ -3,7 +3,7 @@ import service, { Review } from '../../choose-reviewer';
 describe('services/choose-reviewer', function () {
 
   describe('Review', function () {
-    let team, logger, members, pullRequest, pullRequestModel, payload;
+    let team, logger, members, pullRequest, pullRequestModel, payload, steps;
 
     beforeEach(function () {
       members = [
@@ -42,36 +42,54 @@ describe('services/choose-reviewer', function () {
         findById: sinon.stub().returns(Promise.resolve(pullRequest))
       };
 
-      payload = { team, logger, pullRequestModel };
+      steps = sinon.stub();
+
+      payload = { team, logger, pullRequestModel, steps };
     });
 
-    it('should throws error if steps is not passed', function () {
-      const incompleteReview = function () {
-        return new Review();
-      };
+    describe('#start', () => {
 
-      assert.throws(incompleteReview);
-    });
-
-    describe('#start', function () {
-
-      it('should throws error if pull request is not found', function (done) {
-        const steps = [
-          function (review) { return Promise.resolve(review); }
-        ];
-
-        const review = new Review(steps, payload);
+      it('should throws error if pull request is not found', done => {
+        const review = new Review(payload);
 
         pullRequestModel.findById.returns(Promise.resolve(null));
 
-        review.review(123456)
+        review.start(123456)
           .catch(error => {
             assert.instanceOf(error, Error);
             done();
           });
       });
 
-      it('should iterate through steps', function (done) {
+    });
+
+    describe('#findSteps', () => {
+
+      it('should be rejected if there is no steps for team for pull request', done => {
+        const review = new Review(payload);
+
+        steps.returns(Promise.reject());
+
+        review.findSteps({ pullRequest: {} }).catch(() => done());
+      });
+
+      it('should be resolved with review which includes steps for pull request', done => {
+        const review = new Review(payload);
+        const _steps = [];
+
+        steps.returns(Promise.resolve(_steps));
+
+        review.findSteps({ pullRequest: {} }).then(resolved => {
+          assert.equal(resolved.steps, _steps);
+          done();
+        });
+      });
+
+    });
+
+    describe('#stepsQueue', () => {
+
+      it('should iterate through steps', done => {
         const order = [];
 
         const createStep = function (name) {
@@ -81,16 +99,16 @@ describe('services/choose-reviewer', function () {
           };
         };
 
-        const steps = [
+        const _steps = [
           createStep('one'),
           createStep('two'),
           createStep('three'),
           createStep('four')
         ];
 
-        const review = new Review(steps, payload);
+        const review = new Review(payload);
 
-        review.review(123456)
+        review.stepsQueue({ steps: _steps })
           .then(() => {
             assert.deepEqual(order, ['one', 'two', 'three', 'four']);
           })
@@ -98,15 +116,63 @@ describe('services/choose-reviewer', function () {
           .catch(done);
       });
 
-      it('should not throw error if reviewers will not selected', function (done) {
-        const steps = [
+      describe('each step', () => {
+
+        it('should receive team and pullRequest', done => {
+          const steps = [
+            function (review) {
+              assert.equal(review.pullRequest, pullRequest);
+              assert.deepEqual(review.team, members);
+
+              return Promise.resolve(review);
+            }
+          ];
+
+          const review = new Review(payload);
+
+          review.stepsQueue({ steps, pullRequest, team: members })
+            .then(() => null)
+            .then(done)
+            .catch(done);
+        });
+
+        it('should be able to change the team', done => {
+          const steps = [
+            function (review) {
+              review.team.splice(0, 5);
+              return Promise.resolve(review);
+            },
+            function (review) {
+              assert.lengthOf(review.team, 12);
+              return Promise.resolve(review);
+            }
+          ];
+
+          const review = new Review(payload);
+
+          review.stepsQueue({ steps, pullRequest, team: members })
+            .then(() => null)
+            .then(done)
+            .catch(done);
+        });
+
+      });
+
+    });
+
+    describe('#review', () => {
+
+      it('should not throw error if reviewers will not selected', done => {
+        const _steps = [
           function (review) {
             review.team = [];
             return Promise.resolve(review);
           }
         ];
 
-        const review = new Review(steps, payload);
+        steps.returns(Promise.resolve(_steps));
+
+        const review = new Review(payload);
 
         review.review(123456)
           .then(() => done())
@@ -115,51 +181,9 @@ describe('services/choose-reviewer', function () {
 
     });
 
-    describe('each step', function () {
-
-      it('should receive team and pullRequest', function (done) {
-        const steps = [
-          function (review) {
-            assert.equal(review.pullRequest, pullRequest);
-            assert.deepEqual(review.team, members);
-
-            return Promise.resolve(review);
-          }
-        ];
-
-        const review = new Review(steps, payload);
-
-        review.review(123456)
-          .then(() => null)
-          .then(done)
-          .catch(done);
-      });
-
-      it('should be able to change the team', function (done) {
-        const steps = [
-          function (review) {
-            review.team.splice(0, 5);
-            return Promise.resolve(review);
-          },
-          function (review) {
-            assert.lengthOf(review.team, 12);
-            return Promise.resolve(review);
-          }
-        ];
-
-        const review = new Review(steps, payload);
-
-        review.review(123456)
-          .then(() => null)
-          .then(done)
-          .catch(done);
-      });
-
-    });
-
   });
 
-  describe('service', function (done) {
+  describe('service', done => {
 
     it('should return resolved promise', function () {
       const model = { get: sinon.stub().returns({}) };

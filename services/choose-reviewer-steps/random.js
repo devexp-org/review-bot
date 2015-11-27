@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Create review random processor.
  *
@@ -8,8 +6,7 @@
  *
  * @return {Function}
  */
-export default function random(options) {
-
+export default function randomService(options) {
   const max = options.max;
 
   /**
@@ -19,12 +16,13 @@ export default function random(options) {
    *
    * @return {Review} review
    */
-  return function randomStep(review) {
+  function random(review) {
     review.team.forEach(member => {
       member.rank += Math.floor(Math.random() * (max + 1));
     });
 
     return Promise.resolve(review);
-  };
+  }
 
+  return Promise.resolve({ service: random });
 }

@@ -1,17 +1,22 @@
 import _ from 'lodash';
 
 import { mockMembers } from './mocks/index';
-import ignore from '../ignore';
+import service from '../ignore';
 
-describe('services/choose-reviewer/ignore', function () {
+describe('services/choose-reviewer-steps/ignore', function () {
 
   let members, step;
-  beforeEach(function () {
-    step = ignore({ list: ['Captain America', 'Hulk', 'Thor'] });
+  beforeEach(done => {
     members = _.clone(mockMembers, true);
+
+    service({ list: ['Captain America', 'Hulk', 'Thor'] }).then(resolved => {
+      step = resolved.service;
+
+      done();
+    });
   });
 
-  it('should remove members from team which is in ignore list', function (done) {
+  it('should remove members from team which is in ignore list', done => {
     const review = {
       team: members,
       pullRequest: { user: { login: 'Black Widow' } }
@@ -32,7 +37,7 @@ describe('services/choose-reviewer/ignore', function () {
       .catch(done);
   });
 
-  it('should do nothing if there are no team', function (done) {
+  it('should do nothing if there are no team', done => {
     const review = {
       team: [],
       pullRequest: { user: { login: 'Black Widow' } }

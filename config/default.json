@@ -87,6 +87,96 @@
       ]
     },
 
+    "choose-reviewer-steps": {
+      "path": "./services/choose-reviewer-steps",
+      "options": {
+        "team-github": {
+          "steps": [
+            "chooser-reviewer-step-remove-author",
+            "chooser-reviewer-step-remove-already-reviewers",
+            "chooser-reviewer-step-ignore",
+            "chooser-reviewer-step-commiters",
+            "chooser-reviewer-step-random",
+            "chooser-reviewer-step-load",
+            "chooser-reviewer-step-sort",
+            "chooser-reviewer-step-total-number"
+          ]
+        }
+      },
+      "dependencies": [
+        "choose-team",
+        "chooser-reviewer-step-remove-author",
+        "chooser-reviewer-step-remove-already-reviewers",
+        "chooser-reviewer-step-ignore",
+        "chooser-reviewer-step-commiters",
+        "chooser-reviewer-step-random",
+        "chooser-reviewer-step-load",
+        "chooser-reviewer-step-sort",
+        "chooser-reviewer-step-total-number"
+      ]
+    },
+
+    "chooser-reviewer-step-remove-author": {
+      "path": "./services/choose-reviewer-steps/remove_author"
+    },
+
+    "chooser-reviewer-step-remove-already-reviewers": {
+      "path": "./services/choose-reviewer-steps/remove_already_reviewers"
+    },
+
+    "chooser-reviewer-step-ignore": {
+      "path": "./services/choose-reviewer-steps/ignore"
+    },
+
+    "chooser-reviewer-step-commiters": {
+      "path": "./services/choose-reviewer-steps/commiters",
+      "options": {
+        "max": 4,
+        "since": [4, "month"],
+        "filesToCheck": 5,
+        "commitsCount": 10,
+        "ignore": [
+          "config"
+        ]
+      },
+      "dependencies": [
+        "github"
+      ]
+    },
+
+    "chooser-reviewer-step-random": {
+      "path": "./services/choose-reviewer-steps/random",
+      "options": { "max": 5 }
+    },
+
+    "chooser-reviewer-step-load": {
+      "path": "./services/choose-reviewer-steps/load",
+      "options": { "max": 1 },
+      "dependencies": [
+        "model"
+      ]
+    },
+
+    "chooser-reviewer-step-sort": {
+      "path": "./services/choose-reviewer-steps/sort"
+    },
+
+    "chooser-reviewer-step-total-number": {
+      "path": "./services/choose-reviewer-steps/total_number",
+      "options": { "max": 2 }
+    },
+
+    "choose-reviewer": {
+      "path": "./services/choose-reviewer",
+      "dependencies": {
+        "team": "choose-team",
+        "model": "model",
+        "logger": "logger",
+        "events": "events",
+        "steps": "choose-reviewer-steps"
+      }
+    },
+
     "pull-request-github": {
       "path": "./services/pull-request-github",
       "options": {
@@ -160,43 +250,6 @@
       }
     },
 
-    "choose-reviewer": {
-      "path": "./services/choose-reviewer",
-      "options": {
-        "steps": [
-          "./services/choose-reviewer/remove_author",
-          "./services/choose-reviewer/remove_already_reviewers",
-          "./services/choose-reviewer/ignore",
-          "./services/choose-reviewer/commiters",
-          "./services/choose-reviewer/random",
-          "./services/choose-reviewer/load",
-          "./services/choose-reviewer/sort",
-          "./services/choose-reviewer/total_number"
-        ],
-        "stepOptions": {
-          "load": { "max": 1 },
-          "random": { "max": 5 },
-          "commiters": {
-            "max": 4,
-            "since": [4, "month"],
-            "filesToCheck": 5,
-            "commitsCount": 10,
-            "ignore": [
-              "config"
-            ]
-          },
-          "totalNumber": { "max": 2 }
-        }
-      },
-      "dependencies": {
-        "team": "choose-team",
-        "model": "model",
-        "logger": "logger",
-        "events": "events",
-        "github": "github"
-      }
-    },
-
     "review-autoassign": {
       "path": "./services/review-autoassign",
       "dependencies": [
@@ -215,6 +268,10 @@
           {
             "test": "\/start",
             "handlers": ["command-start"]
+          },
+          {
+            "test": "\/stop",
+            "handlers": ["./services/command/stop"]
           },
           {
             "test": "\/stop",
