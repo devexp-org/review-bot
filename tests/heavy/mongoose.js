@@ -1,4 +1,4 @@
-import service from '../../mongoose';
+import service from '../../services/mongoose';
 
 describe('service/mongoose', function () {
 
@@ -13,6 +13,19 @@ describe('service/mongoose', function () {
         error: sinon.stub()
       }
     };
+  });
+
+  it('should be resolved to Mongoose', function (done) {
+
+    service(options, imports)
+      .then(result => {
+        const mongoose = result.service;
+        assert.property(mongoose, 'model');
+
+        result.shutdown().then(done);
+      })
+      .catch(done);
+
   });
 
   it('should be rejected on error', function (done) {
