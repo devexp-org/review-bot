@@ -1,18 +1,24 @@
 import _ from 'lodash';
 
 import { mockMembers } from './mocks/index';
-import random from '../random';
+import service from '../random';
 
-describe('services/choose-reviewer/random', function () {
+describe('services/choose-reviewer-steps/random', () => {
 
   let members, step, pullRequest;
-  beforeEach(function () {
-    step = random({ max: 2 });
+
+  beforeEach(done => {
     members = _.clone(mockMembers, true);
     pullRequest = {};
+
+    service({ max: 2 }).then(resolved => {
+      step = resolved.service;
+
+      done();
+    });
   });
 
-  it('should add random value to rank to each member', function (done) {
+  it('should add random value to rank to each member', done => {
     const review = { team: members, pullRequest };
     const membersClone = _.clone(members, true);
 
@@ -33,7 +39,7 @@ describe('services/choose-reviewer/random', function () {
       .catch(done);
   });
 
-  it('should do nothing if there are no team', function (done) {
+  it('should do nothing if there are no team', done => {
     const review = { team: [], pullRequest };
 
     step(review)

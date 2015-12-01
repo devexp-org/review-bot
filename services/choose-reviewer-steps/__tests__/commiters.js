@@ -1,32 +1,25 @@
 import _ from 'lodash';
 
 import { mockMembers } from './mocks/index';
-import commiters from '../commiters';
+import service from '../commiters';
 import { getFiles, getCommits, getCommiters } from '../commiters';
 
-describe('services/choose-reviewer/commiters', function () {
+describe('services/choose-reviewer-steps/commiters', () => {
+  let members, github, commit, files, pullRequest;
+  let ignorePatterns = [];
 
-  let members, step, github, commit, files, pullRequest;
-  let ignorePatterns, filesToCheck, commitsCount;
-  beforeEach(function () {
-    filesToCheck = 10;
-    commitsCount = 2;
-    ignorePatterns = [];
+  const filesToCheck = 10;
+  const commitsCount = 2;
 
-    step = commiters({
-      max: 4,
-      ignore: ignorePatterns,
-      commitsCount,
-      filesToCheck
-    });
-
+  beforeEach(() => {
     members = _.clone(mockMembers, true);
 
     commit = sinon.stub();
+    commit.callsArgWithAsync(1, null, []);
+
     github = {
       repos: { getCommits: commit }
     };
-    commit.callsArgWithAsync(1, null, []);
 
     files = sinon.stub();
 
@@ -147,12 +140,14 @@ describe('services/choose-reviewer/commiters', function () {
 
   });
 
-  it('should increase rank if member is an author of the last commits', function (done) {
+  it('should increase rank if member is an author of the last commits', done => {
     const review = { team: members, pullRequest };
     const commit = sinon.stub();
-    const payload = {
-      github: { repos: { getCommits: commit } },
-      pullRequestModel: {}
+    const options = {
+      max: 4,
+      ignore: ignorePatterns,
+      commitsCount,
+      filesToCheck
     };
 
     commit.callsArgWith(1, null, []);
@@ -162,6 +157,8 @@ describe('services/choose-reviewer/commiters', function () {
         { author: { login: 'Captain America' } },
         { author: { login: 'Iron Man' } }
       ]);
+
+    github.repos.getCommits = commit;
 
     const membersAltered = [
       { login: 'Black Widow', rank: 10 },
@@ -173,12 +170,17 @@ describe('services/choose-reviewer/commiters', function () {
       { login: 'Thor', rank: 3 }
     ];
 
-    step(review, payload)
-      .then(review => {
-        assert.deepEqual(review.team, membersAltered);
-        done();
-      })
-      .catch(done);
+    service(options, { github })
+      .then(resolved => {
+        const commiters = resolved.service;
+
+        commiters(review)
+          .then(review => {
+            assert.deepEqual(review.team, membersAltered);
+            done();
+          })
+          .catch(done);
+      });
   });
 
 });

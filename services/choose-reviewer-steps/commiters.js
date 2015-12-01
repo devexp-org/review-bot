@@ -1,5 +1,3 @@
-'use strict';
-
 import _ from 'lodash';
 import moment from 'moment';
 
@@ -109,7 +107,7 @@ export function getCommiters(commits) {
  *
  * @return {Array} team
  */
-function addRank(maxRank, team) {
+export function addRank(maxRank, team) {
   return function (members) {
     let max = 0;
 
@@ -136,7 +134,7 @@ function addRank(maxRank, team) {
  *
  * @return {String} [description]
  */
-function getSinceDate(date) {
+export function getSinceDate(date) {
   if (!date) return '';
 
   return moment()
@@ -153,10 +151,11 @@ function getSinceDate(date) {
  * @param {Array}  options.ignore - list of patterns to ignore.
  * @param {Number} options.commitsCount - number of commits to inspect.
  * @param {Number} options.filesToCheck - number files to get commits in.
+ * @param {Object} imports
  *
  * @return {Function}
  */
-export default function commiters(options) {
+export default function commitersService(options, imports) {
 
   const max = options.max;
 
@@ -168,13 +167,13 @@ export default function commiters(options) {
    *
    * @return {Promise}
    */
-  return function commitersStep(review, payload) {
+  function commiters(review, payload) {
 
     if (_.isEmpty(review.team)) {
       return Promise.resolve(review);
     }
 
-    const github = payload.github;
+    const github = imports.github;
     const sinceDate = getSinceDate(options.since);
     const pullRequest = review.pullRequest;
 
@@ -188,6 +187,7 @@ export default function commiters(options) {
         return review;
       });
 
-  };
+  }
 
+  return Promise.resolve({ service: commiters });
 }

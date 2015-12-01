@@ -1,13 +1,13 @@
 import _ from 'lodash';
 
 import { mockMembers } from './mocks/index';
-import removeAlreadyReviewers from '../remove_already_reviewers';
+import service from '../remove_already_reviewers';
 
-describe('services/choose-reviewer/remove_already_reviewers', function () {
+describe('services/choose-reviewer-steps/remove_already_reviewers', () => {
 
   let members, step, pullRequest;
-  beforeEach(function () {
-    step = removeAlreadyReviewers();
+
+  beforeEach(done => {
     members = _.clone(mockMembers, true);
     pullRequest = {
       get(path) {
@@ -21,9 +21,15 @@ describe('services/choose-reviewer/remove_already_reviewers', function () {
         ]
       }
     };
+
+    service().then(resolved => {
+      step = resolved.service;
+
+      done();
+    });
   });
 
-  it('should remove reviewers from team', function (done) {
+  it('should remove reviewers from team', done => {
     const review = { team: members, pullRequest };
 
     const membersAltered = [
@@ -42,7 +48,7 @@ describe('services/choose-reviewer/remove_already_reviewers', function () {
       .catch(done);
   });
 
-  it('should do nothing if there are no reviewers', function (done) {
+  it('should do nothing if there are no reviewers', done => {
     pullRequest.review.reviewers = [];
     const review = { team: members, pullRequest };
     const membersClone = _.clone(members, true);
@@ -55,7 +61,7 @@ describe('services/choose-reviewer/remove_already_reviewers', function () {
     .catch(done);
   });
 
-  it('should do nothing if there are no team', function (done) {
+  it('should do nothing if there are no team', done => {
     const review = { team: [], pullRequest };
 
     step(review)

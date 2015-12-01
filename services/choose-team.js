@@ -52,7 +52,7 @@ export default function (options, imports) {
         routes.push({ getTeam, getMember, pattern });
       } else {
         pattern.forEach(sourcePattern => {
-          routes.push({ getTeam, getMember, pattern: sourcePattern });
+          routes.push({ getTeam, getMember, pattern: sourcePattern, team: sourceName });
         });
       }
 

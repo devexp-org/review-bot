@@ -1,5 +1,3 @@
-'use strict';
-
 import _ from 'lodash';
 
 /**
@@ -7,24 +5,18 @@ import _ from 'lodash';
  *
  * @param {Object} options
  * @param {Number} options.max - max rank which will be substract for amount of active reviews.
+ * @param {Object} imports
  *
  * @return {Function}
  */
-export default function load(options) {
+export default function loadService(options, imports) {
 
   const max = options.max;
 
-  /**
-   * Lower rank if member has some active reviews.
-   *
-   * @param {Review} review
-   * @param {Object} payload
-   *
-   * @return {Promise}
-   */
-  return function loadStep(review, payload) {
+  function load(review, payload) {
+
     const promise = [];
-    const pullRequestModel = payload.pullRequestModel;
+    const pullRequestModel = imports.model.get('pull_request');
 
     if (_.isEmpty(review.team)) {
       return Promise.resolve(review);
@@ -53,6 +45,8 @@ export default function load(options) {
 
         return review;
       });
-  };
 
+  }
+
+  return Promise.resolve({ service: load });
 }

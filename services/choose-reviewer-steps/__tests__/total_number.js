@@ -1,18 +1,24 @@
 import _ from 'lodash';
 
 import { mockMembers } from './mocks/index';
-import totalNumber from '../total_number';
+import service from '../total_number';
 
-describe('services/choose-reviewer/total_number', function () {
+describe('services/choose-reviewer-steps/total_number', () => {
 
   let members, step, pullRequest;
-  beforeEach(function () {
-    step = totalNumber({ max: 2 });
+
+  beforeEach(done => {
     members = _.clone(mockMembers, true);
     pullRequest = {};
+
+    service({ max: 2 }).then(resolved => {
+      step = resolved.service;
+
+      done();
+    });
   });
 
-  it('should keep only `option.max` members', function (done) {
+  it('should keep only `option.max` members', done => {
     const review = { team: members, pullRequest };
     const reviewers = [
       { login: 'Black Widow', rank: 10 },
@@ -27,7 +33,7 @@ describe('services/choose-reviewer/total_number', function () {
       .catch(done);
   });
 
-  it('should do nothing if there are no team', function (done) {
+  it('should do nothing if there are no team', done => {
     const review = { team: [], pullRequest };
 
     step(review)

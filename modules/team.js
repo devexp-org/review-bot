@@ -50,6 +50,18 @@ export default class Team {
     return null;
   }
 
+  getTeamName(pullRequest) {
+    for (let i = 0; i < this.routes.length; i++) {
+      const route = this.routes[i];
+
+      if (this.matchRoute(route.pattern, pullRequest)) {
+        return route.team;
+      }
+    }
+
+    return null;
+  }
+
   matchRoute(pattern, pullRequest) {
     if (pattern === '*') {
       return true;

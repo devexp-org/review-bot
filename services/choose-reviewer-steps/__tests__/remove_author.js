@@ -1,17 +1,23 @@
 import _ from 'lodash';
 
 import { mockMembers } from './mocks/index';
-import removeAuthor from '../remove_author';
+import service from '../remove_author';
 
-describe('services/choose-reviewer/remove_author', function () {
+describe('services/choose-reviewer-steps/remove_author', () => {
 
   let members, step;
-  beforeEach(function () {
-    step = removeAuthor();
+
+  beforeEach(done => {
     members = _.clone(mockMembers, true);
+
+    service().then(resolved => {
+      step = resolved.service;
+
+      done();
+    });
   });
 
-  it('should remove author from team', function (done) {
+  it('should remove author from team', done => {
     const review = {
       team: members,
       pullRequest: { user: { login: 'Black Widow' } }
@@ -34,7 +40,7 @@ describe('services/choose-reviewer/remove_author', function () {
       .catch(done);
   });
 
-  it('should do nothing if there are no team', function (done) {
+  it('should do nothing if there are no team', done => {
     const review = {
       team: [],
       pullRequest: { user: { login: 'Black Widow' } }
@@ -49,4 +55,3 @@ describe('services/choose-reviewer/remove_author', function () {
   });
 
 });
-
