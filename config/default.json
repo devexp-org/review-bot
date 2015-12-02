@@ -272,11 +272,7 @@
           },
           {
             "test": "\/stop",
-            "handlers": ["./services/command/stop"]
-          },
-          {
-            "test": "\/stop",
-            "handlers": ["./services/command/stop"]
+            "handlers": ["command-stop"]
           },
           {
             "test": "\/?ping",
@@ -310,6 +306,7 @@
         "events",
         "logger",
         "command-start",
+        "command-stop",
         "command-ping",
         "command-ok",
         "command-not-ok",
