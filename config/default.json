@@ -187,7 +187,8 @@
       },
       "dependencies": [
         "github",
-        "model"
+        "model",
+        "logger"
       ]
     },
 

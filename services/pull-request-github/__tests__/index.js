@@ -18,7 +18,7 @@ describe('services/pull-request-github', () => {
   });
 
   it('should be able to clean pull request body from old content', () => {
-    const gpr = new PullRequestGitHub(model, github, options);
+    const gpr = new PullRequestGitHub(model, options, { github });
     const body = `
 BODY TEXT
 <div id="top"></div>
@@ -32,7 +32,7 @@ EXTRA BODY TEXT
   });
 
   it('should be able to replace pull request body', () => {
-    const gpr = new PullRequestGitHub(model, github, options);
+    const gpr = new PullRequestGitHub(model, options, { github });
     const body = `
 BODY TEXT
 <div id="top"></div>
@@ -73,7 +73,7 @@ BODY TEXT
     };
 
     it('should put sections in correct order in body content', () => {
-      const gpr = new PullRequestGitHub(model, github, options);
+      const gpr = new PullRequestGitHub(model, options, { github });
 
       assert.equal(gpr.buildBodyContent(sections), '<div>content 2</div><div>content 3</div><div>content 1</div>');
     });

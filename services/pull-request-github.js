@@ -2,19 +2,30 @@
 
 import _ from 'lodash';
 
+/**
+ * Check user organization membership and return login
+ * @param {Object} local PullRequst in db
+ * @return {String}
+ */
+function getLogin(local) {
+  // if user and project in organization
+  return local.organization && local.organization.login ? local.organization.login : local.user.login;
+}
+
 export class PullRequestGitHub {
 
   /**
    * @constructor
    *
    * @param {Object} pullRequest - pull request model
-   * @param {Object} github - github API module
    * @param {Object} [options]
    * @param {String} [options.separator.top] - top body separator
    * @param {String} [options.separator.bottom] - bottom body separator
+   * @param {Object} imports
    */
-  constructor(pullRequest, github, options) {
-    this.github = github;
+  constructor(pullRequest, options, imports) {
+    this.github = imports.github;
+    this.logger = imports.logger;
     this.pullRequest = pullRequest;
 
     this.separator = {
@@ -28,15 +39,19 @@ export class PullRequestGitHub {
   loadPullRequest(local) {
     return new Promise((resolve, reject) => {
       const req = {
-        user: local.organization.login,
+        user: getLogin(local),
         repo: local.repository.name,
         number: local.number
       };
 
-      this.github.pullRequests.get(req, (error, remote) => {
-        error ?
-          reject(new Error('Cannot receive a pull request from github:\n' + error)) :
+      this.github.pullRequests.get(req, (err, remote) => {
+        if (err) {
+          this.logger.error(err);
+
+          reject(new Error('Cannot receive a pull request from github:\n' + err));
+        } else {
           resolve(remote);
+        }
       });
     });
   }
@@ -63,16 +78,18 @@ export class PullRequestGitHub {
   updatePullRequest(local) {
     return new Promise((resolve, reject) => {
       const req = {
-        user: local.organization.login,
+        user: getLogin(local),
         repo: local.repository.name,
         body: local.body,
         title: local.title,
         number: local.number
       };
 
-      this.github.pullRequests.update(req, error => {
-        if (error) {
-          reject(new Error('Cannot update a pull request description:\n' + error));
+      this.github.pullRequests.update(req, err => {
+        if (err) {
+          this.logger.error(err);
+
+          reject(new Error('Cannot update a pull request description:\n' + err));
         }
 
         resolve(local);
@@ -83,16 +100,20 @@ export class PullRequestGitHub {
   loadPullRequestFiles(local) {
     return new Promise((resolve, reject) => {
       const req = {
-        user: local.organization.login,
+        user: getLogin(local),
         repo: local.repository.name,
         number: local.number,
         per_page: 100
       };
 
-      this.github.pullRequests.getFiles(req, (error, files) => {
-        error ?
-          reject(new Error('Cannot receive files from the pull request:\n' + error)) :
+      this.github.pullRequests.getFiles(req, (err, files) => {
+        if (err) {
+          this.logger.error(err);
+
+          reject(new Error('Cannot receive files from the pull request:\n' + err));
+        } else {
           resolve(files.map(file => { delete file.patch; return file; }));
+        }
       });
     });
   }
@@ -164,16 +185,13 @@ export class PullRequestGitHub {
 }
 
 export default function (options, imports) {
-
   const model = imports.model;
-  const github = imports.github;
 
   const service = new PullRequestGitHub(
     model.get('pull_request'),
-    github,
-    options
+    options,
+    imports
   );
 
   return Promise.resolve({ service });
-
 }
