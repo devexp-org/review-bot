@@ -25,16 +25,25 @@ describe('service/command#constructRegexp', () => {
       positive: makeCommonCases('/start')
     },
     {
-      test: '\/?([^!]|^)ok|\/?([^!]|^)ок',
+      test: '\/ok|\/ок|^ok|^ок',
       positive: [].concat(
-        makeCommonCases('/ok'), makeCommonCases('ok'),
-        makeCommonCases('/ок'), makeCommonCases('ок')
+        makeCommonCases('/ok'), makeCommonCases('/ок'),
+        'ok Lorem ipsum dolor sit amet',
+        'ок Lorem ipsum dolor sit amet'
       ),
       negative: [].concat(
         makeCommonCases('/!ok'),
         makeCommonCases('!ok'),
         makeNegativeCases('ok'),
-        makeNegativeCases('ок')
+        makeNegativeCases('ок'),
+        `Lorem ipsum dolor sit amet ok`,
+        `Lorem ipsum dolor sit amet, ok consectetur adipisicing elit.`,
+        `Lorem ipsum dolor sit amet,\n ok consectetur adipisicing elit.`,
+        `Lorem ipsum dolor sit amet,\n ok\n consectetur adipisicing elit.`,
+        `Lorem ipsum dolor sit amet ок`,
+        `Lorem ipsum dolor sit amet, ок consectetur adipisicing elit.`,
+        `Lorem ipsum dolor sit amet,\n ок consectetur adipisicing elit.`,
+        `Lorem ipsum dolor sit amet,\n ок\n consectetur adipisicing elit.`
       )
     },
     {

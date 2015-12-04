@@ -279,7 +279,7 @@
             "handlers": ["command-ping"]
           },
           {
-            "test": "\/?([^!]|^)ok|\/?([^!]|^)ок",
+            "test": "\/ok|\/ок|^ok|^ок",
             "handlers": ["command-ok"]
           },
           {
