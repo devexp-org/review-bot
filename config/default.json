@@ -297,6 +297,10 @@
           {
             "test": "\/add|\\+@?[\\w]+",
             "handlers": ["command-add"]
+          },
+          {
+            "test": "\/remove|\\-@?[\\w]+",
+            "handlers": ["command-remove"]
           }
         ]
       },
@@ -312,7 +316,8 @@
         "command-not-ok",
         "command-busy",
         "command-change",
-        "command-add"
+        "command-add",
+        "command-remove"
       ]
     },
 
@@ -320,6 +325,18 @@
       "path": "./services/command/add",
       "dependencies": {
         "team": "choose-team",
+        "action": "pull-request-action",
+        "logger": "logger",
+        "events": "events"
+      }
+    },
+
+    "command-remove": {
+      "path": "./services/command/remove",
+      "options": {
+        "min": 2
+      },
+      "dependencies": {
         "action": "pull-request-action",
         "logger": "logger",
         "events": "events"
