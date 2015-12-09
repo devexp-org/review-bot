@@ -56,6 +56,6 @@ export default function (options, imports) {
 
   });
 
-  return Promise.resolve({ service: githubRouter });
+  return githubRouter;
 
 }

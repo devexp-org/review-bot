@@ -12,5 +12,5 @@ export default function badgeRouterCreator(options, imports) {
 
   badgeRouter.use(middleware(badge));
 
-  return Promise.resolve({ service: badgeRouter });
+  return badgeRouter;
 }

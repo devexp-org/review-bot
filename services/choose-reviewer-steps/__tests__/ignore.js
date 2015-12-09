@@ -6,14 +6,10 @@ import service from '../ignore';
 describe('services/choose-reviewer-steps/ignore', function () {
 
   let members, step;
-  beforeEach(done => {
+  beforeEach(() => {
     members = _.clone(mockMembers, true);
 
-    service({ list: ['Captain America', 'Hulk', 'Thor'] }).then(resolved => {
-      step = resolved.service;
-
-      done();
-    });
+    step = service({ list: ['Captain America', 'Hulk', 'Thor'] });
   });
 
   it('should remove members from team which is in ignore list', done => {

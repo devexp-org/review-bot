@@ -193,5 +193,5 @@ export default function (options, imports) {
     imports
   );
 
-  return Promise.resolve({ service });
+  return service;
 }

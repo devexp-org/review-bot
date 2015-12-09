@@ -73,5 +73,5 @@ export default function commandService(options, imports) {
 
   };
 
-  return Promise.resolve({ service: addCommand });
+  return addCommand;
 }

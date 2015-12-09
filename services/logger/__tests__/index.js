@@ -9,31 +9,25 @@ class MyDummyWritableStream extends Writable {
 
 }
 
-describe('service/logger', function () {
+describe('services/logger', function () {
 
-  it('should be resolved to logger', function (done) {
+  it('should be resolved to logger', function () {
 
     const options = {
       transports: []
     };
 
-    service(options)
-      .then(result => {
-        const logger = result.service;
+    const logger = service(options);
 
-        assert.property(logger, 'info');
-        assert.property(logger, 'warn');
-        assert.property(logger, 'error');
-
-        done();
-      })
-      .catch(done);
+    assert.property(logger, 'info');
+    assert.property(logger, 'warn');
+    assert.property(logger, 'error');
 
   });
 
   describe('#options', function () {
 
-    it('should accept `file` and `console` transports', function (done) {
+    it('should accept `file` and `console` transports', function () {
 
       const options = {
         transports: [
@@ -52,9 +46,7 @@ describe('service/logger', function () {
         ]
       };
 
-      service(options)
-        .then(result => { done(); })
-        .catch(done);
+      service(options);
 
     });
 

@@ -24,5 +24,5 @@ export default function randomService(options) {
     return Promise.resolve(review);
   }
 
-  return Promise.resolve({ service: random });
+  return random;
 }

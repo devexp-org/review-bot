@@ -26,6 +26,6 @@ export default function (options, imports) {
 
   const service = new Logger({ transports });
 
-  return Promise.resolve({ service });
+  return service;
 
 }

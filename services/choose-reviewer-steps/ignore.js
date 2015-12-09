@@ -21,5 +21,5 @@ export default function ignoreService(options = {}) {
     return Promise.resolve(review);
   }
 
-  return Promise.resolve({ service: ignore });
+  return ignore;
 }

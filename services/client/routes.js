@@ -74,6 +74,6 @@ export default function (options, imports) {
       .catch(res.error.bind(res));
   });
 
-  return Promise.resolve({ service: clientRouter });
+  return clientRouter;
 
 }

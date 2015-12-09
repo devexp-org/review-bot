@@ -148,9 +148,7 @@ export default function (options, imports) {
     pullRequestModel: model.get('pull_request')
   };
 
-  const service = new Review(payload);
-
-  return Promise.resolve({ service });
+  return new Review(payload);
 
 }
 

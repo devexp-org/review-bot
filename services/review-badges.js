@@ -129,5 +129,5 @@ export default function (options, imports) {
   events.on('review:approved', updateReviewBadges);
   events.on('review:complete', updateReviewBadges);
 
-  return Promise.resolve({ service: builder });
+  return builder;
 }

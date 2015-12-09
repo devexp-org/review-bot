@@ -1,23 +1,16 @@
 import service from '../../team-github';
 
-describe('service/team-github', function () {
+describe('services/team-github', function () {
 
-  it('should be resolved to Team', function (done) {
+  it('should be resolved to Team', function () {
 
     const options = {};
     const imports = {
       github: sinon.stub()
     };
 
-    service(options, imports)
-      .then(result => {
-        const team = result.service;
-
-        assert.property(team, 'getTeam');
-        done();
-      })
-      .catch(done);
-
+    const team = service(options, imports);
+    assert.property(team, 'getTeam');
   });
 
 });

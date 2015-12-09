@@ -189,5 +189,5 @@ export default function commitersService(options, imports) {
 
   }
 
-  return Promise.resolve({ service: commiters });
+  return commiters;
 }

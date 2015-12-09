@@ -1,6 +1,6 @@
 import service from '../../review-notification';
 
-describe('service/review-notification', function () {
+describe('services/review-notification', function () {
 
   let options, imports, payload;
   let notifyStartStub, notifyUpdateStub;
@@ -31,7 +31,7 @@ describe('service/review-notification', function () {
     notifyUpdateStub = sinon.stub();
 
     imports.events.on
-      .withArgs('review:started').callsArgWithAsync(1, payload);
+      .withArgs('review:started').callsArgWith(1, payload);
 
     imports.requireDefault
       .withArgs('./notify-start').returns(notifyStartStub);
@@ -41,29 +41,23 @@ describe('service/review-notification', function () {
 
   });
 
-  it('should subscribe notificators on events', function (done) {
+  it('should subscribe notificators on events', function () {
 
-    service(options, imports)
-      .then(() => {
+    service(options, imports);
 
-        assert.calledWith(imports.requireDefault, './notify-start');
-        assert.calledWith(imports.requireDefault, './notify-update');
+    assert.calledWith(imports.requireDefault, './notify-start');
+    assert.calledWith(imports.requireDefault, './notify-update');
 
-        assert.calledWith(imports.events.on, 'review:started');
-        assert.calledWith(imports.events.on, 'review:updated');
+    assert.calledWith(imports.events.on, 'review:started');
+    assert.calledWith(imports.events.on, 'review:updated');
 
-        assert.calledWithExactly(
-          notifyStartStub,
-          imports.blackHole,
-          payload
-        );
+    assert.calledWithExactly(
+      notifyStartStub,
+      imports.blackHole,
+      payload
+    );
 
-        assert.notCalled(notifyUpdateStub);
-
-        done();
-
-      })
-      .catch(done);
+    assert.notCalled(notifyUpdateStub);
 
   });
 

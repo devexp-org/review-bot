@@ -123,5 +123,5 @@ export function pathRelatedCreator(options) {
 export default function pathRelatedService(options) {
   const pathRelated = pathRelatedCreator(options);
 
-  return Promise.resolve({ service: pathRelated });
+  return pathRelated;
 }

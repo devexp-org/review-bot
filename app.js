@@ -1,12 +1,12 @@
 /* eslint-disable no-console, no-process-exit */
 'use strict';
 
-import Application from './modules/application';
+import Architect from 'node-architect';
 import parseConfig from './modules/config';
 
 const basePath = __dirname;
 const appConfig = parseConfig(basePath);
-const application = new Application(appConfig, basePath);
+const application = new Architect(appConfig, basePath);
 
 // `catch` only needed to catch errors during application startup
 application

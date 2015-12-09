@@ -169,6 +169,6 @@ export default function (options, imports) {
     team
   });
 
-  return Promise.resolve({ service });
+  return service;
 
 }

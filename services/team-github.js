@@ -8,6 +8,6 @@ export default function (options, imports) {
 
   const service = new GitHubTeam(github, options && options.slug);
 
-  return Promise.resolve({ service });
+  return service;
 
 }

@@ -20,5 +20,5 @@ function sort(review) {
 }
 
 export default function sortService() {
-  return Promise.resolve({ service: sort });
+  return sort;
 }

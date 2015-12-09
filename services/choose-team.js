@@ -60,8 +60,6 @@ export default function (options, imports) {
 
   });
 
-  const service = new Team(routes);
-
-  return Promise.resolve({ service });
+  return new Team(routes);
 
 }

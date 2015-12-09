@@ -48,5 +48,5 @@ export default function loadService(options, imports) {
 
   }
 
-  return Promise.resolve({ service: load });
+  return load;
 }

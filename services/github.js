@@ -10,6 +10,6 @@ export default function (options, imports) {
     github.authenticate(options.authenticate);
   }
 
-  return Promise.resolve({ service: github });
+  return github;
 
 }

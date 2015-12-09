@@ -48,5 +48,5 @@ export default function commandService(options, imports) {
     return Promise.resolve();
   };
 
-  return Promise.resolve({ service: pingCommand });
+  return pingCommand;
 }

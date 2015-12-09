@@ -62,10 +62,7 @@ describe('services/command/add', () => {
         get: sinon.stub().returns(clone(mockReviewers))
       };
 
-      command = function (comment, payload) {
-        return service({}, { team, action, logger, events })
-          .then(resolved => resolved.service(comment, payload));
-      };
+      command = service({}, { team, action, logger, events });
       payload = { pullRequest, comment };
     });
 

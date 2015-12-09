@@ -54,33 +54,26 @@ describe('services/choose-reviewer-steps/load', () => {
     find.withArgs('Black Widow').returns(Promise.resolve([activePull1]));
     find.withArgs('Hulk').returns(Promise.resolve([activePull1, activePull2]));
 
-    service({ max: 1 }, { model })
-      .then(resolved => {
-        const step = resolved.service;
+    const step = service({ max: 1 }, { model });
 
-        step(review)
-          .then(review => {
-            assert.deepEqual(review.team, membersAltered);
-            done();
-          })
-          .catch(done);
-      });
+    step(review)
+      .then(review => {
+        assert.deepEqual(review.team, membersAltered);
+        done();
+      })
+      .catch(done);
   });
 
   it('should do nothing if there are no reviewers', done => {
     const review = { team: [], pullRequest };
 
-    service({ max: 1 }, { model })
-      .then(resolved => {
-        const step = resolved.service;
-
-        step(review, {})
-          .then(review => {
-            assert.deepEqual(review.team, []);
-            done();
-          })
-          .catch(done);
-      });
+    const step = service({ max: 1 }, { model });
+    step(review, {})
+      .then(review => {
+        assert.deepEqual(review.team, []);
+        done();
+      })
+      .catch(done);
   });
 
 });

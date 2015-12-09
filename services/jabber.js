@@ -11,7 +11,7 @@ export default function (options, imports) {
 
   const service = new Jabber(options);
 
-  const shutdown = function () {
+  service.shutdown = function () {
     return new Promise(resolve => {
       service.close();
       resolve();
@@ -21,5 +21,5 @@ export default function (options, imports) {
   // Ignore promise and don't wait until client goes online.
   service.connect();
 
-  return Promise.resolve({ service, shutdown });
+  return service;
 }
