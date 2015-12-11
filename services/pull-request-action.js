@@ -39,7 +39,7 @@ export class PullRequestAction {
             throw new Error('Pull request `' + pullId + '` not found');
           }
 
-          review = _.merge({}, pullRequest.review, review);
+          review = _.assign({}, pullRequest.review, review);
 
           if (!review.status) {
             review.status = 'notstarted';

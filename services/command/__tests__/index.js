@@ -67,6 +67,13 @@ describe('service/command#constructRegexp', () => {
       )
     },
     {
+      test: '\/remove|\\-@?[\\w]+',
+      positive: [].concat(
+        makeCommonCases('/remove user'), makeCommonCases('/remove @user'),
+        makeCommonCases('-user'), makeCommonCases('-@user')
+      )
+    },
+    {
       test: '\/?ping',
       positive: [].concat(
         makeCommonCases('/ping'),
