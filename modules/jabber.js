@@ -12,6 +12,7 @@ export default class Jabber {
    * @param {Object} options
    * @param {String} options.auth.login
    * @param {String} options.auth.password
+   * @param {Boolean} options.silent - in silent mode messages should not be sent
    * @param {Number} [options.maxQueue]
    * @param {Function} [options.info]
    */
@@ -23,6 +24,7 @@ export default class Jabber {
     this.auth = options.auth;
     this.info = options.info || console.log.bind(console);
     this.host = options.host;
+    this.silent = options.silent;
 
     this._queue = [];
     this._client = null;
@@ -130,6 +132,9 @@ export default class Jabber {
    */
   _send(to, body) {
     const jid = to + '@' + this.host;
+
+    if (this.silent) return;
+
     const stanza = new ltx.Element('message', { to: jid, type: 'chat' })
       .c('body')
       .t(body);
