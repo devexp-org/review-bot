@@ -22,6 +22,7 @@ export default class Jabber {
 
     this.auth = options.auth;
     this.info = options.info || console.log.bind(console);
+    this.host = options.host;
 
     this._queue = [];
     this._client = null;
@@ -128,10 +129,12 @@ export default class Jabber {
    * @param {String} body - message body
    */
   _send(to, body) {
-    const stanza = new ltx.Element('message', { to: to, type: 'chat' })
+    const jid = to + '@' + this.host;
+    const stanza = new ltx.Element('message', { to: jid, type: 'chat' })
       .c('body')
       .t(body);
 
+    this.info(`Send message to: ${jid} — ${body}`);
     this._client.send(stanza);
   }
 
