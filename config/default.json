@@ -97,6 +97,7 @@
             "chooser-reviewer-step-ignore",
             "chooser-reviewer-step-commiters",
             "chooser-reviewer-step-random",
+            "chooser-reviewer-step-path-related",
             "chooser-reviewer-step-load",
             "chooser-reviewer-step-sort",
             "chooser-reviewer-step-total-number"
@@ -112,7 +113,8 @@
         "chooser-reviewer-step-random",
         "chooser-reviewer-step-load",
         "chooser-reviewer-step-sort",
-        "chooser-reviewer-step-total-number"
+        "chooser-reviewer-step-total-number",
+        "chooser-reviewer-step-path-related"
       ]
     },
 
@@ -142,6 +144,16 @@
       "dependencies": [
         "github"
       ]
+    },
+
+    "chooser-reviewer-step-path-related": {
+      "path": "./services/choose-reviewer-steps/path-related",
+      "options": {
+        "max": 5,
+        "members": ["artems"],
+        "incPattern": "*.js",
+        "decPattern": "*.json"
+      }
     },
 
     "chooser-reviewer-step-random": {
