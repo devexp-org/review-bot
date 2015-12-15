@@ -444,7 +444,8 @@
       "options": {
         "events": {
           "review:started": "./services/review-notification/start",
-          "review:command:ping": "./services/review-notification/ping"
+          "review:command:ping": "./services/review-notification/ping",
+          "review:complete": "./services/review-notification/complete"
         },
         "transport": "jabber"
       },

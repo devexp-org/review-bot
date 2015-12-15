@@ -127,10 +127,10 @@ export class PullRequestAction {
 
           if (pullRequest.review.status === 'complete') {
             this.logger.info('review complete #%s', pullId);
-            this.events.emit('review:complete', { pullRequest: pullRequest });
+            this.events.emit('review:complete', { pullRequest });
           } else {
             this.logger.info('review approved #%s by %s', pullId, login);
-            this.events.emit('review:approved', { pullRequest: pullRequest, login: login });
+            this.events.emit('review:approved', { pullRequest, login });
           }
 
           return pullRequest;
