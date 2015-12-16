@@ -206,10 +206,17 @@
 
     "pull-request-action": {
       "path": "./services/pull-request-action",
+      "options": {
+        "defaultApproveCount": 2,
+        "team-github": {
+          "approveCount": 1
+        }
+      },
       "dependencies": [
         "events",
         "logger",
-        "model"
+        "model",
+        "choose-team"
       ]
     },
 

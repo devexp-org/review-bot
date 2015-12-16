@@ -1,20 +1,22 @@
 'use strict';
 
-import _ from 'lodash';
+import { get, assign, isEmpty } from 'lodash';
 
 export class PullRequestAction {
 
   /**
    * @constructor
    *
-   * @param {Object} pullRequest
-   * @param {Object} events
-   * @param {Object} logger
+   * @param {Object} options
+   * @param {Object} imports
    */
-  constructor(pullRequest, events, logger) {
-    this.events = events;
-    this.logger = logger;
-    this.pullRequest = pullRequest;
+  constructor(options, imports) {
+    this.options = options;
+
+    this.events = imports.events;
+    this.logger = imports.logger;
+    this.pullRequest = imports.pullRequest;
+    this.team = imports.team;
   }
 
   /**
@@ -39,13 +41,13 @@ export class PullRequestAction {
             throw new Error('Pull request `' + pullId + '` not found');
           }
 
-          review = _.assign({}, pullRequest.review, review);
+          review = assign({}, pullRequest.review, review);
 
           if (!review.status) {
             review.status = 'notstarted';
           }
 
-          if (review.status === 'inprogress' && _.isEmpty(review.reviewers)) {
+          if (review.status === 'inprogress' && isEmpty(review.reviewers)) {
             throw new Error(
               'Try to start review where reviewers were not selected,' +
               ' id - ' + pullId + ', title - ' + pullRequest.title
@@ -86,9 +88,9 @@ export class PullRequestAction {
    */
   approveReview(login, pullId) {
 
-    let approvedCount = 0;
-
     return new Promise((resolve, reject) => {
+
+      let approvedCount = 0;
 
       this.pullRequest
         .findById(pullId).exec()
@@ -99,6 +101,7 @@ export class PullRequestAction {
           }
 
           const review = pullRequest.get('review');
+          const requiredApprovedCount = this.getRequiredApproveCount(pullRequest);
 
           review.reviewers.forEach(reviewer => {
             if (reviewer.login === login) {
@@ -109,7 +112,7 @@ export class PullRequestAction {
               approvedCount += 1;
             }
 
-            if (approvedCount === 2) {
+            if (approvedCount >= requiredApprovedCount) {
               review.status = 'complete';
             }
           });
@@ -141,19 +144,30 @@ export class PullRequestAction {
 
   }
 
+  /**
+   * Returns number of approved reviews after which review will be marked as completed.
+   *
+   * @param {Object} pullRequest
+   *
+   * @return {Number}
+   */
+  getRequiredApproveCount(pullRequest) {
+    const teamName = this.team.getTeamName(pullRequest);
+
+    return get(this.options, [teamName, 'approveCount'], this.options.defaultApproveCount);
+  }
+
 }
 
 export default function (options, imports) {
 
-  const model = imports.model;
-  const events = imports.events;
-  const logger = imports.logger;
-
-  const service = new PullRequestAction(
-    model.get('pull_request'),
+  const { model, events, logger, 'choose-team': team } = imports;
+  const service = new PullRequestAction(options, {
+    pullRequest: model.get('pull_request'),
     events,
-    logger
-  );
+    logger,
+    team
+  });
 
   return Promise.resolve({ service });
 
