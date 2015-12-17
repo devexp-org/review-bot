@@ -92,45 +92,45 @@
       "options": {
         "team-github": {
           "steps": [
-            "chooser-reviewer-step-remove-author",
-            "chooser-reviewer-step-remove-already-reviewers",
-            "chooser-reviewer-step-ignore",
-            "chooser-reviewer-step-commiters",
-            "chooser-reviewer-step-random",
-            "chooser-reviewer-step-path-related",
-            "chooser-reviewer-step-load",
-            "chooser-reviewer-step-sort",
-            "chooser-reviewer-step-total-number"
+            "choose-reviewer-step-remove-author",
+            "choose-reviewer-step-remove-already-reviewers",
+            "choose-reviewer-step-ignore",
+            "choose-reviewer-step-commiters",
+            "choose-reviewer-step-random",
+            "choose-reviewer-step-path-related",
+            "choose-reviewer-step-load",
+            "choose-reviewer-step-sort",
+            "choose-reviewer-step-total-number"
           ]
         }
       },
       "dependencies": [
         "choose-team",
-        "chooser-reviewer-step-remove-author",
-        "chooser-reviewer-step-remove-already-reviewers",
-        "chooser-reviewer-step-ignore",
-        "chooser-reviewer-step-commiters",
-        "chooser-reviewer-step-random",
-        "chooser-reviewer-step-load",
-        "chooser-reviewer-step-sort",
-        "chooser-reviewer-step-total-number",
-        "chooser-reviewer-step-path-related"
+        "choose-reviewer-step-remove-author",
+        "choose-reviewer-step-remove-already-reviewers",
+        "choose-reviewer-step-ignore",
+        "choose-reviewer-step-commiters",
+        "choose-reviewer-step-random",
+        "choose-reviewer-step-load",
+        "choose-reviewer-step-sort",
+        "choose-reviewer-step-total-number",
+        "choose-reviewer-step-path-related"
       ]
     },
 
-    "chooser-reviewer-step-remove-author": {
+    "choose-reviewer-step-remove-author": {
       "path": "./services/choose-reviewer-steps/remove_author"
     },
 
-    "chooser-reviewer-step-remove-already-reviewers": {
+    "choose-reviewer-step-remove-already-reviewers": {
       "path": "./services/choose-reviewer-steps/remove_already_reviewers"
     },
 
-    "chooser-reviewer-step-ignore": {
+    "choose-reviewer-step-ignore": {
       "path": "./services/choose-reviewer-steps/ignore"
     },
 
-    "chooser-reviewer-step-commiters": {
+    "choose-reviewer-step-commiters": {
       "path": "./services/choose-reviewer-steps/commiters",
       "options": {
         "max": 4,
@@ -146,7 +146,7 @@
       ]
     },
 
-    "chooser-reviewer-step-path-related": {
+    "choose-reviewer-step-path-related": {
       "path": "./services/choose-reviewer-steps/path-related",
       "options": {
         "max": 5,
@@ -156,12 +156,12 @@
       }
     },
 
-    "chooser-reviewer-step-random": {
+    "choose-reviewer-step-random": {
       "path": "./services/choose-reviewer-steps/random",
       "options": { "max": 5 }
     },
 
-    "chooser-reviewer-step-load": {
+    "choose-reviewer-step-load": {
       "path": "./services/choose-reviewer-steps/load",
       "options": { "max": 1 },
       "dependencies": [
@@ -169,11 +169,11 @@
       ]
     },
 
-    "chooser-reviewer-step-sort": {
+    "choose-reviewer-step-sort": {
       "path": "./services/choose-reviewer-steps/sort"
     },
 
-    "chooser-reviewer-step-total-number": {
+    "choose-reviewer-step-total-number": {
       "path": "./services/choose-reviewer-steps/total_number",
       "options": { "max": 2 }
     },
