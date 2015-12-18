@@ -16,11 +16,11 @@ describe('services/choose-reviewer-steps/path-related', () => {
 
   describe('#isMatch', () => {
     it('should return true if pattern match files pathes', () => {
-      assert.isTrue(isMatch(['test.js', 'test.priv.js'], '*.js'));
+      assert.isTrue(isMatch(['test.js', 'test.priv.js'], ['*.js']));
     });
 
     it('should return false if pattern doesn`t match files pathes', () => {
-      assert.isFalse(isMatch(['test.js', 'test.priv.js'], '*.css'));
+      assert.isFalse(isMatch(['test.js', 'test.priv.js'], ['*.css']));
     });
   });
 
@@ -52,7 +52,7 @@ describe('services/choose-reviewer-steps/path-related', () => {
   describe('incRank', () => {
     const members = ['Hulk', 'Hawkeye'];
     const origMembers = filter(mockMembers, m => members.indexOf(m.login) !== -1);
-    const opts = { pattern: '*.js', max: 5, members };
+    const opts = { pattern: ['*.js'], max: 5, members };
 
     it('should increment rank for one random member of team', done => {
       const reviewers = clone(mockMembers, true);
@@ -92,7 +92,7 @@ describe('services/choose-reviewer-steps/path-related', () => {
   describe('decRank', () => {
     const members = ['Hulk', 'Hawkeye'];
     const origMembers = filter(mockMembers, m => members.indexOf(m.login) !== -1);
-    const opts = { pattern: '*.js', max: 5, members };
+    const opts = { pattern: ['*.js'], max: 5, members };
 
     it('should decrement rank for all members specified in options', done => {
       const reviewers = clone(mockMembers, true);

@@ -1,16 +1,16 @@
 import minimatch from 'minimatch';
-import { assign, sample, isEmpty, filter, forEach } from 'lodash';
+import { assign, sample, isEmpty, filter, forEach, any, map } from 'lodash';
 
 /**
  * Checks if files match the pattern
  *
  * @param {String[]} files - list of files
- * @param {String} pattern - minimatch compitable pattern
+ * @param {String[]} patterns - minimatch compitable pattern
  *
  * @return {Boolean}
  */
-export function isMatch(files, pattern) {
-  return !isEmpty(minimatch.match(files, pattern));
+export function isMatch(files, patterns) {
+  return any(map(patterns, pattern => !isEmpty(minimatch.match(files, pattern))));
 }
 
 /**
@@ -39,7 +39,7 @@ export function getFiles(pullRequest) {
 export function incRank(options, review) {
   return function (files) {
     const { pattern, max, members } = options;
-    const isApplicable = options && isMatch(files, pattern);
+    const isApplicable = options && !isEmpty(pattern) && isMatch(files, pattern);
     const membersCount = Math.floor(Math.random() * members.length) + 1;
 
     if (isApplicable) {
