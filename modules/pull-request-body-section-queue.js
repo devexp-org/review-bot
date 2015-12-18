@@ -7,11 +7,14 @@ export default class PullBodySectionDispatcher {
   /**
    * @constructor
    *
+   * @param {Object} options
+   * @param {Boolean} options.silent - in silent mode pull body should not be changed
    * @param {Object} github
    */
-  constructor(github) {
+  constructor(options, github) {
     this.github = github;
     this.queue = {};
+    this.silent = options.silent;
   }
 
   /**
@@ -75,6 +78,8 @@ export default class PullBodySectionDispatcher {
    * @return {Promise}
    */
   setSection(id, sectionId, content, pos = 99999) {
+    if (this.silent) return Promise.resolve();
+
     const promiseList = [];
 
     promiseList.push(this.enqueue(id, sectionId, content, pos));
