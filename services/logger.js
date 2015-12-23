@@ -2,7 +2,7 @@
 
 import winston, { Logger } from 'winston';
 
-export default function (options, imports) {
+export default function setup(options, imports) {
 
   const transports = options.transports.map(transport => {
     if (!('timestamp' in transport)) {
@@ -13,9 +13,6 @@ export default function (options, imports) {
       case 'file':
         return new winston.transports.File(transport);
 
-      case 'daily-rotate-file':
-        return new winston.transports.DailyRotateFile(transport);
-
       case 'console':
         return new winston.transports.Console(transport);
 
@@ -24,8 +21,6 @@ export default function (options, imports) {
     }
   });
 
-  const service = new Logger({ transports });
-
-  return service;
+  return new Logger({ transports });
 
 }

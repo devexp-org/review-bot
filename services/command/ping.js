@@ -11,12 +11,12 @@ export default function commandService(options, imports) {
   /**
    * Handle '/ping' command.
    *
-   * @param {String} command - line with user command.
    * @param {Object} payload - github webhook payload.
+   * @param {String} command - line with user command.
    *
    * @return {Promise}
    */
-  const pingCommand = function pingCommand(command, payload) {
+  const pingCommand = function pingCommand(payload, command) {
     const pullRequest = payload.pullRequest;
 
     logger.info(

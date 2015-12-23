@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { mockMembers } from './mocks/index';
+import { mockMembers } from '../__mocks__/index';
 import service from '../commiters';
 import { getFiles, getCommits, getCommiters } from '../commiters';
 
@@ -24,8 +24,7 @@ describe('services/choose-reviewer-steps/commiters', () => {
     files = sinon.stub();
 
     pullRequest = {
-      repository: { name: 'hubot' },
-      organization: { login: 'github' },
+      repository: { name: 'hubot', owner: { login: 'github' } },
       get: files
     };
 
@@ -138,6 +137,15 @@ describe('services/choose-reviewer-steps/commiters', () => {
         .catch(done);
     });
 
+    it('should skip commits without author', function (done) {
+      commits.push({});
+      commits.unshift({});
+
+      getCommiters(commits)
+        .then(() => null)
+        .then(done, done);
+    });
+
   });
 
   it('should increase rank if member is an author of the last commits', done => {
@@ -178,6 +186,16 @@ describe('services/choose-reviewer-steps/commiters', () => {
         done();
       })
       .catch(done);
+  });
+
+  it('should do nothing if no team in a review object', function (done) {
+    const review = { team: [] };
+
+    const commiters = service({}, {});
+
+    commiters(review)
+      .then(() => null)
+      .then(done, done);
   });
 
 });

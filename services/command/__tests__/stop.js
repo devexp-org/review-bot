@@ -31,21 +31,21 @@ describe('services/command/stop', () => {
 
   it('should be rejected if pr is closed', done => {
     payload.pullRequest.state = 'closed';
-    command('', payload).catch(() => done());
+    command(payload, '/stop').catch(() => done());
   });
 
   it('should be rejected if triggered by not an author', done => {
     payload.comment.user.login = 'blablabla';
-    command('', payload).catch(() => done());
+    command(payload, '/stop').catch(() => done());
   });
 
   it('should be rejected if pull request review not in progress', done => {
     payload.pullRequest.review.status = 'complete';
-    command('', payload).catch(() => done());
+    command(payload, '/stop').catch(() => done());
   });
 
   it('should trigger review:command:stop event', done => {
-    command('', payload)
+    command(payload, '/stop')
       .then(() => {
         assert.calledWith(events.emit, 'review:command:stop');
         done();

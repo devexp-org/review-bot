@@ -22,12 +22,12 @@ export default function commandService(options, imports) {
   /**
    * Handle '/remove' command.
    *
-   * @param {String} command - line with user command
    * @param {Object} payload - github webhook payload.
+   * @param {String} command - line with user command
    *
    * @return {Promise}
    */
-  const removeCommand = function removeCommand(command, payload) {
+  const removeCommand = function removeCommand(payload, command) {
 
     const pullRequest = payload.pullRequest;
     const reviewers = pullRequest.get('review.reviewers');

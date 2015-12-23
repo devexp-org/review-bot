@@ -1,5 +1,7 @@
 'use strict';
 
+import { Schema } from 'mongoose';
+
 export function setupSchema() {
   return {
     id: Number,
@@ -22,13 +24,13 @@ export function setupSchema() {
       id: Number,
       name: String,
       html_url: String,
-      full_name: String
-    },
-    organization: {
-      id: Number,
-      login: String,
-      html_url: String,
-      avatar_url: String
+      full_name: String,
+      owner: {
+        id: Number,
+        login: String,
+        html_url: String,
+        avatar_url: String
+      }
     },
     created_at: Date,
     updated_at: Date,
@@ -61,7 +63,8 @@ export function setupSchema() {
       started_at: Date,
       updated_at: Date,
       completed_at: Date
-    }
+    },
+    section: Schema.Types.Mixed
   };
 }
 
@@ -91,8 +94,7 @@ export function setupModel(modelName, model) {
     return this
       .model(modelName)
       .find({ 'user.login': login })
-      .sort('-updated_at')
-      .exec();
+      .sort('-updated_at');
   };
 
   /**
@@ -106,22 +108,38 @@ export function setupModel(modelName, model) {
     return this
       .model(modelName)
       .find({ 'review.reviewers.login': login })
-      .sort('-updated_at')
-      .exec();
+      .sort('-updated_at');
   };
 
   /**
-   * Find pull request by number and repository
+   * Find pull request by repository and number
    *
-   * @param {Number} number - pull request number
    * @param {String} fullName - repository full name
+   * @param {Number} number - pull request number
    *
    * @return {Promise}
    */
-  model.statics.findByNumberAndRepository = function (number, fullName) {
+  model.statics.findByRepositoryAndNumber = function (fullName, number) {
     return this
       .model(modelName)
       .findOne({ number, 'repository.full_name': fullName });
+  };
+
+  /**
+   * Find open reviews
+   *
+   * @param {String} login
+   * @return {Promise}
+   */
+  model.statics.findInReview = function () {
+    const req = {
+      state: 'open',
+      'review.status': 'inprogress'
+    };
+
+    return this
+      .model(modelName)
+      .find(req, 'review');
   };
 
   /**
@@ -130,7 +148,7 @@ export function setupModel(modelName, model) {
    * @param {String} login
    * @return {Promise}
    */
-  model.statics.findOpenReviewsByUser = function (login) {
+  model.statics.findInReviewByReviewer = function (login) {
     const req = {
       state: 'open',
       'review.status': 'inprogress',
@@ -142,4 +160,18 @@ export function setupModel(modelName, model) {
       .find(req, 'review');
   };
 
+}
+
+export function getUserLogin(pullRequest) {
+  if (pullRequest.repository &&
+      pullRequest.repository.owner &&
+      pullRequest.repository.owner.login) {
+    return pullRequest.repository.owner.login;
+  }
+
+  if (pullRequest.organization && pullRequest.organization.login) {
+    return pullRequest.organization.login;
+  }
+
+  return '';
 }

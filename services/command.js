@@ -1,36 +1,44 @@
 'use strict';
 
-import _ from 'lodash';
+import { map, get } from 'lodash';
 import CommandDispatcher from '../modules/command';
 
-export const constructRegexp = commandRegexp => new RegExp('(^|\\b|\\W|\\s)(' + commandRegexp + ')(\\s|\\b|\\W|$)', 'i');
+export function constructRegexp(x) {
+  return new RegExp('(^|\\s)(' + x + ')(\\s|$)', 'i');
+}
 
 export default function (options, imports) {
 
-  const queue = imports.queue;
   const model = imports.model;
+  const queue = imports.queue;
   const events = imports.events;
   const logger = imports.logger;
-  const pullRequestModel = model.get('pull_request');
+  const PullRequestModel = model.get('pull_request');
 
   const wrapHandler = function (handler) {
-    return function (commentCommand, payload) {
+
+    return function (payload, commentCommand, commandRexExp) {
       const pullId = payload.pullRequest.id;
+
       return queue.dispatch('pull-request-command#' + pullId, () => {
+
         return new Promise((resolve, reject) => {
-          pullRequestModel
+          PullRequestModel
             .findById(pullId)
             .then(pullRequest => {
               payload.pullRequest = pullRequest;
-              return handler(commentCommand, payload);
+
+              return handler(payload, commentCommand, commandRexExp);
             })
             .then(resolve, reject);
         });
+
       });
     };
+
   };
 
-  const commands = options.commands.map(command => {
+  const commands = map(options.commands, command => {
     return {
       test: constructRegexp(command.test),
       handlers: command.handlers.map(service => {
@@ -41,14 +49,16 @@ export default function (options, imports) {
 
   const dispatcher = new CommandDispatcher(commands);
 
-  options.events.forEach(event => {
+  (options.events || []).forEach(event => {
+
     events.on(event, payload => {
-      const comment = _.get(payload, 'comment.body', '');
+      const comment = get(payload, 'comment.body', '');
 
       dispatcher
         .dispatch(comment, payload)
-        .catch(::logger.error);
+        .catch(logger.error.bind(logger));
     });
+
   });
 
   return dispatcher;

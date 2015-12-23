@@ -2,9 +2,9 @@ import { clone } from 'lodash';
 
 import service from '../remove';
 import { getParticipant } from '../remove';
-import { mockReviewers } from './mocks';
+import { mockReviewers } from '../__mocks__/index';
 
-describe('services/command/add', () => {
+describe('services/command/remove', () => {
 
   describe('#getParticipant', () => {
 
@@ -62,24 +62,24 @@ describe('services/command/add', () => {
     });
 
     it('should be rejected if user is not in reviewers list', done => {
-      command('/remove Hawkeye', payload).catch(() => done());
+      command(payload, '/remove Hawkeye').catch(() => done());
     });
 
     it('should be rejected if there only 1 reviewer in reviewers list', done => {
-      pullRequest.get = sinon.stub().returns(['']);
+      pullRequest.get = sinon.stub().returns([{ login: 'Hulk' }]);
 
-      command('/remove Hulk', payload).catch(() => done());
+      command(payload, '/remove Hulk').catch(() => done());
     });
 
     it('should save pullRequest with new reviewers list', done => {
-      command('/remove Hulk', payload).then(() => {
+      command(payload, '/remove Hulk').then(() => {
         assert.called(action.save);
         done();
       }, done);
     });
 
     it('should emit `review:command:remove` event', done => {
-      command('/remove Hulk', payload).then(() => {
+      command(payload, '/remove Hulk').then(() => {
         assert.calledWith(events.emit, 'review:command:remove');
 
         done();

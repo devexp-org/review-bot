@@ -1,8 +1,9 @@
 instrumentation:
     excludes:
-      - "**/__tests__/**"
-      - "tests/**"
       - "app.js"
       - "start.js"
-      - "client/**"
+      - "tests/**"
+      - "plugins/**"
+      - "**/__tests__/**"
+      - "**/__mocks__/**"
     include-all-sources: true

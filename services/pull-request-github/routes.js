@@ -15,44 +15,42 @@ export default function (options, imports) {
   const githubRouter = router();
 
   githubRouter.get('/i', function (req, res) {
-    res.ok('ok');
+    res.send('ok').end();
   });
 
   githubRouter.post('/webhook', function (req, res) {
-    if (!_.isPlainObject(req.body)) {
-      res.error('req.body is not plain object');
-      return;
-    }
+    const reject = (e) => {
+      logger.error(e);
+      res.error(e);
+    };
+
+    const resolve = () => res.ok({ status: 'ok' });
 
     const eventName = req.headers[GITHUB_HEADER_EVENT];
 
+    if (!_.isPlainObject(req.body)) {
+      reject(new Error('req.body is not a plain object'));
+      return;
+    }
+
     switch (eventName) {
+      case 'ping':
+        res.send('pong').end();
+        return;
+
       case 'pull_request':
         pullRequestHook(req.body, imports)
-          .then(null, logger.error.bind(logger));
+          .then(resolve, reject);
         break;
 
       case 'issue_comment':
         issueCommentHook(req.body, imports)
-          .then(null, logger.error.bind(logger));
+          .then(resolve, reject);
         break;
-
-      case 'commit_comment':
-      case 'pull_request_review_comment':
-        logger.info('Ignore event `%s` from GitHub', eventName);
-        res.ok({ status: 'ignored' });
-        break;
-
-      case 'ping':
-        res.ok('pong');
-        return;
 
       default:
-        logger.info('Unknown event `%s` from GitHub', eventName);
-        res.error({ status: 'unknown command' });
+        reject(new Error('Unknown event `${eventName}`'));
     }
-
-    res.ok({ status: 'ok' });
 
   });
 

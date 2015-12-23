@@ -1,84 +1,71 @@
 'use strict';
 
 import _ from 'lodash';
-
-/**
- * Check user organization membership and return login
- * @param {Object} local PullRequst in db
- * @return {String}
- */
-function getLogin(local) {
-  // if user and project in organization
-  return local.organization && local.organization.login ? local.organization.login : local.user.login;
-}
+import { getUserLogin } from '../modules/model/pull_request';
 
 export class PullRequestGitHub {
 
   /**
    * @constructor
    *
-   * @param {Object} pullRequest - pull request model
    * @param {Object} [options]
    * @param {String} [options.separator.top] - top body separator
    * @param {String} [options.separator.bottom] - bottom body separator
-   * @param {Object} imports
+   * @param {Object} github - github api client
+   * @param {Object} pullRequest - pull request mongoose model
    */
-  constructor(pullRequest, options, imports) {
-    this.github = imports.github;
-    this.logger = imports.logger;
+  constructor(options, github, pullRequest) {
+    this.github = github;
     this.pullRequest = pullRequest;
 
     this.separator = {
       top: options.separator && options.separator.top ||
-        '<div id="devkit-top"></div><hr>',
+        '<div id="devexp-top"></div><hr>',
       bottom: options.separator && options.separator.bottom ||
-        '<div id="devkit-bottom"></div>'
+        '<div id="devexp-bottom"></div>'
     };
   }
 
-  loadPullRequest(local) {
+  loadPullRequestFromGitHub(local) {
     return new Promise((resolve, reject) => {
       const req = {
-        user: getLogin(local),
+        user: getUserLogin(local),
         repo: local.repository.name,
         number: local.number
       };
 
       this.github.pullRequests.get(req, (err, remote) => {
-        if (err) {
-          this.logger.error(err);
-
-          reject(new Error('Cannot receive a pull request from github:\n' + err));
-        } else {
-          resolve(remote);
-        }
+        err
+          ? reject(new Error('Cannot receive a pull request from github:\n' + err))
+          : resolve(remote);
       });
     });
   }
 
-  savePullRequest(remote) {
+  savePullRequestToDatabase(remote) {
     return new Promise((resolve, reject) => {
       this.pullRequest
         .findById(remote.id)
         .then(local => {
           if (!local) {
-            return reject(new Error('Pull request `' + remote.id + '` not found'));
+            return reject(new Error(`Pull request '${remote.id}' not found`));
           }
 
           local.set(remote);
-          local.save(error => {
-            error ?
-              reject(new Error('Cannot save a pull request from github:\n' + error)) :
-              resolve(local);
+
+          local.save(err => {
+            err
+              ? reject(new Error('Cannot save a pull request from github:\n' + err))
+              : resolve(local);
           });
         });
     });
   }
 
-  updatePullRequest(local) {
+  updatePullRequestOnGitHub(local) {
     return new Promise((resolve, reject) => {
       const req = {
-        user: getLogin(local),
+        user: getUserLogin(local),
         repo: local.repository.name,
         body: local.body,
         title: local.title,
@@ -86,13 +73,9 @@ export class PullRequestGitHub {
       };
 
       this.github.pullRequests.update(req, err => {
-        if (err) {
-          this.logger.error(err);
-
-          reject(new Error('Cannot update a pull request description:\n' + err));
-        }
-
-        resolve(local);
+        err
+          ? reject(new Error('Cannot update a pull request:\n' + err))
+          : resolve(local);
       });
     });
   }
@@ -100,31 +83,27 @@ export class PullRequestGitHub {
   loadPullRequestFiles(local) {
     return new Promise((resolve, reject) => {
       const req = {
-        user: getLogin(local),
+        user: getUserLogin(local),
         repo: local.repository.name,
         number: local.number,
         per_page: 100
       };
 
       this.github.pullRequests.getFiles(req, (err, files) => {
-        if (err) {
-          this.logger.error(err);
-
-          reject(new Error('Cannot receive files from the pull request:\n' + err));
-        } else {
-          resolve(files.map(file => { delete file.patch; return file; }));
-        }
+        err
+          ? reject(new Error('Cannot receive files from the pull request:\n' + err))
+          : resolve(files.map(file => { delete file.patch; return file; }));
       });
     });
   }
 
   syncPullRequest(local) {
     return this
-      .loadPullRequest(local)
-      .then(remote => this.savePullRequest(remote));
+      .loadPullRequestFromGitHub(local)
+      .then(this.savePullRequestToDatabase.bind(this));
   }
 
-  setBodySection(id, sectionId, content, pos = 99999) {
+  setBodySection(id, sectionId, content, position = Infinity) {
     return this.pullRequest
       .findById(id)
       .then(local => {
@@ -135,33 +114,43 @@ export class PullRequestGitHub {
         return this.syncPullRequest(local);
       })
       .then(local => {
-        const section = _.clone(local.get('section') || {});
-        section[sectionId] = { content, pos };
+        const section = _.cloneDeep(local.get('section') || {});
+
+        section[sectionId] = { content, position };
+
         local.set('section', section);
 
         this.fillPullRequestBody(local);
 
         return local.save();
       })
-      .then(this.updatePullRequest.bind(this));
-  }
-
-  buildBodyContent(section) {
-    return _.values(section)
-      .map(s => { return s.pos ? s : { pos: 99999, content: s }; })
-      .sort((a, b) => a.pos > b.pos ? 1 : a.pos < b.pos ? -1 : 0) // eslint-disable-line
-      .map(s => '<div>' + s.content + '</div>')
-      .join('');
+      .then(this.updatePullRequestOnGitHub.bind(this));
   }
 
   fillPullRequestBody(local) {
     const bodyContent = this.buildBodyContent(local.section);
 
     const bodyContentWithSeparators =
-      this.separator.top + bodyContent + this.separator.bottom;
+      '\n' + this.separator.top +
+      bodyContent +
+      this.separator.bottom + '\n';
 
     local.body = this.cleanPullRequestBody(local.body) +
       bodyContentWithSeparators;
+  }
+
+  buildBodyContent(section) {
+    return _(section)
+      .values()
+      .map(section =>
+        section.content
+          ? section
+          : { position: Infinity, content: section }
+      )
+      .sortBy('position')
+      .map(section => '<div>' + section.content + '</div>')
+      .value()
+      .join('');
   }
 
   cleanPullRequestBody(body) {
@@ -173,25 +162,22 @@ export class PullRequestGitHub {
 
       if (end !== -1) {
         const after = body.substr(end + this.separator.bottom.length);
-        return before.trim() + after.trim();
+        return (before.trim() + '\n' + after.trim()).trim();
       }
 
-      return before.trim();
     }
 
-    return body;
+    return body.trim();
   }
 
 }
 
 export default function (options, imports) {
-  const model = imports.model;
 
-  const service = new PullRequestGitHub(
-    model.get('pull_request'),
+  return new PullRequestGitHub(
     options,
-    imports
+    imports.github,
+    imports.model.get('pull_request')
   );
 
-  return service;
 }

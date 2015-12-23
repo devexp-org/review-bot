@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import { Schema } from 'mongoose';
 
-import { AddonBroker } from '../modules/model';
+import { ModelAddonBroker } from '../modules/model';
 import * as pullRequest from '../modules/model/pull_request';
 
 export default function (options, imports) {
@@ -14,7 +14,9 @@ export default function (options, imports) {
   const extenders = {};
 
   _.forEach(options.addons, (list, modelName) => {
+
     _.forEach(list, addon => {
+
       const m = imports.require(addon);
 
       if (!saveHooks[modelName]) {
@@ -24,16 +26,16 @@ export default function (options, imports) {
 
       m.saveHook && saveHooks[modelName].push(m.saveHook);
       m.extender && extenders[modelName].push(m.extender);
+
     });
+
   });
 
-  const addonBroker = new AddonBroker(saveHooks, extenders);
+  const addonBroker = new ModelAddonBroker(saveHooks, extenders);
 
   const setup = function setup(modelName, module) {
-    const schema = module.setupSchema();
-
-    addonBroker.setupExtenders(modelName, schema);
-
+    const defaultSchema = module.setupSchema();
+    const schema = addonBroker.setupExtenders(modelName, defaultSchema);
     const model = new Schema(schema);
 
     module.setupModel(modelName, model);
@@ -45,12 +47,10 @@ export default function (options, imports) {
 
   setup('pull_request', pullRequest);
 
-  const service = {
+  return {
     get(modelName) {
       return mongoose.model(modelName);
     }
   };
-
-  return service;
 
 }
