@@ -50,29 +50,26 @@ describe('service/review-autoassign', function () {
 
   it('should start review when someone open a new pull request', function (done) {
 
-    service(options, imports)
-      .then(() => {
-        assert.calledWithExactly(
-          imports['pull-request-action'].save,
-          { reviewers: reviewResult.team },
-          1
-        );
-        done();
-      })
-      .catch(done);
+    service(options, imports);
+
+    setTimeout(function () {
+      assert.calledWithExactly(
+        imports['pull-request-action'].save,
+        { reviewers: reviewResult.team },
+        1
+      );
+      done();
+    }, 10);
 
   });
 
-  it('should not restart if reviewer were selected before', function (done) {
+  it('should not restart if reviewer were selected before', function () {
 
     payload.pullRequest.review.reviewers = [{ login: 'Hulk' }];
 
-    service(options, imports)
-      .then(() => {
-        assert.notCalled(imports['pull-request-action'].save);
-        done();
-      })
-      .catch(done);
+    service(options, imports);
+
+    assert.notCalled(imports['pull-request-action'].save);
 
   });
 

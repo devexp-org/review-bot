@@ -24,10 +24,7 @@ describe('services/command/stop', () => {
       approveReview: sinon.stub().returns(Promise.resolve(pullRequest))
     };
 
-    command = function (comment, payload) {
-      return service({}, { action, team, events, logger })
-        .then(resolved => resolved.service(comment, payload));
-    };
+    command = service({}, { action, team, events, logger });
 
     payload = { pullRequest, comment };
   });

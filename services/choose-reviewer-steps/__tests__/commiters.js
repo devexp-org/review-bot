@@ -170,17 +170,14 @@ describe('services/choose-reviewer-steps/commiters', () => {
       { login: 'Thor', rank: 3 }
     ];
 
-    service(options, { github })
-      .then(resolved => {
-        const commiters = resolved.service;
+    const commiters = service(options, { github });
 
-        commiters(review)
-          .then(review => {
-            assert.deepEqual(review.team, membersAltered);
-            done();
-          })
-          .catch(done);
-      });
+    commiters(review)
+      .then(review => {
+        assert.deepEqual(review.team, membersAltered);
+        done();
+      })
+      .catch(done);
   });
 
 });

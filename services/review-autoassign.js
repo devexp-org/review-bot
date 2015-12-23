@@ -49,6 +49,5 @@ export default function (options, imports) {
   events.on('github:pull_request:opened', autoStart);
   events.on('github:pull_request:synchronize', autoStart);
 
-  return Promise.resolve({ service: {} });
-
+  return {};
 }

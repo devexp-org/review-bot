@@ -1,22 +1,16 @@
 import service from '../../events';
 
-describe('service/events', function () {
+describe('services/events', function () {
 
-  it('should be resolved to EventEmitter', function (done) {
+  it('should be resolved to EventEmitter', function () {
 
-    service()
-      .then(result => {
-        const emitter = result.service;
+    const emitter = service();
 
-        assert.property(emitter, 'on');
-        assert.property(emitter, 'once');
-        assert.property(emitter, 'emit');
-        assert.property(emitter, 'addListener');
-        assert.property(emitter, 'removeListener');
-
-        done();
-      })
-      .catch(done);
+    assert.property(emitter, 'on');
+    assert.property(emitter, 'once');
+    assert.property(emitter, 'emit');
+    assert.property(emitter, 'addListener');
+    assert.property(emitter, 'removeListener');
 
   });
 

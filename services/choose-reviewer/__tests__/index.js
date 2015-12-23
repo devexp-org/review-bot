@@ -183,24 +183,17 @@ describe('services/choose-reviewer', function () {
 
   });
 
-  describe('service', done => {
+  describe('service', () => {
 
-    it('should return resolved promise', function () {
+    it('should return service', function () {
       const model = { get: sinon.stub().returns({}) };
       const options = { steps: ['step1', 'step2'] };
       const requireDefault = sinon.stub();
-      const imports = {
-        model,
-        requireDefault
-      };
+      const imports = { model, requireDefault };
 
       requireDefault.returns(function step() {});
 
-      service(options, imports)
-        .then(() => null)
-        .then(done)
-        .catch(done);
-
+      service(options, imports);
     });
 
   });

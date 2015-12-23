@@ -54,7 +54,7 @@ export default function (options, imports) {
         server.address().port
       );
 
-      const shutdown = function () {
+      server.shutdown = function () {
         return new Promise((resolve, reject) => {
           server.close(function (error) {
             error ? reject(error) : resolve();
@@ -62,7 +62,7 @@ export default function (options, imports) {
         });
       };
 
-      provide({ service: server, shutdown });
+      provide(server);
     });
 
   });

@@ -6,15 +6,11 @@ import service from '../sort';
 describe('services/choose-reviewer-steps/sort', () => {
 
   let members, step, pullRequest;
-  beforeEach(done => {
+  beforeEach(() => {
     members = _.clone(mockMembers, true);
     pullRequest = {};
 
-    service().then(resolved => {
-      step = resolved.service;
-
-      done();
-    });
+    step = service();
   });
 
   it('should sort members by rank descending', done => {

@@ -7,14 +7,10 @@ describe('services/choose-reviewer-steps/remove_author', () => {
 
   let members, step;
 
-  beforeEach(done => {
+  beforeEach(() => {
     members = _.clone(mockMembers, true);
 
-    service().then(resolved => {
-      step = resolved.service;
-
-      done();
-    });
+    step = service();
   });
 
   it('should remove author from team', done => {

@@ -6,6 +6,6 @@ export default function (options, imports) {
 
   const service = new StaticTeam(options.members);
 
-  return Promise.resolve({ service });
+  return service;
 
 }

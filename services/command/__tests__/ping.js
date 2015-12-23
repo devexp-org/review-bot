@@ -11,10 +11,7 @@ describe('services/command/ping', () => {
     events = { emit: sinon.stub() };
     logger = { info: sinon.stub() };
 
-    command = function (comment, payload) {
-      return service({}, { logger, events })
-        .then(resolved => resolved.service(comment, payload));
-    };
+    command = service({}, { logger, events });
 
     payload = {
       pullRequest: {

@@ -22,5 +22,5 @@ export default function totalNumberService(options) {
     return Promise.resolve(review);
   }
 
-  return Promise.resolve({ service: totalNumber });
+  return totalNumber;
 }

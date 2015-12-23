@@ -7,15 +7,11 @@ describe('services/choose-reviewer-steps/random', () => {
 
   let members, step, pullRequest;
 
-  beforeEach(done => {
+  beforeEach(() => {
     members = _.clone(mockMembers, true);
     pullRequest = {};
 
-    service({ max: 2 }).then(resolved => {
-      step = resolved.service;
-
-      done();
-    });
+    step = service({ max: 2 });
   });
 
   it('should add random value to rank to each member', done => {

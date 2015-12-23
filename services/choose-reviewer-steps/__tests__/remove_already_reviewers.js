@@ -7,7 +7,7 @@ describe('services/choose-reviewer-steps/remove_already_reviewers', () => {
 
   let members, step, pullRequest;
 
-  beforeEach(done => {
+  beforeEach(() => {
     members = _.clone(mockMembers, true);
     pullRequest = {
       get(path) {
@@ -22,11 +22,7 @@ describe('services/choose-reviewer-steps/remove_already_reviewers', () => {
       }
     };
 
-    service().then(resolved => {
-      step = resolved.service;
-
-      done();
-    });
+    step = service();
   });
 
   it('should remove reviewers from team', done => {

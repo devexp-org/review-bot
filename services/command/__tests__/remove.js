@@ -56,10 +56,9 @@ describe('services/command/add', () => {
         get: sinon.stub().returns(clone(mockReviewers))
       };
 
-      command = (comment, payload) => service({ min: 1 }, { action, logger, events })
-        .then(resolved => resolved.service(comment, payload));
-
       payload = { pullRequest, comment };
+
+      command = service({ min: 1 }, { action, logger, events });
     });
 
     it('should be rejected if user is not in reviewers list', done => {

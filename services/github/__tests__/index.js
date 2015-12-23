@@ -1,27 +1,21 @@
 import service from '../../github';
 
-describe('service/github', function () {
+describe('services/github', function () {
 
-  it('should be resolved to GitHub', function (done) {
+  it('should be resolved to GitHub', function () {
 
     const options = {
       version: '3.0.0'
     };
 
-    service(options)
-      .then(result => {
-        const github = result.service;
+    const github = service(options);
 
-        assert.property(github, 'repos');
-        assert.property(github, 'pullRequests');
-
-        done();
-      })
-      .catch(done);
+    assert.property(github, 'repos');
+    assert.property(github, 'pullRequests');
 
   });
 
-  it('should authenticate to GitHub if credentials is provided', function (done) {
+  it('should authenticate to GitHub if credentials is provided', function () {
     const options = {
       version: '3.0.0',
       authenticate: {
@@ -30,13 +24,8 @@ describe('service/github', function () {
       }
     };
 
-    service(options)
-      .then(result => {
-        const github = result.service;
-        assert.isObject(github);
-        done();
-      })
-      .catch(done);
+    const github = service(options);
+    assert.isObject(github);
 
   });
 

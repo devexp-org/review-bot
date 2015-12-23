@@ -5,5 +5,5 @@ export default function chooseReviewerStepsService(options, imports) {
 
   const service = stepsFactory(options, imports);
 
-  return Promise.resolve({ service });
+  return service;
 }

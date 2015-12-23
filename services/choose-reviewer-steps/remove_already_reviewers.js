@@ -30,5 +30,5 @@ function removeAlreadyReviewers(review) {
 }
 
 export default function removeAuthorService() {
-  return Promise.resolve({ service: removeAlreadyReviewers });
+  return removeAlreadyReviewers;
 }

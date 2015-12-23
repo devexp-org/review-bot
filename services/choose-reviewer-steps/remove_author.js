@@ -16,5 +16,5 @@ function removeAuthor(review) {
 }
 
 export default function removeAuthorService() {
-  return Promise.resolve({ service: removeAuthor });
+  return removeAuthor;
 }

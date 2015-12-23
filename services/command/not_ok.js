@@ -55,5 +55,5 @@ export default function commandService(options, imports) {
 
   };
 
-  return Promise.resolve({ service: notOkCommand });
+  return notOkCommand;
 }

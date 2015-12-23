@@ -31,19 +31,15 @@ describe('services/choose-team', function () {
 
   });
 
-  it('should correct parse options', function (done) {
+  it('should correct parse options', function () {
     pullRequest.repository.full_name = 'github/hubot';
 
-    run()
-      .then(resolved => {
-        assert.property(resolved.service, 'findByPullRequest');
+    const choose = run();
 
-        resolved.service.findByPullRequest(pullRequest);
-        assert.called(imports.team_github_1.getTeam);
+    assert.property(choose, 'findByPullRequest');
 
-        done();
-      })
-      .catch(done);
+    choose.findByPullRequest(pullRequest);
+    assert.called(imports.team_github_1.getTeam);
 
   });
 
@@ -66,7 +62,8 @@ describe('services/choose-team', function () {
     delete imports.team_config_1;
 
     try {
-      run().then(done).catch(done);
+      run();
+      assert.fail('it should fail');
     } catch (e) {
       assert.instanceOf(e, Error);
       assert.match(e.message, /team_config_1/);
