@@ -19,7 +19,7 @@ describe('services/command/stop', () => {
     comment = { user: { login: 'd4rkr00t' } };
 
     action = {
-      save: sinon.stub().returns(Promise.resolve(pullRequest)),
+      saveReview: sinon.stub().returns(Promise.resolve(pullRequest)),
 
       approveReview: sinon.stub().returns(Promise.resolve(pullRequest))
     };

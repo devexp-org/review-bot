@@ -51,7 +51,7 @@ describe('services/command/add', () => {
           promise({ login: 'Hawkeye' })
         )
       };
-      action = { save: sinon.stub().returns(Promise.resolve(pullRequest)) };
+      action = { saveReview: sinon.stub().returns(Promise.resolve(pullRequest)) };
       events = { emit: sinon.stub() };
       logger = { info: sinon.stub() };
       comment = {
@@ -83,7 +83,7 @@ describe('services/command/add', () => {
         const resultReviewers = clone(mockReviewers);
         resultReviewers.push({ login: 'Hawkeye' });
 
-        assert.called(action.save);
+        assert.called(action.saveReview);
         assert.deepEqual(pullRequest.get('review.reviewers'), resultReviewers);
 
         done();

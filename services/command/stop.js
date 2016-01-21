@@ -53,7 +53,7 @@ export default function commandService(options, imports) {
     }
 
     return action
-      .save({ status: 'notstarted' }, pullRequest.id)
+      .saveReview({ status: 'notstarted' }, pullRequest.id)
       .then(pullRequest => {
         events.emit(EVENT_NAME, { pullRequest });
 

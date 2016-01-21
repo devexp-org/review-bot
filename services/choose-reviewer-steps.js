@@ -13,7 +13,7 @@ export function stepsFactory(options, imports) {
    * @return {Object} { steps, stepOptions }
    */
   return function getChooseReviewerSteps(pullRequest) {
-    const teamName = team.getTeamName(pullRequest);
+    const teamName = team.findTeamNameByPullRequest(pullRequest);
 
     if (!teamName) {
       return Promise.reject(new Error(util.format(

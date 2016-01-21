@@ -70,7 +70,7 @@ export default function commandService(options, imports) {
 
           reviewers.push(newReviewer);
 
-          return action.save({ reviewers }, pullRequest.id);
+          return action.saveReview({ reviewers }, pullRequest.id);
         })
         .then(pullRequest => action.approveReview(login, pullRequest.id))
         .then(pullRequest => {

@@ -39,7 +39,7 @@ export class PullRequestAction {
           throw new Error(`Pull request #${pullId} not found`);
         }
 
-        review = assign({}, cloneDeep(pullRequest.review), cloneDeep(review));
+        review = assign({}, pullRequest.get('review'), cloneDeep(review));
 
         if (!review.status) {
           review.status = 'notstarted';

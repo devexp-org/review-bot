@@ -57,7 +57,7 @@ describe('services/command/change', () => {
         )
       };
       action = {
-        save(reviewers) {
+        saveReview(reviewers) {
           pullRequest.review = reviewers;
 
           return pullRequest;

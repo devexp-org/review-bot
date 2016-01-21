@@ -61,7 +61,7 @@ export default function commandService(options, imports) {
     const newReviewers = reject(reviewers, { login: reviewerLogin });
 
     return action
-      .save({ reviewers: newReviewers }, pullRequest.id)
+      .saveReview({ reviewers: newReviewers }, pullRequest.id)
       .then(pullRequest => {
         events.emit(EVENT_NAME, { pullRequest });
       });

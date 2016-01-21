@@ -12,7 +12,7 @@ describe('services/choose-reviewer-steps/load', () => {
     pullRequest = {};
 
     find = sinon.stub();
-    pullRequestModel = { findOpenReviewsByUser: find };
+    pullRequestModel = { findInReviewByReviewer: find };
     model = { get: sinon.stub().returns(pullRequestModel) };
   });
 
