@@ -1,48 +1,8 @@
 'use strict';
 
-import _ from 'lodash';
-import path from 'path';
-
-import Application from '../../modules/application';
-import projectConfig from '../../modules/config';
-
 import { withPullRequest } from './common';
 
 describe('model', function () {
-
-  const basePath = path.resolve('.');
-  const appConfig = projectConfig(basePath, 'testing');
-  appConfig.services.logger.options.transports = [];
-
-  let _appConfig, application;
-  beforeEach(function () {
-    _appConfig = _.clone(appConfig, true);
-    application = new Application(_appConfig, basePath);
-  });
-
-  const pullRequestHook = require('../data/pull_request_webhook');
-  pullRequestHook.pull_request.repository = pullRequestHook.repository;
-  pullRequestHook.pull_request.organization = pullRequestHook.organization;
-
-  const withApp = function (test, done) {
-    application
-      .execute()
-      .then(test)
-      .then(::application.shutdown)
-      .then(done)
-      .catch(done);
-  };
-
-  let PullRequest;
-  const withModel = function (test, done) {
-    withApp(imports => {
-      const model = imports.model;
-      PullRequest = model.get('pull_request');
-      const pullRequest = new PullRequest();
-
-      return PullRequest.remove({}).then(() => pullRequest).then(test);
-    }, done);
-  };
 
   describe('modules/model/pull_request', function () {
 
@@ -55,21 +15,12 @@ describe('model', function () {
 
     });
 
-    it('should apply pre-save hooks and extenderes', function (done) {
-
-      withPullRequest(imports => {
-        const pullRequest = imports.pullRequest;
-        assert.isNumber(pullRequest.complexity);
-      }, done);
-
-    });
-
     describe('#findByUser', function () {
 
       it('should return pull requests filtered by user', function (done) {
 
         withPullRequest(imports => {
-          PullRequest = imports.PullRequest;
+          const { PullRequest } = imports;
 
           PullRequest.findByUser('d4rkr00t')
             .then(result => {
@@ -82,9 +33,11 @@ describe('model', function () {
 
       it('should return an empty array if pulls not found', function (done) {
 
-        withModel(pullRequest => {
+        withPullRequest(imports => {
+          const { PullRequest } = imports;
+
           return PullRequest
-            .findByUser('d4rkr00t')
+            .findByUser('sbmaxx')
             .then(result => {
               assert.isArray(result);
               assert.lengthOf(result, 0);
@@ -99,8 +52,9 @@ describe('model', function () {
 
       it('should return pull requests filtered by reviewer', function (done) {
 
-        withModel(pullRequest => {
-          pullRequest.set(pullRequestHook.pull_request);
+        withPullRequest(imports => {
+          const { pullRequest, PullRequest } = imports;
+
           pullRequest.set('review', {
             reviewers: [{ login: 'sbmaxx' }, { login: 'mishanga' }]
           });
@@ -119,32 +73,31 @@ describe('model', function () {
 
     });
 
-    describe('#findByNumberAndRepository', function () {
+    describe('#findByRepositoryAndNumber', function () {
 
       it('should return pull requests filtered by reviewer', function (done) {
 
-        withModel(pullRequest => {
-          pullRequest.set(pullRequestHook.pull_request);
+        withPullRequest(imports => {
+          const { PullRequest } = imports;
 
-          return pullRequest.save().then(() => {
-            return PullRequest
-              .findByNumberAndRepository(49, 'devexp-org/devexp')
-              .then(result => {
-                assert.equal(result.id, pullRequest.id);
-              });
-          });
+          return PullRequest
+            .findByRepositoryAndNumber('devexp-org/devexp', 49)
+            .then(result => {
+              assert.equal(result.number, 49);
+            });
         }, done);
 
       });
 
     });
 
-    describe('#findOpenReviewsByUser', function () {
+    describe('#findInReviewByReviewer', function () {
 
       it('should return open pull requests filtered by reviewer', function (done) {
 
-        withModel(pullRequest => {
-          pullRequest.set(pullRequestHook.pull_request);
+        withPullRequest(imports => {
+          const { pullRequest, PullRequest } = imports;
+
           pullRequest.set('review', {
             status: 'inprogress',
             reviewers: [{ login: 'sbmaxx' }, { login: 'mishanga' }]
@@ -152,7 +105,7 @@ describe('model', function () {
 
           return pullRequest.save().then(() => {
             return PullRequest
-              .findOpenReviewsByUser('sbmaxx')
+              .findInReviewByReviewer('sbmaxx')
               .then(result => {
                 assert.isArray(result);
                 assert.lengthOf(result, 1);

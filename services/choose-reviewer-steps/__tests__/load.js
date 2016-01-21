@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { mockMembers } from './mocks/index';
+import { mockMembers } from '../__mocks__/index';
 import service from '../load';
 
 describe('services/choose-reviewer-steps/load', () => {
@@ -12,7 +12,7 @@ describe('services/choose-reviewer-steps/load', () => {
     pullRequest = {};
 
     find = sinon.stub();
-    pullRequestModel = { findOpenReviewsByUser: find };
+    pullRequestModel = { findInReviewByReviewer: find };
     model = { get: sinon.stub().returns(pullRequestModel) };
   });
 

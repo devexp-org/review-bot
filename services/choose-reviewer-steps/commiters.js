@@ -54,7 +54,7 @@ export function getCommits(github, pullRequest, since, commitsCount) {
 
     const options = {
       repo: pullRequest.repository.name,
-      user: pullRequest.organization.login,
+      user: pullRequest.repository.owner.login,
       per_page: commitsCount
     };
 
@@ -118,9 +118,9 @@ export function addRank(maxRank, team) {
     });
 
     _.forEach(team, (member) => {
-      member.rank += members[member.login] ?
-        maxRank / (max / members[member.login]) :
-        0;
+      member.rank += members[member.login]
+        ? maxRank / (max / members[member.login])
+        : 0;
     });
 
     return team;

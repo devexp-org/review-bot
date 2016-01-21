@@ -13,12 +13,12 @@ export default function commandService(options, imports) {
   /**
    * Handle '/ok' command.
    *
-   * @param {String} command - line with user command.
    * @param {Object} payload - github webhook payload.
+   * @param {String} command - line with user command.
    *
    * @return {Promise}
    */
-  const okCommand = function okCommand(command, payload) {
+  const okCommand = function okCommand(payload, command) {
 
     const login = payload.comment.user.login;
     const pullRequest = payload.pullRequest;
@@ -70,7 +70,7 @@ export default function commandService(options, imports) {
 
           reviewers.push(newReviewer);
 
-          return action.save({ reviewers }, pullRequest.id);
+          return action.saveReview({ reviewers }, pullRequest.id);
         })
         .then(pullRequest => action.approveReview(login, pullRequest.id))
         .then(pullRequest => {

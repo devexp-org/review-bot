@@ -25,15 +25,19 @@ export default class CommandDispatcher {
     const promise = [];
 
     forEach(this.store, command => {
+
       forEach(comment.split('\n'), line => {
+
         if (command.test.test(line)) {
           forEach(command.handlers, handler => {
             const commentCommand = line.trim();
 
-            promise.push(handler(commentCommand, payload));
+            promise.push(handler(payload, commentCommand, command.test));
           });
         }
+
       });
+
     });
 
     return Promise.all(promise);

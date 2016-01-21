@@ -22,12 +22,12 @@ export default function commandService(options, imports) {
   /**
    * Handle '/remove' command.
    *
-   * @param {String} command - line with user command
    * @param {Object} payload - github webhook payload.
+   * @param {String} command - line with user command
    *
    * @return {Promise}
    */
-  const removeCommand = function removeCommand(command, payload) {
+  const removeCommand = function removeCommand(payload, command) {
 
     const pullRequest = payload.pullRequest;
     const reviewers = pullRequest.get('review.reviewers');
@@ -61,7 +61,7 @@ export default function commandService(options, imports) {
     const newReviewers = reject(reviewers, { login: reviewerLogin });
 
     return action
-      .save({ reviewers: newReviewers }, pullRequest.id)
+      .saveReview({ reviewers: newReviewers }, pullRequest.id)
       .then(pullRequest => {
         events.emit(EVENT_NAME, { pullRequest });
       });

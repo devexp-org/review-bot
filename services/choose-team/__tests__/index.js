@@ -6,9 +6,9 @@ describe('services/choose-team', function () {
 
   beforeEach(function () {
     imports = {
-      team_github_1: { getTeam: sinon.stub(), getMember: sinon.stub() },
-      team_github_2: { getTeam: sinon.stub(), getMember: sinon.stub() },
-      team_config_1: { getTeam: sinon.stub(), getMember: sinon.stub() }
+      team_github_1: { getTeam: sinon.stub() },
+      team_github_2: { getTeam: sinon.stub() },
+      team_config_1: { getTeam: sinon.stub() }
     };
 
     options = {

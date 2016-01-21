@@ -1,5 +1,6 @@
 'use strict';
 
+import _ from 'lodash';
 import minimatch from 'minimatch';
 
 export default class Team {
@@ -39,18 +40,30 @@ export default class Team {
    * @return {Developer}
    */
   findTeamMemberByPullRequest(pullRequest, login) {
+    const find = (team) => _.find(team, { login });
+
     for (let i = 0; i < this.routes.length; i++) {
       const route = this.routes[i];
 
       if (this.matchRoute(route.pattern, pullRequest)) {
-        return route.getMember(pullRequest, login);
+        if (!route.findTeamMemberByPullRequest) {
+          return route.getTeam(pullRequest).then(find);
+        } else {
+          return route.findTeamMemberByPullRequest(pullRequest, login);
+        }
       }
     }
 
     return null;
   }
 
-  getTeamName(pullRequest) {
+  /**
+   *
+   * @param {PullRequest} pullRequest
+   *
+   * @return {String}
+   */
+  findTeamNameByPullRequest(pullRequest) {
     for (let i = 0; i < this.routes.length; i++) {
       const route = this.routes[i];
 

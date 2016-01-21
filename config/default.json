@@ -1,8 +1,10 @@
 {
-  "cluster": {
-    "workers": 4
-  },
   "services": {
+
+    "queue": {
+      "path": "./services/queue"
+    },
+
     "events": {
       "path": "./services/events"
     },
@@ -14,6 +16,21 @@
           { "name": "console", "timestamp": true, "colorize": true }
         ]
       }
+    },
+
+    "github": {
+      "path": "./services/github",
+      "options": {
+        "host": "api.github.com",
+        "debug": false,
+        "version": "3.0.0",
+        "protocol": "https",
+        "timeout": 5000,
+        "headers": {
+          "user-agent": "DevExp"
+        }
+      },
+      "dependencies": []
     },
 
     "mongoose": {
@@ -29,49 +46,12 @@
       "options": {
         "addons": {
           "pull_request": [
-            "./services/complexity/addon",
-            "./services/pull-request-github/addon"
+            "./services/pull-request-github/addon",
+            "./node_modules/devexp-plugin-complexity/services/complexity/addon"
           ]
         }
       },
       "dependencies": ["mongoose"]
-    },
-
-    "github": {
-      "path": "./services/github",
-      "options": {
-        "host": "api.github.com",
-        "debug": false,
-        "version": "3.0.0",
-        "protocol": "https",
-        "timeout": 5000,
-        "headers": {
-          "user-agent": "DevKit-App"
-        }
-      },
-      "dependencies": []
-    },
-
-    "team-github": {
-      "path": "./services/team-github",
-      "options": {
-        "team": "owners"
-      },
-      "dependencies": [
-        "github"
-      ]
-    },
-
-    "team-static": {
-      "path": "./services/team-static",
-      "options": {
-        "members": [
-          "artems",
-          "d4rkr00t",
-          "mishanga",
-          "sbmaxx"
-        ]
-      }
     },
 
     "choose-team": {
@@ -87,106 +67,24 @@
       ]
     },
 
-    "choose-reviewer-steps": {
-      "path": "./services/choose-reviewer-steps",
+    "team-static": {
+      "path": "./services/team-static",
       "options": {
-        "team-github": {
-          "steps": [
-            "choose-reviewer-step-remove-author",
-            "choose-reviewer-step-remove-already-reviewers",
-            "choose-reviewer-step-ignore",
-            "choose-reviewer-step-commiters",
-            "choose-reviewer-step-random",
-            "choose-reviewer-step-path-related",
-            "choose-reviewer-step-load",
-            "choose-reviewer-step-sort",
-            "choose-reviewer-step-total-number"
-          ]
-        }
-      },
-      "dependencies": [
-        "choose-team",
-        "choose-reviewer-step-remove-author",
-        "choose-reviewer-step-remove-already-reviewers",
-        "choose-reviewer-step-ignore",
-        "choose-reviewer-step-commiters",
-        "choose-reviewer-step-random",
-        "choose-reviewer-step-load",
-        "choose-reviewer-step-sort",
-        "choose-reviewer-step-total-number",
-        "choose-reviewer-step-path-related"
-      ]
-    },
-
-    "choose-reviewer-step-remove-author": {
-      "path": "./services/choose-reviewer-steps/remove_author"
-    },
-
-    "choose-reviewer-step-remove-already-reviewers": {
-      "path": "./services/choose-reviewer-steps/remove_already_reviewers"
-    },
-
-    "choose-reviewer-step-ignore": {
-      "path": "./services/choose-reviewer-steps/ignore"
-    },
-
-    "choose-reviewer-step-commiters": {
-      "path": "./services/choose-reviewer-steps/commiters",
-      "options": {
-        "max": 4,
-        "since": [4, "month"],
-        "filesToCheck": 5,
-        "commitsCount": 10,
-        "ignore": [
-          "config"
+        "members": [
+          "artems",
+          "d4rkr00t",
+          "mishanga",
+          "sbmaxx"
         ]
-      },
-      "dependencies": [
-        "github"
-      ]
+      }
     },
 
-    "choose-reviewer-step-path-related": {
-      "path": "./services/choose-reviewer-steps/path-related",
+    "team-github": {
+      "path": "./services/team-github",
       "options": {
-        "max": 5,
-        "members": ["artems"],
-        "incPattern": ["*.js"],
-        "decPattern": ["*.json"]
-      }
-    },
-
-    "choose-reviewer-step-random": {
-      "path": "./services/choose-reviewer-steps/random",
-      "options": { "max": 5 }
-    },
-
-    "choose-reviewer-step-load": {
-      "path": "./services/choose-reviewer-steps/load",
-      "options": { "max": 1 },
-      "dependencies": [
-        "model"
-      ]
-    },
-
-    "choose-reviewer-step-sort": {
-      "path": "./services/choose-reviewer-steps/sort"
-    },
-
-    "choose-reviewer-step-total-number": {
-      "path": "./services/choose-reviewer-steps/total_number",
-      "options": { "max": 2 }
-    },
-
-    "choose-reviewer": {
-      "path": "./services/choose-reviewer",
-      "dependencies": {
-        "team": "choose-team",
-        "model": "model",
-        "logger": "logger",
-        "events": "events",
-        "steps": "choose-reviewer-steps"
-      }
+        "team": "owners"
+      },
+      "dependencies": ["github"]
     },
 
     "pull-request-github": {
@@ -198,8 +96,8 @@
         }
       },
       "dependencies": [
-        "github",
         "model",
+        "github",
         "logger"
       ]
     },
@@ -207,76 +105,16 @@
     "pull-request-action": {
       "path": "./services/pull-request-action",
       "options": {
-        "defaultApproveCount": 2,
         "team-github": {
           "approveCount": 1
-        }
+        },
+        "defaultApproveCount": 2
       },
       "dependencies": [
+        "model",
         "events",
         "logger",
-        "model",
         "choose-team"
-      ]
-    },
-
-    "http": {
-      "path": "./services/http",
-      "options": {
-        "port": "8080",
-        "routes": {
-          "/api": "http-routes-client",
-          "/badges": "http-routes-badges",
-          "/github": "http-routes-github"
-        }
-      },
-      "dependencies": [
-        "logger",
-        "http-routes-client",
-        "http-routes-badges",
-        "http-routes-github"
-      ]
-    },
-
-    "http-routes-client": {
-      "path": "./services/client/routes",
-      "dependencies": [
-        "model",
-        "logger",
-        "choose-reviewer",
-        "pull-request-action"
-      ]
-    },
-
-    "http-routes-badges": {
-      "path": "./services/badge-constructor/routes",
-      "options": {
-        "template": "flat"
-      },
-      "dependencies": [
-        "logger"
-      ]
-    },
-
-    "http-routes-github": {
-      "path": "./services/pull-request-github/routes",
-      "dependencies": {
-        "model": "model",
-        "events": "events",
-        "logger": "logger",
-        "github": "pull-request-github",
-        "choose-reviewer": "choose-reviewer",
-        "pull-request-action": "pull-request-action"
-      }
-    },
-
-    "review-autoassign": {
-      "path": "./services/review-autoassign",
-      "dependencies": [
-        "events",
-        "logger",
-        "choose-reviewer",
-        "pull-request-action"
       ]
     },
 
@@ -428,19 +266,178 @@
       }
     },
 
-    "queue": {
-      "path": "./services/queue"
+    "choose-reviewer": {
+      "path": "./services/choose-reviewer",
+      "dependencies": {
+        "team": "choose-team",
+        "model": "model",
+        "logger": "logger",
+        "events": "events",
+        "steps": "choose-reviewer-steps"
+      }
     },
 
-    "pull-request-body-queue": {
-      "path": "./services/pull-request-body-section-queue",
+    "choose-reviewer-steps": {
+      "path": "./services/choose-reviewer-steps",
+      "options": {
+        "team-github": {
+          "steps": [
+            "choose-reviewer-step-remove-author",
+            "choose-reviewer-step-remove-already-reviewers",
+            "choose-reviewer-step-ignore",
+            "choose-reviewer-step-commiters",
+            "choose-reviewer-step-random",
+            "choose-reviewer-step-path-related",
+            "choose-reviewer-step-load",
+            "choose-reviewer-step-sort",
+            "choose-reviewer-step-total-number"
+          ]
+        }
+      },
       "dependencies": [
-        "pull-request-github"
+        "choose-team",
+        "choose-reviewer-step-remove-author",
+        "choose-reviewer-step-remove-already-reviewers",
+        "choose-reviewer-step-ignore",
+        "choose-reviewer-step-commiters",
+        "choose-reviewer-step-random",
+        "choose-reviewer-step-load",
+        "choose-reviewer-step-sort",
+        "choose-reviewer-step-total-number",
+        "choose-reviewer-step-path-related"
       ]
     },
 
+    "choose-reviewer-step-remove-author": {
+      "path": "./services/choose-reviewer-steps/remove_author"
+    },
+
+    "choose-reviewer-step-remove-already-reviewers": {
+      "path": "./services/choose-reviewer-steps/remove_already_reviewers"
+    },
+
+    "choose-reviewer-step-ignore": {
+      "path": "./services/choose-reviewer-steps/ignore"
+    },
+
+    "choose-reviewer-step-commiters": {
+      "path": "./services/choose-reviewer-steps/commiters",
+      "options": {
+        "max": 4,
+        "since": [4, "month"],
+        "filesToCheck": 5,
+        "commitsCount": 10,
+        "ignore": [
+          "config"
+        ]
+      },
+      "dependencies": [
+        "github"
+      ]
+    },
+
+    "choose-reviewer-step-path-related": {
+      "path": "./services/choose-reviewer-steps/path-related",
+      "options": {
+        "max": 5,
+        "members": ["artems"],
+        "incPattern": ["*.js"],
+        "decPattern": ["*.json"]
+      }
+    },
+
+    "choose-reviewer-step-random": {
+      "path": "./services/choose-reviewer-steps/random",
+      "options": { "max": 5 }
+    },
+
+    "choose-reviewer-step-load": {
+      "path": "./services/choose-reviewer-steps/load",
+      "options": { "max": 1 },
+      "dependencies": [
+        "model"
+      ]
+    },
+
+    "choose-reviewer-step-sort": {
+      "path": "./services/choose-reviewer-steps/sort"
+    },
+
+    "choose-reviewer-step-total-number": {
+      "path": "./services/choose-reviewer-steps/total_number",
+      "options": { "max": 2 }
+    },
+
+    "http": {
+      "path": "./services/http",
+      "options": {
+        "port": "8080",
+        "routes": {
+          "/api": "http-routes-client",
+          "/badges": "http-routes-badges",
+          "/github": "http-routes-github",
+          "/public": "http-routes-static",
+          "/": "http-routes-index"
+        }
+      },
+      "dependencies": [
+        "logger",
+        "http-routes-index",
+        "http-routes-static",
+        "http-routes-client",
+        "http-routes-badges",
+        "http-routes-github"
+      ]
+    },
+
+    "http-routes-index": {
+      "path": "./services/http/routes/index",
+      "options": {
+        "assets": "assets"
+      }
+    },
+
+    "http-routes-static": {
+      "path": "./services/http/routes/static",
+      "options": {
+        "assets": "public"
+      }
+    },
+
+    "http-routes-client": {
+      "path": "./node_modules/devexp-plugin-rest-api/services/client/routes",
+      "dependencies": [
+        "model",
+        "logger",
+        "choose-reviewer",
+        "pull-request-action"
+      ]
+    },
+
+    "http-routes-badges": {
+      "path": "./node_modules/devexp-plugin-badge/services/badge-constructor/routes",
+      "options": {
+        "template": "flat"
+      },
+      "dependencies": [
+        "logger"
+      ]
+    },
+
+    "http-routes-github": {
+      "path": "./services/pull-request-github/routes",
+      "dependencies": {
+        "model": "model",
+        "events": "events",
+        "logger": "logger",
+        "github": "pull-request-github",
+        "choose-reviewer": "choose-reviewer",
+        "pull-request-action": "pull-request-action"
+      }
+    },
+
     "review-badges": {
-      "path": "./services/review-badges",
+      "path": "./node_modules/devexp-plugin-badge/services/review-badges",
       "options": {
         "url": "http://localhost:8080/badges/",
         "style": "flat"
@@ -451,8 +448,41 @@
       ]
     },
 
+    "pull-request-body-queue": {
+      "path": "./node_modules/devexp-plugin-badge/services/pull-request-body-section-queue",
+      "dependencies": [
+        "pull-request-github"
+      ]
+    },
+
+    "review-autoassign": {
+      "path": "./node_modules/devexp-plugin-autoassign/services/review-autoassign",
+      "dependencies": [
+        "events",
+        "logger",
+        "choose-reviewer",
+        "pull-request-action"
+      ]
+    },
+
+    "review-notification": {
+      "path": "./node_modules/devexp-plugin-notification-center/services/review-notification",
+      "options": {
+        "events": {
+          "review:started": "./node_modules/devexp-plugin-notification-center/services/review-notification/start",
+          "review:complete": "./node_modules/devexp-plugin-notification-center/services/review-notification/complete",
+          "review:command:ping": "./node_modules/devexp-plugin-notification-center/services/review-notification/ping"
+        },
+        "transport": "jabber"
+      },
+      "dependencies": [
+        "events",
+        "jabber"
+      ]
+    },
+
     "jabber": {
-      "path": "./services/jabber",
+      "path": "./node_modules/devexp-plugin-notification-jabber/services/jabber",
       "options": {
         "host": "github.com"
       },
@@ -461,19 +491,15 @@
       ]
     },
 
-    "review-notification": {
-      "path": "./services/review-notification",
+    "scheduler": {
+      "path": "./node_modules/devexp-plugin-notification-scheduler/services/scheduler",
       "options": {
-        "events": {
-          "review:started": "./services/review-notification/start",
-          "review:command:ping": "./services/review-notification/ping",
-          "review:complete": "./services/review-notification/complete"
-        },
-        "transport": "jabber"
+        "days": 1
       },
       "dependencies": [
+        "model",
         "events",
-        "jabber"
+        "logger"
       ]
     }
   }

@@ -11,12 +11,12 @@ export default function commandService(options, imports) {
   /**
    * Handle '/start' command.
    *
-   * @param {String} command - line with user command.
    * @param {Object} payload - github webhook payload.
+   * @param {String} command - line with user command.
    *
    * @return {Promise}
    */
-  const startCommand = function startCommand(command, payload) {
+  const startCommand = function startCommand(payload, command) {
     const pullRequest = payload.pullRequest;
 
     logger.info(
@@ -43,7 +43,7 @@ export default function commandService(options, imports) {
     }
 
     return action
-      .save({ status: 'inprogress' }, payload.pullRequest.id)
+      .saveReview({ status: 'inprogress' }, payload.pullRequest.id)
       .then(pullRequest => {
         events.emit(EVENT_NAME, { pullRequest });
 
