@@ -4,11 +4,6 @@ source ./colors.sh 2>/dev/null;
 
 NODE_MODULES=node_modules
 
-if [ ! -d $NODE_MODULES/client ]; then
-    echo "Creating symlink to './client' folder"
-    ln -s ../client $NODE_MODULES/client
-fi
-
 if [ ! -f config/secret.json ]; then
     echo "Copying empty secret.json"
     cp scripts/templates/secret.json config/
