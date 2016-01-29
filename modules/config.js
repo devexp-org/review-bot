@@ -13,7 +13,6 @@ export default function config(basePath, envName) {
     if (fs.existsSync(configPath)) {
       return JSON.parse(fs.readFileSync(configPath));
     }
-
     return {};
   };
 
@@ -25,11 +24,6 @@ export default function config(basePath, envName) {
   const secretConfig = requireIfExists(secretConfigPath);
   const envConfig = requireIfExists(envConfigPath);
 
-  return merge(
-    { env: envName },
-    defaultConfig,
-    secretConfig,
-    envConfig
-  );
+  return merge({ env: envName }, defaultConfig, secretConfig, envConfig);
 
 }

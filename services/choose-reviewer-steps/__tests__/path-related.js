@@ -1,10 +1,10 @@
 import { clone, filter, forEach } from 'lodash';
-import { mockMembers } from '../__mocks__/index';
-import service, { isMatch, isMatchAll, getFiles, incRank, decRank } from '../path-related';
+import { mockMembers } from './mocks/index';
+import { isMatch, isMatchAll, getFiles, incRank, decRank, pathRelatedCreator } from '../path-related';
 
 describe('services/choose-reviewer-steps/path-related', () => {
   it('should always be resolved', done => {
-    const pathRelated = service({});
+    const pathRelated = pathRelatedCreator({});
     const pullRequest = {
       get: sinon.stub().returns([])
     };

@@ -2,7 +2,7 @@
 
 import { isEmpty } from 'lodash';
 
-export class ChooseReviewer {
+export class Review {
 
   /**
    * @constructor
@@ -15,7 +15,7 @@ export class ChooseReviewer {
     this.team = payload.team;
     this.steps = payload.steps;
     this.logger = payload.logger;
-    this.PullRequestModel = payload.PullRequestModel;
+    this.pullRequestModel = payload.pullRequestModel;
   }
 
   /**
@@ -57,7 +57,7 @@ export class ChooseReviewer {
    * @return {Promise}
    */
   addZeroRank(review) {
-    review.team.forEach(member => member.rank = 0);
+    review.team.forEach(member => { member.rank = 0; });
 
     return Promise.resolve(review);
   }
@@ -71,7 +71,7 @@ export class ChooseReviewer {
    */
   start(pullId) {
     return new Promise((resolve, reject) => {
-      this.PullRequestModel
+      this.pullRequestModel
         .findById(pullId)
         .then(pullRequest => {
           if (!pullRequest) {
@@ -113,8 +113,8 @@ export class ChooseReviewer {
 
     return this
       .start(pullId)
-      .then(::this.findTeam)
       .then(::this.findSteps)
+      .then(::this.findTeam)
       .then(::this.addZeroRank)
       .then(::this.stepsQueue)
       .then(review => {
@@ -126,9 +126,9 @@ export class ChooseReviewer {
         );
 
         this.logger.info('Reviewers are: %s',
-          (!isEmpty(review.team))
-            ? review.team.map(x => x.login + '#' + x.rank).join(' ')
-            : 'ooops, no reviewers were selected...'
+          (!isEmpty(review.team)) ?
+            review.team.map(x => x.login + '#' + x.rank).join(' ') :
+            'ooops, no reviewers were selected...'
         );
 
         return review;
@@ -142,13 +142,13 @@ export default function (options, imports) {
   const { team, model, logger, steps } = imports;
 
   const payload = {
-    team,
     steps,
+    team,
     logger,
-    PullRequestModel: model.get('pull_request')
+    pullRequestModel: model.get('pull_request')
   };
 
-  return new ChooseReviewer(payload);
+  return new Review(payload);
 
 }
 

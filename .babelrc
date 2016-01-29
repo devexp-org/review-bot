@@ -1,9 +1,10 @@
 {
-  "presets": [
-    "es2015-loose"
+  "loose": [
+    "es6.modules",
+    "es6.classes"
   ],
-  "plugins": [
-    "syntax-function-bind",
-    "transform-function-bind"
+  "optional": [
+    "es7.functionBind"
   ]
 }
+

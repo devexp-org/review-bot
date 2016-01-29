@@ -19,7 +19,7 @@ describe('services/command/stop', () => {
     comment = { user: { login: 'd4rkr00t' } };
 
     action = {
-      saveReview: sinon.stub().returns(Promise.resolve(pullRequest)),
+      save: sinon.stub().returns(Promise.resolve(pullRequest)),
 
       approveReview: sinon.stub().returns(Promise.resolve(pullRequest))
     };
@@ -31,21 +31,21 @@ describe('services/command/stop', () => {
 
   it('should be rejected if pr is closed', done => {
     payload.pullRequest.state = 'closed';
-    command(payload, '/stop').catch(() => done());
+    command('', payload).catch(() => done());
   });
 
   it('should be rejected if triggered by not an author', done => {
     payload.comment.user.login = 'blablabla';
-    command(payload, '/stop').catch(() => done());
+    command('', payload).catch(() => done());
   });
 
   it('should be rejected if pull request review not in progress', done => {
     payload.pullRequest.review.status = 'complete';
-    command(payload, '/stop').catch(() => done());
+    command('', payload).catch(() => done());
   });
 
   it('should trigger review:command:stop event', done => {
-    command(payload, '/stop')
+    command('', payload)
       .then(() => {
         assert.calledWith(events.emit, 'review:command:stop');
         done();

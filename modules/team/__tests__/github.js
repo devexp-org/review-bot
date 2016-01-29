@@ -7,10 +7,8 @@ describe('modules/team/github', function () {
   let github;
 
   const pull = {
-    repository: {
-      owner: {
-        login: 'devexp-org'
-      }
+    organization: {
+      login: 'devexp-org'
     }
   };
 
@@ -92,6 +90,23 @@ describe('modules/team/github', function () {
       github.orgs.getTeamMembers.callArgWith(1, new Error('error'));
 
       teamPromise.catch(error => { done(); });
+    });
+
+  });
+
+  describe('getMember', function () {
+
+    it('should return a team member with given login', done => {
+      const members = [{ login: 'a' }, { login: 'b' }];
+      const gt = new GitHubTeam(members);
+      gt.getTeam = sinon.stub().returns(Promise.resolve(members));
+
+      gt.getMember({}, 'b')
+        .then(result => {
+          assert.deepEqual(result, members[1]);
+          done();
+        })
+        .catch(done);
     });
 
   });

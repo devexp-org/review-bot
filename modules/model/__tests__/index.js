@@ -1,10 +1,10 @@
 'use strict';
 
-import { ModelAddonBroker } from '../../model';
+import { AddonBroker } from '../../model';
 
 describe('modules/model', function () {
 
-  describe('ModelAddonBroker', function () {
+  describe('AddonBroker', function () {
 
     it('should be able to extend base schema', function () {
       const baseSchema = {
@@ -21,11 +21,11 @@ describe('modules/model', function () {
         };
       };
 
-      const addonBroker = new ModelAddonBroker(null, { modelA: [extender] });
+      const addonBroker = new AddonBroker(null, { modelA: [extender] });
 
-      const newSchema = addonBroker.setupExtenders('modelA', baseSchema);
+      addonBroker.setupExtenders('modelA', baseSchema);
 
-      assert.deepEqual(newSchema, { moduleA: { fieldA: Number, fieldB: String } });
+      assert.deepEqual(baseSchema, { moduleA: { fieldA: Number, fieldB: String } });
     });
 
     it('should be able to add pre-save hook', function (done) {
@@ -57,7 +57,7 @@ describe('modules/model', function () {
         });
       };
 
-      const addonBroker = new ModelAddonBroker({ modelA: [saveHook] }, null);
+      const addonBroker = new AddonBroker({ modelA: [saveHook] }, null);
 
       addonBroker.setupSaveHooks('modelA', modelStub);
 

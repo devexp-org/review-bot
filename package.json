@@ -1,93 +1,88 @@
 {
   "name": "devexp",
-  "authors": [
-    "Stanislav Sysoev <d4rkr00t@gmail.com> (http://sysoev.org)",
-    "Artem Semenov <xxxxxx@yandex-team.ru>"
-  ],
+  "author": "Stanislav Sysoev <d4rkr00t@gmail.com> (http://sysoev.org)",
   "license": "MIT",
   "version": "0.1.0",
   "description": "Developer Experiments",
   "repository": {
     "url": "https://github.com/devexp-org/devexp"
   },
-  "main": "start.js",
+  "main": "app.js",
   "pre-commit": [
-    "eslint",
-    "test"
+    "test",
+    "eslint"
   ],
   "precommit.silent": true,
-  "config": {
-    "mocha": "mocha --compilers js:babel-register -r ./tests/setup.js",
-    "pattern_test": "./modules/**/__tests__/**/*.js ./services/**/__tests__/**/*.js",
-    "pattern_heavy_test": "tests/heavy/**.js",
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "scripts": {
-    "test": "NODE_ENV=testing $npm_package_config_mocha -R spec $npm_package_config_pattern_test",
-    "test:watch": "NODE_ENV=testing $npm_package_config_mocha -w -R spec $npm_package_config_pattern_test",
-    "test:heavy": "NODE_ENV=testing $npm_package_config_mocha -R spec $npm_package_config_pattern_heavy_test",
+    "test": "mocha --compilers js:babel/register -r ./tests/setup.js -R spec */**/__tests__/**.js",
+    "test:heavy": "mocha --compilers js:babel/register -r ./tests/setup.js -R spec tests/heavy/**.js",
+    "test:watch": "mocha --compilers js:babel/register -w -r ./tests/setup.js -R spec */**/__tests__/**.js",
     "_test": "npm run test --silent || true",
     "_test:heavy": "npm run test:heavy --silent || true",
     "eslint": "eslint .",
     "_eslint": "npm run eslint --silent || true",
-    "coverage": "NODE_ENV=testing babel-node ./node_modules/.bin/isparta cover --report text --report html --report lcovonly ./node_modules/.bin/_mocha -- -r ./tests/setup.js -R progress $npm_package_config_pattern_test",
+    "coverage": "babel-node ./node_modules/.bin/isparta cover --report text --report lcovonly --report html ./node_modules/.bin/_mocha -- -r ./tests/setup.js -R dot */**/__tests__/*.js",
     "_coverage": "npm run coverage --silent || true",
-    "coverage:heavy": "NODE_ENV=testing babel-node ./node_modules/.bin/isparta cover --report text --report html ./node_modules/.bin/_mocha -- -r ./tests/setup.js -R progress $npm_package_config_pattern_test $npm_package_config_pattern_heavy_test",
-    "_coverage:heavy": "npm run coverage:heavy --silent || true",
-    "start": "nodemon start.js -e js,json,html --ignore node_modules/",
     "coveralls": "npm run _coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
-    "forever:stop": "NODE_ENV=production forever stop app.js",
+    "start": "nodemon start.js -e js,json,html --ignore node_modules/ --ignore public/ --ignore client/",
+    "webpack:dev": "WEBPACK_DEV=1 webpack-dev-server --config ./.webpack/webpack.js --hot",
+    "dev": "WEBPACK_DEV=1 npm run webpack:dev | npm run start",
+    "build": "webpack --config ./.webpack/webpack.js",
     "forever:start": "NODE_ENV=production forever start app.js",
+    "forever:stop": "NODE_ENV=production forever stop app.js",
     "forever:restart": "NODE_ENV=production forever restart app.js",
     "forever:logs": "forever logs app.js",
     "postinstall": "scripts/postinstall.sh"
   },
   "dependencies": {
+    "babel": "^5.8.23",
     "badgs": "^1.0.0",
-    "bem-naming": "^0.5.1",
     "body-parser": "^1.14.1",
     "express": "^4.13.3",
     "github": "^0.2.4",
-    "got": "^5.0.0",
     "lodash": "^3.10.1",
     "minimatch": "^3.0.0",
     "moment": "^2.10.6",
-    "mongoose": "^4.2.0",
-    "node-schedule": "^0.2.9",
-    "node-xmpp-client": "^3.0.0",
-    "proxy-express": "^1.1.2",
+    "mongoose": "^4.3.1",
+    "node-xmpp-client": "3.0.0",
+    "proxy-express": "^1.1.5",
     "response-time": "^2.3.1",
-    "winston": "^2.1.1",
-
-    "devexp-plugin-badge": "git+https://github.com/devexp-org/devexp-plugin-badge.git",
-    "devexp-plugin-autoassign": "git+https://github.com/devexp-org/devexp-plugin-autoassign.git",
-    "devexp-plugin-complexity": "git+https://github.com/devexp-org/devexp-plugin-complexity.git",
-    "devexp-plugin-notification-center": "git+https://github.com/devexp-org/devexp-plugin-notification-center.git",
-    "devexp-plugin-notification-jabber": "git+https://github.com/devexp-org/devexp-plugin-notification-jabber.git",
-    "devexp-plugin-notification-scheduler": "git+https://github.com/devexp-org/devexp-plugin-notification-scheduler.git",
-    "devexp-plugin-rest-api": "git+https://github.com/devexp-org/devexp-plugin-rest-api.git"
+    "winston": "^1.1.1"
   },
   "devDependencies": {
-    "babel": "^6.3.0",
-    "babel-cli": "^6.3.0",
-    "babel-eslint": "^4.1.0",
-    "babel-plugin-syntax-function-bind": "^6.1.0",
-    "babel-plugin-transform-function-bind": "^6.3.13",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-es2015-loose": "^7.0.0",
-    "babel-register": "^6.4.3",
-    "chai": "^3.4.0",
+    "alt": "^0.18.1",
+    "autoprefixer-loader": "^3.1.0",
+    "babel-eslint": "^4.1.3",
+    "babel-loader": "^5.3.2",
+    "chai": "^3.4.1",
+    "coveralls": "^2.11.6",
+    "css-loader": "0.21.0",
     "cz-conventional-changelog": "^1.1.5",
-    "eslint": "^1.10.0",
-    "isparta": "^4.0.0",
-    "mocha": "^2.3.3",
+    "eslint": "^1.10.3",
+    "eslint-plugin-react": "^3.11.3",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "isparta": "^3.1.0",
+    "mocha": "^2.3.4",
     "node-architect": "^0.0.7",
-    "nodemon": "^1.7.3",
+    "node-libs-browser": "^0.5.3",
+    "node-sass": "^3.4.2",
+    "nodemon": "^1.8.1",
     "pre-commit": "^1.1.2",
     "proxyquire": "^1.7.3",
+    "react": "^0.13.3",
+    "react-hot-loader": "^1.3.0",
+    "react-router": "^0.13.3",
+    "react-timeago": "2.2.1",
+    "sass-loader": "^3.1.2",
     "sinon": "^1.17.2",
-    "supertest": "^1.1.0"
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0",
+    "whatwg-fetch": "^0.10.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }

@@ -12,12 +12,12 @@ export default function commandService(options, imports) {
   /**
    * Handle '/!ok' command.
    *
-   * @param {Object} payload - github webhook payload.
    * @param {String} command - line with user command.
+   * @param {Object} payload - github webhook payload.
    *
    * @return {Promise}
    */
-  const notOkCommand = function notOkCommand(payload, command) {
+  const notOkCommand = function notOkCommand(command, payload) {
 
     const login = payload.comment.user.login;
     const pullRequest = payload.pullRequest;
@@ -33,24 +33,26 @@ export default function commandService(options, imports) {
 
     let status = pullRequest.review.status;
 
-    if (!commenter) {
+    if (commenter) {
+      commenter.approved = false;
+
+      if (status === 'complete') {
+        status = 'notstarted';
+      }
+
+      return action
+        .save({ reviewers, status }, pullRequest.id)
+        .then(pullRequest => {
+          events.emit(EVENT_NAME, { pullRequest });
+        });
+
+    } else {
       return Promise.reject(new Error(util.format(
         '%s tried to cancel approve, but he is not in reviewers list [%s – %s] %s',
         login, pullRequest.number, pullRequest.title, pullRequest.html_url
       )));
     }
 
-    if (status === 'complete') {
-      status = 'notstarted';
-    }
-
-    commenter.approved = false;
-
-    return action
-      .saveReview({ reviewers, status }, pullRequest.id)
-      .then(pullRequest => {
-        events.emit(EVENT_NAME, { pullRequest });
-      });
   };
 
   return notOkCommand;

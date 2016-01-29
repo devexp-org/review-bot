@@ -6,6 +6,8 @@ export default function (options, imports) {
 
   const github = imports.github;
 
-  return new GitHubTeam(github, options.slug);
+  const service = new GitHubTeam(github, options && options.slug);
+
+  return service;
 
 }

@@ -1,7 +1,7 @@
 import { clone } from 'lodash';
 
 import service from '../ok';
-import { mockReviewers } from '../__mocks__/index';
+import { mockReviewers } from './mocks';
 
 describe('services/command/ok', () => {
   let action, pullRequest, team, events, payload;
@@ -30,7 +30,7 @@ describe('services/command/ok', () => {
     };
 
     action = {
-      saveReview(reviewers) {
+      save(reviewers) {
         pullRequest.review = reviewers;
 
         return pullRequest;
@@ -47,23 +47,23 @@ describe('services/command/ok', () => {
   it('should be rejected if pull request is not open', done => {
     pullRequest.state = 'closed';
 
-    command(payload, '/ok').catch(() => done());
+    command('/ok', payload).catch(() => done());
   });
 
   it('should be rejected if author of pull tried to /ok his own pull request', done => {
     pullRequest.user = { login: 'Hawkeye' };
 
-    command(payload, '/ok').catch(() => done());
+    command('/ok', payload).catch(() => done());
   });
 
   it('should be rejected if there is no user with given login in team', done => {
     team.findTeamMemberByPullRequest = sinon.stub().returns(Promise.resolve(null));
 
-    command(payload, '/ok').catch(() => done());
+    command('/ok', payload).catch(() => done());
   });
 
   it('should add new reviewer to pull request', done => {
-    command(payload, '/ok')
+    command('/ok', payload)
       .then(pullRequest => {
         assert.deepEqual(
           pullRequest.review.reviewers,
@@ -74,19 +74,8 @@ describe('services/command/ok', () => {
       .catch(done);
   });
 
-  it('should emit review:command:ok event', done => {
-    comment.user.login = 'Thor';
-
-    command(payload, '/ok')
-      .then(pullRequest => {
-        assert.calledWith(events.emit, 'review:command:ok');
-        done();
-      })
-      .catch(done);
-  });
-
   it('should emit review:command:ok:new_reviewer event', done => {
-    command(payload, '/ok')
+    command('/ok', payload)
       .then(pullRequest => {
         assert.calledWith(events.emit, 'review:command:ok:new_reviewer');
         done();
