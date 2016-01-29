@@ -3,7 +3,7 @@ import teamMock from '../../choose-team/__mocks__/index';
 import modelMock from '../../model/__mocks__/index';
 import loggerMock from '../../logger/__mocks__/index';
 
-describe('services/choose-reviewer-steps', function () {
+describe('services/choose-reviewer', function () {
 
   let team, model, logger, imports, options;
 
@@ -30,19 +30,19 @@ describe('services/choose-reviewer-steps', function () {
 
     let steps, team;
     beforeEach(() => {
-      team = { findTeamNameByPullRequest: sinon.stub().returns('team-github') };
+      team = { getTeamName: sinon.stub().returns('team-github') };
 
       steps = stepsFactory(opts, { team });
     });
 
     it('should be rejected if team was not found', done => {
-      team.findTeamNameByPullRequest = sinon.stub().returns(null);
+      team.getTeamName = sinon.stub().returns(null);
 
       steps({}).catch(() => done());
     });
 
     it('should be rejected if there aren`t any steps for team', done => {
-      team.findTeamNameByPullRequest = sinon.stub().returns('team');
+      team.getTeamName = sinon.stub().returns('team');
 
       steps({}).catch(() => done());
     });

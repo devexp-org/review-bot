@@ -43,7 +43,7 @@ describe('services/command/remove', () => {
     let comment;
 
     beforeEach(() => {
-      action = { saveReview: sinon.stub().returns(Promise.resolve(pullRequest)) };
+      action = { save: sinon.stub().returns(Promise.resolve(pullRequest)) };
       events = { emit: sinon.stub() };
       logger = { info: sinon.stub() };
       comment = {
@@ -73,7 +73,7 @@ describe('services/command/remove', () => {
 
     it('should save pullRequest with new reviewers list', done => {
       command(payload, '/remove Hulk').then(() => {
-        assert.called(action.saveReview);
+        assert.called(action.save);
         done();
       }, done);
     });

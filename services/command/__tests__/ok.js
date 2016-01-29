@@ -30,7 +30,7 @@ describe('services/command/ok', () => {
     };
 
     action = {
-      saveReview(reviewers) {
+      save(reviewers) {
         pullRequest.review = reviewers;
 
         return pullRequest;

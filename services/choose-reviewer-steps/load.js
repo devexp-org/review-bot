@@ -23,7 +23,7 @@ export default function loadService(options, imports) {
     }
 
     review.team.forEach(member => {
-      promise.push(pullRequestModel.findInReviewByReviewer(member.login));
+      promise.push(pullRequestModel.findOpenReviewsByUser(member.login));
     });
 
     return Promise

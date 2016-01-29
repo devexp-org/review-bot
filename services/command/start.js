@@ -43,7 +43,7 @@ export default function commandService(options, imports) {
     }
 
     return action
-      .saveReview({ status: 'inprogress' }, payload.pullRequest.id)
+      .save({ status: 'inprogress' }, payload.pullRequest.id)
       .then(pullRequest => {
         events.emit(EVENT_NAME, { pullRequest });
 

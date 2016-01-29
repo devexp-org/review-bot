@@ -110,7 +110,7 @@ export default function commandService(options, imports) {
         reviewers = reject(reviewers, { login: oldReviewerLogin });
         reviewers.push(newReviewer);
 
-        return action.saveReview({ reviewers }, pullRequest.id);
+        return action.save({ reviewers }, pullRequest.id);
       }).then(pullRequest => {
         events.emit(EVENT_NAME, { pullRequest });
       });
