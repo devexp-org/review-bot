@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 
-export class ModelAddonBroker {
+export class AddonBroker {
 
   /**
    * @constructor
@@ -54,19 +54,13 @@ export class ModelAddonBroker {
    *
    * @param {String} name - model name.
    * @param {Object} schema - model base schema.
-   *
-   * @return {Object} extended schema
    */
   setupExtenders(name, schema) {
     const extenders = this.get(name).extenders;
 
-    let newSchema = _.cloneDeep(schema);
-
     _.forEach(extenders, extender => {
-      newSchema = _.merge(newSchema, extender(schema));
+      _.merge(schema, extender(schema));
     });
-
-    return newSchema;
   }
 
 }

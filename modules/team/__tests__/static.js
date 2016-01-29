@@ -17,6 +17,18 @@ describe('modules/team/static', () => {
       .catch(done);
   });
 
+  it('should return a team member with given login', done => {
+    const members = [{ login: 'a' }, { login: 'b' }];
+    const team = new StaticTeam(members);
+
+    team.getMember({}, 'b')
+      .then(result => {
+        assert.deepEqual(result, members[1]);
+        done();
+      })
+      .catch(done);
+  });
+
   it('should return clone of members', done => {
     const members = [{ login: 'a' }, { login: 'b' }];
     const team = new StaticTeam(members);

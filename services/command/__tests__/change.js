@@ -2,7 +2,7 @@ import { clone } from 'lodash';
 
 import service from '../change';
 import { getParticipant } from '../change';
-import { mockReviewers } from '../__mocks__/index';
+import { mockReviewers } from './mocks';
 
 describe('services/command/change', () => {
 
@@ -79,39 +79,39 @@ describe('services/command/change', () => {
     it('should be rejected if pull request is closed', done => {
       pullRequest.state = 'closed';
 
-      command(payload, '/change Hulk to Hawkeye').catch(() => done());
+      command('/change Hulk to Hawkeye', payload).catch(() => done());
     });
 
     it('should be rejected if we can`t parse participants from command', done => {
-      command(payload, '/change Hawkeye').catch(() => done());
+      command('/change Hawkeye', payload).catch(() => done());
     });
 
     it('should be rejected if called from not an author of pull request', done => {
       pullRequest.user.login = 'Hawkeye';
 
-      command(payload, '/change Hawkeye to Hulk').catch(() => done());
+      command('/change Hawkeye to Hulk', payload).catch(() => done());
     });
 
     it('should be rejected if old reviewer not in reviewers list', done => {
-      command(payload, '/change Hawkeye to Spider-Man').catch(() => done());
+      command('/change Hawkeye to Spider-Man', payload).catch(() => done());
     });
 
     it('should be rejected if new reviewer already in reviewers list', done => {
-      command(payload, '/change Thor to Hulk').catch(() => done());
+      command('/change Thor to Hulk', payload).catch(() => done());
     });
 
     it('should be rejected if author tries to set himself as reviewer', done => {
-      command(payload, '/change Thor to d4rkr00t').catch(() => done());
+      command('/change Thor to d4rkr00t', payload).catch(() => done());
     });
 
     it('should be rejected if new reviewer is not in team', done => {
       team.findTeamMemberByPullRequest = sinon.stub().returns(Promise.resolve(null));
 
-      command(payload, '/change Thor to blablabla').catch(() => done());
+      command('/change Thor to blablabla', payload).catch(() => done());
     });
 
     it('should save pullRequest with new reviewer', done => {
-      command(payload, '/change Thor to Spider-Man').then(() => {
+      command('/change Thor to Spider-Man', payload).then(() => {
         const resultReviewers = [
           { login: 'Hulk' },
           { login: 'Spider-Man' }

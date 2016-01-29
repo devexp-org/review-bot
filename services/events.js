@@ -2,7 +2,7 @@
 
 import { EventEmitter } from 'events';
 
-export default function setup() {
+export default function (options, imports) {
 
   return new EventEmitter();
 

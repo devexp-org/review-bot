@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-import { mockMembers } from '../__mocks__/index';
+import { mockMembers } from './mocks/index';
 import service from '../remove_already_reviewers';
 
 describe('services/choose-reviewer-steps/remove_already_reviewers', () => {

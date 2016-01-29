@@ -28,7 +28,7 @@ export default function middleware() {
 
       this
         .status(status || 500)
-        .json({ error: String(message) });
+        .json({ error: message });
     };
 
     next();

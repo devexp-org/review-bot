@@ -13,12 +13,12 @@ export default function commandService(options, imports) {
   /**
    * Handle '/ok' command.
    *
-   * @param {Object} payload - github webhook payload.
    * @param {String} command - line with user command.
+   * @param {Object} payload - github webhook payload.
    *
    * @return {Promise}
    */
-  const okCommand = function okCommand(payload, command) {
+  const okCommand = function okCommand(command, payload) {
 
     const login = payload.comment.user.login;
     const pullRequest = payload.pullRequest;

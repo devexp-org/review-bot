@@ -11,12 +11,12 @@ export default function commandService(options, imports) {
   /**
    * Handle '/stop' command.
    *
-   * @param {Object} payload - github webhook payload.
    * @param {String} command - line with user command.
+   * @param {Object} payload - github webhook payload.
    *
    * @return {Promise}
    */
-  const stopCommand = function stopCommand(payload, command) {
+  const stopCommand = function stopCommand(command, payload) {
     const pullRequest = payload.pullRequest;
 
     logger.info(

@@ -24,12 +24,12 @@ export default function commandService(options, imports) {
   /**
    * Handle '/change' command.
    *
-   * @param {Object} payload - github webhook payload.
    * @param {String} command - line with user command.
+   * @param {Object} payload - github webhook payload.
    *
    * @return {Promise}
    */
-  const changeCommand = function changeCommand(payload, command) {
+  const changeCommand = function changeCommand(command, payload) {
 
     const pullRequest = payload.pullRequest;
     const { oldReviewerLogin, newReviewerLogin } = getParticipant(command);

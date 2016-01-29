@@ -1,3 +1,4 @@
-plugins
+public
 coverage
 tests/data
+client

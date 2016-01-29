@@ -15,24 +15,23 @@ export default function webhook(payload, imports) {
   const events = imports.events;
   const github = imports.github;
 
-  const PullRequestModel = model.get('pull_request');
+  const PullRequest = model.get('pull_request');
 
   logger.info(
-    'Webhook triggered: action=%s [%s – %s] %s',
-    payload.action,
-    payload.pull_request.number,
-    payload.pull_request.title,
-    payload.pull_request.html_url
+    'Webhook triggered for pull #%s, action=%s',
+    payload.pull_request.id,
+    payload.action
   );
 
   const pullRequestWebhook = payload.pull_request;
   pullRequestWebhook.repository = payload.repository;
+  pullRequestWebhook.organization = payload.organization;
 
-  return PullRequestModel
+  return PullRequest
     .findById(pullRequestWebhook.id)
     .then(pullRequest => {
       if (!pullRequest) {
-        pullRequest = new PullRequestModel(pullRequestWebhook);
+        pullRequest = new PullRequest(pullRequestWebhook);
       } else {
         pullRequest.set(pullRequestWebhook);
       }
@@ -41,24 +40,19 @@ export default function webhook(payload, imports) {
         .loadPullRequestFiles(pullRequest)
         .then(files => {
           pullRequest.set('files', files);
-
           return pullRequest;
         });
     })
     .then(pullRequest => {
-      return new Promise((resolve, reject) => {
-        pullRequest.save().then(resolve, reject);
-      });
+      return pullRequest.save();
     })
     .then(pullRequest => {
       logger.info(
-        'Pull request saved [%s – %s] %s',
-        pullRequest.number,
-        pullRequest.title,
+        'Pull request #%s saved. %s',
+        pullRequest._id,
         pullRequest.html_url
       );
-
-      events.emit('github:pull_request', { pullRequest });
+      events.emit('github:pull_request:' + payload.action, { pullRequest: pullRequest });
 
       return pullRequest;
     });

@@ -6,8 +6,8 @@ import { find, cloneDeep } from 'lodash';
 const EVENT_NAME = 'review:command:add';
 
 const COMMAND_REGEXP = new RegExp(
-  '(?:^|\\s)' + '\\+@?(\\w+)' + '(?:\\s|$)|' + // +username +@username
-  '(?:^|\\s)' + '\/?add\\s+@?(\\w+)' + '(?:\\s|$)', // /add username /add @username
+  '(?:^|\\W)' + '\\+@?([\\w]+)' + '(?:\\W|$)|' + // +username +@username
+  '(?:^|\\W)' + '\/?add\\s+@?([\\w]+)' + '(?:\\W|$)', // /add username /add @username
   'i'
 );
 
@@ -23,12 +23,12 @@ export default function commandService(options, imports) {
   /**
    * Handle '/add' command.
    *
-   * @param {Object} payload - github webhook payload.
    * @param {String} command - line with user command
+   * @param {Object} payload - github webhook payload.
    *
    * @return {Promise}
    */
-  const addCommand = function addCommand(payload, command) {
+  const addCommand = function addCommand(command, payload) {
 
     let newReviewer;
 

@@ -5,9 +5,16 @@
     "node": true,
     "mocha": true
   },
+  "plugins": [
+    "react"
+  ],
   "globals": {
     "sinon": true,
     "assert": true
+  },
+  "ecmaFeatures": {
+    "jsx": true,
+    "generators": true
   },
   "rules": {
     // possible errors
@@ -157,7 +164,7 @@
     "object-curly-spacing": [2, "always"],
     "one-var": [2, { "initialized": "never" }],
     "operator-assignment": [0],
-    "operator-linebreak": [2, "after", { "overrides": { "?": "before", ":": "before" } }],
+    "operator-linebreak": [2, "after"],
     "padded-blocks": [0],
     "quote-props": [2, "as-needed", { "keywords": true }],
     "quotes": [2, "single"],
