@@ -4,7 +4,7 @@ import service from '../remove';
 import { getParticipant } from '../remove';
 import { mockReviewers } from './mocks';
 
-describe('services/command/add', () => {
+describe('services/command/remove', () => {
 
   describe('#getParticipant', () => {
 
@@ -30,6 +30,18 @@ describe('services/command/add', () => {
       assert.equal(getParticipant('-username'), 'username');
       assert.equal(getParticipant('Text \n-username\nOther text'), 'username');
       assert.equal(getParticipant(' -username and some more text\nOther text'), 'username');
+    });
+
+    it('should get participant from command like -user-name', () => {
+      assert.equal(getParticipant('-user-name'), 'user-name');
+      assert.equal(getParticipant('Text \n-user-name\nOther text'), 'user-name');
+      assert.equal(getParticipant(' -user-name and some more text\nOther text'), 'user-name');
+    });
+
+    it('should get participant from command like /remove user-name', () => {
+      assert.equal(getParticipant('/remove user-name'), 'user-name');
+      assert.equal(getParticipant('Text \n/remove user-name\nOther text'), 'user-name');
+      assert.equal(getParticipant(' /remove user-name and some more text\nOther text'), 'user-name');
     });
   });
 
