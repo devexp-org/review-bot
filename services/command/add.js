@@ -2,19 +2,14 @@
 
 import util from 'util';
 import { find, cloneDeep } from 'lodash';
+import parseLogins from '../../modules/parse-logins';
 
 const EVENT_NAME = 'review:command:add';
 
-const COMMAND_REGEXP = new RegExp(
-  '(?:^|\\W)' + '\\+@?([\\w]+)' + '(?:\\W|$)|' + // +username +@username
-  '(?:^|\\W)' + '\/?add\\s+@?([\\w]+)' + '(?:\\W|$)', // /add username /add @username
-  'i'
-);
-
 export function getParticipant(command) {
-  const participant = command.match(COMMAND_REGEXP);
+  const participant = parseLogins(command, ['/add', '+']);
 
-  return participant[1] || participant[2];
+  return participant[0];
 }
 
 export default function commandService(options, imports) {

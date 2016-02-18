@@ -1,18 +1,13 @@
 import util from 'util';
 import { find, reject } from 'lodash';
+import parseLogins from '../../modules/parse-logins';
 
 const EVENT_NAME = 'review:command:remove';
 
-const COMMAND_REGEXP = new RegExp(
-  '(?:^|\\W)' + '\\-@?([\\w]+)' + '(?:\\W|$)|' + // -username -@username
-  '(?:^|\\W)' + '\/?remove\\s+@?([\\w]+)' + '(?:\\W|$)', // /remove username /remove @username
-  'i'
-);
-
 export function getParticipant(command) {
-  const participant = command.match(COMMAND_REGEXP);
+  const participant = parseLogins(command, ['/remove', '-']);
 
-  return participant[1] || participant[2];
+  return participant[0];
 }
 
 export default function commandService(options, imports) {

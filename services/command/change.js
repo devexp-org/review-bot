@@ -2,19 +2,18 @@
 
 import util from 'util';
 import { find, reject, cloneDeep, isEmpty } from 'lodash';
+import parseLogins from '../../modules/parse-logins';
 
 const EVENT_NAME = 'review:command:change';
-const COMMAND_REGEXP =
-  /(?:^|\W)\/?change\s+@?([-0-9a-zA-Z]+)\s+(?:to\s+)?@?([-0-9a-zA-Z]+)(?:\W|$)/;
 
 export function getParticipant(command) {
-  const participant = command.match(COMMAND_REGEXP);
+  const participant = parseLogins(command.replace(/\sto\s/, ' '), '/change');
 
   if (isEmpty(participant)) return {};
 
   return {
-    oldReviewerLogin: participant[1],
-    newReviewerLogin: participant[2]
+    oldReviewerLogin: participant[0],
+    newReviewerLogin: participant[1]
   };
 }
 
