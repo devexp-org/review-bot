@@ -1,5 +1,7 @@
 import { clone } from 'lodash';
 
+import parseLogins from '../../../modules/parse-logins';
+
 import service from '../add';
 import { getParticipant } from '../add';
 import { mockReviewers } from './mocks';
@@ -9,27 +11,27 @@ describe('services/command/add', () => {
   describe('#getParticipant', () => {
 
     it('should get participant from command like /add @username', () => {
-      assert.equal(getParticipant('/add @username'), 'username');
-      assert.equal(getParticipant('Text \n/add @username\nOther text'), 'username');
-      assert.equal(getParticipant(' /add @username and some more text\nOther text'), 'username');
+      assert.equal(getParticipant('/add @username', parseLogins), 'username');
+      assert.equal(getParticipant('Text \n/add @username\nOther text', parseLogins), 'username');
+      assert.equal(getParticipant(' /add @username and some more text\nOther text', parseLogins), 'username');
     });
 
     it('should get participant from command like /add username', () => {
-      assert.equal(getParticipant('/add username'), 'username');
-      assert.equal(getParticipant('Text \n/add username\nOther text'), 'username');
-      assert.equal(getParticipant(' /add username and some more text\nOther text'), 'username');
+      assert.equal(getParticipant('/add username', parseLogins), 'username');
+      assert.equal(getParticipant('Text \n/add username\nOther text', parseLogins), 'username');
+      assert.equal(getParticipant(' /add username and some more text\nOther text', parseLogins), 'username');
     });
 
     it('should get participant from command like +@username', () => {
-      assert.equal(getParticipant('+@username'), 'username');
-      assert.equal(getParticipant('Text \n+@username\nOther text'), 'username');
-      assert.equal(getParticipant(' +@username and some more text\nOther text'), 'username');
+      assert.equal(getParticipant('+@username', parseLogins), 'username');
+      assert.equal(getParticipant('Text \n+@username\nOther text', parseLogins), 'username');
+      assert.equal(getParticipant(' +@username and some more text\nOther text', parseLogins), 'username');
     });
 
     it('should get participant from command like +username', () => {
-      assert.equal(getParticipant('+username'), 'username');
-      assert.equal(getParticipant('Text \n+username\nOther text'), 'username');
-      assert.equal(getParticipant(' +username and some more text\nOther text'), 'username');
+      assert.equal(getParticipant('+username', parseLogins), 'username');
+      assert.equal(getParticipant('Text \n+username\nOther text', parseLogins), 'username');
+      assert.equal(getParticipant(' +username and some more text\nOther text', parseLogins), 'username');
     });
   });
 
@@ -62,7 +64,7 @@ describe('services/command/add', () => {
         get: sinon.stub().returns(clone(mockReviewers))
       };
 
-      command = service({}, { team, action, logger, events });
+      command = service({}, { team, action, logger, events, parseLogins });
       payload = { pullRequest, comment };
     });
 

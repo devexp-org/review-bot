@@ -1,17 +1,16 @@
 import util from 'util';
 import { find, reject } from 'lodash';
-import parseLogins from '../../modules/parse-logins';
 
 const EVENT_NAME = 'review:command:remove';
 
-export function getParticipant(command) {
+export function getParticipant(command, parseLogins) {
   const participant = parseLogins(command, ['/remove', '-']);
 
   return participant[0];
 }
 
 export default function commandService(options, imports) {
-  const { action, logger, events } = imports;
+  const { action, logger, events, parseLogins } = imports;
   const minReviewersCount = options.min;
 
   /**
@@ -34,7 +33,7 @@ export default function commandService(options, imports) {
       pullRequest.html_url
     );
 
-    const reviewerLogin = getParticipant(command);
+    const reviewerLogin = getParticipant(command, parseLogins);
 
     if (!find(reviewers, { login: reviewerLogin })) {
       return Promise.reject(new Error(util.format(

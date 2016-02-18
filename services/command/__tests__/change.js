@@ -1,5 +1,7 @@
 import { clone } from 'lodash';
 
+import parseLogins from '../../../modules/parse-logins';
+
 import service from '../change';
 import { getParticipant } from '../change';
 import { mockReviewers } from './mocks';
@@ -11,25 +13,25 @@ describe('services/command/change', () => {
     it('should get participant from command like /change Hulk to Hawkeye', () => {
       const expected = { oldReviewerLogin: 'Hulk', newReviewerLogin: 'Hawkeye' };
 
-      assert.deepEqual(getParticipant('/change Hulk to Hawkeye'), expected);
-      assert.deepEqual(getParticipant('Text \n/change Hulk to Hawkeye\nOther text'), expected);
-      assert.deepEqual(getParticipant(' /change Hulk to Hawkeye and some more text\nOther text'), expected);
+      assert.deepEqual(getParticipant('/change Hulk to Hawkeye', parseLogins), expected);
+      assert.deepEqual(getParticipant('Text \n/change Hulk to Hawkeye\nOther text', parseLogins), expected);
+      assert.deepEqual(getParticipant(' /change Hulk to Hawkeye and more text\nOther text', parseLogins), expected);
 
-      assert.deepEqual(getParticipant('/change @Hulk to @Hawkeye'), expected);
-      assert.deepEqual(getParticipant('Text \n/change @Hulk to @Hawkeye\nOther text'), expected);
-      assert.deepEqual(getParticipant(' /change @Hulk to @Hawkeye and some more text\nOther text'), expected);
+      assert.deepEqual(getParticipant('/change @Hulk to @Hawkeye', parseLogins), expected);
+      assert.deepEqual(getParticipant('Text \n/change @Hulk to @Hawkeye\nOther text', parseLogins), expected);
+      assert.deepEqual(getParticipant(' /change @Hulk to @Hawkeye and more text\nOther text', parseLogins), expected);
     });
 
     it('should get participant from command like /change Hulk Hawkeye', () => {
       const expected = { oldReviewerLogin: 'Hulk', newReviewerLogin: 'Hawkeye' };
 
-      assert.deepEqual(getParticipant('/change Hulk Hawkeye'), expected);
-      assert.deepEqual(getParticipant('Text \n/change Hulk Hawkeye\nOther text'), expected);
-      assert.deepEqual(getParticipant(' /change Hulk Hawkeye and some more text\nOther text'), expected);
+      assert.deepEqual(getParticipant('/change Hulk Hawkeye', parseLogins), expected);
+      assert.deepEqual(getParticipant('Text \n/change Hulk Hawkeye\nOther text', parseLogins), expected);
+      assert.deepEqual(getParticipant(' /change Hulk Hawkeye and some more text\nOther text', parseLogins), expected);
 
-      assert.deepEqual(getParticipant('/change @Hulk @Hawkeye'), expected);
-      assert.deepEqual(getParticipant('Text \n/change @Hulk @Hawkeye\nOther text'), expected);
-      assert.deepEqual(getParticipant(' /change @Hulk @Hawkeye and some more text\nOther text'), expected);
+      assert.deepEqual(getParticipant('/change @Hulk @Hawkeye', parseLogins), expected);
+      assert.deepEqual(getParticipant('Text \n/change @Hulk @Hawkeye\nOther text', parseLogins), expected);
+      assert.deepEqual(getParticipant(' /change @Hulk @Hawkeye and some more text\nOther text', parseLogins), expected);
     });
 
   });
@@ -71,7 +73,7 @@ describe('services/command/change', () => {
         }
       };
 
-      command = service({}, { team, action, logger, events });
+      command = service({}, { team, action, logger, events, parseLogins });
       payload = { pullRequest, comment };
 
     });

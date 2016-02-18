@@ -2,18 +2,17 @@
 
 import util from 'util';
 import { find, cloneDeep } from 'lodash';
-import parseLogins from '../../modules/parse-logins';
 
 const EVENT_NAME = 'review:command:add';
 
-export function getParticipant(command) {
+export function getParticipant(command, parseLogins) {
   const participant = parseLogins(command, ['/add', '+']);
 
   return participant[0];
 }
 
 export default function commandService(options, imports) {
-  const { team, action, logger, events } = imports;
+  const { team, action, logger, events, parseLogins } = imports;
 
   /**
    * Handle '/add' command.
@@ -37,7 +36,7 @@ export default function commandService(options, imports) {
       pullRequest.html_url
     );
 
-    const newReviewerLogin = getParticipant(command);
+    const newReviewerLogin = getParticipant(command, parseLogins);
 
     if (find(reviewers, { login: newReviewerLogin })) {
       return Promise.reject(new Error(util.format(

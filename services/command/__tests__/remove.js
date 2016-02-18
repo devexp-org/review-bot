@@ -1,5 +1,7 @@
 import { clone } from 'lodash';
 
+import parseLogins from '../../../modules/parse-logins';
+
 import service from '../remove';
 import { getParticipant } from '../remove';
 import { mockReviewers } from './mocks';
@@ -9,39 +11,39 @@ describe('services/command/remove', () => {
   describe('#getParticipant', () => {
 
     it('should get participant from command like /remove @username', () => {
-      assert.equal(getParticipant('/remove @username'), 'username');
-      assert.equal(getParticipant('Text \n/remove @username\nOther text'), 'username');
-      assert.equal(getParticipant(' /remove @username and some more text\nOther text'), 'username');
+      assert.equal(getParticipant('/remove @username', parseLogins), 'username');
+      assert.equal(getParticipant('Text \n/remove @username\nOther text', parseLogins), 'username');
+      assert.equal(getParticipant(' /remove @username and some more text\nOther text', parseLogins), 'username');
     });
 
     it('should get participant from command like /remove username', () => {
-      assert.equal(getParticipant('/remove username'), 'username');
-      assert.equal(getParticipant('Text \n/remove username\nOther text'), 'username');
-      assert.equal(getParticipant(' /remove username and some more text\nOther text'), 'username');
+      assert.equal(getParticipant('/remove username', parseLogins), 'username');
+      assert.equal(getParticipant('Text \n/remove username\nOther text', parseLogins), 'username');
+      assert.equal(getParticipant(' /remove username and some more text\nOther text', parseLogins), 'username');
     });
 
     it('should get participant from command like -@username', () => {
-      assert.equal(getParticipant('-@username'), 'username');
-      assert.equal(getParticipant('Text \n-@username\nOther text'), 'username');
-      assert.equal(getParticipant(' -@username and some more text\nOther text'), 'username');
+      assert.equal(getParticipant('-@username', parseLogins), 'username');
+      assert.equal(getParticipant('Text \n-@username\nOther text', parseLogins), 'username');
+      assert.equal(getParticipant(' -@username and some more text\nOther text', parseLogins), 'username');
     });
 
     it('should get participant from command like -username', () => {
-      assert.equal(getParticipant('-username'), 'username');
-      assert.equal(getParticipant('Text \n-username\nOther text'), 'username');
-      assert.equal(getParticipant(' -username and some more text\nOther text'), 'username');
+      assert.equal(getParticipant('-username', parseLogins), 'username');
+      assert.equal(getParticipant('Text \n-username\nOther text', parseLogins), 'username');
+      assert.equal(getParticipant(' -username and some more text\nOther text', parseLogins), 'username');
     });
 
     it('should get participant from command like -user-name', () => {
-      assert.equal(getParticipant('-user-name'), 'user-name');
-      assert.equal(getParticipant('Text \n-user-name\nOther text'), 'user-name');
-      assert.equal(getParticipant(' -user-name and some more text\nOther text'), 'user-name');
+      assert.equal(getParticipant('-user-name', parseLogins), 'user-name');
+      assert.equal(getParticipant('Text \n-user-name\nOther text', parseLogins), 'user-name');
+      assert.equal(getParticipant(' -user-name and some more text\nOther text', parseLogins), 'user-name');
     });
 
     it('should get participant from command like /remove user-name', () => {
-      assert.equal(getParticipant('/remove user-name'), 'user-name');
-      assert.equal(getParticipant('Text \n/remove user-name\nOther text'), 'user-name');
-      assert.equal(getParticipant(' /remove user-name and some more text\nOther text'), 'user-name');
+      assert.equal(getParticipant('/remove user-name', parseLogins), 'user-name');
+      assert.equal(getParticipant('Text \n/remove user-name\nOther text', parseLogins), 'user-name');
+      assert.equal(getParticipant(' /remove user-name and some more text\nOther text', parseLogins), 'user-name');
     });
   });
 
@@ -70,7 +72,7 @@ describe('services/command/remove', () => {
 
       payload = { pullRequest, comment };
 
-      command = service({ min: 1 }, { action, logger, events });
+      command = service({ min: 1 }, { action, logger, events, parseLogins });
     });
 
     it('should be rejected if user is not in reviewers list', done => {

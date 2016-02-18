@@ -74,6 +74,10 @@
       }
     },
 
+    "parseLogins": {
+      "path": "./services/parse-logins"
+    },
+
     "choose-team": {
       "path": "./services/choose-team",
       "options": {
@@ -346,7 +350,8 @@
         "team": "choose-team",
         "action": "pull-request-action",
         "logger": "logger",
-        "events": "events"
+        "events": "events",
+        "parseLogins": "parseLogins"
       }
     },
 
@@ -358,7 +363,8 @@
       "dependencies": {
         "action": "pull-request-action",
         "logger": "logger",
-        "events": "events"
+        "events": "events",
+        "parseLogins": "parseLogins"
       }
     },
 
@@ -379,7 +385,8 @@
         "team": "choose-team",
         "action": "pull-request-action",
         "logger": "logger",
-        "events": "events"
+        "events": "events",
+        "parseLogins": "parseLogins"
       }
     },
 

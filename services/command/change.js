@@ -2,11 +2,10 @@
 
 import util from 'util';
 import { find, reject, cloneDeep, isEmpty } from 'lodash';
-import parseLogins from '../../modules/parse-logins';
 
 const EVENT_NAME = 'review:command:change';
 
-export function getParticipant(command) {
+export function getParticipant(command, parseLogins) {
   const participant = parseLogins(command.replace(/\sto\s/, ' '), '/change');
 
   if (isEmpty(participant)) return {};
@@ -18,7 +17,7 @@ export function getParticipant(command) {
 }
 
 export default function commandService(options, imports) {
-  const { team, action, logger, events } = imports;
+  const { team, action, logger, events, parseLogins } = imports;
 
   /**
    * Handle '/change' command.
@@ -31,7 +30,7 @@ export default function commandService(options, imports) {
   const changeCommand = function changeCommand(command, payload) {
 
     const pullRequest = payload.pullRequest;
-    const { oldReviewerLogin, newReviewerLogin } = getParticipant(command);
+    const { oldReviewerLogin, newReviewerLogin } = getParticipant(command, parseLogins);
 
     logger.info(
       '"/change" [%s – %s] %s',
