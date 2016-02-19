@@ -41,6 +41,10 @@ describe('modules/parse-logins', () => {
     assert.deepEqual(parseLogins(stubsPositiveMixed.stub, ['login3', 'lo1-gin2']), stubsPositiveMixed.result.slice(3));
   });
 
+  it('should stop on new line break', () => {
+    assert.deepEqual(parseLogins('/add @login \n @login2'), ['login']);
+  });
+
   it('should correct find start from for strings like +@login', () => {
     assert.deepEqual(parseLogins('+@login', ['/add', '+']), ['login']);
   });
