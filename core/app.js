@@ -3,8 +3,9 @@
 
 import Architect from 'node-architect';
 import parseConfig from './modules/config';
+import path from 'path';
 
-const basePath = __dirname;
+const basePath = path.join(__dirname, '..');
 const appConfig = parseConfig(basePath);
 const application = new Architect(appConfig, basePath);
 

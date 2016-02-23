@@ -1,4 +1,4 @@
-public
+core/public
 coverage
-tests/data
-client
+core/tests/data
+core/client
