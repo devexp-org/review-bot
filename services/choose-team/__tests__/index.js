@@ -1,4 +1,4 @@
-import service from '../../choose-team';
+import service from '../';
 
 describe('services/choose-team', function () {
 

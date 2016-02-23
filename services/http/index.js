@@ -8,7 +8,7 @@ import proxy from 'proxy-express';
 import bodyParser from 'body-parser';
 import responseTime from 'response-time';
 
-import responseJSON from './http/response';
+import responseJSON from './response';
 
 export default function (options, imports) {
 
@@ -16,8 +16,8 @@ export default function (options, imports) {
   const port = options.port || 8080;
   const logger = imports.logger;
 
-  const assetsPath = path.join(__dirname, '..', 'assets');
-  const publicPath = path.join(__dirname, '..', 'public');
+  const assetsPath = path.join(__dirname, '..', '..', 'assets');
+  const publicPath = path.join(__dirname, '..', '..', 'public');
 
   app.use(responseTime());
   app.use(bodyParser.json());

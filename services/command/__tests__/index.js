@@ -1,4 +1,4 @@
-import { constructRegexp } from '../../command';
+import { constructRegexp } from '../';
 import { forEach } from 'lodash';
 
 function makeCommonCases(command) {

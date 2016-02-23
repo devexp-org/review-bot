@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { mockMembers } from './mocks/index';
-import service from '../ignore';
+import service from '../steps/ignore';
 
 describe('services/choose-reviewer-steps/ignore', function () {
 

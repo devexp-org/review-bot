@@ -123,19 +123,19 @@
     },
 
     "choose-reviewer-step-remove-author": {
-      "path": "./services/choose-reviewer-steps/remove_author"
+      "path": "./services/choose-reviewer-steps/steps/remove_author"
     },
 
     "choose-reviewer-step-remove-already-reviewers": {
-      "path": "./services/choose-reviewer-steps/remove_already_reviewers"
+      "path": "./services/choose-reviewer-steps/steps/remove_already_reviewers"
     },
 
     "choose-reviewer-step-ignore": {
-      "path": "./services/choose-reviewer-steps/ignore"
+      "path": "./services/choose-reviewer-steps/steps/ignore"
     },
 
     "choose-reviewer-step-commiters": {
-      "path": "./services/choose-reviewer-steps/commiters",
+      "path": "./services/choose-reviewer-steps/steps/commiters",
       "options": {
         "max": 4,
         "since": [4, "month"],
@@ -151,7 +151,7 @@
     },
 
     "choose-reviewer-step-path-related": {
-      "path": "./services/choose-reviewer-steps/path-related",
+      "path": "./services/choose-reviewer-steps/steps/path-related",
       "options": {
         "max": 5,
         "members": ["artems"],
@@ -161,12 +161,12 @@
     },
 
     "choose-reviewer-step-random": {
-      "path": "./services/choose-reviewer-steps/random",
+      "path": "./services/choose-reviewer-steps/steps/random",
       "options": { "max": 5 }
     },
 
     "choose-reviewer-step-load": {
-      "path": "./services/choose-reviewer-steps/load",
+      "path": "./services/choose-reviewer-steps/steps/load",
       "options": { "max": 1 },
       "dependencies": [
         "model"
@@ -174,11 +174,11 @@
     },
 
     "choose-reviewer-step-sort": {
-      "path": "./services/choose-reviewer-steps/sort"
+      "path": "./services/choose-reviewer-steps/steps/sort"
     },
 
     "choose-reviewer-step-total-number": {
-      "path": "./services/choose-reviewer-steps/total_number",
+      "path": "./services/choose-reviewer-steps/steps/total_number",
       "options": { "max": 2 }
     },
 
@@ -345,7 +345,7 @@
     },
 
     "command-add": {
-      "path": "./services/command/add",
+      "path": "./services/command/commands/add",
       "dependencies": {
         "team": "choose-team",
         "action": "pull-request-action",
@@ -356,7 +356,7 @@
     },
 
     "command-remove": {
-      "path": "./services/command/remove",
+      "path": "./services/command/commands/remove",
       "options": {
         "min": 2
       },
@@ -369,7 +369,7 @@
     },
 
     "command-busy": {
-      "path": "./services/command/busy",
+      "path": "./services/command/commands/busy",
       "dependencies": {
         "team": "choose-team",
         "review": "choose-reviewer",
@@ -380,7 +380,7 @@
     },
 
     "command-change": {
-      "path": "./services/command/change",
+      "path": "./services/command/commands/change",
       "dependencies": {
         "team": "choose-team",
         "action": "pull-request-action",
@@ -391,7 +391,7 @@
     },
 
     "command-not-ok": {
-      "path": "./services/command/not_ok",
+      "path": "./services/command/commands/not_ok",
       "dependencies": {
         "action": "pull-request-action",
         "logger": "logger",
@@ -400,7 +400,7 @@
     },
 
     "command-ok": {
-      "path": "./services/command/ok",
+      "path": "./services/command/commands/ok",
       "dependencies": {
         "team": "choose-team",
         "action": "pull-request-action",
@@ -410,7 +410,7 @@
     },
 
     "command-ping": {
-      "path": "./services/command/ping",
+      "path": "./services/command/commands/ping",
       "dependencies": {
         "logger": "logger",
         "events": "events"
@@ -418,7 +418,7 @@
     },
 
     "command-start": {
-      "path": "./services/command/start",
+      "path": "./services/command/commands/start",
       "dependencies": {
         "action": "pull-request-action",
         "logger": "logger",
@@ -427,7 +427,7 @@
     },
 
     "command-stop": {
-      "path": "./services/command/stop",
+      "path": "./services/command/commands/stop",
       "dependencies": {
         "action": "pull-request-action",
         "logger": "logger",
@@ -472,9 +472,9 @@
       "path": "./services/review-notification",
       "options": {
         "events": {
-          "review:started": "./services/review-notification/start",
-          "review:command:ping": "./services/review-notification/ping",
-          "review:complete": "./services/review-notification/complete"
+          "review:started": "./services/review-notification/templates/start",
+          "review:command:ping": "./services/review-notification/templates/ping",
+          "review:complete": "./services/review-notification/templates/complete"
         },
         "transport": "jabber"
       },

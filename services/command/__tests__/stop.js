@@ -1,4 +1,4 @@
-import service from '../stop';
+import service from '../commands/stop';
 
 describe('services/command/stop', () => {
   let action, pullRequest, team, events, payload;

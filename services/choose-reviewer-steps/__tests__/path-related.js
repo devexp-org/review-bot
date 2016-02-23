@@ -1,6 +1,6 @@
 import { clone, filter, forEach } from 'lodash';
 import { mockMembers } from './mocks/index';
-import { isMatch, isMatchAll, getFiles, incRank, decRank, pathRelatedCreator } from '../path-related';
+import { isMatch, isMatchAll, getFiles, incRank, decRank, pathRelatedCreator } from '../steps/path-related';
 
 describe('services/choose-reviewer-steps/path-related', () => {
   it('should always be resolved', done => {

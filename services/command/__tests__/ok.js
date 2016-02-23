@@ -1,6 +1,6 @@
 import { clone } from 'lodash';
 
-import service from '../ok';
+import service from '../commands/ok';
 import { mockReviewers } from './mocks';
 
 describe('services/command/ok', () => {

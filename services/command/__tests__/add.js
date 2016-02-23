@@ -2,8 +2,8 @@ import { clone } from 'lodash';
 
 import parseLogins from '../../../modules/parse-logins';
 
-import service from '../add';
-import { getParticipant } from '../add';
+import service from '../commands/add';
+import { getParticipant } from '../commands/add';
 import { mockReviewers } from './mocks';
 
 describe('services/command/add', () => {

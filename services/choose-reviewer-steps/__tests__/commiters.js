@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
 import { mockMembers } from './mocks/index';
-import service from '../commiters';
-import { getFiles, getCommits, getCommiters } from '../commiters';
+import service from '../steps/commiters';
+import { getFiles, getCommits, getCommiters } from '../steps/commiters';
 
 describe('services/choose-reviewer-steps/commiters', () => {
   let members, github, commit, files, pullRequest;

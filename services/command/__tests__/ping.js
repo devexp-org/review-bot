@@ -1,4 +1,4 @@
-import service from '../ping';
+import service from '../commands/ping';
 
 describe('services/command/ping', () => {
 

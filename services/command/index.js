@@ -1,7 +1,7 @@
 'use strict';
 
 import _ from 'lodash';
-import CommandDispatcher from '../modules/command';
+import CommandDispatcher from '../../modules/command';
 
 export const constructRegexp = commandRegexp => new RegExp('(^|\\b|\\W|\\s)(' + commandRegexp + ')(\\s|\\b|\\W|$)', 'i');
 

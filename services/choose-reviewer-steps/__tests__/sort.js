@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import { mockMembers } from './mocks/index';
-import service from '../sort';
+import service from '../steps/sort';
 
 describe('services/choose-reviewer-steps/sort', () => {
 
