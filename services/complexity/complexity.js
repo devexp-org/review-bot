@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Map amount of additions to complexity rate.
  *

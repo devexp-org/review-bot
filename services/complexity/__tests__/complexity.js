@@ -1,10 +1,8 @@
-'use strict';
-
 import _ from 'lodash';
 
-import * as complexity from '../../complexity';
+import * as complexity from '../complexity';
 
-describe('modules/complexity', function () {
+describe('services/complexity', function () {
 
   describe('#additionsComplexity', function () {
 

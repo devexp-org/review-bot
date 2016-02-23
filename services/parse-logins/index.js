@@ -1,4 +1,4 @@
-import parseLogins from '../../modules/parse-logins';
+import parseLogins from './parse-logins';
 
 /**
  * Parse Logins service.

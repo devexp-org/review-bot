@@ -2,7 +2,7 @@
 
 import _ from 'lodash';
 
-import Team from '../../modules/team';
+import Team from './team';
 
 /*
 

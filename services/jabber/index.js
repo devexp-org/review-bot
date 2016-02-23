@@ -1,6 +1,6 @@
 'use strict';
 
-import Jabber from '../../modules/jabber';
+import Jabber from './jabber';
 
 export default function (options, imports) {
 

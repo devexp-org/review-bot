@@ -3,8 +3,8 @@
 import _ from 'lodash';
 import { Schema } from 'mongoose';
 
-import { AddonBroker } from '../../modules/model';
-import * as pullRequest from '../../modules/model/pull_request';
+import { AddonBroker } from './addon-broker';
+import * as pullRequest from './models/pull-request';
 
 export default function (options, imports) {
 

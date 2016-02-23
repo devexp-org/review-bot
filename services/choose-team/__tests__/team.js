@@ -1,8 +1,8 @@
 'use strict';
 
-import Team from '../../team';
+import Team from '../team';
 
-describe('modules/team', () => {
+describe('services/choose-team/team', () => {
 
   const pull = {
     repository: { full_name: 'devexp-org/devexp' }

@@ -1,4 +1,4 @@
-import PullBodySectionDispatcher from '../../modules/pull-request-body-section-queue';
+import PullBodySectionDispatcher from './dispatcher';
 
 export default function pullRequestBodySectionQueue(options = {}, imports) {
   const github = imports['pull-request-github'];

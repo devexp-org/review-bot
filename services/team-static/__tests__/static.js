@@ -2,7 +2,7 @@
 
 import StaticTeam from '../static';
 
-describe('modules/team/static', () => {
+describe('services/team-static/static', () => {
 
   it('should return team members', done => {
     const members = [{ login: 'a' }, { login: 'b' }];

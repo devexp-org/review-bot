@@ -1,4 +1,4 @@
-import BadgeBase from '../../badge-base';
+import BadgeBase from '../';
 
 describe('modules/badge-base', () => {
   const badgeBase = new BadgeBase('http://shields.io/badges/');

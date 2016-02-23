@@ -1,6 +1,6 @@
-import stepsFactory from '../../choose-reviewer-steps';
+import { getStepsFactory } from '../';
 
-describe('modules/choose-reviewer-steps', () => {
+describe('services/choose-reviewer-steps', () => {
   const opts = {
     'team-github': {
       steps: [
@@ -15,7 +15,7 @@ describe('modules/choose-reviewer-steps', () => {
     beforeEach(() => {
       team = { getTeamName: sinon.stub().returns('team-github') };
 
-      steps = stepsFactory(opts, { team });
+      steps = getStepsFactory(opts, { team });
     });
 
     it('should be rejected if team was not found', done => {
@@ -31,7 +31,7 @@ describe('modules/choose-reviewer-steps', () => {
     });
 
     it('should throw an error if there is no step with passed name', () => {
-      steps = stepsFactory(opts, { team });
+      steps = getStepsFactory(opts, { team });
 
       assert.throws(() => {
         steps.getSteps({});
@@ -42,7 +42,7 @@ describe('modules/choose-reviewer-steps', () => {
       const step1 = function step1() {};
       const step2 = function step2() {};
 
-      steps = stepsFactory(opts, { team, step1, step2 });
+      steps = getStepsFactory(opts, { team, step1, step2 });
 
       steps({})
         .then(resolved => {

@@ -1,8 +1,8 @@
 'use strict';
 
-import { AddonBroker } from '../../model';
+import { AddonBroker } from '../addon-broker';
 
-describe('modules/model', function () {
+describe('services/model/addon-broker', function () {
 
   describe('AddonBroker', function () {
 

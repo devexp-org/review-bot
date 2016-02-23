@@ -10,7 +10,7 @@ describe('modules/config', function () {
     existsStub = sinon.stub();
     readFileSyncStub = sinon.stub();
 
-    parseConfig = proxyquire('../../config', {
+    parseConfig = proxyquire('../', {
       fs: {
         existsSync: existsStub,
         readFileSync: readFileSyncStub

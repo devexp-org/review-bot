@@ -1,6 +1,6 @@
 import { clone } from 'lodash';
 
-import parseLogins from '../../../modules/parse-logins';
+import parseLogins from '../../parse-logins/parse-logins';
 
 import service from '../commands/remove';
 import { getParticipant } from '../commands/remove';

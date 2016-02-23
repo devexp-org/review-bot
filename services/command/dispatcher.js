@@ -1,5 +1,3 @@
-'use strict';
-
 import { forEach } from 'lodash';
 
 export default class CommandDispatcher {

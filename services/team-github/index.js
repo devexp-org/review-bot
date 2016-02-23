@@ -1,6 +1,6 @@
 'use strict';
 
-import GitHubTeam from '../../modules/team/github';
+import GitHubTeam from './github';
 
 export default function (options, imports) {
 

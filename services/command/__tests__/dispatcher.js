@@ -1,8 +1,8 @@
 'use strict';
 
-import CommandDispatcher from '../../command';
+import CommandDispatcher from '../dispatcher';
 
-describe('modules/command', () => {
+describe('services/command/dispatcher', () => {
 
   it('should use empty array if commands list is not passed', () => {
     const dispatcher = new CommandDispatcher();

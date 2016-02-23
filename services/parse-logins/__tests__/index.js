@@ -1,4 +1,4 @@
-import parseLogins from '../../parse-logins';
+import parseLogins from '../parse-logins';
 
 const stubsPositiveMixed = {
   stub: 'login @login2 login3 @lo-gin lo1-gin2',
@@ -12,7 +12,7 @@ const stubsPositiveAt = {
 
 const stubNegative = '@1 :+1: @1login @;123,, логин -login';
 
-describe('modules/parse-logins', () => {
+describe('services/parse-logins', () => {
   it('should match mixed logins', () => {
     assert.deepEqual(parseLogins(stubsPositiveMixed.stub), stubsPositiveMixed.result);
   });

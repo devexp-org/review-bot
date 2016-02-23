@@ -1,6 +1,6 @@
 'use strict';
 
-import StaticTeam from '../../modules/team/static';
+import StaticTeam from './static';
 
 export default function (options, imports) {
 
