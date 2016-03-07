@@ -15,23 +15,14 @@
   "precommit.silent": true,
   "scripts": {
     "test": "mocha --compilers js:babel/register -r ./core/tests/setup.js -R spec */**/**/__tests__/**.js",
-    "test:heavy": "mocha --compilers js:babel/register -r ./core/tests/setup.js -R spec core/tests/heavy/**.js",
     "test:watch": "mocha --compilers js:babel/register -w -r ./core/tests/setup.js -R spec */**/**/__tests__/**.js",
-    "_test": "npm run test --silent || true",
-    "_test:heavy": "npm run test:heavy --silent || true",
     "eslint": "eslint .",
-    "_eslint": "npm run eslint --silent || true",
     "coverage": "babel-node ./node_modules/.bin/isparta cover --report text --report lcovonly --report html ./node_modules/.bin/_mocha -- -r ./core/tests/setup.js -R dot */**/**/__tests__/*.js",
-    "_coverage": "npm run coverage --silent || true",
     "coveralls": "npm run _coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "start": "nodemon start.js -e js,json,html --ignore node_modules/ --ignore public/ --ignore client/",
     "webpack:dev": "WEBPACK_DEV=1 webpack-dev-server --config ./.webpack/webpack.js --hot",
     "dev": "WEBPACK_DEV=1 npm run webpack:dev | npm run start",
     "build": "webpack --config ./.webpack/webpack.js",
-    "forever:start": "NODE_ENV=production forever start app.js",
-    "forever:stop": "NODE_ENV=production forever stop app.js",
-    "forever:restart": "NODE_ENV=production forever restart app.js",
-    "forever:logs": "forever logs app.js",
     "postinstall": ".scripts/postinstall.sh"
   },
   "dependencies": {
