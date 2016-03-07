@@ -2,7 +2,6 @@ logs
 coverage
 node_modules
 npm-debug.log
-config/secret.json
+config/*
 public/app.js
 public/style.css
-
