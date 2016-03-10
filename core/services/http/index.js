@@ -4,7 +4,6 @@ import _ from 'lodash';
 import path from 'path';
 import express from 'express';
 
-import proxy from 'proxy-express';
 import bodyParser from 'body-parser';
 import responseTime from 'response-time';
 
@@ -17,7 +16,6 @@ export default function (options, imports) {
   const logger = imports.logger;
 
   const assetsPath = path.join(__dirname, '..', '..', 'assets');
-  const publicPath = path.join(__dirname, '..', '..', 'public');
 
   app.use(responseTime());
   app.use(bodyParser.json());
@@ -33,17 +31,6 @@ export default function (options, imports) {
     const routerModule = imports[router];
 
     app.use(route, routerModule);
-  });
-
-  if (process.env.WEBPACK) {
-    app.use(proxy('localhost:8081', '/public'));
-  } else {
-    app.use('/public', express.static(publicPath));
-  }
-
-  const indexFile = path.join(assetsPath, 'index.html');
-  app.get('*', function (req, res) {
-    res.sendFile(indexFile);
   });
 
   return new Promise(provide => {
