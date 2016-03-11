@@ -42,7 +42,7 @@
     "chai": "^3.4.1",
     "coveralls": "^2.11.6",
     "cz-conventional-changelog": "^1.1.5",
-    "eslint": "^1.10.3",
+    "eslint": "^2.4.0",
     "isparta": "^3.1.0",
     "mocha": "^2.3.4",
     "node-architect": "^0.0.7",
