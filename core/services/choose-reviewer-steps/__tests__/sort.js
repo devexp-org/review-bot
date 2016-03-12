@@ -7,7 +7,7 @@ describe('services/choose-reviewer-steps/sort', () => {
 
   let members, step, pullRequest;
   beforeEach(() => {
-    members = _.clone(mockMembers, true);
+    members = _.cloneDeep(mockMembers);
     pullRequest = {};
 
     step = service();

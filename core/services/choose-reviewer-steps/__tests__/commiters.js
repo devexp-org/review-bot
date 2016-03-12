@@ -12,7 +12,7 @@ describe('services/choose-reviewer-steps/commiters', () => {
   const commitsCount = 2;
 
   beforeEach(() => {
-    members = _.clone(mockMembers, true);
+    members = _.cloneDeep(mockMembers);
 
     commit = sinon.stub();
     commit.callsArgWithAsync(1, null, []);

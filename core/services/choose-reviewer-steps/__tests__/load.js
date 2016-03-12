@@ -8,7 +8,7 @@ describe('services/choose-reviewer-steps/load', () => {
   let members, pullRequest, pullRequestModel, model, find;
 
   beforeEach(() => {
-    members = _.clone(mockMembers, true);
+    members = _.cloneDeep(mockMembers);
     pullRequest = {};
 
     find = sinon.stub();

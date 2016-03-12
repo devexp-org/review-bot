@@ -8,7 +8,7 @@ describe('services/choose-reviewer-steps/remove_author', () => {
   let members, step;
 
   beforeEach(() => {
-    members = _.clone(mockMembers, true);
+    members = _.cloneDeep(mockMembers);
 
     step = service();
   });

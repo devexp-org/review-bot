@@ -1,4 +1,4 @@
-import { reject, isEmpty, contains } from 'lodash';
+import { reject, isEmpty, includes } from 'lodash';
 
 /**
  * Review ignore step - removes reviewers which login match to one in the list.
@@ -16,7 +16,7 @@ export default function ignoreService(options = {}) {
       return Promise.resolve(review);
     }
 
-    review.team = reject(review.team, member => contains(list, member.login));
+    review.team = reject(review.team, member => includes(list, member.login));
 
     return Promise.resolve(review);
   }
