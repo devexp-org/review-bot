@@ -1,10 +1,7 @@
 import service from '../commands/stop';
 
 describe('services/command/stop', () => {
-  let action, pullRequest, team, events, payload;
-  let logger;
-  let comment;
-  let command;
+  let action, pullRequest, team, events, payload, logger, comment, command; // eslint-disable-line
 
   beforeEach(() => {
     events = { emit: sinon.stub() };

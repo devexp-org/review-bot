@@ -37,14 +37,7 @@ describe('services/command/change', () => {
   });
 
   describe('#changeCommand', () => {
-    let pullRequest;
-    let payload;
-    let action;
-    let events;
-    let logger;
-    let team;
-    let comment;
-    let command;
+    let pullRequest, payload, action, events, logger, team, comment, command; // eslint-disable-line
 
     beforeEach(() => {
       pullRequest = {

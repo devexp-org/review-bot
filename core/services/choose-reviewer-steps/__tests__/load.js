@@ -5,7 +5,7 @@ import service from '../steps/load';
 
 describe('services/choose-reviewer-steps/load', () => {
 
-  let members, pullRequest, pullRequestModel, model, find;
+  let members, pullRequest, pullRequestModel, model, find; // eslint-disable-line
 
   beforeEach(() => {
     members = _.cloneDeep(mockMembers);

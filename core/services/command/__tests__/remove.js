@@ -48,13 +48,7 @@ describe('services/command/remove', () => {
   });
 
   describe('#removeCommand', () => {
-    let command;
-    let pullRequest;
-    let payload;
-    let action;
-    let events;
-    let logger;
-    let comment;
+    let command, pullRequest, payload, action, events, logger, comment; // eslint-disable-line
 
     beforeEach(() => {
       action = { save: sinon.stub().returns(Promise.resolve(pullRequest)) };

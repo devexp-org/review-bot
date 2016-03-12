@@ -72,7 +72,7 @@ describe('services/choose-reviewer-steps/commiters', () => {
 
   describe('#getCommits', function () {
 
-    let helper, since;
+    let helper, since; // eslint-disable-line
     beforeEach(function () {
       since = '2015-01-01T01:00:00Z';
       helper = getCommits(github, pullRequest, since, commitsCount);
