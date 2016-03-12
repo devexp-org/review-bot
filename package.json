@@ -34,7 +34,7 @@
     "lodash": "^3.10.1",
     "minimatch": "^3.0.0",
     "moment": "^2.10.6",
-    "mongoose": "^4.3.1",
+    "mongoose": "^4.4.7",
     "node-xmpp-client": "3.0.0",
     "proxy-express": "^2.0.0",
     "response-time": "^2.3.1",
