@@ -12,7 +12,7 @@ describe('services/choose-reviewer-steps/commiters', () => {
   const commitsCount = 2;
 
   beforeEach(() => {
-    members = _.clone(mockMembers, true);
+    members = _.cloneDeep(mockMembers);
 
     commit = sinon.stub();
     commit.callsArgWithAsync(1, null, []);
@@ -72,7 +72,7 @@ describe('services/choose-reviewer-steps/commiters', () => {
 
   describe('#getCommits', function () {
 
-    let helper, since;
+    let helper, since; // eslint-disable-line
     beforeEach(function () {
       since = '2015-01-01T01:00:00Z';
       helper = getCommits(github, pullRequest, since, commitsCount);

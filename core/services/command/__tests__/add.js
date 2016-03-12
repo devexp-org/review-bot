@@ -36,14 +36,7 @@ describe('services/command/add', () => {
   });
 
   describe('#addCommand', () => {
-    let command;
-    let pullRequest;
-    let payload;
-    let action;
-    let events;
-    let logger;
-    let team;
-    let comment;
+    let command, pullRequest, payload, action, events, logger, team, comment; // eslint-disable-line
 
     beforeEach(() => {
       team = {

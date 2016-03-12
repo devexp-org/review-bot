@@ -2,10 +2,7 @@ import service from '../commands/ping';
 
 describe('services/command/ping', () => {
 
-  let command;
-  let payload;
-  let logger;
-  let events;
+  let command, payload, logger, events; // eslint-disable-line
 
   beforeEach(() => {
     events = { emit: sinon.stub() };

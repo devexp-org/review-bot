@@ -40,8 +40,7 @@ export default function loadService(options, imports) {
                 reviewer.rank -= max;
               }
             });
-          })
-          .value();
+          });
 
         return review;
       });

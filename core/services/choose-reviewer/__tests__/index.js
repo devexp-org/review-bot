@@ -3,7 +3,7 @@ import service, { Review } from '../../choose-reviewer';
 describe('services/choose-reviewer', function () {
 
   describe('Review', function () {
-    let team, logger, members, pullRequest, pullRequestModel, payload, steps;
+    let team, logger, members, pullRequest, pullRequestModel, payload, steps; // eslint-disable-line
 
     beforeEach(function () {
       members = [

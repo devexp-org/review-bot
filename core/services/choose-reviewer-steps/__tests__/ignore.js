@@ -7,7 +7,7 @@ describe('services/choose-reviewer-steps/ignore', function () {
 
   let members, step;
   beforeEach(() => {
-    members = _.clone(mockMembers, true);
+    members = _.cloneDeep(mockMembers);
 
     step = service({ list: ['Captain America', 'Hulk', 'Thor'] });
   });

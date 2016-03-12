@@ -13,9 +13,6 @@ export default function (options, imports) {
       case 'file':
         return new winston.transports.File(transport);
 
-      case 'daily-rotate-file':
-        return new winston.transports.DailyRotateFile(transport);
-
       case 'console':
         return new winston.transports.Console(transport);
 

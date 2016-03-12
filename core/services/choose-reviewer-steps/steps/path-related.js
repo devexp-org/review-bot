@@ -1,5 +1,5 @@
 import minimatch from 'minimatch';
-import { assign, sample, isEmpty, filter, forEach, any, map, all } from 'lodash';
+import { assign, sample, isEmpty, filter, forEach, some, map, every } from 'lodash';
 
 /**
  * Checks if files match the pattern
@@ -10,7 +10,7 @@ import { assign, sample, isEmpty, filter, forEach, any, map, all } from 'lodash'
  * @return {Boolean}
  */
 export function isMatch(files, patterns) {
-  return any(map(patterns, pattern => !isEmpty(minimatch.match(files, pattern))));
+  return some(map(patterns, pattern => !isEmpty(minimatch.match(files, pattern))));
 }
 
 /**
@@ -22,7 +22,7 @@ export function isMatch(files, patterns) {
  * @return {Boolean}
  */
 export function isMatchAll(files, patterns) {
-  return all(map(patterns, pattern => !isEmpty(minimatch.match(files, pattern))));
+  return every(map(patterns, pattern => !isEmpty(minimatch.match(files, pattern))));
 }
 
 /**
@@ -65,7 +65,9 @@ export function incRank(options, review) {
         );
       }
 
-      reviewers.forEach(reviewer => reviewer.rank += Math.floor(Math.random() * max) + 1);
+      reviewers.forEach(reviewer => {
+        reviewer.rank += Math.floor(Math.random() * max) + 1;
+      });
     }
 
     return Promise.resolve(files);

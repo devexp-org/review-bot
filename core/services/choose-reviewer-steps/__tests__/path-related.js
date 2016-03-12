@@ -1,4 +1,4 @@
-import { clone, filter, forEach } from 'lodash';
+import { cloneDeep, filter, forEach } from 'lodash';
 import { mockMembers } from './mocks/index';
 import { isMatch, isMatchAll, getFiles, incRank, decRank, pathRelatedCreator } from '../steps/path-related';
 
@@ -65,7 +65,7 @@ describe('services/choose-reviewer-steps/path-related', () => {
     const opts = { pattern: ['*.js'], max: 5, members };
 
     it('should increment rank for one random member of team', done => {
-      const reviewers = clone(mockMembers, true);
+      const reviewers = cloneDeep(mockMembers);
       const step = incRank(opts, { reviewers });
 
       step(['test.js'])
@@ -82,7 +82,7 @@ describe('services/choose-reviewer-steps/path-related', () => {
     });
 
     it('should not change rank if there is no matched pathes', done => {
-      const reviewers = clone(mockMembers, true);
+      const reviewers = cloneDeep(mockMembers);
       const step = incRank(opts, { reviewers });
 
       step(['test.css'])
@@ -105,7 +105,7 @@ describe('services/choose-reviewer-steps/path-related', () => {
     const opts = { pattern: ['*.js'], max: 5, members };
 
     it('should decrement rank for all members specified in options', done => {
-      const reviewers = clone(mockMembers, true);
+      const reviewers = cloneDeep(mockMembers);
       const step = decRank(opts, { reviewers });
 
       step(['test.js'])
@@ -122,7 +122,7 @@ describe('services/choose-reviewer-steps/path-related', () => {
     });
 
     it('should not change rank if there is no matched pathes', done => {
-      const reviewers = clone(mockMembers, true);
+      const reviewers = cloneDeep(mockMembers);
       const step = decRank(opts, { reviewers });
 
       step(['test.css'])

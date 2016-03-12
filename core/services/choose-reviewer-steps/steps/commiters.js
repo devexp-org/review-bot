@@ -31,7 +31,7 @@ export function getFiles(pullRequest, ignorePatterns, filesToCheck) {
 
       return keep;
     })
-    .sample(filesToCheck)
+    .sampleSize(filesToCheck)
     .value();
 
   return Promise.resolve(files);

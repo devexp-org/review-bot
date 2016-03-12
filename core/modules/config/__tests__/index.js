@@ -15,7 +15,7 @@ describe('modules/config', function () {
         existsSync: existsStub,
         readFileSync: readFileSyncStub
       }
-    });
+    }).default;
   });
 
   it('should read default config', function () {

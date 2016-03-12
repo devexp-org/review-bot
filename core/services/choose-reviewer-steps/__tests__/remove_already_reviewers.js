@@ -8,7 +8,7 @@ describe('services/choose-reviewer-steps/remove_already_reviewers', () => {
   let members, step, pullRequest;
 
   beforeEach(() => {
-    members = _.clone(mockMembers, true);
+    members = _.cloneDeep(mockMembers);
     pullRequest = {
       get(path) {
         assert.equal(path, 'review.reviewers');
@@ -47,7 +47,7 @@ describe('services/choose-reviewer-steps/remove_already_reviewers', () => {
   it('should do nothing if there are no reviewers', done => {
     pullRequest.review.reviewers = [];
     const review = { team: members, pullRequest };
-    const membersClone = _.clone(members, true);
+    const membersClone = _.cloneDeep(members);
 
     step(review)
     .then(review => {

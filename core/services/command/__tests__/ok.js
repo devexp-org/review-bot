@@ -4,10 +4,7 @@ import service from '../commands/ok';
 import { mockReviewers } from './mocks';
 
 describe('services/command/ok', () => {
-  let action, pullRequest, team, events, payload;
-  let logger;
-  let comment;
-  let command;
+  let action, pullRequest, team, events, payload, logger, comment, command; // eslint-disable-line
 
   beforeEach(() => {
     pullRequest = {

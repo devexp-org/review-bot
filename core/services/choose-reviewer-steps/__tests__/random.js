@@ -8,7 +8,7 @@ describe('services/choose-reviewer-steps/random', () => {
   let members, step, pullRequest;
 
   beforeEach(() => {
-    members = _.clone(mockMembers, true);
+    members = _.cloneDeep(mockMembers);
     pullRequest = {};
 
     step = service({ max: 2 });
@@ -16,7 +16,7 @@ describe('services/choose-reviewer-steps/random', () => {
 
   it('should add random value to rank to each member', done => {
     const review = { team: members, pullRequest };
-    const membersClone = _.clone(members, true);
+    const membersClone = _.cloneDeep(members);
 
     step(review)
       .then(review => {

@@ -36,14 +36,14 @@ describe('service/command#constructRegexp', () => {
         makeCommonCases('!ok'),
         makeNegativeCases('ok'),
         makeNegativeCases('ок'),
-        `Lorem ipsum dolor sit amet ok`,
-        `Lorem ipsum dolor sit amet, ok consectetur adipisicing elit.`,
-        `Lorem ipsum dolor sit amet,\n ok consectetur adipisicing elit.`,
-        `Lorem ipsum dolor sit amet,\n ok\n consectetur adipisicing elit.`,
-        `Lorem ipsum dolor sit amet ок`,
-        `Lorem ipsum dolor sit amet, ок consectetur adipisicing elit.`,
-        `Lorem ipsum dolor sit amet,\n ок consectetur adipisicing elit.`,
-        `Lorem ipsum dolor sit amet,\n ок\n consectetur adipisicing elit.`
+        'Lorem ipsum dolor sit amet ok',
+        'Lorem ipsum dolor sit amet, ok consectetur adipisicing elit.',
+        'Lorem ipsum dolor sit amet,\n ok consectetur adipisicing elit.',
+        'Lorem ipsum dolor sit amet,\n ok\n consectetur adipisicing elit.',
+        'Lorem ipsum dolor sit amet ок',
+        'Lorem ipsum dolor sit amet, ок consectetur adipisicing elit.',
+        'Lorem ipsum dolor sit amet,\n ок consectetur adipisicing elit.',
+        'Lorem ipsum dolor sit amet,\n ок\n consectetur adipisicing elit.'
       )
     },
     {

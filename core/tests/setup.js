@@ -3,6 +3,8 @@
 import chai from 'chai';
 import sinon from 'sinon';
 
+require('babel-polyfill');
+
 const assert = chai.assert;
 
 sinon.assert.expose(assert, { prefix: '' });
