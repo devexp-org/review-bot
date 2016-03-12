@@ -36,10 +36,6 @@ describe('services/logger', function () {
             stream: new MyDummyWritableStream()
           },
           {
-            name: 'daily-rotate-file',
-            stream: new MyDummyWritableStream()
-          },
-          {
             name: 'console',
             timestamp: true
           }
