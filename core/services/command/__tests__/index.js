@@ -1,3 +1,4 @@
+import service from '../';
 import { constructRegexp } from '../';
 import { forEach } from 'lodash';
 
@@ -97,5 +98,33 @@ describe('service/command#constructRegexp', () => {
         assert.notMatch(c, regexp);
       });
     });
+  });
+});
+
+describe('service/command#command', () => {
+  let command, queue, model, events, logger, pullRequestModel; // eslint-disable-line
+
+  beforeEach(() => {
+    const options = {
+      events: ['github:issue_comment'],
+      commands: [
+        {
+          test: '\/start',
+          handlers: ['command-start']
+        }
+      ]
+    };
+
+    events = { on: sinon.stub() };
+    logger = { info: sinon.stub() };
+    model = { get: sinon.stub().returns(pullRequestModel) };
+    pullRequestModel = {};
+    queue = { dispatch: sinon.stub() };
+
+    command = service(options, { queue, model, logger, events, 'command-start': sinon.stub() });
+  });
+
+  it('should subscribe on events', function () {
+    assert.calledWith(events.on, 'github:issue_comment');
   });
 });

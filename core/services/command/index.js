@@ -1,16 +1,12 @@
-'use strict';
-
 import _ from 'lodash';
 import CommandDispatcher from './dispatcher';
 
-export const constructRegexp = commandRegexp => new RegExp('(^|\\b|\\W|\\s)(' + commandRegexp + ')(\\s|\\b|\\W|$)', 'i');
+export function constructRegexp(commandRegexp) {
+  return new RegExp('(^|\\b|\\W|\\s)(' + commandRegexp + ')(\\s|\\b|\\W|$)', 'i');
+}
 
-export default function (options, imports) {
-
-  const queue = imports.queue;
-  const model = imports.model;
-  const events = imports.events;
-  const logger = imports.logger;
+export default function command(options, imports) {
+  const { queue, model, events, logger } = imports;
   const pullRequestModel = model.get('pull_request');
 
   const wrapHandler = function (handler) {
@@ -33,9 +29,7 @@ export default function (options, imports) {
   const commands = options.commands.map(command => {
     return {
       test: constructRegexp(command.test),
-      handlers: command.handlers.map(service => {
-        return wrapHandler(imports[service]);
-      })
+      handlers: command.handlers.map(service => wrapHandler(imports[service]))
     };
   });
 
@@ -52,5 +46,4 @@ export default function (options, imports) {
   });
 
   return dispatcher;
-
 }
