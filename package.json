@@ -18,7 +18,7 @@
     "test:watch": "mocha --compilers js:babel-register -w -r ./core/tests/setup.js -R spec core/**/**/__tests__/**.js",
     "eslint": "eslint .",
     "coverage": "babel-node ./node_modules/.bin/isparta cover --report text --report lcovonly --report html ./node_modules/.bin/_mocha -- -r ./core/tests/setup.js -R dot */**/**/__tests__/*.js",
-    "coveralls": "npm run _coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
+    "coveralls": "npm run coverage && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "start": "nodemon start.js -e js,json,html --ignore node_modules/",
     "postinstall": ".scripts/postinstall.sh"
   },
