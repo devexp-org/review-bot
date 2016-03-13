@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import CommandDispatcher from './dispatcher';
+import commandLogFactory from './log';
 
 export function constructRegexp(commandRegexp) {
   return new RegExp('(^|\\b|\\W|\\s)(' + commandRegexp + ')(\\s|\\b|\\W|$)', 'i');
@@ -7,6 +8,7 @@ export function constructRegexp(commandRegexp) {
 
 export default function command(options, imports) {
   const { queue, model, events, logger } = imports;
+  const commandLog = commandLogFactory({ logger });
   const pullRequestModel = model.get('pull_request');
 
   const wrapHandler = function (handler) {
@@ -18,6 +20,7 @@ export default function command(options, imports) {
             .findById(pullId)
             .then(pullRequest => {
               payload.pullRequest = pullRequest;
+              payload.commandLog = commandLog;
               return handler(commentCommand, payload);
             })
             .then(resolve, reject);
