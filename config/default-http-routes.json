@@ -1,0 +1,23 @@
+{
+  "http-routes-badges": {
+    "path": "./core/services/badge-constructor/routes",
+    "options": {
+      "template": "flat"
+    },
+    "dependencies": [
+      "logger"
+    ]
+  },
+
+  "http-routes-github": {
+    "path": "./core/services/pull-request-github/routes",
+    "dependencies": {
+      "model": "model",
+      "events": "events",
+      "logger": "logger",
+      "github": "pull-request-github",
+      "choose-reviewer": "choose-reviewer",
+      "pull-request-action": "pull-request-action"
+    }
+  }
+}

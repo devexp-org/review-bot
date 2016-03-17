@@ -1,0 +1,96 @@
+{
+  "parse-logins": {
+    "path": "./core/services/parse-logins"
+  },
+
+  "command-add": {
+    "path": "./core/services/command/commands/add",
+    "dependencies": {
+      "team": "choose-team",
+      "action": "pull-request-action",
+      "logger": "logger",
+      "events": "events",
+      "parseLogins": "parse-logins"
+    }
+  },
+
+  "command-remove": {
+    "path": "./core/services/command/commands/remove",
+    "options": {
+      "min": 2
+    },
+    "dependencies": {
+      "events": "events",
+      "logger": "logger",
+      "action": "pull-request-action",
+      "parseLogins": "parse-logins"
+    }
+  },
+
+  "command-busy": {
+    "path": "./core/services/command/commands/busy",
+    "dependencies": {
+      "team": "choose-team",
+      "review": "choose-reviewer",
+      "action": "pull-request-action",
+      "logger": "logger",
+      "events": "events"
+    }
+  },
+
+  "command-change": {
+    "path": "./core/services/command/commands/change",
+    "dependencies": {
+      "team": "choose-team",
+      "action": "pull-request-action",
+      "logger": "logger",
+      "events": "events",
+      "parseLogins": "parse-logins"
+    }
+  },
+
+  "command-not-ok": {
+    "path": "./core/services/command/commands/not_ok",
+    "dependencies": {
+      "action": "pull-request-action",
+      "logger": "logger",
+      "events": "events"
+    }
+  },
+
+  "command-ok": {
+    "path": "./core/services/command/commands/ok",
+    "dependencies": {
+      "team": "choose-team",
+      "action": "pull-request-action",
+      "logger": "logger",
+      "events": "events"
+    }
+  },
+
+  "command-ping": {
+    "path": "./core/services/command/commands/ping",
+    "dependencies": {
+      "logger": "logger",
+      "events": "events"
+    }
+  },
+
+  "command-start": {
+    "path": "./core/services/command/commands/start",
+    "dependencies": {
+      "action": "pull-request-action",
+      "logger": "logger",
+      "events": "events"
+    }
+  },
+
+  "command-stop": {
+    "path": "./core/services/command/commands/stop",
+    "dependencies": {
+      "action": "pull-request-action",
+      "logger": "logger",
+      "events": "events"
+    }
+  }
+}
