@@ -124,7 +124,7 @@ export class PullRequestGitHub {
       .then(remote => this.savePullRequest(remote));
   }
 
-  setBodySection(id, sectionId, content, pos = 99999) {
+  setSection(id, sectionId, content, pos = 99999) {
     return this.pullRequest
       .findById(id)
       .then(local => {

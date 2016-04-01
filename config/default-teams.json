@@ -1,0 +1,23 @@
+{
+  "team-github": {
+    "path": "./core/services/team-github",
+    "options": {
+      "team": "owners"
+    },
+    "dependencies": [
+      "github"
+    ]
+  },
+
+  "team-static": {
+    "path": "./core/services/team-static",
+    "options": {
+      "members": [
+        "artems",
+        "d4rkr00t",
+        "mishanga",
+        "sbmaxx"
+      ]
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "choose-reviewer-step-remove-author": {
+    "path": "./core/services/choose-reviewer-steps/steps/remove_author"
+  },
+
+  "choose-reviewer-step-remove-already-reviewers": {
+    "path": "./core/services/choose-reviewer-steps/steps/remove_already_reviewers"
+  },
+
+  "choose-reviewer-step-ignore": {
+    "path": "./core/services/choose-reviewer-steps/steps/ignore"
+  },
+
+  "choose-reviewer-step-commiters": {
+    "path": "./core/services/choose-reviewer-steps/steps/commiters",
+    "options": {
+      "max": 4,
+      "since": [4, "month"],
+      "filesToCheck": 5,
+      "commitsCount": 10,
+      "ignore": [
+        "config"
+      ]
+    },
+    "dependencies": [
+      "github"
+    ]
+  },
+
+  "choose-reviewer-step-path-related": {
+    "path": "./core/services/choose-reviewer-steps/steps/path-related",
+    "options": {
+      "max": 5,
+      "members": ["artems"],
+      "incPattern": ["*.js"],
+      "decPattern": ["*.json"]
+    }
+  },
+
+  "choose-reviewer-step-random": {
+    "path": "./core/services/choose-reviewer-steps/steps/random",
+    "options": { "max": 5 }
+  },
+
+  "choose-reviewer-step-load": {
+    "path": "./core/services/choose-reviewer-steps/steps/load",
+    "options": { "max": 1 },
+    "dependencies": [
+      "model"
+    ]
+  },
+
+  "choose-reviewer-step-sort": {
+    "path": "./core/services/choose-reviewer-steps/steps/sort"
+  },
+
+  "choose-reviewer-step-total-number": {
+    "path": "./core/services/choose-reviewer-steps/steps/total_number",
+    "options": { "max": 2 }
+  }
+}

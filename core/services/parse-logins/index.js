@@ -1,7 +1,7 @@
 import parseLogins from './parse-logins';
 
 /**
- * Parse Logins service.
+ * Parse logins service.
  *
  * @param {Object} options
  * @param {Boolean} options.isStrictAt
@@ -9,7 +9,7 @@ import parseLogins from './parse-logins';
  * @return {Function}
  */
 export default function parseLoginsService(options) {
-  return function parseLoginsWrap(str, startFrom) {
+  return function (str, startFrom) {
     return parseLogins(str, startFrom, options.isStrcitAt);
   };
 }
