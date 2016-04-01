@@ -10,7 +10,7 @@ import _ from 'lodash';
  * @return {Boolean}
  */
 function shouldStart(pullRequest) {
-  return _.isEmpty(pullRequest.review.reviewers);
+  return _.isEmpty(pullRequest.get('review.reviewers'));
 }
 
 export default function (options, imports) {
@@ -34,16 +34,18 @@ export default function (options, imports) {
     }
 
     logger.info(
-      'Autostart review [%s – %s]',
-      pullRequest.id,
-      pullRequest.title
+      'Autostart review [%s – %s] %s',
+      pullRequest.number,
+      pullRequest.title,
+      pullRequest.html_url
     );
 
-    chooseReviewer.review(pullRequest.id)
+    chooseReviewer
+      .review(pullRequest.id)
       .then(resultReview => {
         return action.save({ reviewers: resultReview.team }, pullRequest.id);
       })
-      .catch(logger.error.bind(logger));
+      .catch(::logger.error);
   }
 
   events.on('github:pull_request:opened', autoStart);

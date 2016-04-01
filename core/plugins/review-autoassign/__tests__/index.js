@@ -1,3 +1,4 @@
+import { get } from 'lodash';
 import service from '../../review-autoassign';
 
 describe('service/review-autoassign', function () {
@@ -30,6 +31,9 @@ describe('service/review-autoassign', function () {
         title: 'title',
         review: {
           reviewers: []
+        },
+        get(path) {
+          return get(this, path);
         }
       }
     };

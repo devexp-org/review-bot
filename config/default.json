@@ -141,13 +141,6 @@
       ]
     },
 
-    "pull-request-body-queue": {
-      "path": "./core/services/pull-request-body-section-queue",
-      "dependencies": [
-        "pull-request-github"
-      ]
-    },
-
     "pull-request-action": {
       "path": "./core/services/pull-request-action",
       "options": {
@@ -256,27 +249,7 @@
       ]
     },
 
-    "!plugin-review-badges": {
-      "path": "./core/services/review-badges",
-      "options": {
-        "url": "http://localhost:8080/badges/",
-        "style": "flat"
-      },
-      "dependencies": [
-        "events",
-        "pull-request-body-queue"
-      ]
-    },
-
-    "!plugin-review-autoassign": {
-      "path": "./core/services/review-autoassign",
-      "dependencies": [
-        "events",
-        "logger",
-        "choose-reviewer",
-        "pull-request-action"
-      ]
-    }
+    "#include:plugins": "./default-plugins.json"
 
   }
 }
