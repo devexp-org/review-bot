@@ -39,8 +39,8 @@ export default class BadgeBase {
     if (!subject) throw new Error('Badge should have a subject!');
     if (!status) throw new Error('Badge should have a status!');
 
-    status = this._escape(status);
     subject = this._escape(subject);
+    status = this._escape(status);
 
     const src = encodeURIComponent(`${subject}-${status}-${color}`);
     const img = `<img src="${this.url}${src}.svg" />`;

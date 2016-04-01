@@ -93,7 +93,7 @@ export function getCommiters(commits) {
 
     if (!author) return;
 
-    members[author.login] = members[author.login] + 1 || 1;
+    members[author.login] = (members[author.login] + 1) || 1;
   });
 
   return Promise.resolve(members);
@@ -118,9 +118,9 @@ export function addRank(maxRank, team) {
     });
 
     _.forEach(team, (member) => {
-      member.rank += members[member.login] ?
-        maxRank / (max / members[member.login]) :
-        0;
+      member.rank += members[member.login]
+        ? maxRank / (max / members[member.login])
+        : 0;
     });
 
     return team;
