@@ -33,6 +33,10 @@ export default function (options, imports) {
     app.use(route, routerModule);
   });
 
+  app.get('/', function (req, res) {
+    res.send('Choose Reviewers Bot');
+  });
+
   return new Promise(provide => {
     const server = app.listen(port, () => {
       logger.info(
