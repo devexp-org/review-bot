@@ -43,9 +43,7 @@ export default function (options, imports) {
 
       server.shutdown = function () {
         return new Promise((resolve, reject) => {
-          server.close(function (error) {
-            error ? reject(error) : resolve();
-          });
+          server.close(() => resolve());
         });
       };
 

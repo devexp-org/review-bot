@@ -9,7 +9,7 @@ export default function (options, imports) {
 
   connection.shutdown = function () {
     return new Promise(resolve => {
-      connection.close(resolve);
+      connection.close(() => resolve());
     });
   };
 
