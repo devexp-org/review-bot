@@ -31,7 +31,7 @@
     "badgs": "^1.0.0",
     "body-parser": "^1.14.1",
     "express": "^4.13.3",
-    "github": "^0.2.4",
+    "github": "^1.1.0",
     "lodash": "^4.6.1",
     "minimatch": "^3.0.0",
     "moment": "^2.10.6",
