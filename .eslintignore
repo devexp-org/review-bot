@@ -1,4 +1,2 @@
-core/public
 coverage
-core/tests/data
-core/client
+node_modules

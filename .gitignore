@@ -2,4 +2,4 @@ logs
 coverage
 node_modules
 npm-debug.log
-config/*
+config/secret.json
