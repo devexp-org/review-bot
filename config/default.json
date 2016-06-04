@@ -40,6 +40,33 @@
           }
         }
       }
+    },
+
+    "github": {
+      "path": "./src/services/github",
+      "options": {
+        "host": "api.github.com",
+        "debug": false,
+        "version": "3.0.0",
+        "timeout": 5000,
+        "protocol": "https",
+        "headers": {
+          "user-agent": "DevExp/2.0.0"
+        }
+      },
+      "dependencies": []
+    },
+
+    "http": {
+      "path": "./src/services/http",
+      "options": {
+        "port": "8080",
+        "routes": {
+        }
+      },
+      "dependencies": [
+        "logger"
+      ]
     }
 
   }

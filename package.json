@@ -41,6 +41,7 @@
     "node-schedule": "^1.1.0",
     "node-xmpp-client": "^3.0.0",
     "response-time": "^2.3.1",
+    "server-destroy": "^1.0.1",
     "slack-client": "^2.0.6"
   },
   "devDependencies": {
@@ -70,7 +71,7 @@
   },
   "config": {
     "mocha": "mocha --compilers js:babel-core/register --require ./tests/setup.js --reporter progress",
-    "istanbul": "nyc --all --require babel-core/register --require ./tests/setup.js --reporter text --reporter html mocha",
+    "istanbul": "nyc --all --require babel-core/register --reporter text --reporter html npm test",
     "pattern_e2e": "./tests/e2e/**.js",
     "pattern_test": "./src/**/__tests__/**.js"
   }
