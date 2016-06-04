@@ -1,0 +1,47 @@
+{
+
+  "startup_timeout": 10000,
+
+  "shutdown_timeout": 5000,
+
+  "services": {
+
+    "queue": {
+      "path": "./src/services/queue"
+    },
+
+    "events": {
+      "path": "./src/services/events"
+    },
+
+    "logger": {
+      "path": "./src/services/logger",
+      "options": {
+        "formatters": {
+          "default": {
+            "format": "[%(date)s] %(name)s %(levelname)s: %(message)s",
+            "datefmt": "%Y-%m-%dT%H:%M:%S.%L%z",
+            "colorize": true
+          }
+        },
+        "handlers": {
+          "terminal": {
+            "class": "intel/handlers/console",
+            "level": "VERBOSE",
+            "formatter": "default"
+          }
+        },
+        "loggers": {
+          "root": {
+            "level": "INFO",
+            "handlers": ["terminal"],
+            "exitOnError": false,
+            "handleExceptions": true
+          }
+        }
+      }
+    }
+
+  }
+
+}

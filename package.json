@@ -40,25 +40,37 @@
     "node-architect": "^0.0.9",
     "node-schedule": "^1.1.0",
     "node-xmpp-client": "^3.0.0",
-    "nodemailer": "^2.3.1",
     "response-time": "^2.3.1",
     "slack-client": "^2.0.6"
   },
   "devDependencies": {
-    "babel-eslint": "^6.0.4",
+    "babel-cli": "^6.6.5",
+    "babel-core": "^6.7.2",
+    "babel-eslint": "^6.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.8.0",
     "chai": "^3.4.1",
     "eslint": "2.6.0",
-    "istanbul": "^0.4.3",
     "mocha": "^2.3.4",
     "nodemon": "^1.8.1",
+    "nyc": "^6.4.4",
     "pre-commit": "^1.1.2",
     "proxyquire": "^1.7.3",
     "sinon": "^1.17.2",
     "supertest": "^1.2.0"
   },
+  "nyc": {
+    "include": [
+      "src"
+    ],
+    "exclude": [
+      "src/app.js",
+      "**/__tests__/**",
+      "**/__mocks__/**"
+    ]
+  },
   "config": {
-    "mocha": "mocha -r ./tests/setup.js --reporter progress",
-    "istanbul": "istanbul cover --report text --report html _mocha -- -r ./tests/setup.js --reporter progress",
+    "mocha": "mocha --compilers js:babel-core/register --require ./tests/setup.js --reporter progress",
+    "istanbul": "nyc --all --require babel-core/register --require ./tests/setup.js --reporter text --reporter html mocha",
     "pattern_e2e": "./tests/e2e/**.js",
     "pattern_test": "./src/**/__tests__/**.js"
   }
