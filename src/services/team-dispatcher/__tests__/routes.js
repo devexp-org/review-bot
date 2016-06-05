@@ -58,10 +58,23 @@ describe('services/team-dispatcher/routes', function () {
       .end(done);
   });
 
-  it('should return error if pull request not found', function (done) {
+  it('should return error if pull request is not found', function (done) {
     pullRequestModel.findByRepositoryAndNumber
       .withArgs('github/hubot', '1')
       .returns(Promise.resolve(null));
+
+    request(app)
+      .get('/pull/github/hubot/1')
+      .expect('Content-Type', /application\/json/)
+      .expect(500)
+      .expect(/not found/)
+      .end(done);
+  });
+
+  it('should return error if team is not found', function (done) {
+    teamDispatcher.findTeamByPullRequest
+      .withArgs(pullRequest)
+      .returns(null);
 
     request(app)
       .get('/pull/github/hubot/1')

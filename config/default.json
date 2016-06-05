@@ -98,7 +98,7 @@
       "options": {
         "addons": {
           "pull_request": [
-            "#comment:pull-request-github-addon",
+            "pull-request-github-addon",
             "#comment:pull-request-review-addon",
             "#comment:pull-request-complexity-addon"
           ]
@@ -106,7 +106,7 @@
       },
       "dependencies": [
         "mongoose",
-        "#comment:pull-request-github-addon",
+        "pull-request-github-addon",
         "#comment:pull-request-review-addon",
         "#comment:pull-request-complexity-addon"
       ]
@@ -134,7 +134,33 @@
       ]
     },
 
-    "#include:teams": "./default-teams.json"
+    "#include:teams": "./default-teams.json",
+
+    "pull-request-model": {
+      "path": "./src/services/pull-request-model",
+      "dependencies": [
+        "model"
+      ]
+    },
+
+    "pull-request-github": {
+      "path": "./src/services/pull-request-github",
+      "options": {
+        "separator": {
+          "top": "\n<hr><div id=\"devexp-content-start\"></div>",
+          "bottom": "<div id=\"devexp-content-end\"></div>"
+        }
+      },
+      "dependencies": [
+        "github"
+      ]
+    },
+
+    "pull-request-github-addon": {
+      "path": "./src/services/pull-request-github/addon"
+    },
+
+    "#comment:comment": "comment"
 
   }
 
