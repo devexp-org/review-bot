@@ -34,12 +34,12 @@ export default function setup(options, imports) {
 
       enableDestroy(server);
 
-      logger.info('Server listening at %s:%s', address.address, address.port);
+      logger.info('Listening at %s:%s', address.address, address.port);
 
       server.shutdown = (callback) => {
-        logger.info('Server shutdown start');
+        logger.info('Shutdown start');
         server.destroy(() => {
-          logger.info('Server shutdown finish');
+          logger.info('Shutdown finish');
           callback();
         });
       };

@@ -62,12 +62,79 @@
       "options": {
         "port": "8080",
         "routes": {
+          "#comment:/api": "http-route-api",
+          "#comment:/github": "http-route-github",
+          "#comment:/badges": "http-route-badges",
+          "#comment:/jabber": "http-routes-jabber",
+          "#comment:/staff": "http-routes-yandex-staff",
+          "#comment:/team": "http-routes-team-dispatcher",
+          "#comment:/badges-updater": "http-routes-badges-updater"
         }
       },
       "dependencies": [
-        "logger"
+        "logger",
+        "#comment:http-route-api",
+        "#comment:http-route-github",
+        "#comment:http-route-badges",
+        "#comment:http-routes-jabber",
+        "#comment:http-routes-yandex-staff",
+        "#comment:http-routes-team-dispatcher",
+        "#comment:http-routes-badges-updater"
       ]
-    }
+    },
+
+    "#comment:#include:http-routes": "./default-http-routes.json",
+
+    "mongoose": {
+      "path": "./src/services/mongoose",
+      "options": {
+        "host": "mongodb://localhost/devexp"
+      },
+      "dependencies": ["logger"]
+    },
+
+    "model": {
+      "path": "./src/services/model",
+      "options": {
+        "addons": {
+          "pull_request": [
+            "#comment:pull-request-github-addon",
+            "#comment:pull-request-review-addon",
+            "#comment:pull-request-complexity-addon"
+          ]
+        }
+      },
+      "dependencies": [
+        "mongoose",
+        "#comment:pull-request-github-addon",
+        "#comment:pull-request-review-addon",
+        "#comment:pull-request-complexity-addon"
+      ]
+    },
+
+    "team-dispatcher": {
+      "path": "./src/services/team-dispatcher",
+      "options": {
+        "routes": [
+          { "team-devexp": ["devexp/devexp"] },
+          { "#comment:team-mm-staff": ["mm-interfaces/fiji"] },
+          { "#comment:team-serp-staff": ["serp/web4"] },
+          { "#comment:team-lego-staff": ["lego/*"] },
+          { "#comment:team-news-staff": ["news/*"] },
+          { "#comment:team-serp-infraspeed": ["search-interfaces/ci"] }
+        ]
+      },
+      "dependencies": [
+        "team-devexp",
+        "#comment:team-mm-staff",
+        "#comment:team-serp-staff",
+        "#comment:team-lego-staff",
+        "#comment:team-news-staff",
+        "#comment:team-serp-infraspeed"
+      ]
+    },
+
+    "#include:teams": "./default-teams.json"
 
   }
 

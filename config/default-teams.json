@@ -1,0 +1,189 @@
+{
+
+  "team-static": {
+    "path": "./src/services/team-dispatcher/static",
+    "options": {
+      "members": [
+        "artems",
+        "d4rkr00t",
+        "mishanga",
+        "sbmaxx"
+      ]
+    }
+  },
+
+  "team-github": {
+    "path": "./src/services/team-dispatcher/github",
+    "options": {
+      "orgName": "devexp-org",
+      "slugName": "owners",
+      "overrides": {
+        "approveCount": 1
+      }
+    },
+    "dependencies": [
+      "github"
+    ]
+  },
+
+  "team-devexp": {
+    "path": "./src/services/team-dispatcher/static",
+    "options": {
+      "members": [
+        {
+          "login": "sysoev",
+          "work_email": "sysoev@yandex-team.ru",
+          "avatar_url": "https://center.yandex-team.ru/api/v1/user/sysoev/avatar/100.jpg"
+        },
+        {
+          "login": "xxxxxx",
+          "work_email": "xxxxxx@yandex-team.ru",
+          "avatar_url": "https://center.yandex-team.ru/api/v1/user/xxxxxx/avatar/100.jpg"
+        },
+        {
+          "login": "beam",
+          "work_email": "beam@yandex-team.ru",
+          "avatar_url": "https://center.yandex-team.ru/api/v1/user/beam/avatar/100.jpg"
+        }
+      ]
+    }
+  },
+
+  "#comment:team-serp-staff": {
+    "path": "./src/plugins/team-dispatcher/yandex",
+    "options": {
+      "groupId": ["26233", "43129"],
+      "overrides": {
+        "steps": [
+          "review-step-remove-author",
+          "review-step-special-reviewers",
+          "review-step-remove-already-reviewers",
+          "review-step-prefered-reviewers",
+          "review-step-ignore",
+          "review-step-commiters",
+          "review-step-random",
+          "review-step-path-related-infra",
+          "review-step-path-related-constructor",
+          "review-step-load",
+          "review-step-responsible"
+        ]
+      }
+    },
+    "dependencies": [
+      "yandex-staff"
+    ]
+  },
+
+  "#comment:team-lego-staff": {
+    "path": "./src/plugins/team-dispatcher/yandex",
+    "options": {
+      "groupId": ["43130"],
+      "overrides": {
+        "approveCount": 1,
+        "stepsOptions": {
+          "total-number": { "max": 1 }
+        },
+        "steps": [
+          "review-step-remove-author",
+          "review-step-special-reviewers",
+          "review-step-remove-already-reviewers",
+          "review-step-prefered-reviewers",
+          "review-step-ignore-lego",
+          "review-step-commiters",
+          "review-step-random",
+          "review-step-load"
+        ]
+      }
+    },
+    "dependencies": [
+      "yandex-staff"
+    ]
+  },
+
+  "#comment:team-news-staff": {
+    "path": "./src/plugins/team-dispatcher/yandex",
+    "options": {
+      "groupId": ["26237"],
+      "overrides": {
+        "steps": [
+          "review-step-remove-author",
+          "review-step-remove-already-reviewers",
+          "review-step-prefered-reviewers",
+          "review-step-ignore",
+          "review-step-commiters",
+          "review-step-random",
+          "review-step-load"
+        ]
+      }
+    },
+    "dependencies": [
+      "yandex-staff"
+    ]
+  },
+
+  "#comment:team-serp-infraspeed": {
+    "path": "./src/services/team-dispatcher/github",
+    "options": {
+      "orgName": "serp",
+      "slugName": "infraspeed",
+      "overrides": {
+        "steps": [
+          "review-step-remove-author",
+          "review-step-special-reviewers",
+          "review-step-remove-already-reviewers",
+          "review-step-prefered-reviewers",
+          "review-step-commiters",
+          "review-step-random"
+        ]
+      }
+    },
+    "dependencies": [
+      "github"
+    ]
+  },
+
+  "#comment:team-mm-image-staff": {
+    "path": "./src/plugins/team-dispatcher/yandex",
+    "options": {
+      "groupId": ["26234", "26236"]
+    },
+    "dependencies": [
+      "yandex-staff"
+    ]
+  },
+
+  "#comment:team-mm-video-staff": {
+    "path": "./src/plugins/team-dispatcher/yandex",
+    "options": {
+      "groupId": ["26235", "29571"]
+    },
+    "dependencies": [
+      "yandex-staff"
+    ]
+  },
+
+  "#comment:team-mm-staff": {
+    "path": "./src/plugins/team-dispatcher/yandex-mm",
+    "options": {
+      "overrides": {
+        "steps": [
+          "reviewer-assignment-step-remove-author",
+          "reviewer-assignment-step-special-reviewers",
+          "reviewer-assignment-step-remove-already-reviewers",
+          "reviewer-assignment-step-prefered-reviewers",
+          "reviewer-assignment-step-ignore",
+          "reviewer-assignment-step-commiters",
+          "reviewer-assignment-step-random",
+          "reviewer-assignment-step-load",
+          "reviewer-assignment-step-sakhalin"
+        ]
+      }
+    },
+    "dependencies": [
+      "yandex-staff",
+      "team-mm-image-staff",
+      "team-mm-video-staff"
+    ]
+  }
+
+}

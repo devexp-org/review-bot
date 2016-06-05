@@ -28,8 +28,12 @@ const requireIfExists = function (configPath) {
 export function transform(basePath, json) {
 
   const visit = function (context) {
-    if (Array.isArray(context)) {
-      return _.map(context, visit);
+
+    if (_.isArray(context)) {
+      return _(context)
+        .filter(key => !_.isString(key) || key.substr(0, 9) !== '#comment:')
+        .map(visit)
+        .value();
     }
 
     if (_.isPlainObject(context)) {
@@ -37,7 +41,9 @@ export function transform(basePath, json) {
 
       const newObj = _(context)
         .mapValues((v, k) => {
-          if (k.substr(0, 9) === '#include:') {
+          if (k.substr(0, 9) === '#comment:') {
+            return null;
+          } else if (k.substr(0, 9) === '#include:') {
             const includePath = path.join(basePath, v);
             const includeContent = requireIfExists(includePath);
 

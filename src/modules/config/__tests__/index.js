@@ -79,6 +79,30 @@ describe('modules/config', function () {
 
   });
 
+  describe('#comment', function () {
+
+    it('should parse #comment directive in object key', function () {
+      const defaultConfig = '{ "port": 80, "#comment:test": "comment" }';
+      existsSyncStub.withArgs('config/default.json').returns(true);
+      readFileSyncStub.withArgs('config/default.json').returns(defaultConfig);
+
+      const result = parseConfig('.');
+
+      assert.deepEqual(result, { env: 'development', port: 80 });
+    });
+
+    it('should parse #comment directive in array value', function () {
+      const defaultConfig = '{ "port": 80, "params": [true, "#comment:test"] }';
+      existsSyncStub.withArgs('config/default.json').returns(true);
+      readFileSyncStub.withArgs('config/default.json').returns(defaultConfig);
+
+      const result = parseConfig('.');
+
+      assert.deepEqual(result, { env: 'development', port: 80, params: [true] });
+    });
+
+  });
+
   it('should throw an error if json file is not valid', function () {
     const defaultConfig = '{ "port" 80 }';
 
