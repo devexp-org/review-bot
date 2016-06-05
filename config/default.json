@@ -99,7 +99,7 @@
         "addons": {
           "pull_request": [
             "pull-request-github-addon",
-            "#comment:pull-request-review-addon",
+            "pull-request-review-addon",
             "#comment:pull-request-complexity-addon"
           ]
         }
@@ -158,6 +158,22 @@
 
     "pull-request-github-addon": {
       "path": "./src/services/pull-request-github/addon"
+    },
+
+    "pull-request-review": {
+      "path": "./src/services/pull-request-review",
+      "options": {
+        "approveCount": 2
+      },
+      "dependencies": [
+        "events",
+        "logger",
+        "team-dispatcher"
+      ]
+    },
+
+    "pull-request-review-addon": {
+      "path": "./src/services/pull-request-review/addon"
     },
 
     "#comment:comment": "comment"
