@@ -1,0 +1,105 @@
+{
+
+  "commands": [
+    {
+      "test": "\/start",
+      "handlers": [
+        "command-start",
+        "#comment:command-yandex-start"
+      ]
+    },
+    {
+      "test": "\/stop",
+      "handlers": ["command-stop"]
+    },
+    {
+      "test": "\/ping",
+      "handlers": ["command-ping"]
+    },
+    {
+      "test": "\/fixed",
+      "handlers": ["command-ping"]
+    },
+    {
+      "test": "^пинг",
+      "handlers": ["command-ping"]
+    },
+    {
+      "test": "\/ok",
+      "handlers": ["command-ok"]
+    },
+    {
+      "test": "^ok",
+      "handlers": ["command-ok"]
+    },
+    {
+      "test": "^lgtm",
+      "handlers": ["command-ok"]
+    },
+    {
+      "test": "^:ok:",
+      "handlers": ["command-ok"]
+    },
+    {
+      "test": "^:fire:",
+      "handlers": ["command-ok"]
+    },
+    {
+      "test": "\/збс",
+      "handlers": ["command-ok"]
+    },
+    {
+      "test": "^норм ваще",
+      "handlers": ["command-ok"]
+    },
+    {
+      "test": "^мне нравиться",
+      "handlers": ["command-ok"]
+    },
+    {
+      "test": "\/!ok",
+      "handlers": ["command-not-ok"]
+    },
+    {
+      "test": "^wtf",
+      "handlers": ["command-not-ok"]
+    },
+    {
+      "test": "^не\\s?ок",
+      "handlers": ["command-not-ok"]
+    },
+    {
+      "test": "^нужны правки",
+      "handlers": ["command-not-ok"]
+    },
+    {
+      "test": "\/busy",
+      "handlers": ["command-busy"]
+    },
+    {
+      "test": "^занят",
+      "handlers": ["command-busy"]
+    },
+    {
+      "test": "\/add (@\\w+)",
+      "handlers": ["command-add"]
+    },
+    {
+      "test": "\/change (@\\w+) to (@\\w+)",
+      "handlers": ["command-change"]
+    },
+    {
+      "test": "\/remove (@\\w+)",
+      "handlers": ["command-remove"]
+    },
+    {
+      "test": "\/replace (@\\w+)",
+      "handlers": ["command-replace"]
+    },
+    {
+      "test": "\/help",
+      "handlers": ["command-help"]
+    }
+  ]
+
+}

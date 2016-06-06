@@ -219,7 +219,35 @@
       ]
     },
 
-    "#include:reviewer-assignment-steps": "./default-review-steps.json",
+    "#include:review-steps": "./default-review-steps.json",
+
+    "command": {
+      "path": "./src/services/command",
+      "options": {
+        "events": ["github:issue_comment"],
+        "#include:command-regexp": "./default-command-regexp.json"
+      },
+      "dependencies": [
+        "queue",
+        "events",
+        "logger",
+        "pull-request-model",
+        "command-start",
+        "command-stop",
+        "command-ping",
+        "command-ok",
+        "command-not-ok",
+        "command-busy",
+        "command-replace",
+        "command-change",
+        "command-add",
+        "command-remove",
+        "command-help",
+        "#comment:command-yandex-start"
+      ]
+    },
+
+    "#include:command": "./default-command.json",
 
     "#comment:comment": "comment"
 
