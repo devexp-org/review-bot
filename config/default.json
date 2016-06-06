@@ -249,6 +249,27 @@
 
     "#include:command": "./default-command.json",
 
+    "notification": {
+      "path": "./src/services/notification",
+      "dependencies": [
+        "model"
+      ]
+    },
+
+    "#include:notification": "./default-notification.json",
+
+    "scheduler": {
+      "path": "./src/services/scheduler",
+      "options": {
+        "days": 1
+      },
+      "dependencies": [
+        "events",
+        "logger",
+        "pull-request-model"
+      ]
+    },
+
     "#comment:comment": "comment"
 
   }

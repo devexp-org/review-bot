@@ -1,0 +1,58 @@
+{
+
+  "notification-message-ping": {
+    "path": "./src/services/notification/messages/ping",
+    "dependencies": [
+      "events",
+      "logger",
+      "notification"
+    ]
+  },
+
+  "notification-message-start": {
+    "path": "./src/services/notification/messages/start",
+    "dependencies": [
+      "events",
+      "logger",
+      "notification"
+    ]
+  },
+
+  "notification-message-complete": {
+    "path": "./src/services/notification/messages/complete",
+    "dependencies": [
+      "events",
+      "logger",
+      "notification"
+    ]
+  },
+
+  "notification-service-jabber": {
+    "path": "./src/services/jabber",
+    "options": {
+      "auth": {
+        "login": "login@example.com",
+        "password": "P@$$W01d"
+      }
+    },
+    "dependencies": [
+      "events",
+      "logger",
+      "notification"
+    ]
+  },
+
+  "notification-service-slack": {
+    "path": "./src/services/slack",
+    "options": {
+      "token": "0123456789abcdf",
+      "autoMark": true,
+      "autoReconnect": true,
+      "host": "example.com"
+    },
+    "dependencies": [
+      "logger"
+    ]
+  }
+
+}
