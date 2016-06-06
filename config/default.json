@@ -107,7 +107,7 @@
       "dependencies": [
         "mongoose",
         "pull-request-github-addon",
-        "#comment:pull-request-review-addon",
+        "pull-request-review-addon",
         "#comment:pull-request-complexity-addon"
       ]
     },
@@ -175,6 +175,51 @@
     "pull-request-review-addon": {
       "path": "./src/services/pull-request-review/addon"
     },
+
+    "review": {
+      "path": "./src/services/review",
+      "options": {
+        "steps": [
+          "remove-author",
+          "remove-already-reviewers",
+          "ignore",
+          "commiters",
+          "random",
+          "load",
+          "total-number"
+        ],
+        "stepOptions": {
+          "commiters": {
+            "max": 4,
+            "since": [4, "month"],
+            "ignore": ["config"],
+            "filesToCheck": 5,
+            "commitsCount": 10
+          },
+          "load": { "max": 1 },
+          "random": { "max": 5 }
+        }
+      },
+      "dependencies": [
+        "logger",
+        "team-dispatcher",
+        "review-step-commiters",
+        "review-step-ignore",
+        "review-step-ignore-lego",
+        "review-step-load",
+        "review-step-path-related-constructor",
+        "review-step-path-related-infra",
+        "#comment:review-step-prefered-reviewers",
+        "review-step-random",
+        "review-step-remove-already-reviewers",
+        "review-step-remove-author",
+        "#comment:review-step-responsible",
+        "#comment:review-step-sakhalin",
+        "#comment:review-step-special-reviewers"
+      ]
+    },
+
+    "#include:reviewer-assignment-steps": "./default-review-steps.json",
 
     "#comment:comment": "comment"
 

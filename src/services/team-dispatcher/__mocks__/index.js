@@ -1,7 +1,7 @@
 import teamMock from './team';
 import teamDispatcherMock from './class';
 
-export function members() {
+export function membersMock() {
   return [
     { login: 'Black Panther' },
     { login: 'Black Widow' },
