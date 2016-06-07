@@ -1,33 +1,34 @@
-/* eslint-disable no-console */
-
 import Client, { ltx } from 'node-xmpp-client';
+import AbstractTransport from '../notification/transport';
 
 export const KEEP_ALIVE_INTERVAL = 10000;
 
-export default class Jabber {
+export default class Jabber extends AbstractTransport {
 
   /**
    * @constructor
    *
+   * @param {Object} logger
    * @param {Object} options
    * @param {String} options.auth.login
    * @param {String} options.auth.password
    * @param {Boolean} options.silent - in silent mode messages should not be sent
    * @param {Number} [options.maxQueue]
-   * @param {Function} [options.info]
    */
-  constructor(options) {
+  constructor(logger, options) {
+    super();
+
     if (!options || !options.auth || !options.auth.login) {
       throw new Error('Need to pass valid login and password for jabber notification');
     }
 
     this.auth = options.auth;
-    this.info = options.info || console.log.bind(console);
-    this.silent = options.silent;
+    this.logger = logger;
 
     this._queue = [];
     this._client = null;
     this._online = false;
+    this._silent = options.silent;
     this._maxQueue = options.maxQueue || 50;
   }
 
@@ -51,11 +52,11 @@ export default class Jabber {
       client.on('connect', () => resolve());
 
       client.on('error', (error) => {
-        this.info('Error:\n' + error.stack);
+        this.logger.error(error);
       });
 
       client.on('online', (data) => {
-        this.info(`Connected as ${data.jid.user}@${data.jid.domain}`);
+        this.logger.info(`Connected as ${data.jid.user}@${data.jid.domain}`);
 
         this._online = true;
 
@@ -65,11 +66,11 @@ export default class Jabber {
       client.on('offline', () => {
         this._online = false;
 
-        this.info('Disconnected');
+        this.logger.info('Disconnected');
       });
 
       client.on('stanza', (stanza) => {
-        this.info('Incoming message: ' + stanza.toString());
+        this.logger.info('Incoming message: ' + stanza.toString());
       });
 
       client.connect();
@@ -77,7 +78,7 @@ export default class Jabber {
       // keep-alive
       clearInterval(this._keepAliveId);
       this._keepAliveId = setInterval(
-        () => { client.send(' '); },
+        () => client.send(' '),
         KEEP_ALIVE_INTERVAL
       );
     });
@@ -108,16 +109,18 @@ export default class Jabber {
       this._client.end();
     }
 
-    clearInterval(this._keepAliveId);
-
     this._client = null;
+
+    clearInterval(this._keepAliveId);
 
     callback && callback();
   }
 
   /**
-   * Send a message to to a specific person.
+   * Send a message to a specific person.
    * If client goes offline, stores message in queue.
+   *
+   * @override
    *
    * @param {String} to - user jid
    * @param {String} body - message body
@@ -141,11 +144,9 @@ export default class Jabber {
    * @param {String} body - message body
    */
   _send(to, body) {
-    this.info(`Send message to: ${to} — ${body}`);
+    this.logger.info(`Send message to: ${to} — ${body}`);
 
-    if (this.silent) {
-      return;
-    }
+    if (this._silent) return;
 
     const elem = { to, type: 'chat' };
     const stanza = new ltx.Element('message', elem).c('body').t(body);

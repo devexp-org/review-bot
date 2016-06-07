@@ -4,11 +4,15 @@ export default function (options, imports) {
 
   const logger = imports.logger.getLogger('jabber');
 
-  options.info = logger.info.bind(logger);
+  const service = new Jabber(logger, options);
 
-  const service = new Jabber(options);
-
-  service.shutdown = (callback) => service.close(callback);
+  service.shutdown = (callback) => {
+    logger.info('Shutdown start');
+    service.close(() => {
+      logger.info('Shutdown finish');
+      callback();
+    });
+  };
 
   // Ignore promise and don't wait until client goes online.
   service.connect();

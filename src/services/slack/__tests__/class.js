@@ -1,93 +1,58 @@
 import proxyquire from 'proxyquire';
+import loggerMock from '../../logger/__mocks__/';
+import slackClientStub from '../__mocks__/slack-client';
 
 describe('services/slack/class', function () {
 
-  let info, options, Slack, client, message, directMessage;
+  let options, logger, slack, Slack, client;
+
   beforeEach(function () {
-    info = sinon.stub();
 
-    client = sinon.stub();
+    logger = loggerMock();
 
-    message = {
-      ok: true,
-      channel: { id: 'channel.id' }
-    };
-
-    directMessage = { send: sinon.stub() };
-
-    client.prototype.on = sinon.stub();
-    client.prototype.login = sinon.stub();
-    client.prototype.disconnect = sinon.stub();
-    client.prototype.getDMByID = sinon.stub()
-      .returns(directMessage);
-    client.prototype.openDM = sinon.stub()
-      .withArgs('uid')
-      .callsArgWith(1, message);
-    client.prototype.getUserByEmail = sinon.stub()
-      .returns({ id: 'id', uid: 'uid' });
-
-    client.prototype.self = { name: 'self.name' };
-    client.prototype.team = { name: 'team.name' };
-
-    client.prototype.on
-      .withArgs('open')
-      .callsArgAsync(1);
-
-    client.prototype.on
-      .withArgs('close')
-      .callsArgAsync(1);
+    client = slackClientStub();
 
     Slack = proxyquire('../class', {
-      'slack-client': {
-        RtmClient: client
+      '@slack/client': {
+        RtmClient: client,
+        MemoryDataStore: sinon.stub()
       }
     }).default;
 
-    options = {
-      info: info,
-      host: 'example.com',
-      token: 'token'
-    };
+    options = { host: 'example.com', token: 'token' };
+
+    slack = new Slack(logger, options);
   });
 
   describe('#constructor', function () {
 
     it('should return Slack', function () {
-      const slack = new Slack(options);
-
       assert.property(slack, 'send');
       assert.property(slack, 'close');
       assert.property(slack, 'connect');
     });
 
-    it('should throw an error if login and password is not set', function () {
-      assert.throws(() => new Slack({}), /token/);
+    it('should throw an error if token is not set', function () {
+      assert.throws(() => new Slack(logger, {}), /token/);
     });
 
   });
 
   describe('#connect', function () {
 
-    let slack;
-    beforeEach(function () {
-      slack = new Slack(options);
-    });
-
     it('should initiate connection to slack', function (done) {
       slack.connect()
-        .then(() => assert.called(client.prototype.login))
-        .then(() => slack.close(done))
-        .catch(done);
+        .then(() => assert.called(client.start))
+        .then(done, done);
     });
 
     it('should log errors', function (done) {
-      client.prototype.on
+      client.on
         .withArgs('error')
         .callsArgWith(1, new Error());
 
       slack.connect()
-        .then(() => assert.called(info))
-        .then(() => slack.close())
+        .then(() => assert.called(logger.error))
         .then(done, done);
     });
 
@@ -95,71 +60,70 @@ describe('services/slack/class', function () {
 
   describe('#close', function () {
 
-    let slack;
-    beforeEach(function () {
-      slack = new Slack(options);
+    it('should close connection to slack', function (done) {
+      slack.connect()
+        .then(() => slack.close(() => {
+          assert.called(client.disconnect);
+          done();
+        }));
     });
 
-    it('should close connection to slack', function (done) {
-      slack.close(done);
+    it('should not throw an error if client is not connect before', function (done) {
+      slack.close(() => {
+        assert.notCalled(client.disconnect);
+        done();
+      });
     });
 
   });
 
   describe('#send', function () {
 
-    let slack;
-    beforeEach(function () {
-      slack = new Slack(options);
-    });
-
     it('should send message to user', function (done) {
       slack.connect()
-        .then(() => slack.send('foo'))
-        .then(() => assert.called(directMessage.send))
+        .then(() => slack.send('user', 'message'))
+        .then(() => assert.called(client.sendMessage))
         .then(done, done);
     });
 
     it('should not send message in silent mode', function (done) {
       options.silent = true;
-      slack = new Slack(options);
+      slack = new Slack(logger, options);
 
       slack.connect()
-        .then(() => slack.send('foo'))
-        .then(() => assert.notCalled(directMessage.send))
+        .then(() => slack.send('user', 'message'))
+        .then(() => assert.notCalled(client.sendMessage))
         .then(done, done);
     });
 
     describe('should log error if cannot send message', function () {
 
       it('(1)', function (done) {
-        client.prototype.getUserByEmail
+        client.dataStore.getUserByEmail
           .returns(null);
 
         slack.connect()
-          .then(() => slack.send('foo'))
-          .then(() => assert.called(info))
-          .then(() => assert.notCalled(directMessage.send))
+          .then(() => slack.send('user', 'message'))
+          .then(() => assert.called(logger.error))
+          .then(() => assert.notCalled(client.sendMessage))
           .then(done, done);
       });
 
       it('(2)', function (done) {
-        delete message.ok;
+        client.sendMessage.throws('TypeError');
 
         slack.connect()
-          .then(() => slack.send('foo'))
-          .then(() => assert.called(info))
-          .then(() => assert.notCalled(directMessage.send))
+          .then(() => slack.send('user', 'message'))
+          .then(() => assert.called(logger.error))
           .then(done, done);
       });
 
       it('(3)', function (done) {
-        directMessage.send.throws('TypeError');
+        client.dataStore.getDMByName.returns(null);
 
         slack.connect()
-          .then(() => slack.send('foo'))
-          .catch(e => assert.match(e.message, 'TypeError'))
-          .then(() => assert.called(info))
+          .then(() => slack.send('user', 'message'))
+          .then(() => assert.called(logger.error))
           .then(done, done);
       });
 

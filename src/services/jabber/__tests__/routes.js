@@ -3,7 +3,7 @@ import request from 'supertest';
 import service from '../routes';
 import responseJSON from '../../http/response';
 
-import jabberMock from '../__mocks__/jabber';
+import jabberMock from '../__mocks__/';
 
 describe('services/jabber/routes', function () {
 

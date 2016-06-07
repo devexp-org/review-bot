@@ -27,6 +27,7 @@
     "coverage:e2e": "$npm_package_config_istanbul $npm_package_config_pattern_test $npm_package_config_pattern_e2e"
   },
   "dependencies": {
+    "@slack/client": "^3.4.0",
     "badgs": "^1.0.0",
     "body-parser": "^1.14.1",
     "express": "^4.13.3",

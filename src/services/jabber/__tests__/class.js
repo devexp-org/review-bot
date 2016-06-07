@@ -1,50 +1,63 @@
-import xmppMock from '../__mocks__/xmpp';
 import proxyquire from 'proxyquire';
+import loggerMock from '../../logger/__mocks__/';
+import nodeXmppMock from '../__mocks__/node-xmpp';
 
 describe('services/jabber/class', function () {
 
-  let xmpp, info, options, Jabber;
-  beforeEach(function () {
-    xmpp = xmppMock();
+  let xmpp, options, logger, jabber, Jabber;
 
-    info = sinon.stub();
+  beforeEach(function () {
+    xmpp = nodeXmppMock();
+
+    logger = loggerMock();
 
     Jabber = proxyquire('../class', {
       'node-xmpp-client': xmpp
     }).default;
 
     options = {
-      auth: { login: 'login', password: 'password' },
-      info: info
+      auth: { login: 'login', password: 'password' }
     };
+
+    jabber = new Jabber(logger, options);
+
   });
 
   describe('#constructor', function () {
 
     it('should return Jabber', function () {
-      const jabber = new Jabber(options);
+      const jabber = new Jabber(logger, options);
 
       assert.property(jabber, 'send');
       assert.property(jabber, 'close');
       assert.property(jabber, 'connect');
     });
 
-    it('should throw an error if login and password is not set', function () {
-      assert.throws(() => new Jabber({}), /login and password/);
+    it('should throw an error if login or password is not set', function () {
+      assert.throws(() => new Jabber(logger, {}), /login and password/);
     });
 
   });
 
   describe('#connect', function () {
 
-    let jabber;
+    let clock;
     beforeEach(function () {
-      jabber = new Jabber(options);
+      clock = sinon.useFakeTimers();
+    });
+
+    afterEach(function () {
+      clock.restore();
     });
 
     it('should initiate connection to jabber host', function (done) {
-      // TODO check interval with fake
+      jabber.connect()
+        .then(() => assert.called(xmpp.connect))
+        .then(() => jabber.close(done))
+        .catch(done);
+    });
 
+    it('should initiate connection to jabber host', function (done) {
       jabber.connect()
         .then(() => assert.called(xmpp.connect))
         .then(() => jabber.close(done))
@@ -55,7 +68,7 @@ describe('services/jabber/class', function () {
       xmpp.on.withArgs('error').callsArgWith(1, new Error());
 
       jabber.connect()
-        .then(() => assert.called(info))
+        .then(() => assert.called(logger.error))
         .then(() => jabber.close(done))
         .catch(done);
 
@@ -76,7 +89,7 @@ describe('services/jabber/class', function () {
       xmpp.on.withArgs('offline').callsArgWith(1);
 
       jabber.connect()
-        .then(() => assert.called(info))
+        .then(() => assert.called(logger.info))
         .then(() => jabber.close(done))
         .catch(done);
     });
@@ -85,7 +98,7 @@ describe('services/jabber/class', function () {
       xmpp.on.withArgs('stanza').callsArgWith(1, 'stanza');
 
       jabber.connect()
-        .then(() => assert.called(info))
+        .then(() => assert.called(logger.info))
         .then(() => jabber.close(done))
         .catch(done);
     });
@@ -94,24 +107,24 @@ describe('services/jabber/class', function () {
 
   describe('#close', function () {
 
-    let jabber;
-
-    beforeEach(function () {
-      jabber = new Jabber(options);
+    it('should close connection to jabber', function (done) {
+      jabber.connect()
+        .then(() => jabber.close(() => {
+          assert.called(xmpp.end);
+          done();
+        }));
     });
 
-    it('should close connection to jabber', function (done) {
-      jabber.close(done);
+    it('should not throw an error if client is not connect before', function (done) {
+      jabber.close(() => {
+        assert.notCalled(xmpp.end);
+        done();
+      });
     });
 
   });
 
   describe('#send', function () {
-
-    let jabber;
-    beforeEach(function () {
-      jabber = new Jabber(options);
-    });
 
     it('should send message to user if client is online', function (done) {
       const data = { jid: { user: 'user', domain: 'domain' } };
@@ -158,7 +171,7 @@ describe('services/jabber/class', function () {
       xmpp.on.withArgs('online').callsArgWith(1, data);
 
       options.silent = true;
-      jabber = new Jabber(options);
+      jabber = new Jabber(logger, options);
 
       jabber.connect()
         .then(() => jabber.send('foo', 'message'))

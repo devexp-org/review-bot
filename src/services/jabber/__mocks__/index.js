@@ -1,6 +1,6 @@
-export default function jabberStub() {
+export default function mock() {
 
-  const jabber = sinon.stub();
+  const jabber = function () {};
 
   jabber.prototype.send = jabber.send = sinon.stub();
   jabber.prototype.close = jabber.close = sinon.stub();

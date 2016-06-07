@@ -219,14 +219,7 @@ describe('services/schedule', function () {
       options = {};
       imports = { events, logger, 'pull-request-model': PullRequestModel };
 
-    });
-
-    it('should cancel timer when review is done', function () {
-      events.on.withArgs('review:complete').callsArgWith(1, payload);
-
-      service.default(options, imports);
-
-      assert.calledWith(schedule.cancelJob, 'pull-1');
+      PullRequestModel.findInReview.returns(Promise.resolve([]));
     });
 
     it('should set timer when review is starting', function (done) {
@@ -238,6 +231,14 @@ describe('services/schedule', function () {
         assert.calledWith(schedule.scheduleJob, 'pull-1');
         done();
       }, 0);
+    });
+
+    it('should cancel timer when review is done', function () {
+      events.on.withArgs('review:complete').callsArgWith(1, payload);
+
+      service.default(options, imports);
+
+      assert.calledWith(schedule.cancelJob, 'pull-1');
     });
 
   });

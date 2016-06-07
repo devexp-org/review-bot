@@ -3,12 +3,20 @@ import Slack from './class';
 export default function (options, imports) {
 
   const logger = imports.logger.getLogger('slack');
-  options.info = logger.info.bind(logger);
 
-  const slack = new Slack(options);
+  const service = new Slack(logger, options);
 
-  slack.connect();
+  service.shutdown = (callback) => {
+    logger.info('Shutdown start');
+    service.close(() => {
+      logger.info('Shutdown finish');
+      callback();
+    });
+  };
 
-  return slack;
+  // Ignore promise and don't wait until client goes online.
+  service.connect();
+
+  return service;
 
 }

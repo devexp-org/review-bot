@@ -20,7 +20,7 @@ application
     process.exit(1);
   });
 
-process.on('SIGINT', () => {
+process.once('SIGINT', function shutdown() {
   console.log(''); // echo new line char, after "^C"
 
   Promise.resolve()

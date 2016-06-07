@@ -1,5 +1,5 @@
 import proxyquire from 'proxyquire';
-import jabberMock from '../__mocks__/jabber';
+import jabberMock from '../__mocks__/';
 import loggerMock from '../../logger/__mocks__/';
 
 describe('services/jabber', function () {
@@ -19,6 +19,17 @@ describe('services/jabber', function () {
     }).default;
   });
 
+  it('the mock object should have the same methods', function () {
+
+    const obj = service(options, imports);
+    const methods = Object.keys(jabber);
+
+    methods.forEach(method => {
+      assert.property(obj, method);
+    });
+
+  });
+
   it('should try connect to jabber', function () {
     service(options, imports);
 
@@ -29,9 +40,10 @@ describe('services/jabber', function () {
     const callback = sinon.stub();
     const jabberService = service(options, imports);
 
+    jabberService.close.callsArg(0);
     jabberService.shutdown(callback);
 
-    assert.calledWith(jabber.close, callback);
+    assert.called(jabber.close);
   });
 
 });
