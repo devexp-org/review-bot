@@ -1,6 +1,6 @@
 {
 
-  "#comment:autoassign": {
+  "autoassign": {
     "path": "./src/plugins/autoassign",
     "dependencies": [
       "events",
@@ -10,12 +10,12 @@
     ]
   },
 
-  "#comment:components-api": {
-    "path": "./src/plugins/components-api"
+  "pull-request-complexity-addon": {
+    "path": "./src/plugins/complexity/addon"
   },
 
-  "#comment:pull-request-complexity-addon": {
-    "path": "./src/plugins/complexity/addon"
+  "#comment:components-api": {
+    "path": "./src/plugins/components-api"
   },
 
   "#comment:local-repo": {

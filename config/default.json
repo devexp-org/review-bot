@@ -98,7 +98,7 @@
           "pull_request": [
             "pull-request-github-addon",
             "pull-request-review-addon",
-            "#comment:pull-request-complexity-addon"
+            "pull-request-complexity-addon"
           ]
         }
       },
@@ -106,7 +106,7 @@
         "mongoose",
         "pull-request-github-addon",
         "pull-request-review-addon",
-        "#comment:pull-request-complexity-addon"
+        "pull-request-complexity-addon"
       ]
     },
 
