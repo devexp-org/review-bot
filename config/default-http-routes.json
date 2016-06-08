@@ -1,0 +1,54 @@
+{
+
+  "http-routes-team": {
+    "path": "./src/services/team-dispatcher/routes",
+    "dependencies": [
+      "logger",
+      "team-dispatcher",
+      "pull-request-model"
+    ]
+  },
+
+  "http-routes-github": {
+    "path": "./src/services/pull-request-webhook",
+    "dependencies": [
+      "events",
+      "logger",
+      "pull-request-model",
+      "pull-request-github"
+    ]
+  },
+
+  "http-routes-jabber": {
+    "path": "./src/services/jabber/routes",
+    "dependencies": [
+      "logger",
+      "notification-service-jabber"
+    ]
+  },
+
+  "#comment:http-routes-badges": {
+    "path": "./src/plugins/badges-http",
+    "options": {
+        "template": "flat-square"
+    }
+  },
+
+  "#comment:http-routes-staff": {
+    "path": "./src/plugins/yandex-staff/routes",
+    "dependencies": [
+      "logger",
+      "yandex-staff"
+    ]
+  },
+
+  "#comment:http-routes-badges-updater": {
+    "path": "./src/plugins/badges/routes",
+    "dependencies": [
+      "events",
+      "logger",
+      "pull-request-model"
+    ]
+  }
+
+}

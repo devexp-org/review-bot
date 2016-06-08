@@ -1,0 +1,123 @@
+{
+
+  "#comment:autoassign": {
+    "path": "./src/plugins/autoassign",
+    "dependencies": [
+      "events",
+      "logger",
+      "review",
+      "pull-request-review"
+    ]
+  },
+
+  "#comment:components-api": {
+    "path": "./src/plugins/components-api"
+  },
+
+  "#comment:pull-request-complexity-addon": {
+    "path": "./src/plugins/complexity/addon"
+  },
+
+  "#comment:local-repo": {
+    "path": "./src/plugins/local-repo",
+    "options": {
+      "host": "https://github.yandex-team.ru"
+    },
+    "dependencies": [
+      "events",
+      "logger"
+    ]
+  },
+
+  "#comment:special-checker": {
+    "path": "./src/plugins/project-config",
+    "dependencies": [
+      "events",
+      "logger",
+      "github",
+      "command-add",
+      "team-dispatcher"
+    ]
+  },
+
+  "#comment:startrek": {
+    "path": "./src/plugins/startrek",
+    "options": {
+      "url": "https://st-api.yandex-team.ru/v2"
+    }
+  },
+
+  "#comment:#include:startrek": "./default-startrek.json",
+
+  "#comment:yandex-staff": {
+    "path": "./src/plugins/yandex-staff",
+    "options": {
+      "cache": {
+        "getGroupMembers": 86400
+      },
+      "center_url": "https://center.yandex-team.ru/api/v1/",
+      "jabber_url": "https://center.yandex-team.ru/jabber/status-bulk/",
+      "fields": {
+        "absence": [
+          "left_edge",
+          "right_edge",
+          "gap_type__name",
+          "gap_type__verbose_name",
+          "staff__login"
+        ],
+        "where": [
+          "staff__login",
+          "updated_at",
+          "is_vpn",
+          "office__code",
+          "office__name",
+          "office__city__name"
+        ],
+        "info": [
+          "first_name",
+          "login",
+          "last_name",
+          "work_email",
+          "office",
+          "city",
+          "position",
+          "birthday",
+          "uid",
+          "family_status",
+          "phones",
+          "cars",
+          "mobile_phone"
+        ],
+        "group": ["login"]
+      }
+    }
+  },
+
+  "#comment:test-file-resolver": {
+    "path": "./src/plugins/test-file-resolver",
+    "options": {
+      "patterns": {
+        "lego/*": "gemini/${block}.js",
+        "serp/web4": "gemini/test-suites/${platform}/${block}",
+        "mm-interfaces/fiji": "gemini/${project}/${platform}/${block}.js"
+      },
+      "resolvers": {
+        "mm-interfaces/fiji": "./src/plugins/test-file-resolver/fiji-resolver"
+      }
+    }
+  },
+
+  "#comment:pull-header-mm": {
+    "path": "./src/plugins/pull-header-mm",
+    "options": {
+      "queues": ["IMAGESUI", "VIDEOUI", "MOBVIDEO", "SAKHALIN"]
+    },
+    "dependencies": [
+      "queue",
+      "events",
+      "startrek",
+      "pull-request-github"
+    ]
+  }
+
+}

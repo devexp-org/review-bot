@@ -62,28 +62,26 @@
       "options": {
         "port": "8080",
         "routes": {
-          "#comment:/api": "http-route-api",
-          "#comment:/github": "http-route-github",
-          "#comment:/badges": "http-route-badges",
-          "#comment:/jabber": "http-routes-jabber",
-          "#comment:/staff": "http-routes-yandex-staff",
-          "#comment:/team": "http-routes-team-dispatcher",
+          "/team": "http-routes-team",
+          "/github": "http-routes-github",
+          "/jabber": "http-routes-jabber",
+          "#comment:/staff": "http-routes-staff",
+          "#comment:/badges": "http-routes-badges",
           "#comment:/badges-updater": "http-routes-badges-updater"
         }
       },
       "dependencies": [
         "logger",
-        "#comment:http-route-api",
-        "#comment:http-route-github",
-        "#comment:http-route-badges",
-        "#comment:http-routes-jabber",
-        "#comment:http-routes-yandex-staff",
-        "#comment:http-routes-team-dispatcher",
+        "http-routes-team",
+        "http-routes-github",
+        "http-routes-jabber",
+        "#comment:http-routes-staff",
+        "#comment:http-routes-badges",
         "#comment:http-routes-badges-updater"
       ]
     },
 
-    "#comment:#include:http-routes": "./default-http-routes.json",
+    "#include:http-routes": "./default-http-routes.json",
 
     "mongoose": {
       "path": "./src/services/mongoose",
@@ -209,12 +207,12 @@
         "review-step-load",
         "review-step-path-related-constructor",
         "review-step-path-related-infra",
-        "#comment:review-step-prefered-reviewers",
         "review-step-random",
         "review-step-remove-already-reviewers",
         "review-step-remove-author",
         "#comment:review-step-responsible",
         "#comment:review-step-sakhalin",
+        "#comment:review-step-prefered-reviewers",
         "#comment:review-step-special-reviewers"
       ]
     },
@@ -270,7 +268,9 @@
       ]
     },
 
-    "#comment:comment": "comment"
+    "#include:badges": "./default-badges.json",
+
+    "#include:plugins": "./default-plugins.json"
 
   }
 
