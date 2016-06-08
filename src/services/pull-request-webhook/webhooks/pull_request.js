@@ -9,7 +9,7 @@
 export default function webhook(payload, imports) {
 
   const events = imports.events;
-  const logger = imports.logger.getLogger('webhook');
+  const logger = imports.logger.getLogger('http.webhook');
 
   const PullRequestModel = imports['pull-request-model'];
   const pullRequestGitHub = imports['pull-request-github'];

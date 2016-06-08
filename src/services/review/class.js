@@ -76,7 +76,7 @@ export default class ReviewerAssignment {
       const ranker = this.imports['review-step-' + name];
 
       if (!ranker && !notFound) {
-        notFound = new Error(`There is no step with name "${name}"`);
+        notFound = new Error(`There is no step "${name}"`);
       }
 
       return { ranker, name };
@@ -176,7 +176,7 @@ export default class ReviewerAssignment {
    * @return {Promise.<Review>}
    */
   choose(pullRequest) {
-    this.logger.info('Review started for #s', pullRequest.id);
+    this.logger.info('Review started %s', pullRequest);
 
     return this
       .start(pullRequest)

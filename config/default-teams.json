@@ -4,10 +4,10 @@
     "path": "./src/services/team-dispatcher/static",
     "options": {
       "members": [
-        "artems",
-        "d4rkr00t",
-        "mishanga",
-        "sbmaxx"
+        { "login": "artems" },
+        { "login": "d4rkr00t" },
+        { "login": "mishanga" },
+        { "login": "sbmaxx" }
       ]
     }
   },

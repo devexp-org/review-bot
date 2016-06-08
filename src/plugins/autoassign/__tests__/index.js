@@ -36,7 +36,7 @@ describe('plugins/autoassign', function () {
       .callsArgWith(1, payload);
 
     imports.review.choose
-      .withArgs(1)
+      .withArgs(pullRequest)
       .returns(Promise.resolve(reviewResult));
 
   });

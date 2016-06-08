@@ -115,6 +115,7 @@
       "options": {
         "routes": [
           { "team-devexp": ["devexp/devexp"] },
+          { "team-static": ["devexp-org/devexp"] },
           { "#comment:team-mm-staff": ["mm-interfaces/fiji"] },
           { "#comment:team-serp-staff": ["serp/web4"] },
           { "#comment:team-lego-staff": ["lego/*"] },
@@ -124,6 +125,7 @@
       },
       "dependencies": [
         "team-devexp",
+        "team-static",
         "#comment:team-mm-staff",
         "#comment:team-serp-staff",
         "#comment:team-lego-staff",
@@ -183,10 +185,9 @@
           "ignore",
           "commiters",
           "random",
-          "load",
-          "total-number"
+          "load"
         ],
-        "stepOptions": {
+        "stepsOptions": {
           "commiters": {
             "max": 4,
             "since": [4, "month"],

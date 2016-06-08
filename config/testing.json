@@ -1,0 +1,12 @@
+{
+  "services": {
+
+    "mongoose": {
+      "options": {
+        "host": "mongodb://localhost/devexp_test"
+      }
+    }
+
+  }
+
+}

@@ -32,7 +32,7 @@ export default function setup(options, imports) {
 
     logger.info('Autostart review %s', pullRequest);
 
-    review.choose(pullRequest.id)
+    review.choose(pullRequest)
       .then(result => {
         return pullRequestReview
           .updateReviewers(pullRequest, result.members);
