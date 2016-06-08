@@ -49,8 +49,8 @@
     }
   },
 
-  "#comment:team-serp-staff": {
-    "path": "./src/plugins/team-dispatcher/yandex",
+  "team-serp-staff": {
+    "path": "./src/plugins/team-dispatcher/staff",
     "options": {
       "groupId": ["26233", "43129"],
       "overrides": {
@@ -70,12 +70,12 @@
       }
     },
     "dependencies": [
-      "yandex-staff"
+      "staff"
     ]
   },
 
-  "#comment:team-lego-staff": {
-    "path": "./src/plugins/team-dispatcher/yandex",
+  "team-lego-staff": {
+    "path": "./src/plugins/team-dispatcher/staff",
     "options": {
       "groupId": ["43130"],
       "overrides": {
@@ -96,12 +96,12 @@
       }
     },
     "dependencies": [
-      "yandex-staff"
+      "staff"
     ]
   },
 
-  "#comment:team-news-staff": {
-    "path": "./src/plugins/team-dispatcher/yandex",
+  "team-news-staff": {
+    "path": "./src/plugins/team-dispatcher/staff",
     "options": {
       "groupId": ["26237"],
       "overrides": {
@@ -117,11 +117,11 @@
       }
     },
     "dependencies": [
-      "yandex-staff"
+      "staff"
     ]
   },
 
-  "#comment:team-serp-infraspeed": {
+  "team-serp-infraspeed": {
     "path": "./src/services/team-dispatcher/github",
     "options": {
       "orgName": "serp",
@@ -142,28 +142,28 @@
     ]
   },
 
-  "#comment:team-mm-image-staff": {
-    "path": "./src/plugins/team-dispatcher/yandex",
+  "team-mm-image-staff": {
+    "path": "./src/plugins/team-dispatcher/staff",
     "options": {
       "groupId": ["26234", "26236"]
     },
     "dependencies": [
-      "yandex-staff"
+      "staff"
     ]
   },
 
-  "#comment:team-mm-video-staff": {
-    "path": "./src/plugins/team-dispatcher/yandex",
+  "team-mm-video-staff": {
+    "path": "./src/plugins/team-dispatcher/staff",
     "options": {
       "groupId": ["26235", "29571"]
     },
     "dependencies": [
-      "yandex-staff"
+      "staff"
     ]
   },
 
-  "#comment:team-mm-staff": {
-    "path": "./src/plugins/team-dispatcher/yandex-mm",
+  "team-mm-staff": {
+    "path": "./src/plugins/team-dispatcher/mm",
     "options": {
       "overrides": {
         "steps": [
@@ -180,7 +180,7 @@
       }
     },
     "dependencies": [
-      "yandex-staff",
+      "staff",
       "team-mm-image-staff",
       "team-mm-video-staff"
     ]

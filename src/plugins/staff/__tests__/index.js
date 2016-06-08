@@ -1,7 +1,7 @@
 import service from '../';
 import serviceMock from '../__mocks__/';
 
-describe('plugins/yandex-staff', function () {
+describe('plugins/staff', function () {
 
   it('the mock object should have the same methods', function () {
 

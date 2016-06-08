@@ -113,8 +113,8 @@
     ]
   },
 
-  "#comment:review-step-prefered-reviewers": {
-    "path": "./src/plugins/review/steps/prefered-reviewers",
+  "review-step-prefered": {
+    "path": "./src/services/review/steps/prefered",
     "dependencies": [
       "logger",
       "team-dispatcher"

@@ -3,10 +3,7 @@
   "commands": [
     {
       "test": "\/start",
-      "handlers": [
-        "command-start",
-        "#comment:command-yandex-start"
-      ]
+      "handlers": ["command-start"]
     },
     {
       "test": "\/stop",

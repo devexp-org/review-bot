@@ -63,20 +63,20 @@
         "port": "8080",
         "routes": {
           "/team": "http-routes-team",
+          "/staff": "http-routes-staff",
           "/github": "http-routes-github",
-          "/jabber": "http-routes-jabber",
-          "#comment:/staff": "http-routes-staff",
-          "#comment:/badges": "http-routes-badges",
+          "/badges": "http-routes-badges",
+          "#comment:/jabber": "http-routes-jabber",
           "#comment:/badges-updater": "http-routes-badges-updater"
         }
       },
       "dependencies": [
         "logger",
         "http-routes-team",
+        "http-routes-staff",
         "http-routes-github",
-        "http-routes-jabber",
-        "#comment:http-routes-staff",
-        "#comment:http-routes-badges",
+        "http-routes-badges",
+        "#comment:http-routes-jabber",
         "#comment:http-routes-badges-updater"
       ]
     },
@@ -116,21 +116,21 @@
         "routes": [
           { "team-devexp": ["devexp/devexp"] },
           { "team-static": ["devexp-org/devexp"] },
-          { "#comment:team-mm-staff": ["mm-interfaces/fiji"] },
-          { "#comment:team-serp-staff": ["serp/web4"] },
-          { "#comment:team-lego-staff": ["lego/*"] },
-          { "#comment:team-news-staff": ["news/*"] },
-          { "#comment:team-serp-infraspeed": ["search-interfaces/ci"] }
+          { "team-mm-staff": ["mm-interfaces/fiji"] },
+          { "team-serp-staff": ["serp/web4"] },
+          { "team-lego-staff": ["lego/*"] },
+          { "team-news-staff": ["news/*"] },
+          { "team-serp-infraspeed": ["search-interfaces/ci"] }
         ]
       },
       "dependencies": [
         "team-devexp",
         "team-static",
-        "#comment:team-mm-staff",
-        "#comment:team-serp-staff",
-        "#comment:team-lego-staff",
-        "#comment:team-news-staff",
-        "#comment:team-serp-infraspeed"
+        "team-mm-staff",
+        "team-serp-staff",
+        "team-lego-staff",
+        "team-news-staff",
+        "team-serp-infraspeed"
       ]
     },
 
@@ -212,9 +212,9 @@
         "review-step-random",
         "review-step-remove-already-reviewers",
         "review-step-remove-author",
+        "review-step-prefered",
         "#comment:review-step-responsible",
         "#comment:review-step-sakhalin",
-        "#comment:review-step-prefered-reviewers",
         "#comment:review-step-special-reviewers"
       ]
     },
@@ -242,8 +242,7 @@
         "command-change",
         "command-add",
         "command-remove",
-        "command-help",
-        "#comment:command-yandex-start"
+        "command-help"
       ]
     },
 

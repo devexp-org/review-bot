@@ -19,7 +19,7 @@
     ]
   },
 
-  "http-routes-jabber": {
+  "#comment:http-routes-jabber": {
     "path": "./src/services/jabber/routes",
     "dependencies": [
       "logger",
@@ -27,18 +27,18 @@
     ]
   },
 
-  "#comment:http-routes-badges": {
+  "http-routes-badges": {
     "path": "./src/plugins/badges-http",
     "options": {
         "template": "flat-square"
     }
   },
 
-  "#comment:http-routes-staff": {
-    "path": "./src/plugins/yandex-staff/routes",
+  "http-routes-staff": {
+    "path": "./src/plugins/staff/routes",
     "dependencies": [
-      "logger",
-      "yandex-staff"
+      "staff",
+      "logger"
     ]
   },
 

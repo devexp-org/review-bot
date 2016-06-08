@@ -19,3 +19,10 @@
 
 # MIGRATION
 * скрипт миграции для БД для pull_request коллекции
+* перенести
+  - badges
+  - project-config
+  - review/steps/
+  - pull-header-mm
+  - local-repo
+  - test-file-resolver

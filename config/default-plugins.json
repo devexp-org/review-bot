@@ -40,17 +40,17 @@
     ]
   },
 
-  "#comment:startrek": {
+  "startrek": {
     "path": "./src/plugins/startrek",
     "options": {
       "url": "https://st-api.yandex-team.ru/v2"
     }
   },
 
-  "#comment:#include:startrek": "./default-startrek.json",
+  "#include:startrek": "./default-startrek.json",
 
-  "#comment:yandex-staff": {
-    "path": "./src/plugins/yandex-staff",
+  "staff": {
+    "path": "./src/plugins/staff",
     "options": {
       "cache": {
         "getGroupMembers": 86400

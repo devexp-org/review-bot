@@ -104,16 +104,6 @@
     "dependencies": [
       "events"
     ]
-  },
-
-  "#comment:command-yandex-start": {
-    "path": "./src/plugins/command/commands/yandex-start",
-    "dependencies": [
-      "logger",
-      "events",
-      "yandex-staff",
-      "pull-request-review"
-    ]
   }
 
 }
