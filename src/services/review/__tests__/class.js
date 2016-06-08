@@ -24,7 +24,8 @@ describe('services/review/class', function () {
     pullRequest = pullRequestMock();
 
     options = {
-      steps: ['step1', 'step2']
+      steps: ['step1', 'step2'],
+      totalReviewers: 4
     };
 
     imports = { logger, 'team-dispatcher': teamDispatcher };
@@ -166,17 +167,17 @@ describe('services/review/class', function () {
 
   });
 
-  describe('#review', function () {
+  describe('#choose', function () {
 
     let review;
 
     beforeEach(function () {
 
       imports['review-step-step1'] = function (review) {
-        return Promise.resolve({ rank: 1, login: 'Spider-Man' });
+        return Promise.resolve([{ rank: 1, login: 'Spider-Man' }]);
       };
       imports['review-step-step2'] = function (review) {
-        return Promise.resolve({ rank: 2, login: 'Black Widow' });
+        return Promise.resolve([{ rank: 2, login: 'Black Widow' }]);
       };
 
       review = new Review(options, imports);
@@ -192,7 +193,7 @@ describe('services/review/class', function () {
         .then(done, done);
     });
 
-    it('should return resolved pormise with chosen reviewers', function (done) {
+    it('should return resolved pormise with choosen reviewers', function (done) {
       review.choose(pullRequest)
         .then(review => {
           assert.isArray(review.members);
@@ -231,12 +232,16 @@ describe('services/review/class', function () {
     });
 
     it('should return resolved pormise even when reviewers are not selected', function (done) {
-      team.getMembersForReview.returns(Promise.resolve([]));
+      imports['review-step-step1'] = function (review) {
+        return Promise.resolve([]);
+      };
+      imports['review-step-step2'] = function (review) {
+        return Promise.resolve([]);
+      };
 
       review.choose(pullRequest)
         .then(review => {
-          assert.isArray(review.members);
-          assert.lengthOf(review.members, 0);
+          assert.lengthOf(review.ranks, 0);
         })
         .then(done, done);
     });

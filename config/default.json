@@ -197,7 +197,8 @@
           },
           "load": { "max": 1 },
           "random": { "max": 5 }
-        }
+        },
+        "totalReviewers": 2
       },
       "dependencies": [
         "logger",

@@ -37,7 +37,7 @@ describe('services/review/steps/ignore', function () {
     const review = { members: [], pullRequest };
 
     step(review, options)
-      .then(review => assert.sameDeepMembers(review.members, []))
+      .then(actual => assert.sameDeepMembers(actual, []))
       .then(done, done);
   });
 
@@ -45,7 +45,7 @@ describe('services/review/steps/ignore', function () {
     const review = { members, pullRequest };
 
     step(review, {})
-      .then(review => assert.sameDeepMembers(review.members, members))
+      .then(actual => assert.sameDeepMembers(actual, []))
       .then(done, done);
   });
 

@@ -28,6 +28,7 @@ describe('plugins/autoassign', function () {
     payload = { pullRequest };
 
     reviewResult = {
+      ranks: [1, 2, 3],
       members: ['Captain America', 'Hawkeye']
     };
 
@@ -49,7 +50,7 @@ describe('plugins/autoassign', function () {
       assert.calledWithExactly(
         imports['pull-request-review'].updateReviewers,
         payload.pullRequest,
-        reviewResult.members
+        reviewResult.ranks
       );
       done();
     }, 0);

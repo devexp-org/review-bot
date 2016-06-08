@@ -1,4 +1,4 @@
-import { flatten, forEach, isEmpty } from 'lodash';
+import { chain, flatten, forEach, isEmpty } from 'lodash';
 
 export default class ReviewerAssignment {
 
@@ -122,7 +122,11 @@ export default class ReviewerAssignment {
     );
 
     const promise = review.steps.map(({ ranker, name }) => {
-      return ranker(review, stepsOptions[name]);
+      return ranker(review, stepsOptions[name])
+        .then(ranks => {
+          this.logger.info('"%s" returns ranks %s', name, JSON.stringify(ranks));
+          return ranks;
+        });
     });
 
     return Promise.all(promise)
@@ -132,10 +136,14 @@ export default class ReviewerAssignment {
   }
 
   countRanks({ review, ranks }) {
+    let totalReviewers = review.team.getOption(
+      'totalReviewers',
+      this.options.totalReviewers
+    );
+
     const members = {};
 
     flatten(ranks).forEach(member => {
-
       if (!members[member.login]) {
         members[member.login] = 0;
       }
@@ -143,10 +151,10 @@ export default class ReviewerAssignment {
       if (Number.isFinite(members[member.login])) {
         members[member.login] += member.rank;
       }
-
     });
 
-    review.ranks = Object.keys(members)
+    review.ranks = chain(members)
+      .keys(members)
       .sort((a, b) => {
         if (members[a] === Infinity) {
           return -1;
@@ -162,7 +170,11 @@ export default class ReviewerAssignment {
       })
       .map(login => {
         return { login, rank: members[login] };
-      });
+      })
+      .takeWhile(member => {
+        return member.rank === Infinity || (totalReviewers--) > 0;
+      })
+      .value();
 
     return review;
   }
@@ -189,9 +201,9 @@ export default class ReviewerAssignment {
         this.logger.info('Complete %s', review.pullRequest);
 
         this.logger.info('Reviewers are: %s',
-          isEmpty(review.members)
+          isEmpty(review.ranks)
             ? 'ooops, no reviewers were selected...'
-            : review.members.map(x => x.login + '#' + x.rank).join(' ')
+            : review.ranks.map(x => x.login + '#' + x.rank).join(' ')
         );
 
         return review;

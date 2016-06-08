@@ -13,7 +13,7 @@ function ignore(review, options) {
   const list = options && options.list || [];
 
   if (isEmpty(list) || isEmpty(review.members)) {
-    return Promise.resolve(review);
+    return Promise.resolve([]);
   }
 
   const ignored = chain(review.members)
