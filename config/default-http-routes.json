@@ -22,7 +22,7 @@
   "http-routes-badges": {
     "path": "./src/plugins/badges-http",
     "options": {
-        "template": "flat-square"
+      "template": "flat-square"
     }
   },
 

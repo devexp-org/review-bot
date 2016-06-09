@@ -150,13 +150,9 @@
 
     "pull-request-review": {
       "path": "./src/services/pull-request-review",
-      "options": {
-        "approveCount": 2
-      },
       "dependencies": [
         "events",
-        "logger",
-        "team-dispatcher"
+        "logger"
       ]
     },
 
@@ -167,6 +163,8 @@
     "review": {
       "path": "./src/services/review",
       "options": {
+        "approveCount": 2,
+        "totalReviewers": 2,
         "steps": [
           "remove-author",
           "remove-already-reviewers",
@@ -186,8 +184,7 @@
           },
           "load": { "max": 5 },
           "random": { "max": 5 }
-        },
-        "totalReviewers": 2
+        }
       },
       "dependencies": [
         "logger",

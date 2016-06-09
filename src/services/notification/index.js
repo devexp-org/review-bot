@@ -20,7 +20,7 @@ export default function setup(options, imports) {
     return userModel.findByLogin(to)
       .then(user => {
         if (!user) {
-          throw new Error(`${to} is not found`);
+          throw new Error(`The user '${to}" is not found`);
         }
 
         const userContacts = user.getContacts();

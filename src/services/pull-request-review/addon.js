@@ -71,6 +71,12 @@ export default function setup(options, imports) {
      * @return {Object}
      */
     extender() {
+
+      const Rank = new Schema({
+        login: String,
+        value: Number
+      });
+
       const Reviewer = new Schema({
         login: String
       });
@@ -87,12 +93,19 @@ export default function setup(options, imports) {
             ],
             'default': 'notstarted'
           },
+          ranks: [Rank],
+          banned: [Reviewer],
           reviewers: [Reviewer],
+          approveCount: {
+            type: Number,
+            'default': 0
+          },
           started_at: Date,
           updated_at: Date,
           completed_at: Date
         }
       };
+
     }
 
   };

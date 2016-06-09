@@ -29,7 +29,6 @@ export function withPullRequestReview(test, config, done) {
       },
       'pull-request-review': {
         path: './src/services/pull-request-review',
-        options: { approveCount: 1 },
         dependencies: ['team-dispatcher', 'events', 'logger']
       },
       'pull-request-review-addon': {

@@ -89,7 +89,7 @@ export function setupModel(modelName, model) {
       .model(modelName)
       .find({ 'user.login': login })
       .sort('-updated_at')
-      .limit(20)
+      .limit(50)
       .exec();
   };
 

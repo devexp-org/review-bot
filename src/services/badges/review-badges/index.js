@@ -27,7 +27,7 @@ export default function (options, imports) {
     });
   }
 
-  // Subscribe on events for creating review badges.
+  // Subscribe to events for creating review badges.
   events.on('review:updated', updateBadges);
   events.on('review:started', updateBadges);
   events.on('review:approved', updateBadges);

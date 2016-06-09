@@ -34,6 +34,10 @@ export default class ReviewerAssignment {
 
     review.team = team;
 
+    review.approveCount = team.getOption(
+      'approveCount', this.options.approveCount
+    );
+
     return team.getMembersForReview(review.pullRequest)
       .then(members => {
         review.members = members;

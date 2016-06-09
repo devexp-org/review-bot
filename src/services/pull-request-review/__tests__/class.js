@@ -1,31 +1,22 @@
 import PullRequestReview from '../class';
 
-import teamMock from '../../team-dispatcher/__mocks__/team';
 import loggerMock from '../../logger/__mocks__/';
 import eventsMock from '../../events/__mocks__/';
-import teamDispatcherMock from '../../team-dispatcher/__mocks__/class';
 import { pullRequestMock } from '../../model/pull-request/__mocks__/';
 
 describe('services/pull-request-review/class', function () {
 
   let pullRequest, pullRequestReview, review;
-  let logger, events, team, teamDispatcher;
-  let options, imports;
+  let logger, events, options, imports;
 
   beforeEach(function () {
-    team = teamMock();
     logger = loggerMock();
     events = eventsMock();
 
     pullRequest = pullRequestMock();
 
-    teamDispatcher = teamDispatcherMock();
-    teamDispatcher.findTeamByPullRequest
-      .withArgs(pullRequest)
-      .returns(team);
-
-    options = { approveCount: 2 };
-    imports = { events, logger, teamDispatcher };
+    options = {};
+    imports = { events, logger };
 
     pullRequestReview = new PullRequestReview(options, imports);
 
@@ -220,22 +211,12 @@ describe('services/pull-request-review/class', function () {
         .then(done, done);
     });
 
-    it('should reject promise if team is not found', function (done) {
-      teamDispatcher.findTeamByPullRequest
-        .withArgs(pullRequest)
-        .returns(null);
-
-      pullRequestReview.approveReview(pullRequest, 'foo')
-        .then(() => assert.fail())
-        .catch(e => assert.match(e.message, /not found/i))
-        .then(done, done);
-    });
-
     describe('when review is complete', function () {
 
       beforeEach(function () {
         review.status = 'inprogress';
         review.reviewers = [{ login: 'foo' }, { login: 'bar', approved: true }];
+        review.approveCount = 2;
       });
 
       it('should emit events `review:approve` and `review:complete`', function (done) {

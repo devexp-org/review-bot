@@ -9,12 +9,11 @@ export default class PullRequestReview {
    * @param {Object} options
    * @param {Object} imports
    */
-  constructor(options, { events, logger, teamDispatcher }) {
+  constructor(options, { events, logger }) {
     this.options = options;
 
     this.events = events;
     this.logger = logger;
-    this.teamDispatcher = teamDispatcher;
   }
 
   /**
@@ -29,7 +28,7 @@ export default class PullRequestReview {
 
     if (review.status !== 'notstarted' && review.status !== 'changesneeded') {
       return Promise.reject(new Error(util.format(
-        'Try to start is not opened review. Status is %s %s',
+        'Try to start is not opened review. Status is %s. %s',
         review.status,
         pullRequest
       )));
@@ -37,7 +36,7 @@ export default class PullRequestReview {
 
     if (isEmpty(review.reviewers)) {
       return Promise.reject(new Error(util.format(
-        'Try to start review where reviewers were not selected %s',
+        'Try to start review where reviewers were not selected. %s',
         pullRequest
       )));
     }
@@ -52,7 +51,7 @@ export default class PullRequestReview {
 
     pullRequest.set('review', review);
 
-    this.logger.info('Review started %s', pullRequest);
+    this.logger.info('Review started. %s', pullRequest);
     this.events.emit('review:started', { pullRequest });
 
     return Promise.resolve(pullRequest);
@@ -70,7 +69,7 @@ export default class PullRequestReview {
 
     if (review.status !== 'inprogress' && review.status !== 'changesneeded') {
       this.logger.info(
-        'Try to stop is not in progress review. Status is %s %s',
+        'Try to stop is not in progress review. Status is %s. %s',
         review.status,
         pullRequest
       );
@@ -81,7 +80,7 @@ export default class PullRequestReview {
 
     pullRequest.set('review', review);
 
-    this.logger.info('Review stopped %s', pullRequest);
+    this.logger.info('Review stopped. %s', pullRequest);
     this.events.emit('review:updated', { pullRequest });
 
     return Promise.resolve(pullRequest);
@@ -97,22 +96,16 @@ export default class PullRequestReview {
    */
   approveReview(pullRequest, login) {
 
-    let approvedCount = 0;
-    let requiredApprovedCount;
+    let approveCount = 0;
 
     const review = pullRequest.get('review');
-
-    try {
-      requiredApprovedCount = this.getRequiredApproveCount(pullRequest);
-    } catch (error) {
-      return Promise.reject(error);
-    }
+    const requiredApproveCount = review.approveCount;
 
     forEach(review.reviewers, (reviewer) => {
       if (reviewer.login === login) {
         if (reviewer.approved) {
           this.logger.info(
-            '%s was approved pull request before %s',
+            '%s was approved pull request before. %s',
             reviewer.login,
             pullRequest
           );
@@ -122,10 +115,10 @@ export default class PullRequestReview {
       }
 
       if (reviewer.approved) {
-        approvedCount += 1;
+        approveCount += 1;
       }
 
-      if (approvedCount >= requiredApprovedCount) {
+      if (approveCount >= requiredApproveCount) {
         review.status = 'complete';
       }
     });
@@ -138,12 +131,12 @@ export default class PullRequestReview {
 
     pullRequest.set('review', review);
 
-    this.logger.info('Review approved by %s %s', login, pullRequest);
+    this.logger.info('Review approved by %s. %s', login, pullRequest);
 
     this.events.emit('review:approved', { pullRequest, login });
 
     if (pullRequest.get('review.status') === 'complete') {
-      this.logger.info('Review complete %s', pullRequest);
+      this.logger.info('Review complete. %s', pullRequest);
       this.events.emit('review:complete', { pullRequest });
     }
 
@@ -174,7 +167,7 @@ export default class PullRequestReview {
     pullRequest.set('review', review);
 
     this.logger.info(
-      'Pull request marked as `changes needed` by %s %s', login, pullRequest
+      'Pull request marked as `changes needed` by %s. %s', login, pullRequest
     );
 
     this.events.emit('review:changesneeded', { pullRequest, login });
@@ -193,7 +186,7 @@ export default class PullRequestReview {
   updateReviewers(pullRequest, reviewers) {
     if (isEmpty(reviewers)) {
       return Promise.reject(new Error(util.format(
-        'Cannot drop all reviewers from pull request %s',
+        'Cannot drop all reviewers from pull request. %s',
         pullRequest
       )));
     }
@@ -201,27 +194,10 @@ export default class PullRequestReview {
     pullRequest.set('review.reviewers', reviewers);
     pullRequest.set('review.updated_at', new Date());
 
-    this.logger.info('Reviewers updated %s', pullRequest);
+    this.logger.info('Reviewers updated. %s', pullRequest);
     this.events.emit('review:updated', { pullRequest });
 
     return Promise.resolve(pullRequest);
-  }
-
-  /**
-   * Returns number of approved reviews after which review will be marked as completed.
-   *
-   * @param {Object} pullRequest
-   *
-   * @return {Number}
-   */
-  getRequiredApproveCount(pullRequest) {
-    const team = this.teamDispatcher.findTeamByPullRequest(pullRequest);
-
-    if (!team) {
-      throw new Error(`Team is not found for pull request ${pullRequest}`);
-    }
-
-    return team.getOption('approveCount', this.options.approveCount);
   }
 
 }
