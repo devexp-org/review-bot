@@ -30,6 +30,7 @@
     "@slack/client": "^3.4.0",
     "badgs": "^1.0.0",
     "body-parser": "^1.14.1",
+    "components-api": "git+https://github.yandex-team.ru/st-lukas/components-api.git",
     "express": "^4.13.3",
     "github": "^0.2.4",
     "got": "^6.3.0",

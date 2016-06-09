@@ -1,4 +1,3 @@
-/*
 import service from '../';
 import serviceMock from '../__mocks__/';
 
@@ -17,4 +16,3 @@ describe('plugins/components-api', function () {
   });
 
 });
-*/

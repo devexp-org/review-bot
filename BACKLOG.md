@@ -3,6 +3,8 @@
   - сейчас каждый тип бейджика обновляет себя сам с запросом на github
   - необходимо сделать так, чтобы запросы схлопывались в один
 * Хранить настройки команд в БД
+* Расширить review
+  * добавить approveCount
 
 # TODO
 * переписать load step, он притормаживает на больших командах
@@ -20,9 +22,6 @@
 # MIGRATION
 * скрипт миграции для БД для pull_request коллекции
 * перенести
-  - badges
-  - project-config
   - review/steps/
-  - pull-header-mm
   - local-repo
   - test-file-resolver
