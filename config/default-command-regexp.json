@@ -18,55 +18,11 @@
       "handlers": ["command-ping"]
     },
     {
-      "test": "^пинг",
-      "handlers": ["command-ping"]
-    },
-    {
       "test": "\/ok",
       "handlers": ["command-ok"]
     },
     {
-      "test": "^ok",
-      "handlers": ["command-ok"]
-    },
-    {
-      "test": "^lgtm",
-      "handlers": ["command-ok"]
-    },
-    {
-      "test": "^:ok:",
-      "handlers": ["command-ok"]
-    },
-    {
-      "test": "^:fire:",
-      "handlers": ["command-ok"]
-    },
-    {
-      "test": "\/збс",
-      "handlers": ["command-ok"]
-    },
-    {
-      "test": "^норм ваще",
-      "handlers": ["command-ok"]
-    },
-    {
-      "test": "^мне нравиться",
-      "handlers": ["command-ok"]
-    },
-    {
       "test": "\/!ok",
-      "handlers": ["command-not-ok"]
-    },
-    {
-      "test": "^wtf",
-      "handlers": ["command-not-ok"]
-    },
-    {
-      "test": "^не\\s?ок",
-      "handlers": ["command-not-ok"]
-    },
-    {
-      "test": "^нужны правки",
       "handlers": ["command-not-ok"]
     },
     {

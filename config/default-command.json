@@ -99,7 +99,7 @@
   "command-help": {
     "path": "./src/services/command/commands/help",
     "options": {
-      "link": "https://wiki.yandex-team.ru/search-interfaces/review-faq/"
+      "link": "https://example.com/help"
     },
     "dependencies": [
       "events"

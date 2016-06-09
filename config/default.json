@@ -63,21 +63,21 @@
         "port": "8080",
         "routes": {
           "/team": "http-routes-team",
-          "/staff": "http-routes-staff",
           "/github": "http-routes-github",
           "/badges": "http-routes-badges",
-          "#comment:/jabber": "http-routes-jabber",
-          "#comment:/badges-updater": "http-routes-badges-updater"
+          "/badges-updater": "http-routes-badges-updater",
+          "#comment:/staff": "http-routes-staff",
+          "#comment:/jabber": "http-routes-jabber"
         }
       },
       "dependencies": [
         "logger",
         "http-routes-team",
-        "http-routes-staff",
         "http-routes-github",
         "http-routes-badges",
-        "#comment:http-routes-jabber",
-        "#comment:http-routes-badges-updater"
+        "http-routes-badges-updater",
+        "#comment:http-routes-staff",
+        "#comment:http-routes-jabber"
       ]
     },
 
@@ -114,23 +114,11 @@
       "path": "./src/services/team-dispatcher",
       "options": {
         "routes": [
-          { "team-devexp": ["devexp/devexp"] },
-          { "team-static": ["devexp-org/devexp"] },
-          { "team-mm-staff": ["mm-interfaces/fiji"] },
-          { "team-serp-staff": ["serp/web4"] },
-          { "team-lego-staff": ["lego/*"] },
-          { "team-news-staff": ["news/*"] },
-          { "team-serp-infraspeed": ["search-interfaces/ci"] }
+          { "team-devexp-github": ["*/devexp"] }
         ]
       },
       "dependencies": [
-        "team-devexp",
-        "team-static",
-        "team-mm-staff",
-        "team-serp-staff",
-        "team-lego-staff",
-        "team-news-staff",
-        "team-serp-infraspeed"
+        "team-devexp-github"
       ]
     },
 
@@ -183,19 +171,20 @@
           "remove-author",
           "remove-already-reviewers",
           "ignore",
-          "commiters",
           "random",
+          "prefered",
+          "commiters",
+          "project-config",
           "load"
         ],
         "stepsOptions": {
           "commiters": {
             "max": 4,
             "since": [4, "month"],
-            "ignore": ["config"],
             "filesToCheck": 5,
             "commitsCount": 10
           },
-          "load": { "max": 1 },
+          "load": { "max": 5 },
           "random": { "max": 5 }
         },
         "totalReviewers": 2
@@ -205,17 +194,12 @@
         "team-dispatcher",
         "review-step-commiters",
         "review-step-ignore",
-        "review-step-ignore-lego",
-        "review-step-load",
-        "review-step-path-related-constructor",
-        "review-step-path-related-infra",
         "review-step-random",
+        "review-step-load",
         "review-step-remove-already-reviewers",
         "review-step-remove-author",
-        "review-step-prefered",
-        "#comment:review-step-responsible",
-        "#comment:review-step-sakhalin",
-        "#comment:review-step-special-reviewers"
+        "review-step-project-config",
+        "review-step-prefered"
       ]
     },
 

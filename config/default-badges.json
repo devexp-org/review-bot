@@ -3,40 +3,11 @@
     "review-badges": {
       "path": "./src/services/badges/review-badges",
       "options": {
-        "url": "https://badges.qloud.yandex-team.ru/badges/"
+        "url": "https://example.com/badges/"
       },
       "dependencies": [
         "queue",
         "events",
-        "pull-request-github"
-      ]
-    },
-
-    "#comment:test-badges": {
-      "path": "./src/plugins/badges/test-badges",
-      "options": {
-        "url": "https://badges.qloud.yandex-team.ru/badges/"
-      },
-      "dependencies": [
-        "queue",
-        "events",
-        "logger",
-        "local-repo",
-        "pull-request-github",
-        "test-file-resolver"
-      ]
-    },
-
-    "#comment:responsible-badges": {
-      "path": "./src/plugins/badges/responsible-badges",
-      "options": {
-        "url": "https://badges.qloud.yandex-team.ru/badges/"
-      },
-      "dependencies": [
-        "events",
-        "logger",
-        "components-api",
-        "team-dispatcher",
         "pull-request-github"
       ]
     }

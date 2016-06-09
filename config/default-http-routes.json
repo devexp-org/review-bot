@@ -19,14 +19,6 @@
     ]
   },
 
-  "#comment:http-routes-jabber": {
-    "path": "./src/services/jabber/routes",
-    "dependencies": [
-      "logger",
-      "notification-service-jabber"
-    ]
-  },
-
   "http-routes-badges": {
     "path": "./src/plugins/badges-http",
     "options": {
@@ -34,7 +26,16 @@
     }
   },
 
-  "http-routes-staff": {
+  "http-routes-badges-updater": {
+    "path": "./src/plugins/badges/routes",
+    "dependencies": [
+      "events",
+      "logger",
+      "pull-request-model"
+    ]
+  },
+
+  "#comment:http-routes-staff": {
     "path": "./src/plugins/staff/routes",
     "dependencies": [
       "staff",
@@ -42,12 +43,11 @@
     ]
   },
 
-  "#comment:http-routes-badges-updater": {
-    "path": "./src/plugins/badges/routes",
+  "#comment:http-routes-jabber": {
+    "path": "./src/services/jabber/routes",
     "dependencies": [
-      "events",
       "logger",
-      "pull-request-model"
+      "notification-service-jabber"
     ]
   }
 

@@ -10,26 +10,7 @@
     ]
   },
 
-  "pull-request-complexity-addon": {
-    "path": "./src/plugins/complexity/addon"
-  },
-
-  "#comment:components-api": {
-    "path": "./src/plugins/components-api"
-  },
-
-  "#comment:local-repo": {
-    "path": "./src/plugins/local-repo",
-    "options": {
-      "host": "https://github.yandex-team.ru"
-    },
-    "dependencies": [
-      "events",
-      "logger"
-    ]
-  },
-
-  "#comment:special-checker": {
+  "project-config": {
     "path": "./src/plugins/project-config",
     "dependencies": [
       "events",
@@ -40,16 +21,11 @@
     ]
   },
 
-  "startrek": {
-    "path": "./src/plugins/startrek",
-    "options": {
-      "url": "https://st-api.yandex-team.ru/v2"
-    }
+  "pull-request-complexity-addon": {
+    "path": "./src/plugins/complexity/addon"
   },
 
-  "#include:startrek": "./default-startrek.json",
-
-  "staff": {
+  "#comment:staff": {
     "path": "./src/plugins/staff",
     "options": {
       "cache": {
@@ -93,31 +69,13 @@
     }
   },
 
-  "#comment:test-file-resolver": {
-    "path": "./src/plugins/test-file-resolver",
+  "#comment:startrek": {
+    "path": "./src/plugins/startrek",
     "options": {
-      "patterns": {
-        "lego/*": "gemini/${block}.js",
-        "serp/web4": "gemini/test-suites/${platform}/${block}",
-        "mm-interfaces/fiji": "gemini/${project}/${platform}/${block}.js"
-      },
-      "resolvers": {
-        "mm-interfaces/fiji": "./src/plugins/test-file-resolver/fiji-resolver"
-      }
+      "url": "https://st-api.yandex-team.ru/v2"
     }
   },
 
-  "#comment:pull-header-mm": {
-    "path": "./src/plugins/pull-header-mm",
-    "options": {
-      "queues": ["IMAGESUI", "VIDEOUI", "MOBVIDEO", "SAKHALIN"]
-    },
-    "dependencies": [
-      "queue",
-      "events",
-      "startrek",
-      "pull-request-github"
-    ]
-  }
+  "#comment:#include:startrek": "./default-startrek.json"
 
 }

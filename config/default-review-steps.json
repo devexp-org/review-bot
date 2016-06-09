@@ -1,4 +1,12 @@
 {
+
+  "review-step-load": {
+    "path": "./src/services/review/steps/load",
+    "dependencies": [
+      "pull-request-model"
+    ]
+  },
+
   "review-step-remove-author": {
     "path": "./src/services/review/steps/remove_author"
   },
@@ -8,109 +16,18 @@
   },
 
   "review-step-ignore": {
-    "path": "./src/services/review/steps/ignore",
-    "options": {
-      "list": []
-    }
-  },
-
-  "review-step-ignore-serp": {
-    "path": "./src/services/review/steps/ignore",
-    "options": {
-      "list": [
-        "binarycat",
-        "vitaly", "kuznecov", "tadatuta", "gela-d", "einstain",
-        "karamadjong", "persidskiy", "incrop", "qfox", "birhoff",
-        "yeti-or", "borodindk", "anyatyu", "smdenis", "sagitov"
-      ]
-    }
-  },
-
-  "review-step-ignore-lego": {
-    "path": "./src/services/review/steps/ignore",
-    "options": {
-      "list": ["xoxulin"]
-    }
+    "path": "./src/services/review/steps/ignore"
   },
 
   "review-step-commiters": {
     "path": "./src/services/review/steps/commiters",
-    "options": {
-      "max": 7,
-      "since": [4, "month"],
-      "filesToCheck": 5,
-      "commitsCount": 10,
-      "ignore": ["-i18n"]
-    },
     "dependencies": [
       "github"
     ]
   },
 
-  "review-step-path-related-constructor": {
-    "path": "./src/services/review/steps/path_related",
-    "options": {
-      "max": 5,
-      "members": ["lostsoul", "hatroman", "jabs"],
-      "incPattern": ["constructor/**", "adapters/**"]
-    }
-  },
-
-  "review-step-path-related-infra": {
-    "path": "./src/services/review/steps/path_related",
-    "options": {
-      "max": 9,
-      "members": ["rudeshko", "alex-k", "zumra6a"],
-      "incPattern": [
-        ".enb/**",
-        ".bowerrc",
-        ".borschik",
-        ".githooks/**",
-        ".tanker/**",
-        ".gitignore",
-        ".npmrc",
-        ".yaspeller.dictionary.json",
-        "bower.json",
-        "configs/**",
-        "gemini/**",
-        "GNUmakefile",
-        "i-global/__config/**",
-        "npm-shrinkwrap.json",
-        "package.json",
-        "tools/**"
-      ],
-      "decPattern": [
-        "!.enb/**",
-        "!.bowerrc",
-        "!.borschik",
-        "!.githooks",
-        "!.gitignore",
-        "!.npmrc",
-        "!.yaspeller.dictionary.json",
-        "!.tanker/**",
-        "!bower.json",
-        "!configs/**",
-        "!gemini/**",
-        "!GNUmakefile",
-        "!i-global/__config/**",
-        "!npm-shrinkwrap.json",
-        "!package.json",
-        "!tools/**"
-      ]
-    }
-  },
-
   "review-step-random": {
-    "path": "./src/services/review/steps/random",
-    "options": { "max": 5 }
-  },
-
-  "review-step-load": {
-    "path": "./src/services/review/steps/load",
-    "options": { "max": 1 },
-    "dependencies": [
-      "pull-request-model"
-    ]
+    "path": "./src/services/review/steps/random"
   },
 
   "review-step-prefered": {
@@ -121,25 +38,11 @@
     ]
   },
 
-  "#comment:review-step-special-reviewers": {
-    "path": "./src/plugins/review/steps/special-reviewers",
+  "review-step-project-config": {
+    "path": "./src/plugins/project-config/review-step",
     "dependencies": [
-      "special-checker"
+      "project-config"
     ]
-  },
-
-  "#comment:review-step-responsible": {
-    "path": "./src/plugins/review/steps/responsible",
-    "dependencies": [
-      "components-api"
-    ]
-  },
-
-  "#comment:review-step-sakhalin": {
-    "path": "./src/plugins/review/steps/sakhalin",
-    "options": {
-      "upRankCount": 10
-    }
   }
 
 }
