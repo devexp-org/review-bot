@@ -1,7 +1,7 @@
 import service from '../';
-import serviceMock from '../__mocks__/';
+import serviceMock from '../../pull-request-github/__mocks__/';
 
-describe('services/pull-request-github', function () {
+describe('services/pull-request-github-delayed', function () {
 
   let options, imports, github;
 

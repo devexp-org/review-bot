@@ -77,7 +77,13 @@ export default function setup(options, imports) {
         value: Number
       });
 
+      const Banned = new Schema({
+        count: Number,
+        login: String
+      });
+
       const Reviewer = new Schema({
+        rank: Number,
         login: String
       });
 
@@ -94,7 +100,7 @@ export default function setup(options, imports) {
             'default': 'notstarted'
           },
           ranks: [Rank],
-          banned: [Reviewer],
+          banned: [Banned],
           reviewers: [Reviewer],
           approveCount: {
             type: Number,

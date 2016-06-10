@@ -35,7 +35,7 @@ export default function setup(options, imports) {
     review.choose(pullRequest)
       .then(result => {
         return pullRequestReview
-          .updateReviewers(pullRequest, result.ranks);
+          .updateReviewers(pullRequest, result.reviewers);
       })
       .catch(logger.error.bind(logger));
   }

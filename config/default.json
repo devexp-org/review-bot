@@ -132,7 +132,7 @@
     },
 
     "pull-request-github": {
-      "path": "./src/services/pull-request-github",
+      "path": "./src/services/pull-request-github-delayed",
       "options": {
         "separator": {
           "top": "\n<hr><div id=\"devexp-content-start\"></div>",

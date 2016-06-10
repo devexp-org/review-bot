@@ -90,7 +90,7 @@ describe('services/review/class', function () {
           name: name,
           ranker: function (review) {
             order.push(name);
-            return Promise.resolve(review);
+            return Promise.resolve([]);
           }
         };
       };
@@ -141,16 +141,14 @@ describe('services/review/class', function () {
             name: 'step1',
             ranker: function (review) {
               stub1();
-              review.members.splice(0, 5);
-              return Promise.resolve(review);
+              return Promise.resolve([]);
             }
           },
           {
             name: 'step2',
             ranker: function (review) {
               stub2();
-              assert.lengthOf(review.members, 12);
-              return Promise.resolve(review);
+              return Promise.resolve([{ login: 'foo', rank: 1 }]);
             }
           }
         ];
@@ -184,7 +182,7 @@ describe('services/review/class', function () {
 
     });
 
-    it('should return rejected pormise if team is not found', function (done) {
+    it('should return rejected promise if team is not found', function (done) {
       teamDispatcher.findTeamByPullRequest.returns(null);
 
       review.choose(pullRequest)
@@ -193,18 +191,18 @@ describe('services/review/class', function () {
         .then(done, done);
     });
 
-    it('should return resolved pormise with choosen reviewers', function (done) {
+    it('should return resolved promise with choosen reviewers', function (done) {
       review.choose(pullRequest)
         .then(review => {
           assert.isArray(review.members);
           assert.isAbove(review.members.length, 0);
-          assert.isArray(review.ranks);
-          assert.isAbove(review.ranks.length, 0);
+          assert.isArray(review.reviewers);
+          assert.isAbove(review.reviewers.length, 0);
         })
         .then(done, done);
     });
 
-    it('should return resolved pormise with chosen reviewers ordered by rank', function (done) {
+    it('should return resolved promise with chosen reviewers ordered by rank', function (done) {
 
       imports['review-step-step1'] = function (review) {
         return Promise.resolve([
@@ -223,15 +221,15 @@ describe('services/review/class', function () {
 
       review.choose(pullRequest)
         .then(review => {
-          assert.equal(review.ranks[0].login, 'Thor');
-          assert.equal(review.ranks[1].login, 'Black Widow');
-          assert.equal(review.ranks[2].login, 'Spider-Man');
-          assert.equal(review.ranks[3].login, 'Hulk');
+          assert.equal(review.reviewers[0].login, 'Thor');
+          assert.equal(review.reviewers[1].login, 'Black Widow');
+          assert.equal(review.reviewers[2].login, 'Spider-Man');
+          assert.equal(review.reviewers[3].login, 'Hulk');
         })
         .then(done, done);
     });
 
-    it('should return resolved pormise even when reviewers are not selected', function (done) {
+    it('should return resolved promise even when reviewers are not selected', function (done) {
       imports['review-step-step1'] = function (review) {
         return Promise.resolve([]);
       };
@@ -241,7 +239,7 @@ describe('services/review/class', function () {
 
       review.choose(pullRequest)
         .then(review => {
-          assert.lengthOf(review.ranks, 0);
+          assert.lengthOf(review.reviewers, 0);
         })
         .then(done, done);
     });

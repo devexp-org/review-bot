@@ -50,7 +50,7 @@ describe('plugins/autoassign', function () {
       assert.calledWithExactly(
         imports['pull-request-review'].updateReviewers,
         payload.pullRequest,
-        reviewResult.ranks
+        reviewResult.reviewers
       );
       done();
     }, 0);

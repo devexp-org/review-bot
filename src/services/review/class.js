@@ -1,6 +1,6 @@
-import { chain, flatten, forEach, isEmpty } from 'lodash';
+import { chain, isEmpty } from 'lodash';
 
-export default class ReviewerAssignment {
+export default class Review {
 
   /**
    * @constructor
@@ -14,6 +14,17 @@ export default class ReviewerAssignment {
 
     this.logger = imports.logger;
     this.teamDispatcher = imports['team-dispatcher'];
+  }
+
+  /**
+   * Start ranking queue.
+   *
+   * @param {PullRequest} pullRequest
+   *
+   * @return {Promise.<Review>}
+   */
+  start(pullRequest) {
+    return Promise.resolve({ pullRequest });
   }
 
   /**
@@ -34,13 +45,22 @@ export default class ReviewerAssignment {
 
     review.team = team;
 
+    review.banCount = review.team.getOption(
+      'banCount', this.options.banCount
+    );
+
     review.approveCount = team.getOption(
       'approveCount', this.options.approveCount
+    );
+
+    review.totalReviewers = team.getOption(
+      'totalReviewers', this.options.totalReviewers
     );
 
     return team.getMembersForReview(review.pullRequest)
       .then(members => {
         review.members = members;
+
         return review;
       });
   }
@@ -56,6 +76,7 @@ export default class ReviewerAssignment {
     return this.getSteps(review)
       .then(steps => {
         review.steps = steps;
+
         return review;
       });
   }
@@ -90,30 +111,6 @@ export default class ReviewerAssignment {
   }
 
   /**
-   * Add zero rank for every reviewer.
-   *
-   * @param {Review} review
-   *
-   * @return {Promise.<Review>}
-   */
-  addZeroRank(review) {
-    forEach(review.members, (member) => { member.rank = 0; });
-
-    return Promise.resolve(review);
-  }
-
-  /**
-   * Start ranking queue.
-   *
-   * @param {PullRequest} pullRequest
-   *
-   * @return {Promise.<Review>}
-   */
-  start(pullRequest) {
-    return Promise.resolve({ pullRequest, members: [] });
-  }
-
-  /**
    * Build queue from steps.
    *
    * @param {Review} review
@@ -125,53 +122,42 @@ export default class ReviewerAssignment {
       'stepsOptions', this.options.stepsOptions || {}
     );
 
-    const promise = review.steps.map(({ ranker, name }) => {
-      return ranker(review, stepsOptions[name])
-        .then(ranks => {
-          this.logger.info('"%s" returns ranks %s', name, JSON.stringify(ranks));
-          return ranks;
-        });
-    });
+    review.ranks = [];
 
-    return Promise.all(promise)
-      .then(ranks => {
-        return { review, ranks };
+    return review.steps.reduce((promise, { ranker, name }) => {
+      return promise.then(review => {
+        return ranker(review, stepsOptions[name]).then(values => {
+          this.logger.info('"%s" returns "%s"', name, JSON.stringify(values));
+
+          review.ranks.push({ name, values });
+
+          return review;
+        });
       });
+    }, Promise.resolve(review));
   }
 
-  countRanks({ review, ranks }) {
-    let totalReviewers = review.team.getOption(
-      'totalReviewers',
-      this.options.totalReviewers
-    );
+  countRanks(review) {
+    let members = {};
+    let totalReviewers = review.totalReviewers;
 
-    const members = {};
-
-    flatten(ranks).forEach(member => {
-      if (!members[member.login]) {
-        members[member.login] = 0;
-      }
-
-      if (Number.isFinite(members[member.login])) {
-        members[member.login] += member.rank;
-      }
-    });
-
-    review.ranks = chain(members)
-      .keys(members)
-      .sort((a, b) => {
-        if (members[a] === Infinity) {
-          return -1;
-        } else if (members[a] === -Infinity) {
-          return 1;
-        } else if (members[b] === Infinity) {
-          return 1;
-        } else if (members[b] === -Infinity) {
-          return -1;
+    chain(review.ranks)
+      .map('values')
+      .flatten()
+      .forEach(member => {
+        if (!members[member.login]) {
+          members[member.login] = 0;
         }
 
-        return members[b] - members[a];
+        if (Number.isFinite(members[member.login])) {
+          members[member.login] += member.rank;
+        }
       })
+      .value();
+
+    review.reviewers = chain(members)
+      .keys(members)
+      .sort((a, b) => members[b] - members[a])
       .map(login => {
         return { login, rank: members[login] };
       })
@@ -198,14 +184,13 @@ export default class ReviewerAssignment {
       .start(pullRequest)
       .then(this.setTeam.bind(this))
       .then(this.setSteps.bind(this))
-      .then(this.addZeroRank.bind(this))
       .then(this.stepsQueue.bind(this))
       .then(this.countRanks.bind(this))
       .then(review => {
         this.logger.info('Complete %s', review.pullRequest);
 
         this.logger.info('Reviewers are: %s',
-          isEmpty(review.ranks)
+          isEmpty(review.reviewers)
             ? 'ooops, no reviewers were selected...'
             : review.ranks.map(x => x.login + '#' + x.rank).join(' ')
         );
