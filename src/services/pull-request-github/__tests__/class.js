@@ -13,8 +13,8 @@ describe('services/pull-request-github/class', function () {
 
     options = {
       separator: {
-        top: '<div id="top"></div>',
-        bottom: '<div id="bottom"></div>'
+        top: '<!-- BEGIN -->',
+        bottom: '<!-- END -->'
       }
     };
 
@@ -209,7 +209,7 @@ describe('services/pull-request-github/class', function () {
   describe('#cleanPullRequestBody', function () {
 
     it('should be able to clean pull request body from end', function () {
-      const body = 'BODY TEXT\n<div id="top"></div>\nEXTRA BODY TEXT\n<div id="bottom"></div>';
+      const body = 'BODY TEXT\n<!-- BEGIN -->\nEXTRA BODY TEXT\n<!-- END -->';
 
       const result = pullRequestGitHub.cleanPullRequestBody(body);
 
@@ -217,21 +217,27 @@ describe('services/pull-request-github/class', function () {
     });
 
     it('should able to clean pull request body from begin', function () {
-      const body = '<div id="top"></div>\nEXTRA BODY TEXT\n<div id="bottom"></div>\nBODY TEXT';
+      const body = '<!-- BEGIN -->\nEXTRA BODY TEXT\n<!-- END -->\nBODY TEXT';
 
       const result = pullRequestGitHub.cleanPullRequestBody(body);
 
       assert.equal(result, 'BODY TEXT');
-
     });
 
     it('should able to clean pull request body from middle', function () {
-      const body = 'BODY TEXT 1\n<div id="top"></div>\nEXTRA BODY TEXT\n<div id="bottom"></div>\nBODY TEXT 2';
+      const body = 'BODY TEXT 1\n<!-- BEGIN -->\nEXTRA BODY TEXT\n<!-- END -->\nBODY TEXT 2';
 
       const result = pullRequestGitHub.cleanPullRequestBody(body);
 
       assert.equal(result, 'BODY TEXT 1\nBODY TEXT 2');
+    });
 
+    it('should clean empty lines', function () {
+      const body = 'BODY TEXT 1\n\n<!-- BEGIN -->\nEXTRA BODY TEXT\n<!-- END -->\n';
+
+      const result = pullRequestGitHub.cleanPullRequestBody(body);
+
+      assert.equal(result, 'BODY TEXT 1');
     });
 
     it('should not perform any edits if no separators exist', function () {
@@ -240,16 +246,14 @@ describe('services/pull-request-github/class', function () {
       const result = pullRequestGitHub.cleanPullRequestBody(body);
 
       assert.equal(result, body);
-
     });
 
     it('should not perform any edits if only 1 separator exists', function () {
-      const body = 'BODY TEXT 1\n<div id="top"></div>\nEXTRA BODY TEXT\nBODY TEXT 2';
+      const body = 'BODY TEXT 1\n<!-- BEGIN -->\nEXTRA BODY TEXT\nBODY TEXT 2';
 
       const result = pullRequestGitHub.cleanPullRequestBody(body);
 
       assert.equal(result, body);
-
     });
 
   });
@@ -257,7 +261,7 @@ describe('services/pull-request-github/class', function () {
   describe('#fillPullRequestBody', function () {
 
     it('should be able to replace pull request body', function () {
-      const body = 'BODY TEXT\n<div id="top"></div>\n<div>EXTRA BODY TEXT</div>\n<div id="bottom"></div>';
+      const body = 'BODY TEXT\n<!-- BEGIN -->\n<div>EXTRA BODY TEXT</div>\n<!-- END -->';
 
       const pullRequest = {
         body: body,
@@ -269,7 +273,25 @@ describe('services/pull-request-github/class', function () {
 
       pullRequestGitHub.fillPullRequestBody(pullRequest);
 
-      const expected = 'BODY TEXT<div id="top"></div><div>ID1</div><div>ID2</div><div id="bottom"></div>';
+      const expected = 'BODY TEXT\n<!-- BEGIN -->\n----\nID1\nID2\n<!-- END -->';
+
+      assert.equal(pullRequest.body, expected);
+    });
+
+    it('should not add divining line if body is an empty', function () {
+      const body = '';
+
+      const pullRequest = {
+        body: body,
+        section: {
+          id1: 'ID1',
+          id2: 'ID2'
+        }
+      };
+
+      pullRequestGitHub.fillPullRequestBody(pullRequest);
+
+      const expected = '<!-- BEGIN -->\nID1\nID2\n<!-- END -->';
 
       assert.equal(pullRequest.body, expected);
     });
@@ -293,7 +315,7 @@ describe('services/pull-request-github/class', function () {
 
       assert.equal(
         pullRequestGitHub.buildBodyContent(sections),
-        '<div>content 2</div><div>content 3</div><div>content 1</div>'
+        'content 2\ncontent 3\ncontent 1'
       );
     });
 

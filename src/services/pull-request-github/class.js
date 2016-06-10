@@ -15,9 +15,9 @@ export default class PullRequestGitHub {
 
     this.separator = {
       top: options.separator && options.separator.top ||
-        '<div id="devexp-top"></div><hr>',
+        '<!-- DEVEXP BEGIN -->',
       bottom: options.separator && options.separator.bottom ||
-        '<div id="devexp-bottom"></div>'
+        '<!-- DEVEXP END -->'
     };
   }
 
@@ -115,19 +115,28 @@ export default class PullRequestGitHub {
   fillPullRequestBody(local) {
     const bodyContent = this.buildBodyContent(local.section);
 
-    const bodyContentWithSeparators =
-      this.separator.top + bodyContent + this.separator.bottom;
+    local.body = this.cleanPullRequestBody(local.body);
 
-    local.body = this.cleanPullRequestBody(local.body) +
-      bodyContentWithSeparators;
+    const bodyContentWithSeparators = [
+      (local.body.length ? '\n' : ''),
+      this.separator.top + '\n',
+      (local.body.length ? '----\n' : ''),
+      bodyContent + '\n',
+      this.separator.bottom
+    ].join('');
+
+    local.body += bodyContentWithSeparators;
   }
 
   cleanPullRequestBody(body) {
-    const start = body.indexOf(this.separator.top);
+    const begin = body.indexOf(this.separator.top);
 
-    if (start !== -1) {
-      const before = body.substr(0, start);
-      const end = body.indexOf(this.separator.bottom, start + 1);
+    if (begin !== -1) {
+      const before = body.substr(0, begin);
+      const end = body.indexOf(
+        this.separator.bottom,
+        begin + this.separator.top.length
+      );
 
       if (end !== -1) {
         const after = body.substr(end + this.separator.bottom.length);
@@ -156,8 +165,8 @@ export default class PullRequestGitHub {
           return 0;
         }
       })
-      .map(section => '<div>' + section.content + '</div>')
-      .join('');
+      .map(section => section.content)
+      .join('\n');
   }
 
 }

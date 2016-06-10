@@ -30,12 +30,6 @@ export function withGitHub(test, config, done) {
       },
       'pull-request-github': {
         path: './src/services/pull-request-github',
-        options: {
-          separator: {
-            top: "<div id='devexp-content-top'></div><hr>",
-            bottom: "<div id='devexp-content-bottom'></div>"
-          }
-        },
         dependencies: ['logger', 'github']
       },
       'pull-request-github-addon': {
