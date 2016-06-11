@@ -15,7 +15,7 @@ export default function setup(options, imports) {
 
   const events = imports.events;
   const review = imports.review;
-  const logger = imports.logger.getLogger('review');
+  const logger = imports.logger.getLogger('review.autoassign');
 
   const pullRequestReview = imports['pull-request-review'];
 
@@ -33,10 +33,7 @@ export default function setup(options, imports) {
     logger.info('Autostart review %s', pullRequest);
 
     review.choose(pullRequest)
-      .then(result => {
-        return pullRequestReview
-          .updateReviewers(pullRequest, result.reviewers);
-      })
+      .then(result => pullRequestReview.updateReview(pullRequest, result))
       .catch(logger.error.bind(logger));
   }
 

@@ -76,11 +76,11 @@ describe('services/command/replace', function () {
     command('/replace Hulk', payload, ['Hulk'])
       .then(() => {
         assert.calledWith(
-          pullRequestReview.updateReviewers,
+          pullRequestReview.updateReview,
           sinon.match.object,
-          sinon.match(reviewers => {
+          sinon.match(review => {
             assert.sameDeepMembers(
-              reviewers, [{ login: 'Spider-Man' }, { login: 'Thor' }]
+              review.reviewers, [{ login: 'Spider-Man' }, { login: 'Thor' }]
             );
 
             return true;

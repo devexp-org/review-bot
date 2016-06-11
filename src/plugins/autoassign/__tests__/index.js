@@ -48,9 +48,9 @@ describe('plugins/autoassign', function () {
 
     setTimeout(() => {
       assert.calledWithExactly(
-        imports['pull-request-review'].updateReviewers,
+        imports['pull-request-review'].updateReview,
         payload.pullRequest,
-        reviewResult.reviewers
+        reviewResult
       );
       done();
     }, 0);
@@ -64,7 +64,7 @@ describe('plugins/autoassign', function () {
     service(options, imports);
 
     setTimeout(() => {
-      assert.notCalled(imports['pull-request-review'].updateReviewers);
+      assert.notCalled(imports['pull-request-review'].updateReview);
       done();
     }, 0);
 

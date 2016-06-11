@@ -104,8 +104,8 @@ export default function commandService(options, imports) {
 
         pullRequestReviewers.push(newReviewer);
 
-        return pullRequestReview.updateReviewers(
-          pullRequest, pullRequestReviewers
+        return pullRequestReview.updateReview(
+          pullRequest, { reviewers: pullRequestReviewers }
         );
       })
       .then(pullRequest => {

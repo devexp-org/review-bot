@@ -63,7 +63,7 @@ export default function setup(options, imports) {
     );
 
     return pullRequestReview
-      .updateReviewers(pullRequest, pullRequestReviewers)
+      .updateReview(pullRequest, { reviewers: pullRequestReviewers })
       .then(pullRequest => {
         events.emit(EVENT_NAME, { pullRequest });
 

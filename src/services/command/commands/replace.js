@@ -53,8 +53,8 @@ export default function commandService(options, imports) {
 
         pullRequestReviewers.push(cloneDeep(ranks.shift()));
 
-        return pullRequestReview.updateReviewers(
-          pullRequest, pullRequestReviewers
+        return pullRequestReview.updateReview(
+          pullRequest, { reviewers: pullRequestReviewers }
         );
       })
       .then(pullRequest => {

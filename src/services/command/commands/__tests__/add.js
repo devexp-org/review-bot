@@ -78,7 +78,7 @@ describe('services/command/add', function () {
   it('should save a pullRequest with new a reviewer', function (done) {
     command('/add Hawkeye', payload, ['Hawkeye'])
       .then(() => {
-        assert.called(pullRequestReview.updateReviewers);
+        assert.called(pullRequestReview.updateReview);
 
         const actual = pullRequest.get('review.members');
         const expected = reviewersMock();

@@ -78,10 +78,10 @@ describe('services/command/remove', function () {
     command('/remove Hulk', payload, ['Hulk'])
       .then(() => {
         assert.calledWith(
-          pullRequestReview.updateReviewers,
+          pullRequestReview.updateReview,
           sinon.match.object,
-          sinon.match(reviewers => {
-            assert.sameDeepMembers(reviewers, [{ login: 'Thor' }]);
+          sinon.match(review => {
+            assert.sameDeepMembers(review.reviewers, [{ login: 'Thor' }]);
 
             return true;
           })

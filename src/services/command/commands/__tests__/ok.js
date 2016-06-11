@@ -90,11 +90,11 @@ describe('services/command/ok', function () {
     command('/ok', payload)
       .then(pullRequest => {
         assert.calledWith(
-          pullRequestReview.updateReviewers,
+          pullRequestReview.updateReview,
           sinon.match.object,
-          sinon.match(reviewers => {
+          sinon.match(review => {
             assert.sameDeepMembers(
-              reviewers,
+              review.reviewers,
               [
                 { login: 'Hulk' },
                 { login: 'Thor' },

@@ -68,11 +68,11 @@ describe('services/command/busy', function () {
     command('/busy', payload)
       .then(() => {
         assert.calledWith(
-          pullRequestReview.updateReviewers,
+          pullRequestReview.updateReview,
           sinon.match.object,
-          sinon.match(reviewers => {
+          sinon.match(review => {
             assert.sameDeepMembers(
-              reviewers, [{ login: 'Black Widow' }, { login: 'Hulk' }]
+              review.reviewers, [{ login: 'Black Widow' }, { login: 'Hulk' }]
             );
 
             return true;

@@ -197,7 +197,7 @@ describe('services/pull-request-review', function () {
 
     });
 
-    describe('#updateReviewers', function () {
+    describe('#updateReview', function () {
 
       it('should change reviewers of pull request', function (done) {
         withPullRequestReview(imports => {
@@ -206,7 +206,7 @@ describe('services/pull-request-review', function () {
           const pullRequestReview = imports['pull-request-review'];
           pullRequest.set('review.status', 'notstarted');
 
-          return pullRequestReview.updateReviewers(pullRequest, [{ login: 'bar' }])
+          return pullRequestReview.updateReview(pullRequest, { reviewers: [{ login: 'bar' }] })
             .then(afterSaveAndLoad(PullRequestModel, pullRequestLoaded => {
               const reviewers = pullRequestLoaded.get('review.reviewers');
               assert.isArray(reviewers);

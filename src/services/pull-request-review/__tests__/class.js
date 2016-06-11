@@ -277,16 +277,20 @@ describe('services/pull-request-review/class', function () {
 
   });
 
-  describe('#updateReviewers', function () {
+  describe('#updateReview', function () {
 
     it('should emit event `review:updated`', function (done) {
-      pullRequestReview.updateReviewers(pullRequest, [{ login: 'baz' }])
+      pullRequestReview.updateReview(
+          pullRequest, { reviewers: [{ login: 'baz' }] }
+        )
         .then(() => assert.calledWith(events.emit, 'review:updated'))
         .then(done, done);
     });
 
     it('should update reviewers in pull request', function (done) {
-      pullRequestReview.updateReviewers(pullRequest, [{ login: 'baz' }])
+      pullRequestReview.updateReview(
+          pullRequest, { reviewers: [{ login: 'baz' }] }
+        )
         .then(() => assert.calledWith(
           pullRequest.set, 'review.reviewers', [{ login: 'baz' }]
         ))
@@ -294,13 +298,15 @@ describe('services/pull-request-review/class', function () {
     });
 
     it('should update property "updated_at"', function (done) {
-      pullRequestReview.updateReviewers(pullRequest, [{ login: 'baz' }])
+      pullRequestReview.updateReview(
+          pullRequest, { reviewers: [{ login: 'baz' }] }
+        )
         .then(() => assert.calledWith(pullRequest.set, 'review.updated_at'))
         .then(done, done);
     });
 
     it('should reject promise if all reviewers were dropped', function (done) {
-      pullRequestReview.updateReviewers(pullRequest, [])
+      pullRequestReview.updateReview(pullRequest, { reviewers: [] })
         .then(() => assert.fail())
         .catch(e => assert.match(e.message, /cannot drop all/i))
         .then(done, done);

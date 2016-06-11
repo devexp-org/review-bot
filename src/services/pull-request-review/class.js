@@ -179,22 +179,31 @@ export default class PullRequestReview {
    * Update reviewers list.
    *
    * @param {PullRequest} pullRequest
-   * @param {Object} reviewers
+   * @param {Object} review
    *
    * @return {Promise}
    */
-  updateReviewers(pullRequest, reviewers) {
-    if (isEmpty(reviewers)) {
-      return Promise.reject(new Error(util.format(
-        'Cannot drop all reviewers from pull request. %s',
-        pullRequest
-      )));
+  updateReview(pullRequest, review) {
+    if ('ranks' in review) {
+      pullRequest.set('review.ranks', review.ranks);
+    }
+    if ('banned' in review) {
+      pullRequest.set('review.banned', review.banned);
+    }
+    if ('reviewers' in review) {
+      if (isEmpty(review.reviewers)) {
+        return Promise.reject(new Error(util.format(
+          'Cannot drop all reviewers from pull request. %s',
+          pullRequest
+        )));
+      }
+
+      pullRequest.set('review.reviewers', review.reviewers);
     }
 
-    pullRequest.set('review.reviewers', reviewers);
     pullRequest.set('review.updated_at', new Date());
 
-    this.logger.info('Reviewers updated. %s', pullRequest);
+    this.logger.info('Review updated. %s', pullRequest);
     this.events.emit('review:updated', { pullRequest });
 
     return Promise.resolve(pullRequest);
