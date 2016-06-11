@@ -1,7 +1,7 @@
 import service from '../';
 import teamMock from '../../../../services/team-dispatcher/__mocks__/team';
 
-describe('plugins/team-dispatcher/mm', function () {
+describe('plugins/multimedia/team', function () {
 
   const methods = [
     'getOption',

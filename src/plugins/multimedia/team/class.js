@@ -1,5 +1,5 @@
 import { assign, flatten, includes, cloneDeep } from 'lodash';
-import StaffTeam from '../staff/class';
+import StaffTeam from '../../staff-team/class';
 
 export default class MMTeam extends StaffTeam {
 

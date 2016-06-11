@@ -1,5 +1,5 @@
 import service from '../';
-import staffMock from '../../../../plugins/staff/__mocks__/';
+import staffMock from '../../staff/__mocks__/';
 
 describe('plugins/team-dispatcher/staff', function () {
 

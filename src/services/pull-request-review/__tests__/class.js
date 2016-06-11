@@ -297,6 +297,26 @@ describe('services/pull-request-review/class', function () {
         .then(done, done);
     });
 
+    it('should update reviewer ranks in pull request', function (done) {
+      pullRequestReview.updateReview(
+          pullRequest, { ranks: [{ login: 'baz', rank: 1 }] }
+        )
+        .then(() => assert.calledWith(
+          pullRequest.set, 'review.ranks', [{ login: 'baz', rank: 1 }]
+        ))
+        .then(done, done);
+    });
+
+    it('should update banned reviewers in pull request', function (done) {
+      pullRequestReview.updateReview(
+          pullRequest, { banned: [{ login: 'baz' }] }
+        )
+        .then(() => assert.calledWith(
+          pullRequest.set, 'review.banned', [{ login: 'baz' }]
+        ))
+        .then(done, done);
+    });
+
     it('should update property "updated_at"', function (done) {
       pullRequestReview.updateReview(
           pullRequest, { reviewers: [{ login: 'baz' }] }

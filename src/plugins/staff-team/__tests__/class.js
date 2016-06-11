@@ -1,8 +1,8 @@
 import StaffTeam from '../class';
 
-import staffMock from '../../../../plugins/staff/__mocks__/';
+import staffMock from '../../staff/__mocks__/';
 import { pullRequestMock } from
-  '../../../../services/model/pull-request/__mocks__/';
+  '../../../services/model/pull-request/__mocks__/';
 
 describe('plugins/team-dispatcher/staff/class', function () {
 

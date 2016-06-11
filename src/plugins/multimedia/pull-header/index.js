@@ -1,9 +1,11 @@
-function build(id, tasks) {
+export function buildHeader(id, issues) {
 
-  const tasksSection = tasks.map(task => `Task: https://st.yandex-team.ru/${task}`);
+  const tasksSection = issues
+    .map(id => `Task: https://st.yandex-team.ru/${id}`);
 
   return tasksSection.concat([
-    '\nАвтоботы:',
+    '\n',
+    'Автоботы:',
     'report-report:',
     `http://buildfarm-d-pull-${id}.ti.balancer.serp.yandex.ru/`,
     'node-report:',
@@ -33,11 +35,11 @@ export default function setup(options, imports) {
       return;
     }
 
-    const tasks = startrek.parseIssue(pullRequest.title, options.queues);
+    const issues = startrek.parseIssue(pullRequest.title, options.queues);
 
     return queue.dispatch('pull-request#' + pullRequest.id, () => {
       pullRequestGitHub.setBodySection(
-        pullRequest, 'pull-header-mm', build(pullRequest.id, tasks), 25
+        pullRequest, 'pull-header-mm', buildHeader(pullRequest.id, issues), 25
       );
       return pullRequestGitHub.syncPullRequestWithGitHub(pullRequest);
     });

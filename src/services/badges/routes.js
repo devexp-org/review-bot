@@ -14,20 +14,16 @@ export default function setup(options, imports) {
     const repo = req.params.repo;
     const number = req.params.number;
 
-    if (!org || !repo || !number) {
-      res.error('Url format: pull/{org}/{repo}/{number}');
-      return;
-    }
-
     PullRequestModel
       .findByRepositoryAndNumber(`${org}/${repo}`, number)
       .then(pullRequest => {
         if (!pullRequest) {
-          res.end('Pull request not found');
+          res.error('Pull request not found');
           return;
         }
 
         events.emit('review:update_badges', { pullRequest });
+
         res.end('ok');
       })
       .catch(err => {

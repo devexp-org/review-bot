@@ -5,7 +5,7 @@ import staffMock from '../../../staff/__mocks__/';
 import { pullRequestMock } from
   '../../../../services/model/pull-request/__mocks__/';
 
-describe('plugins/team-dispatcher/mm/class', function () {
+describe('plugins/multimedia/team/class', function () {
 
   let team, staff, groupId, teams, pullRequest;
   beforeEach(function () {

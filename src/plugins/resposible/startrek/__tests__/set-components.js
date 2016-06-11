@@ -1,13 +1,13 @@
 import service from '../set-components';
 
-import loggerMock from '../../../services/logger/__mocks__/';
-import eventsMock from '../../../services/events/__mocks__/';
-import startrekMock from '../__mocks__/';
-import componentsAPIMock from '../../components-api/__mocks__/';
+import loggerMock from '../../../../services/logger/__mocks__/';
+import eventsMock from '../../../../services/events/__mocks__/';
+import startrekMock from '../../../startrek/__mocks__/';
+import componentsAPIMock from '../../api/__mocks__/';
 import { pullRequestMock } from
-  '../../../services/model/pull-request/__mocks__/';
+  '../../../../services/model/pull-request/__mocks__/';
 
-describe('plugins/startrek/set-issue-status', function () {
+describe('plugins/resposible/startrek/set-components', function () {
 
   let options, imports;
   let events, logger, startrek, componentsAPI, payload, pullRequest;

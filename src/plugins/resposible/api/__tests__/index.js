@@ -2,7 +2,7 @@
 // import service from '../';
 // import serviceMock from '../__mocks__/';
 
-describe.skip('plugins/components-api', function () {
+describe.skip('plugins/responsible/api', function () {
 
   it('the mock object should have the same methods', function () {
 

@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 
-import AbstractTeam from '../../../services/team-dispatcher/team';
+import AbstractTeam from '../../services/team-dispatcher/team';
 
 export default class StaffTeam extends AbstractTeam {
 
