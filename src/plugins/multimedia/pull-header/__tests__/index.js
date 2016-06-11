@@ -20,7 +20,7 @@ describe('plugins/multimedia/pull-header', function () {
       queue = queueMock();
       events = eventsMock();
       startrek = startrekMock();
-      pullRequestGitHub = pullRequestGitHubMock()
+      pullRequestGitHub = pullRequestGitHubMock();
 
       pullRequest = pullRequestMock();
 
