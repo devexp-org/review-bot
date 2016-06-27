@@ -15,15 +15,17 @@ export default function (options, imports) {
   const events = imports.events;
   const transport = imports[options.transport];
 
-  Object
-    .keys(options.events)
-    .forEach(event => {
-      const notify = imports.requireDefault(options.events[event]);
+  if (transport) {
+    Object
+      .keys(options.events)
+      .forEach(event => {
+        const notify = imports.requireDefault(options.events[event]);
 
-      events.on(event, (payload) => {
-        notify(transport, payload);
+        events.on(event, (payload) => {
+          notify(transport, payload);
+        });
       });
-    });
+  }
 
   return {};
 }
