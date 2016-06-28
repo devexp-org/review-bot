@@ -9,16 +9,16 @@ Automaticaly choose reviewers for pull requests.
     <img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat" alt="License">
   </a>
 
-  <a href="https://github.com/devexp-org/devexp/issues">
-    <img src="https://img.shields.io/github/issues/devexp-org/devexp.svg" alt="Github Issues">
+  <a href="https://github.com/devexp-org/review-bot/issues">
+    <img src="https://img.shields.io/github/issues/devexp-org/review-bot.svg" alt="Github Issues">
   </a>
 
-  <a href="https://travis-ci.org/devexp-org/devexp">
-    <img src="https://img.shields.io/travis/devexp-org/devexp.svg" alt="Travis Status">
+  <a href="https://travis-ci.org/devexp-org/review-bot">
+    <img src="https://img.shields.io/travis/devexp-org/review-bot.svg" alt="Travis Status">
   </a>
 
-  <a href="https://coveralls.io/github/devexp-org/devexp">
-    <img src="https://img.shields.io/coveralls/devexp-org/devexp.svg" alt="Coveralls">
+  <a href="https://coveralls.io/github/devexp-org/review-bot">
+    <img src="https://img.shields.io/coveralls/devexp-org/review-bot.svg" alt="Coveralls">
   </a>
 </p>
 
