@@ -214,26 +214,14 @@
       "options": {
         "port": "8080",
         "routes": {
-          "/api": "http-routes-client",
           "/badges": "http-routes-badges",
           "/github": "http-routes-github"
         }
       },
       "dependencies": [
         "logger",
-        "http-routes-client",
         "http-routes-badges",
         "http-routes-github"
-      ]
-    },
-
-    "http-routes-client": {
-      "path": "./core/services/client/routes",
-      "dependencies": [
-        "model",
-        "logger",
-        "choose-reviewer",
-        "pull-request-action"
       ]
     },
 
