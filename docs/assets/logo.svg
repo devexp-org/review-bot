@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="1180px" height="230px" viewBox="0 0 1180 230" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <path d="M162.633774,96.9859103 C155.591949,135.116922 122.168977,164 82,164 C36.7126505,164 0,127.287349 0,82 C0,36.7126505 36.7126505,0 82,0 C122.875225,0 156.765145,29.9076469 162.980629,69.0338103 C170.255079,69.5371485 176,75.5976752 176,83 C176,90.5195906 170.071619,96.6545335 162.633774,96.9859103 Z" id="path-1"></path>
+        <mask id="mask-2" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-12" y="-12" width="200" height="188">
+            <rect x="-12" y="-12" width="200" height="188" fill="white"></rect>
+            <use xlink:href="#path-1" fill="black"></use>
+        </mask>
+        <path d="M81.5,144 C116.017797,144 144,116.017797 144,81.5 C144,46.9822031 116.017797,19 81.5,19 C46.9822031,19 19,46.9822031 19,81.5 C19,116.017797 46.9822031,144 81.5,144 Z M162,97 C169.731986,97 176,90.7319865 176,83 C176,75.2680135 169.731986,69 162,69 C154.268014,69 148,75.2680135 148,83 C148,90.7319865 154.268014,97 162,97 Z" id="path-3"></path>
+        <mask id="mask-4" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-6" y="-6" width="169" height="137">
+            <rect x="13" y="13" width="169" height="137" fill="white"></rect>
+            <use xlink:href="#path-3" fill="black"></use>
+        </mask>
+        <circle id="path-5" cx="162" cy="83" r="14"></circle>
+        <mask id="mask-6" maskContentUnits="userSpaceOnUse" maskUnits="objectBoundingBox" x="-10" y="-10" width="48" height="48">
+            <rect x="138" y="59" width="48" height="48" fill="white"></rect>
+            <use xlink:href="#path-5" fill="black"></use>
+        </mask>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <text id="REVIEW-BOT" font-family="HelveticaNeue-Light, Helvetica Neue" font-size="144" font-weight="300" letter-spacing="2" fill="#90A4AE">
+            <tspan x="275" y="169">REVIEW BO</tspan>
+            <tspan x="1050.584" y="169">T</tspan>
+        </text>
+        <g id="Shape" transform="translate(48.000000, 34.000000)">
+            <use id="Combined-Shape" stroke="#90A4AE" mask="url(#mask-2)" stroke-width="24" xlink:href="#path-1"></use>
+            <path d="M81.75,129.280275 C81.75,132.413608 77.1372944,132.274398 75.0358081,132.004381 C52.5091706,129.109966 34.6715886,111.18513 31.8452131,88.5795507 C31.6488669,87.0091585 31.4543109,82 34.5793108,82 C37.7043108,82 38.2250578,89.069077 38.2250578,89.069077 C41.1366114,107.85973 55.9428856,122.705488 74.6835637,125.624805 C74.6835637,125.624805 81.75,126.146941 81.75,129.280275 L81.75,129.280275 L81.75,129.280275 Z" id="Path" fill="#90A4AE"></path>
+            <use id="Combined-Shape" stroke="#90A4AE" mask="url(#mask-4)" stroke-width="12" xlink:href="#path-3"></use>
+            <use id="Oval-3" stroke="#90A4AE" mask="url(#mask-6)" stroke-width="20" xlink:href="#path-5"></use>
+        </g>
+    </g>
+</svg>

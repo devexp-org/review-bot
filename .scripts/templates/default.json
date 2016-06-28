@@ -43,7 +43,7 @@
         "protocol": "https",
         "timeout": 5000,
         "headers": {
-          "user-agent": "DevKit-App"
+          "user-agent": "review-bot"
         }
       },
       "dependencies": []
@@ -57,18 +57,6 @@
       "dependencies": [
         "github"
       ]
-    },
-
-    "team-static": {
-      "path": "./core/services/team-static",
-      "options": {
-        "members": [
-          "artems",
-          "d4rkr00t",
-          "mishanga",
-          "sbmaxx"
-        ]
-      }
     },
 
     "parseLogins": {
@@ -151,7 +139,7 @@
       "path": "./core/services/choose-reviewer-steps/steps/path-related",
       "options": {
         "max": 5,
-        "members": ["artems"],
+        "members": ["login"],
         "incPattern": ["*.js"],
         "decPattern": ["*.json"]
       }
@@ -226,26 +214,14 @@
       "options": {
         "port": "8080",
         "routes": {
-          "/api": "http-routes-client",
           "/badges": "http-routes-badges",
           "/github": "http-routes-github"
         }
       },
       "dependencies": [
         "logger",
-        "http-routes-client",
         "http-routes-badges",
         "http-routes-github"
-      ]
-    },
-
-    "http-routes-client": {
-      "path": "./core/services/client/routes",
-      "dependencies": [
-        "model",
-        "logger",
-        "choose-reviewer",
-        "pull-request-action"
       ]
     },
 
@@ -455,16 +431,6 @@
       ]
     },
 
-    "jabber": {
-      "path": "./core/services/jabber",
-      "options": {
-        "host": "github.com"
-      },
-      "dependencies": [
-        "logger"
-      ]
-    },
-
     "review-notification": {
       "path": "./core/services/review-notification",
       "options": {
@@ -473,11 +439,10 @@
           "review:command:ping": "./core/services/review-notification/templates/ping",
           "review:complete": "./core/services/review-notification/templates/complete"
         },
-        "transport": "jabber"
+        "transport": ""
       },
       "dependencies": [
-        "events",
-        "jabber"
+        "events"
       ]
     }
   }
