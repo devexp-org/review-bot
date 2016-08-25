@@ -1,0 +1,74 @@
+{
+  "name": "devexp",
+  "author": [
+    "Artem Semenov <tema.semenov@gmail.com>",
+    "Stanislav Sysoev <d4rkr00t@gmail.com> (http://sysoev.org)"
+  ],
+  "license": "MIT",
+  "version": "2.0.0",
+  "description": "Developer Experiments",
+  "repository": {
+    "url": "https://github.com/devexp-org/devexp"
+  },
+  "main": "start.js",
+  "scripts": {
+    "test": "$npm_package_config_mocha $npm_package_config_pattern_test",
+    "test:e2e": "$npm_package_config_mocha $npm_package_config_pattern_e2e",
+    "test:watch": "$npm_package_config_mocha --watch --reporter spec $npm_package_config_pattern_test",
+    "start": "node start.js",
+    "start:watch": "nodemon start.js -e js,json,html --ignore node_modules/",
+    "eslint": "eslint .",
+    "coverage": "$npm_package_config_istanbul $npm_package_config_pattern_test",
+    "coverage:e2e": "$npm_package_config_istanbul $npm_package_config_pattern_test $npm_package_config_pattern_e2e",
+    "precommit": "npm run check-code --silent",
+    "check-code": "npm run eslint && npm test"
+  },
+  "dependencies": {
+    "badgs": "^1.1.1",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "github": "^2.5.1",
+    "got": "^6.3.0",
+    "intel": "^1.1.1",
+    "lodash": "^4.15.0",
+    "minimatch": "^3.0.3",
+    "moment": "^2.14.1",
+    "mongoose": "^4.5.10",
+    "node-architect": "^0.0.12",
+    "node-schedule": "^1.1.1",
+    "node-xmpp-client": "^3.0.2",
+    "response-time": "^2.3.1",
+    "server-destroy": "^1.0.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.14.0",
+    "babel-core": "^6.14.0",
+    "babel-eslint": "^6.1.2",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.14.0",
+    "chai": "^3.5.0",
+    "eslint": "^3.3.1",
+    "git-pre-commit": "^1.0.2",
+    "mocha": "^3.0.2",
+    "nodemon": "^1.10.2",
+    "nyc": "^8.1.0",
+    "proxyquire": "^1.7.10",
+    "sinon": "^1.17.5",
+    "supertest": "^2.0.0"
+  },
+  "nyc": {
+    "include": [
+      "src"
+    ],
+    "exclude": [
+      "src/app.js",
+      "**/__tests__/**",
+      "**/__mocks__/**"
+    ]
+  },
+  "config": {
+    "mocha": "mocha --compilers js:babel-core/register --require ./tests/setup.js --reporter progress",
+    "istanbul": "nyc --all --require babel-core/register --reporter text --reporter html npm test",
+    "pattern_e2e": "./tests/e2e/**.js",
+    "pattern_test": "./src/**/__tests__/**.js"
+  }
+}
