@@ -26,6 +26,7 @@
   "dependencies": {
     "badgs": "^1.1.1",
     "body-parser": "^1.15.2",
+    "events-as-promised": "^0.1.4",
     "express": "^4.14.0",
     "github": "^2.5.1",
     "got": "^6.3.0",
