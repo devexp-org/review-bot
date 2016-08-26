@@ -30,7 +30,7 @@ describe('modules/config', function () {
 
     const result = parseConfig('.');
 
-    assert.deepEqual(result, { env: 'development', port: 80 });
+    assert.deepEqual(result, { env: 'testing', port: 80 });
   });
 
   it('should read env config and extend default config if env config exists', function () {
@@ -38,14 +38,14 @@ describe('modules/config', function () {
     const developmentConfig = '{ "port": 8080 }';
 
     existsSyncStub.withArgs('config/default.json').returns(true);
-    existsSyncStub.withArgs('config/development.json').returns(true);
+    existsSyncStub.withArgs('config/testing.json').returns(true);
 
     readFileSyncStub.withArgs('config/default.json').returns(defaultConfig);
-    readFileSyncStub.withArgs('config/development.json').returns(developmentConfig);
+    readFileSyncStub.withArgs('config/testing.json').returns(developmentConfig);
 
     const result = parseConfig('.');
 
-    assert.deepEqual(result, { env: 'development', port: 8080 });
+    assert.deepEqual(result, { env: 'testing', port: 8080 });
   });
 
   it('should merge default and env configs', function () {
@@ -53,14 +53,14 @@ describe('modules/config', function () {
     const developmentConfig = '{ "http": { "debug": true } }';
 
     existsSyncStub.withArgs('config/default.json').returns(true);
-    existsSyncStub.withArgs('config/development.json').returns(true);
+    existsSyncStub.withArgs('config/testing.json').returns(true);
 
     readFileSyncStub.withArgs('config/default.json').returns(defaultConfig);
-    readFileSyncStub.withArgs('config/development.json').returns(developmentConfig);
+    readFileSyncStub.withArgs('config/testing.json').returns(developmentConfig);
 
     const result = parseConfig('.');
 
-    assert.deepEqual(result, { env: 'development', http: { port: 80, debug: true } });
+    assert.deepEqual(result, { env: 'testing', http: { port: 80, debug: true } });
   });
 
   it('should parse #include directive', function () {
@@ -75,7 +75,7 @@ describe('modules/config', function () {
 
     const result = parseConfig('.');
 
-    assert.deepEqual(result, { env: 'development', port: 8080, params: [true, false] });
+    assert.deepEqual(result, { env: 'testing', port: 8080, params: [true, false] });
 
   });
 
@@ -88,7 +88,7 @@ describe('modules/config', function () {
 
       const result = parseConfig('.');
 
-      assert.deepEqual(result, { env: 'development', port: 80 });
+      assert.deepEqual(result, { env: 'testing', port: 80 });
     });
 
     it('should parse #comment directive in array value', function () {
@@ -98,7 +98,7 @@ describe('modules/config', function () {
 
       const result = parseConfig('.');
 
-      assert.deepEqual(result, { env: 'development', port: 80, params: [true] });
+      assert.deepEqual(result, { env: 'testing', port: 80, params: [true] });
     });
 
   });

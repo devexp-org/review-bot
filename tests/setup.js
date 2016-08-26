@@ -8,3 +8,5 @@ sinon.assert.expose(assert, { prefix: '' });
 global.chai = chai;
 global.sinon = sinon;
 global.assert = assert;
+
+process.env.NODE_ENV = 'testing'
