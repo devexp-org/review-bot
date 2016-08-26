@@ -38,6 +38,17 @@
       }
     },
 
+    "http": {
+      "path": "./src/services/http",
+      "options": {
+        "port": "80"
+      },
+      "dependencies": [
+        "events",
+        "logger"
+      ]
+    },
+
     "#comment:__LASTLINE__": ""
   }
 

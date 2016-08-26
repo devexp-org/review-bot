@@ -1,0 +1,9 @@
+{
+  "services": {
+    "http": {
+      "options": {
+        "port": 8080
+      }
+    }
+  }
+}
