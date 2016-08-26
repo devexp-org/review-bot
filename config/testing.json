@@ -5,6 +5,12 @@
       "options": {
         "port": "8080"
       }
+    },
+
+    "mongoose": {
+      "options": {
+        "host": "mongodb://localhost/devexp_test"
+      }
     }
 
   }

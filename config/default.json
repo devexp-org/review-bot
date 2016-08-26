@@ -49,6 +49,14 @@
       ]
     },
 
+    "mongoose": {
+      "path": "./src/services/mongoose",
+      "options": {
+        "host": "mongodb://localhost/devexp"
+      },
+      "dependencies": ["logger"]
+    },
+
     "#comment:__LASTLINE__": ""
   }
 
