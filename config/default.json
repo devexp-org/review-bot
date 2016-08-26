@@ -57,6 +57,15 @@
       "dependencies": ["logger"]
     },
 
+    "model": {
+      "path": "./src/services/model",
+      "options": {
+      },
+      "dependencies": [
+        "mongoose"
+      ]
+    },
+
     "#comment:__LASTLINE__": ""
   }
 

@@ -2,7 +2,7 @@ import proxyquire from 'proxyquire';
 
 describe('modules/config', function () {
 
-  let parseConfig, existsSyncStub, readFileSyncStub;
+  let NODE_ENV, parseConfig, existsSyncStub, readFileSyncStub;
 
   beforeEach(function () {
 
@@ -19,6 +19,13 @@ describe('modules/config', function () {
       }
     }).default;
 
+    NODE_ENV = process.env.NODE_ENV;
+    process.env.NODE_ENV = 'testing';
+
+  });
+
+  afterEach(function () {
+    process.env.NODE_ENV = NODE_ENV;
   });
 
   it('should read default config', function () {
@@ -35,13 +42,13 @@ describe('modules/config', function () {
 
   it('should read env config and extend default config if env config exists', function () {
     const defaultConfig = '{ "port": 80 }';
-    const developmentConfig = '{ "port": 8080 }';
+    const testingConfig = '{ "port": 8080 }';
 
     existsSyncStub.withArgs('config/default.json').returns(true);
     existsSyncStub.withArgs('config/testing.json').returns(true);
 
     readFileSyncStub.withArgs('config/default.json').returns(defaultConfig);
-    readFileSyncStub.withArgs('config/testing.json').returns(developmentConfig);
+    readFileSyncStub.withArgs('config/testing.json').returns(testingConfig);
 
     const result = parseConfig('.');
 
@@ -50,17 +57,34 @@ describe('modules/config', function () {
 
   it('should merge default and env configs', function () {
     const defaultConfig = '{ "http": { "port": 80, "debug": false } }';
-    const developmentConfig = '{ "http": { "debug": true } }';
+    const testingConfig = '{ "http": { "debug": true } }';
 
     existsSyncStub.withArgs('config/default.json').returns(true);
     existsSyncStub.withArgs('config/testing.json').returns(true);
 
     readFileSyncStub.withArgs('config/default.json').returns(defaultConfig);
-    readFileSyncStub.withArgs('config/testing.json').returns(developmentConfig);
+    readFileSyncStub.withArgs('config/testing.json').returns(testingConfig);
 
     const result = parseConfig('.');
 
     assert.deepEqual(result, { env: 'testing', http: { port: 80, debug: true } });
+  });
+
+  it('should use `development` config if `process.env.NODE_ENV` does not present', function () {
+    const defaultConfig = '{ "http": { "port": 80, "debug": false } }';
+    const developmentConfig = '{ "http": { "debug": true } }';
+
+    delete process.env.NODE_ENV;
+
+    existsSyncStub.withArgs('config/default.json').returns(true);
+    existsSyncStub.withArgs('config/development.json').returns(true);
+
+    readFileSyncStub.withArgs('config/default.json').returns(defaultConfig);
+    readFileSyncStub.withArgs('config/development.json').returns(developmentConfig);
+
+    const result = parseConfig('.');
+
+    assert.deepEqual(result, { env: 'development', http: { port: 80, debug: true } });
   });
 
   it('should parse #include directive', function () {
