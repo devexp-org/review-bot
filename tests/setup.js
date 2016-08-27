@@ -9,4 +9,4 @@ global.chai = chai;
 global.sinon = sinon;
 global.assert = assert;
 
-process.env.NODE_ENV = 'testing'
+process.env.NODE_ENV = 'testing';

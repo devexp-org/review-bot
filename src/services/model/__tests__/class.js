@@ -4,7 +4,7 @@ describe('services/model/class', function () {
 
   let model;
 
-  beforeEach(function() {
+  beforeEach(function () {
     model = {
       plugin: sinon.stub()
     };

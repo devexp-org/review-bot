@@ -46,7 +46,7 @@ export default function setup(options, imports) {
     }
 
     setup(modelName, module);
-  })
+  });
 
   return (modelName) => mongoose.model(modelName);
 

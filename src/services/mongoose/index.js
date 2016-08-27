@@ -15,7 +15,7 @@ export default function setup(options, imports) {
         logger.info('Shutdown finished');
         resolve();
       });
-    })
+    });
   };
 
   return new Promise((resolve, reject) => {
