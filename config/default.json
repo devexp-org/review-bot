@@ -60,11 +60,17 @@
     "model": {
       "path": "./src/services/model",
       "options": {
+        "models": {
+          "user": "model-user"
+        }
       },
       "dependencies": [
-        "mongoose"
+        "mongoose",
+        "model-user"
       ]
     },
+
+    "#include:model-class": "./default-model-class.json",
 
     "#comment:__LASTLINE__": ""
   }
