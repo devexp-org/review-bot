@@ -50,6 +50,8 @@ export function transform(basePath, json) {
             addons.push(visit(includeContent));
 
             return null;
+          } else if (k.substr(0, 0) === '#plugin:') {
+            return null;
           } else {
             return visit(v);
           }

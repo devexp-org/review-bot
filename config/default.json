@@ -42,14 +42,11 @@
       "path": "./src/services/http",
       "options": {
         "port": "80",
-        "routes": {
-          "/user": "http-routes-user"
-        }
+        "routes": {}
       },
       "dependencies": [
         "events",
-        "logger",
-        "http-routes-user"
+        "logger"
       ]
     },
 

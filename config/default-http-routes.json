@@ -5,7 +5,21 @@
     "dependencies": [
       "model",
       "logger"
-    ]
+    ],
+    "#plugin:": {
+      "services": {
+        "http": {
+          "options": {
+            "routes": {
+              "/user": "http-routes-user"
+            }
+          },
+          "dependencies": [
+            "http-routes-user"
+          ]
+        }
+      }
+    }
   }
 
 }
