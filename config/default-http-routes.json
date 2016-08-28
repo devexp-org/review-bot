@@ -1,0 +1,11 @@
+{
+
+  "http-routes-user": {
+    "path": "./src/services/model/model-user/routes",
+    "dependencies": [
+      "model",
+      "logger"
+    ]
+  }
+
+}

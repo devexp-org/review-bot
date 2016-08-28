@@ -2,7 +2,7 @@ import { get } from 'lodash';
 
 export function userMock() {
 
-  const user = { _id: 1, contacts: [] };
+  const user = { _id: 'testuser', contacts: [] };
 
   user.get = function () {};
   user.set = sinon.stub().returnsThis();
@@ -26,7 +26,7 @@ export function userModelMock() {
     return userMock();
   };
 
-  stub.findByLogin = sinon.stub();
+  stub.findByLogin = sinon.stub().returns(Promise.resolve(null));
 
   return stub;
 

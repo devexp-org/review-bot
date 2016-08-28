@@ -41,13 +41,19 @@
     "http": {
       "path": "./src/services/http",
       "options": {
-        "port": "80"
+        "port": "80",
+        "routes": {
+          "/user": "http-routes-user"
+        }
       },
       "dependencies": [
         "events",
-        "logger"
+        "logger",
+        "http-routes-user"
       ]
     },
+
+    "#include:http-routes": "./default-http-routes.json",
 
     "mongoose": {
       "path": "./src/services/mongoose",
