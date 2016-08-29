@@ -1,31 +1,28 @@
-import { Schema } from 'mongoose';
-
-const Contact = new Schema({
-  id: {
-    type: String,
-    'enum': ['mail', 'jabber']
-  },
-  account: String
-});
-
 export function baseSchema() {
   return {
-    _id: String,
-    contacts: {
-      type: [Contact],
-      'default': []
-    }
+    login: {
+      type: String,
+      unique: true,
+      required: true,
+      minlength: 2,
+      maxlength: 256
+    },
+    html_url: {
+      type: String,
+      maxlength: 1024
+    },
+    avatar_url: {
+      type: String,
+      maxlength: 1024
+    },
+    contacts: [{
+      id: { type: String, 'enum': ['mail', 'jabber'] },
+      account: String
+    }]
   };
 }
 
 export function setupModel(modelName, model) {
-
-  /**
-   * Set mongo id the same as user login
-   */
-  model.virtual('login')
-    .get(function () { return this._id; })
-    .set(function (login) { this._id = login; });
 
   /**
    * Find user by login
@@ -37,7 +34,7 @@ export function setupModel(modelName, model) {
   model.statics.findByLogin = function (login) {
     return this
       .model(modelName)
-      .findById(login);
+      .findOne({ login });
   };
 
   /**

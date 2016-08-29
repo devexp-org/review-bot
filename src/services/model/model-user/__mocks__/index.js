@@ -2,13 +2,11 @@ import { get } from 'lodash';
 
 export function userMock() {
 
-  const user = { _id: 'testuser', contacts: [] };
+  const user = { login: 'testuser', contacts: [] };
 
   user.get = function () {};
   user.set = sinon.stub().returnsThis();
   user.save = sinon.stub().returns(Promise.resolve(user));
-
-  user.login = user._id;
 
   user.getContacts = sinon.stub().returns([]);
 

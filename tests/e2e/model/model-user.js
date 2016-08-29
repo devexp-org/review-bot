@@ -55,7 +55,11 @@ describe('services/model-class/user', function () {
 
     withUserCollection(imports => {
       const user = imports.user;
-      assert.equal(user._id, user.login);
+      const UserModel = imports.UserModel;
+
+      assert.property(user, 'getContacts');
+      assert.property(UserModel, 'findByLogin');
+
     }, {}, done);
 
   });

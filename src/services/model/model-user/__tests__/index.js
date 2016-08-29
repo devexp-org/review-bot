@@ -2,7 +2,7 @@ import service, * as userModel from '../';
 
 import { userMock } from '../__mocks__/';
 import staticModelMock from '../../../model/__mocks__/static';
-import schemaModelMock, { virtualMock } from '../../../model/__mocks__/schema';
+import schemaModelMock from '../../../model/__mocks__/schema';
 
 describe('services/model/model-user', function () {
 
@@ -19,7 +19,7 @@ describe('services/model/model-user', function () {
       const schema = userModel.baseSchema();
 
       assert.isObject(schema);
-      assert.property(schema, '_id');
+      assert.property(schema, 'login');
       assert.property(schema, 'contacts');
     });
 
@@ -27,27 +27,14 @@ describe('services/model/model-user', function () {
 
   describe('#setupModel', function () {
 
-    let user, model, loginMock;
+    let user, model;
 
     beforeEach(function () {
       user = userMock();
 
       model = schemaModelMock();
 
-      loginMock = virtualMock();
-
-      model.virtual
-        .withArgs('login')
-        .returns(loginMock);
-
       userModel.setupModel('user', model);
-    });
-
-    it('should add property "login"', function () {
-      assert.calledWith(model.virtual, 'login');
-
-      loginMock.get.callArgOnWith(0, user);
-      loginMock.set.callArgOnWith(0, user, 1);
     });
 
     it('should add method "getContacts"', function () {

@@ -48,7 +48,7 @@ describe('services/model/model-user/routes', function () {
       request(app)
         .post('/add')
         .field('login', 'testuser')
-        .expect('{"data":{"_id":"testuser","contacts":[],"login":"testuser"}}')
+        .expect('{"data":{"login":"testuser","contacts":[]}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -75,7 +75,7 @@ describe('services/model/model-user/routes', function () {
     it('should return user', function (done) {
       request(app)
         .get('/get/testuser')
-        .expect('{"data":{"_id":"testuser","contacts":[],"login":"testuser"}}')
+        .expect('{"data":{"login":"testuser","contacts":[]}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
