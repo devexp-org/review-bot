@@ -38,6 +38,10 @@
       }
     },
 
+    "plugin-manager": {
+      "path": "./src/services/plugin-manager"
+    },
+
     "http": {
       "path": "./src/services/http",
       "options": {
@@ -46,7 +50,8 @@
       },
       "dependencies": [
         "events",
-        "logger"
+        "logger",
+        "plugin-manager"
       ]
     },
 

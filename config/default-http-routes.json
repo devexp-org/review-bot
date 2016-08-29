@@ -6,18 +6,9 @@
       "model",
       "logger"
     ],
-    "#plugin:": {
-      "services": {
-        "http": {
-          "options": {
-            "routes": {
-              "/user": "http-routes-user"
-            }
-          },
-          "dependencies": [
-            "http-routes-user"
-          ]
-        }
+    "#plugin:http": {
+      "routes": {
+        "/user": "http-routes-user"
       }
     }
   }

@@ -35,7 +35,7 @@
     "minimatch": "^3.0.3",
     "moment": "^2.14.1",
     "mongoose": "^4.5.10",
-    "node-architect": "^0.0.12",
+    "node-architect": "^0.0.13",
     "node-schedule": "^1.1.1",
     "node-xmpp-client": "^3.0.2",
     "response-time": "^2.3.1",
