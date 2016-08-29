@@ -7,7 +7,20 @@ export default function setup(options, imports) {
 
   const userRoute = router();
 
-  userRoute.get('/by-login/:login', function (req, res) {
+  userRoute.post('/add', function (req, res) {
+    const login = req.body.login;
+
+    const user = new UserModel({ login });
+
+    user.save()
+      .then(res.success.bind(res))
+      .catch(err => {
+        res.error(err.message);
+        logger.error(err);
+      });
+  });
+
+  userRoute.get('/get/:login', function (req, res) {
     const login = req.params.login;
 
     UserModel
