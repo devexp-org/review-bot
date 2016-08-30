@@ -12,11 +12,16 @@ export default function setup(options, imports) {
 
     const team = new TeamModel({ name });
 
-    team.save()
+    team
+      .validate()
+      .then(team.save.bind(team))
       .then(res.success.bind(res))
       .catch(err => {
-        res.error(err.message);
-        logger.error(err);
+        if (err.name !== 'ValidationError') {
+          logger.error(String(err));
+        }
+
+        res.error(err);
       });
   });
 
@@ -28,7 +33,7 @@ export default function setup(options, imports) {
       .then(team => {
         if (!team) {
           return Promise.reject(new Error(
-            `Team ${name} is not found`
+            `Team "${name}" is not found`
           ));
         }
 
@@ -36,8 +41,8 @@ export default function setup(options, imports) {
       })
       .then(res.success.bind(res))
       .catch(err => {
-        res.error(err.message);
-        logger.error(err);
+        logger.error(String(err));
+        res.error(err);
       });
   });
 

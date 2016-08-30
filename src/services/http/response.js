@@ -5,15 +5,19 @@ export default function middleware() {
     /**
      * Send failure response.
      *
-     * @param {String} [message] — error message (default: error).
+     * @param {Object} [error] — error message (default: Internal Error).
      * @param {Number} [status] — http response status (default: 500).
      */
-    res.error = function (message, status) {
-      message = message || 'Internal error';
+    res.error = function (error, status) {
+      error = error || 'Internal Error';
+
+      if (error.name === 'Error') {
+        error = error.message;
+      }
 
       this
         .status(status || 500)
-        .json({ error: String(message) });
+        .json({ error });
     };
 
     /**
@@ -22,7 +26,8 @@ export default function middleware() {
      * @param {*} [data] — response data.
      */
     res.success = function (data) {
-      this.json({ data: data || {} });
+      data = data || {};
+      this.json({ data });
     };
 
     next();

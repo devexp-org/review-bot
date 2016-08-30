@@ -7,16 +7,21 @@ export default function setup(options, imports) {
 
   const userRoute = router();
 
-  userRoute.post('/add', function (req, res) {
-    const login = req.body.login;
+  userRoute.all('/add', function (req, res) {
+    const login = req.body.login || req.query.login;
 
     const user = new UserModel({ login });
 
-    user.save()
+    user
+      .validate()
+      .then(user.save.bind(user))
       .then(res.success.bind(res))
       .catch(err => {
-        res.error(err.message);
-        logger.error(err);
+        if (err.name !== 'ValidationError') {
+          logger.error(String(err));
+        }
+
+        res.error(err);
       });
   });
 
@@ -28,7 +33,7 @@ export default function setup(options, imports) {
       .then(user => {
         if (!user) {
           return Promise.reject(new Error(
-            `User ${login} is not found`
+            `User "${login}" is not found`
           ));
         }
 
@@ -36,8 +41,8 @@ export default function setup(options, imports) {
       })
       .then(res.success.bind(res))
       .catch(err => {
-        res.error(err.message);
-        logger.error(err);
+        logger.error(String(err));
+        res.error(err);
       });
   });
 
