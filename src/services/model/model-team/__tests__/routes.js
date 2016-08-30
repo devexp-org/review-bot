@@ -6,31 +6,31 @@ import responseJSON from '../../../http/response';
 
 import modelMock from '../../../model/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
-import { userMock, userModelMock } from '../__mocks__/';
+import { teamMock, teamModelMock } from '../__mocks__/';
 
-describe('services/model/model-user/routes', function () {
+describe('services/model/model-team/routes', function () {
 
   let app, options, imports, router;
-  let model, logger, user, UserModel;
+  let model, logger, team, TeamModel;
 
   beforeEach(function () {
     app = express();
 
-    user = userMock();
+    team = teamMock();
     model = modelMock();
     logger = loggerMock();
-    UserModel = userModelMock();
+    TeamModel = teamModelMock();
 
     options = {};
     imports = { logger, model };
 
     model
-      .withArgs('user')
-      .returns(UserModel);
+      .withArgs('team')
+      .returns(TeamModel);
 
-    UserModel.findByLogin
-      .withArgs('testuser')
-      .returns(Promise.resolve(user));
+    TeamModel.findByName
+      .withArgs('testteam')
+      .returns(Promise.resolve(team));
 
     router = service(options, imports);
   });
@@ -43,25 +43,25 @@ describe('services/model/model-user/routes', function () {
 
   describe('/add', function () {
 
-    it('should create a new user', function (done) {
+    it('should create a new team', function (done) {
       request(app)
         .post('/add')
-        .field('login', 'testuser')
-        .expect('{"data":{"login":"testuser","contacts":[]}}')
+        .field('name', 'testteam')
+        .expect('{"data":{"name":"name","members":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
     });
 
-    it('should return an error if user already exsits', function (done) {
-      const user = new UserModel();
+    it('should return an error if team already exsits', function (done) {
+      const team = new TeamModel();
 
-      user.save.returns(Promise.reject(new Error('User "testuser" already exists')));
+      team.save.returns(Promise.reject(new Error('team "testteam" already exists')));
 
       request(app)
         .post('/add')
-        .field('login', 'testuser')
-        .expect('{"error":"User \\"testuser\\" already exists"}')
+        .field('name', 'testteam')
+        .expect('{"error":"team \\"testteam\\" already exists"}')
         .expect('Content-Type', /application\/json/)
         .expect(500)
         .end(done);
@@ -69,19 +69,19 @@ describe('services/model/model-user/routes', function () {
 
   });
 
-  describe('/get/:login', function () {
+  describe('/get/:name', function () {
 
-    it('should return a user', function (done) {
+    it('should return a team', function (done) {
       request(app)
-        .get('/get/testuser')
-        .expect('{"data":{"login":"testuser","contacts":[]}}')
+        .get('/get/testteam')
+        .expect('{"data":{"name":"name","members":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
     });
 
-    it('should return an error if user is not found', function (done) {
-      UserModel.findByLogin
+    it('should return an error if team is not found', function (done) {
+      TeamModel.findByName
         .withArgs('foo')
         .returns(Promise.resolve(null));
 

@@ -5,6 +5,7 @@ export default function mock() {
     sort: sinon.stub().returnsThis(),
     skip: sinon.stub().returnsThis(),
     limit: sinon.stub().returnsThis(),
+    populate: sinon.stub().returnsThis(),
 
     exec: sinon.stub().returns(Promise.resolve(null)),
 

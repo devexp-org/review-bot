@@ -22,7 +22,7 @@ export function userModelMock() {
 
   const user = userMock();
 
-  const stub = function () { return user; };
+  const stub = sinon.stub().returns(user);
 
   stub.findByLogin = sinon.stub().returns(Promise.resolve(null));
 

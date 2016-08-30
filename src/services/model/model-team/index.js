@@ -13,8 +13,8 @@ export function baseSchema() {
       ref: 'user',
       type: Schema.Types.ObjectId
     }],
-    config: {
-      reviewSteps: [{
+    reviewConfig: {
+      steps: [{
         name: String,
         options: {}
       }],

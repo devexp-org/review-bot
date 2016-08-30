@@ -1,3 +1,5 @@
+import { isFunction } from 'lodash';
+
 import service, * as userModel from '../';
 
 import { userMock } from '../__mocks__/';
@@ -6,7 +8,7 @@ import schemaModelMock from '../../../model/__mocks__/schema';
 
 describe('services/model/model-user', function () {
 
-  it('should able to setup model', function () {
+  it('should be able to setup model', function () {
     const obj = service();
 
     assert.property(obj, 'baseSchema');
@@ -15,12 +17,15 @@ describe('services/model/model-user', function () {
 
   describe('#baseSchema', function () {
 
-    it('should return schema', function () {
+    it('the mock object should have the same properties', function () {
+      const mock = userMock();
       const schema = userModel.baseSchema();
 
-      assert.isObject(schema);
-      assert.property(schema, 'login');
-      assert.property(schema, 'contacts');
+      const properties = Object.keys(mock);
+
+      properties
+        .filter(property => isFunction(property))
+        .forEach(property => assert.property(schema, property));
     });
 
   });
