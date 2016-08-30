@@ -16,13 +16,7 @@ export default function setup(options, imports) {
       .validate()
       .then(team.save.bind(team))
       .then(res.success.bind(res))
-      .catch(err => {
-        if (err.name !== 'ValidationError') {
-          logger.error(String(err));
-        }
-
-        res.error(err);
-      });
+      .catch(res.handleError.bind(res, logger));
   });
 
   teamRoute.get('/get/:name', function (req, res) {
@@ -40,10 +34,7 @@ export default function setup(options, imports) {
         return team;
       })
       .then(res.success.bind(res))
-      .catch(err => {
-        logger.error(String(err));
-        res.error(err);
-      });
+      .catch(res.handleError.bind(res, logger));
   });
 
   return teamRoute;

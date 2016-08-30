@@ -1,5 +1,15 @@
 {
 
+
+  "http-middleware-model": {
+    "path": "./src/services/model/response",
+    "#plugin:http": {
+      "middlewares": [
+        "http-middleware-model"
+      ]
+    }
+  },
+
   "http-routes-user": {
     "path": "./src/services/model/model-user/routes",
     "dependencies": [

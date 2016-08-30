@@ -46,7 +46,8 @@
       "path": "./src/services/http",
       "options": {
         "port": "80",
-        "routes": {}
+        "routes": {},
+        "middlewares": {}
       },
       "dependencies": [
         "events",

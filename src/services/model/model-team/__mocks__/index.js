@@ -17,6 +17,7 @@ export function teamMock() {
   team.get = function () {};
   team.set = sinon.stub().returnsThis();
   team.save = sinon.stub().returns(Promise.resolve(team));
+  user.validate = sinon.stub().returns(Promise.resolve(user)),
 
   sinon.stub(team, 'get', function (path) {
     return get(this, path);

@@ -11,10 +11,6 @@ export default function middleware() {
     res.error = function (error, status) {
       error = error || 'Internal Error';
 
-      if (error.name === 'Error') {
-        error = error.message;
-      }
-
       this
         .status(status || 500)
         .json({ error });

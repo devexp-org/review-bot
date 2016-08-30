@@ -7,6 +7,7 @@ export function userMock() {
   user.get = function () {};
   user.set = sinon.stub().returnsThis();
   user.save = sinon.stub().returns(Promise.resolve(user));
+  user.validate = sinon.stub().returns(Promise.resolve(user)),
 
   user.getContacts = sinon.stub().returns([]);
 
