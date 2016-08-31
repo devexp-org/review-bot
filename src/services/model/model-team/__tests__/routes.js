@@ -3,6 +3,7 @@ import request from 'supertest';
 import service from '../routes';
 import bodyParser from 'body-parser';
 import responseJSON from '../../../http/response';
+import responseModel from '../../response';
 
 import modelMock from '../../../model/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
@@ -38,6 +39,7 @@ describe('services/model/model-team/routes', function () {
   beforeEach(function () {
     app.use(bodyParser.json());
     app.use(responseJSON());
+    app.use(responseModel());
     app.use('/', router);
   });
 
@@ -56,12 +58,12 @@ describe('services/model/model-team/routes', function () {
     it('should return an error if team already exsits', function (done) {
       const team = new TeamModel();
 
-      team.save.returns(Promise.reject(new Error('team "testteam" already exists')));
+      team.save.returns(Promise.reject(new Error('Team "testteam" already exists')));
 
       request(app)
         .post('/add')
         .field('name', 'testteam')
-        .expect('{"error":"team \\"testteam\\" already exists"}')
+        .expect('{"error":{"message":"Team \\"testteam\\" already exists"}}')
         .expect('Content-Type', /application\/json/)
         .expect(500)
         .end(done);

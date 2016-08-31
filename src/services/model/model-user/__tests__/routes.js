@@ -3,6 +3,7 @@ import request from 'supertest';
 import service from '../routes';
 import bodyParser from 'body-parser';
 import responseJSON from '../../../http/response';
+import responseModel from '../../response';
 
 import modelMock from '../../../model/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
@@ -38,6 +39,7 @@ describe('services/model/model-user/routes', function () {
   beforeEach(function () {
     app.use(bodyParser.json());
     app.use(responseJSON());
+    app.use(responseModel());
     app.use('/', router);
   });
 
@@ -61,7 +63,7 @@ describe('services/model/model-user/routes', function () {
       request(app)
         .post('/add')
         .field('login', 'testuser')
-        .expect('{"error":"User \\"testuser\\" already exists"}')
+        .expect('{"error":{"message":"User \\"testuser\\" already exists"}}')
         .expect('Content-Type', /application\/json/)
         .expect(500)
         .end(done);

@@ -14,29 +14,27 @@ export default function setup() {
 
       const plainError = Object.keys(err).length === 0;
 
-      logError = resError = err;
+      resError = { message: err.message };
 
       if (plainError) {
         logError = err.message;
-        resError = { name: err.name, message: err.message };
       } else {
         logError = String(err);
       }
 
       switch (err.name) {
 
+        case 'MongoError':
+          logError = err.name + ': ' + err.errmsg;
+          resError.message = err.errmsg;
+          break;
+
         case 'ValidationError': {
+          resError = err;
           resStatus = 200;
           logMethod = 'warn';
           break;
         }
-
-        case 'MongoError':
-          logError = err.name + ': ' + err.errmsg;
-          resError = err.toJSON();
-          resError.name = 'MongoError';
-          resError.message = err.errmsg;
-          break;
 
         default:
           break;

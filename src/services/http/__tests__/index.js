@@ -5,6 +5,7 @@ import loggerMock from '../../logger/__mocks__/';
 
 import indexRoute from '../routes/index';
 import staticRoute from '../routes/static';
+import resposeJSON from '../response';
 
 describe('services/http', function () {
 
@@ -16,7 +17,8 @@ describe('services/http', function () {
       routes: {
         '/': 'index',
         '/public': 'bundle'
-      }
+      },
+      middlewares: ['responseJSON']
     };
 
     const localAssets = path.resolve(__dirname, './assets');
@@ -24,7 +26,8 @@ describe('services/http', function () {
     imports = {
       index: indexRoute({ assets: localAssets }, {}),
       bundle: staticRoute({ assets: localAssets }, {}),
-      logger: loggerMock()
+      logger: loggerMock(),
+      responseJSON: resposeJSON()
     };
 
   });
@@ -98,6 +101,12 @@ describe('services/http', function () {
     imports.index = null;
 
     assert.throws(() => service(options, imports), /cannot.*index/i);
+  });
+
+  it('should throw an error if middleware module is not given', function () {
+    imports.responseJSON = null;
+
+    assert.throws(() => service(options, imports), /cannot.*responseJSON/i);
   });
 
 });

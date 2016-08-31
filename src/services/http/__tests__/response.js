@@ -32,7 +32,7 @@ describe('services/http/response', function () {
         res.error();
 
         assert.calledWithExactly(res.status, 500);
-        assert.calledWithExactly(res.json, { error: 'Internal error' });
+        assert.calledWithExactly(res.json, { error: 'Internal Error' });
         done();
       });
     });
