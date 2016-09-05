@@ -4,7 +4,6 @@ var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
-  devtool: '#source-map',
   entry: [
     'webpack-hot-middleware/client',
     './app/index.js'
@@ -21,7 +20,7 @@ module.exports = {
   ],
   module: {
     loaders: [{
-      test: /\.js?$/,
+      test: /\.jsx?$/,
       loader: 'babel',
       include: path.join(__dirname, 'app'),
       query: {
@@ -30,7 +29,6 @@ module.exports = {
             'transforms': [{
               transform: 'react-transform-hmr',
               imports: ['react'],
-              // This is important for Webpack HMR:
               locals: ['module']
             }]
           }],
