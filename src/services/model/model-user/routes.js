@@ -37,6 +37,13 @@ export default function setup(options, imports) {
       .catch(res.handleError.bind(res, logger));
   });
 
+  userRoute.get('/list', function (req, res) {
+    UserModel
+      .find({}, 'login')
+      .then(res.success.bind(res))
+      .catch(res.handleError.bind(res, logger));
+  });
+
   return userRoute;
 
 }

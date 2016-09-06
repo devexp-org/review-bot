@@ -16,7 +16,7 @@
     "test:e2e": "$npm_package_config_mocha $npm_package_config_pattern_e2e",
     "test:watch": "$npm_package_config_mocha --watch --reporter spec $npm_package_config_pattern_test",
     "start": "node start.js",
-    "start:watch": "nodemon start.js -e js,json,html --ignore node_modules/",
+    "start:watch": "nodemon start.js -e js,json,html --ignore node_modules/ --ignore client/",
     "eslint": "eslint .",
     "coverage": "$npm_package_config_istanbul $npm_package_config_pattern_test",
     "coverage:e2e": "$npm_package_config_istanbul $npm_package_config_pattern_test $npm_package_config_pattern_e2e",

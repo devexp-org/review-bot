@@ -3,11 +3,13 @@ export const USER_FETCHING = 'USER_FETCHING';
 export const USER_FETCHED = 'USER_FETCHED';
 export const USER_FETCH_FAILED = 'USER_FETCH_FAILED';
 
+const HOST = 'http://localhost:8080/user/get/';
+
 function fetchUser(userId) {
   return (dispatch) => {
     dispatch({ type: USER_FETCHING, userId: userId });
 
-    return fetch('http://jsonplaceholder.typicode.com/users/' + userId)
+    return fetch(HOST + userId)
       .then((response) => {
         return response.json();
       })

@@ -8,8 +8,8 @@ class UserList extends Component {
       <ul>
         {this.props.users.map((user) => {
           return (
-            <li key={user.id}>
-              <Link to={'user/' + user.id}>{user.name}</Link>
+            <li key={user._id}>
+              <Link to={'user/' + user.login}>{user.login}</Link>
             </li>
           );
         })}

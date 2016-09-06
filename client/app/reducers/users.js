@@ -22,7 +22,7 @@ export default function users(state = {
     case USERS_FETCHED:
       return Object.assign({}, state, {
         readyState: USERS_FETCHED,
-        list: action.result
+        list: action.result.data
       });
     default:
       return state;
