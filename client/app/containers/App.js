@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 import Helmet from 'react-helmet';
 
@@ -8,16 +8,16 @@ class App extends Component {
     return (
       <div>
         <Helmet
-          title='MyApp'
-          titleTemplate='MyApp - %s'
+          title="MyApp"
+          titleTemplate="MyApp - %s"
           meta={[
-            {'char-set': 'utf-8'},
-            {'name': 'description', 'content': 'My super dooper dope app'}
+            { charset: 'utf-8' },
+            { name: 'description', content: 'My super dooper dope app' }
           ]}
         />
         <nav>
           <ul>
-            <li><Link to='/'>Users</Link></li>
+            <li><Link to="/">Users</Link></li>
           </ul>
         </nav>
         {this.props.children}
@@ -25,5 +25,9 @@ class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  children: PropTypes.node
+};
 
 export default App;

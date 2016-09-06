@@ -15,7 +15,7 @@ function fetchUsers() {
         (result) => dispatch({ type: USERS_FETCHED, result }),
         (error) => dispatch({ type: USERS_FETCH_FAILED, error })
       );
-  }
+  };
 }
 
 function shouldFetchUsers(state) {
@@ -35,5 +35,5 @@ export function fetchUsersIfNeeded() {
     if (shouldFetchUsers(getState())) {
       return dispatch(fetchUsers());
     }
-  }
+  };
 }

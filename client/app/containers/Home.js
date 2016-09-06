@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import * as UsersActions from '../actions/users';
 import UserList from '../components/UserList';
 
@@ -36,7 +35,7 @@ class Home extends Component {
   render() {
     return (
       <div>
-        <Helmet title='Home' />
+        <Helmet title="Home" />
         <h5>Users:</h5>
         {this.renderUsers()}
       </div>
@@ -49,5 +48,10 @@ function mapStateToProps(state) {
     users: state.users
   };
 }
+
+Home.propTypes = {
+  users: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
+};
 
 export default connect(mapStateToProps)(Home);

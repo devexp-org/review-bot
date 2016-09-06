@@ -6,10 +6,10 @@ class NoMatch extends Component {
   render() {
     return (
       <div>
-        <Helmet title='Not Found' />
+        <Helmet title="Not Found" />
         Page was not found
       </div>
-    )
+    );
   }
 }
 

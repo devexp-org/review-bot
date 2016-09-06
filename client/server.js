@@ -1,3 +1,6 @@
+/* global __ENVIRONMENT__ */
+/* eslint-disable no-console */
+
 require('babel-core/register');
 
 const path = require('path');
@@ -22,7 +25,7 @@ process.on('unhandledRejection', (reason, p) => {
   }
 });
 
-server.get('/favicon.ico', function(req, res) {
+server.get('/favicon.ico', function (req, res) {
   res.writeHead(200, { 'Content-Type': 'image/x-icon' });
   res.end();
 });

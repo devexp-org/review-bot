@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { Link } from 'react-router';
 
 class UserList extends Component {
@@ -17,5 +17,9 @@ class UserList extends Component {
     );
   }
 }
+
+UserList.propTypes = {
+  users: PropTypes.array.isRequired
+};
 
 export default UserList;

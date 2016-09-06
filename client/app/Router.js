@@ -55,7 +55,7 @@ function handleRoute(res, renderProps) {
   const readyOnAllActions = renderProps.components
     .filter(component => component.readyOnActions)
     .map(component => {
-      return component.readyOnActions(store.dispatch, renderProps.params)
+      return component.readyOnActions(store.dispatch, renderProps.params);
     });
 
   Promise
@@ -63,7 +63,7 @@ function handleRoute(res, renderProps) {
     .then(() => {
       return res
         .status(status)
-        .send(renderComponentWithRoot(RouterContext, renderProps, store))
+        .send(renderComponentWithRoot(RouterContext, renderProps, store));
     });
 }
 

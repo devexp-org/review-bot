@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import * as UserActions from '../actions/user';
@@ -41,7 +41,7 @@ class User extends Component {
         <Helmet
           title={this.getUser() ? this.getUser().name : ''}
           meta={[
-            {'name': 'description', 'content': 'User Profile'}
+            { name: 'description', content: 'User Profile' }
           ]}
         />
         {this.renderUser()}
@@ -55,5 +55,11 @@ function mapStateToProps(state) {
     user: state.user
   };
 }
+
+User.propTypes = {
+  user: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
+};
 
 export default connect(mapStateToProps)(User);

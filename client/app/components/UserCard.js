@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PropTypes, Component } from 'react';
 
 class UserCard extends Component {
 
@@ -16,5 +16,9 @@ class UserCard extends Component {
     );
   }
 }
+
+UserCard.propTypes = {
+  user: PropTypes.object.isRequired
+};
 
 export default UserCard;

@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-disable no-var */
 
 var path = require('path');
 var webpack = require('webpack');
@@ -26,7 +26,7 @@ module.exports = {
       query: {
         plugins: [
           ['react-transform', {
-            'transforms': [{
+            transforms: [{
               transform: 'react-transform-hmr',
               imports: ['react'],
               locals: ['module']
