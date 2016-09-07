@@ -1,5 +1,7 @@
 import { Router as router } from 'express';
 
+import { NotFoundError } from '../error';
+
 export default function setup(options, imports) {
 
   const logger = imports.logger.getLogger('http-user');
@@ -7,40 +9,60 @@ export default function setup(options, imports) {
 
   const userRoute = router();
 
-  userRoute.all('/add', function (req, res) {
-    const login = req.body.login || req.query.login;
+  userRoute.get('/', function (req, res) {
+    UserModel
+      .find({})
+      .then(res.json.bind(res))
+      .catch(res.handleError.bind(res, logger));
+  });
 
-    const user = new UserModel({ login });
+  userRoute.post('/', function (req, res) {
+    const user = new UserModel({ login: req.body.login });
 
     user
       .validate()
       .then(user.save.bind(user))
-      .then(res.success.bind(res))
+      .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });
 
-  userRoute.get('/get/:login', function (req, res) {
-    const login = req.params.login;
+  userRoute.get('/:id', function (req, res) {
+    const id = req.params.id;
 
     UserModel
-      .findByLogin(login)
+      .findById(id)
       .then(user => {
         if (!user) {
-          return Promise.reject(new Error(
-            `User "${login}" is not found`
-          ));
+          return Promise.reject(
+            new NotFoundError(`User was not found (${id})`)
+          );
         }
 
         return user;
       })
-      .then(res.success.bind(res))
+      .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });
 
-  userRoute.get('/list', function (req, res) {
+  userRoute.put('/:id', function (req, res) {
+    const id = req.params.id;
+
     UserModel
-      .find({}, 'login')
-      .then(res.success.bind(res))
+      .findById(id)
+      .then(user => {
+        if (!user) {
+          return Promise.reject(
+            new NotFoundError(`User was not found (${id})`)
+          );
+        }
+
+        user.login = req.body.login;
+
+        return user
+          .validate()
+          .then(user.save.bind(user));
+      })
+      .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });
 

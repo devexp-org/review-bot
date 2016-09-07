@@ -24,14 +24,22 @@ export default function setup() {
 
       switch (err.name) {
 
+        case 'CastError':
+          resStatus = 400;
+
         case 'MongoError':
           logError = err.name + ': ' + err.errmsg;
           resError.message = err.errmsg;
           break;
 
+        case 'NotFoundError':
+          resStatus = 404;
+          logMethod = 'info';
+          break;
+
         case 'ValidationError': {
           resError = err;
-          resStatus = 200;
+          resStatus = 422;
           logMethod = 'warn';
           break;
         }
@@ -42,7 +50,8 @@ export default function setup() {
       }
 
       logger[logMethod](logError);
-      res.error(resError, resStatus);
+
+      res.status(resStatus).json(resError);
 
     };
 

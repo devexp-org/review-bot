@@ -63,7 +63,7 @@ describe('services/model/model-team/routes', function () {
       request(app)
         .post('/add')
         .field('name', 'testteam')
-        .expect('{"error":{"message":"Team \\"testteam\\" already exists"}}')
+        .expect('{"message":"Team \\"testteam\\" already exists"}')
         .expect('Content-Type', /application\/json/)
         .expect(500)
         .end(done);

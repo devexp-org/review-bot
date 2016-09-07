@@ -29,7 +29,7 @@ describe('services/model/model-user/routes', function () {
       .withArgs('user')
       .returns(UserModel);
 
-    UserModel.findByLogin
+    UserModel.findById
       .withArgs('testuser')
       .returns(Promise.resolve(user));
 
@@ -43,13 +43,13 @@ describe('services/model/model-user/routes', function () {
     app.use('/', router);
   });
 
-  describe('/add', function () {
+  describe('POST /', function () {
 
     it('should create a new user', function (done) {
       request(app)
-        .post('/add')
+        .post('/')
         .field('login', 'testuser')
-        .expect('{"data":{"login":"testuser","contacts":[]}}')
+        .expect('{"login":"testuser","contacts":[]}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -61,9 +61,9 @@ describe('services/model/model-user/routes', function () {
       user.save.returns(Promise.reject(new Error('User "testuser" already exists')));
 
       request(app)
-        .post('/add')
+        .post('/')
         .field('login', 'testuser')
-        .expect('{"error":{"message":"User \\"testuser\\" already exists"}}')
+        .expect('{"message":"User \\"testuser\\" already exists"}')
         .expect('Content-Type', /application\/json/)
         .expect(500)
         .end(done);
@@ -71,27 +71,27 @@ describe('services/model/model-user/routes', function () {
 
   });
 
-  describe('/get/:login', function () {
+  describe('GET /:id', function () {
 
     it('should return a user', function (done) {
       request(app)
-        .get('/get/testuser')
-        .expect('{"data":{"login":"testuser","contacts":[]}}')
+        .get('/testuser')
+        .expect('{"login":"testuser","contacts":[]}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
     });
 
     it('should return an error if user is not found', function (done) {
-      UserModel.findByLogin
+      UserModel.findById
         .withArgs('foo')
         .returns(Promise.resolve(null));
 
       request(app)
-        .get('/get/foo')
+        .get('/foo')
         .expect(/not found/)
         .expect('Content-Type', /application\/json/)
-        .expect(500)
+        .expect(404)
         .end(done);
     });
 
