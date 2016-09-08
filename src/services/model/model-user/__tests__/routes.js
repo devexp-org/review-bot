@@ -29,7 +29,7 @@ describe('services/model/model-user/routes', function () {
       .withArgs('user')
       .returns(UserModel);
 
-    UserModel.findById
+    UserModel.findByLogin
       .withArgs('testuser')
       .returns(Promise.resolve(user));
 

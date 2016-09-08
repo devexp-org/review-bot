@@ -3,7 +3,7 @@ export const USERS_FETCHING = 'USERS_FETCHING';
 export const USERS_FETCHED = 'USERS_FETCHED';
 export const USERS_FETCH_FAILED = 'USERS_FETCH_FAILED';
 
-const HOST = 'http://localhost:8080/user/list/';
+const HOST = 'http://localhost:8080/users/';
 
 function fetchUsers() {
   return (dispatch) => {

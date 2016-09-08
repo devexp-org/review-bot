@@ -30,7 +30,7 @@ export default function setup(options, imports) {
     const id = req.params.id;
 
     UserModel
-      .findById(id)
+      .findByLogin(id)
       .then(user => {
         if (!user) {
           return Promise.reject(
@@ -39,28 +39,6 @@ export default function setup(options, imports) {
         }
 
         return user;
-      })
-      .then(res.json.bind(res))
-      .catch(res.handleError.bind(res, logger));
-  });
-
-  userRoute.put('/:id', function (req, res) {
-    const id = req.params.id;
-
-    UserModel
-      .findById(id)
-      .then(user => {
-        if (!user) {
-          return Promise.reject(
-            new NotFoundError(`User was not found (${id})`)
-          );
-        }
-
-        user.login = req.body.login;
-
-        return user
-          .validate()
-          .then(user.save.bind(user));
       })
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));

@@ -23,7 +23,7 @@ export default function user(state = {}, action) {
       return Object.assign({}, state, {
         [action.userId]: {
           readyState: USER_FETCHED,
-          info: action.result.data
+          info: action.result
         }
       });
     default:
