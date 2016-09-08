@@ -36,6 +36,11 @@ class Home extends Component {
     return (
       <div>
         <Helmet title="Home" />
+        <h4>New user</h4>
+        <form onSubmit={this.handleSubmit}>
+          <input name="login" size="25" />
+          <button type="submit">Add</button>
+        </form>
         <h5>Users:</h5>
         {this.renderUsers()}
       </div>

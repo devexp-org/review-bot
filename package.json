@@ -35,6 +35,7 @@
     "minimatch": "^3.0.3",
     "moment": "^2.14.1",
     "mongoose": "^4.5.10",
+    "mongoose-beautiful-unique-validation": "^5.0.1",
     "node-architect": "^0.0.13",
     "node-schedule": "^1.1.1",
     "node-xmpp-client": "^3.0.2",

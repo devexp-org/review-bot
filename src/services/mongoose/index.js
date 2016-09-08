@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
+import beautifyUnique from 'mongoose-beautiful-unique-validation';
 
 mongoose.Promise = global.Promise;
 
 export default function setup(options, imports) {
+
+  mongoose.plugin(beautifyUnique);
 
   const logger = imports.logger.getLogger('mongoose');
 

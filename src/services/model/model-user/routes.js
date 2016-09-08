@@ -44,6 +44,30 @@ export default function setup(options, imports) {
       .catch(res.handleError.bind(res, logger));
   });
 
+  userRoute.put('/:id', function (req, res) {
+    const id = req.params.id;
+
+    const contacts = req.body.contacts || [];
+
+    UserModel
+      .findByLogin(id)
+      .then(user => {
+        if (!user) {
+          return Promise.reject(
+            new NotFoundError(`User was not found (${id})`)
+          );
+        }
+        return user;
+      })
+      .then(user => {
+        return user
+          .set('contacts', contacts)
+          .save();
+      })
+      .then(res.json.bind(res))
+      .catch(res.handleError.bind(res, logger));
+  });
+
   return userRoute;
 
 }

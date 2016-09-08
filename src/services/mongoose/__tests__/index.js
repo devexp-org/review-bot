@@ -19,6 +19,7 @@ describe('services/mongoose', function () {
 
     mongoose = proxyquire('../', {
       mongoose: {
+        plugin: sinon.stub(),
         createConnection: sinon.stub().returns(connectionStub)
       }
     }).default;
