@@ -1,16 +1,13 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 
-class UserCard extends Component {
+const UserCard = (props) => {
+  const user = props.user;
 
-  render() {
-    const user = this.props.user;
-
-    return (
-      <ul>
-        <li>Name: {user.login}</li>
-      </ul>
-    );
-  }
+  return (
+    <ul>
+      <li>Name: {user.login}</li>
+    </ul>
+  );
 }
 
 UserCard.propTypes = {

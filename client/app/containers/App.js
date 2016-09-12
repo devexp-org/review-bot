@@ -8,11 +8,10 @@ class App extends Component {
     return (
       <div>
         <Helmet
-          title="MyApp"
-          titleTemplate="MyApp - %s"
+          title="DevExp"
+          titleTemplate="DevExp - %s"
           meta={[
-            { charset: 'utf-8' },
-            { name: 'description', content: 'My super dooper dope app' }
+            { charset: 'utf-8' }
           ]}
         />
         <nav>

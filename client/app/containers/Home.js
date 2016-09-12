@@ -1,16 +1,14 @@
 import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
-import * as UsersActions from '../actions/UserList';
-import * as UserFormActions from '../actions/UserForm';
 import UserList from '../components/UserList';
+import * as UserActions from '../actions/user';
 
-// @connect(state => { users: state.users })
 class Home extends Component {
 
   static readyOnActions(dispatch) {
     return Promise.all([
-      dispatch(UsersActions.fetchUsersIfNeeded())
+      dispatch(UserActions.fetchUserList())
     ]);
   }
 
@@ -18,42 +16,51 @@ class Home extends Component {
     Home.readyOnActions(this.props.dispatch);
   }
 
-  renderUsers() {
-    const users = this.props.users;
+  renderUserList() {
+    const userList = this.props.userList;
 
-    if (users.readyState === UsersActions.USERS_INVALID ||
-      users.readyState === UsersActions.USERS_FETCHING) {
+    if (userList.readyState === UserActions.USER_LIST_FETCHING) {
       return <p>Loading...</p>;
     }
 
-    if (users.readyState === UsersActions.USERS_FETCH_FAILED) {
-      return <p>Failed to fetch users</p>;
+    if (userList.readyState === UserActions.USER_LIST_FETCH_FAILED) {
+      return <p>Failed to fetch userList</p>;
     }
 
-    return <UserList users={users.list} />;
+    return <UserList userList={userList.list} onDelete={this.props.handleDelete} />;
+  }
+
+  renderUserForm() {
+    const form = this.props.userForm;
+
+    const isSubmiting = form.readyState === UserActions.USER_FORM_SUBMITING;
+
+    const handleSubmit = (form) => (event) => this.props.handleSubmit(event, form);
+    const handleChange = (name) => (event) => this.props.handleChange(event, name);
+
+    return (
+      <form onSubmit={handleSubmit(form)}>
+        <input
+          size="25"
+          name="login"
+          value={form.fields.login || ''}
+          onChange={handleChange('login')}
+          autoComplete="off"
+        />
+        {form.errors.login ? (<div>{form.errors.login.message}</div>) : ''}
+        <div><button type="submit" disabled={isSubmiting}>Add</button></div>
+      </form>
+    );
   }
 
   render() {
-    var form = this.props.userForm;
-
-    const handleSubmit = (form) => (event) => this.props.handleSubmit(form, event);
-    const handleChange = (name) => (event) => this.props.handleChange(name, event);
-
     return (
       <div>
         <Helmet title="Home" />
         <h4>New user</h4>
-        <form onSubmit={handleSubmit(form)}>
-          <input
-            size="25"
-            name="login"
-            value={form.login || ''}
-            onChange={handleChange('login')}
-          />
-          <button type="submit">Add</button>
-        </form>
+        {this.renderUserForm()}
         <h5>Users:</h5>
-        {this.renderUsers()}
+        {this.renderUserList()}
       </div>
     );
   }
@@ -63,27 +70,32 @@ function mapDispatchToProps(dispatch) {
   return {
     dispatch,
 
-    handleChange: (name, event) => {
-      dispatch({ type: UserFormActions.USER_FORM_CHANGE, name, value: event.target.value })
+    handleChange: (event, name) => {
+      const value = event.target.value;
+      dispatch({ type: UserActions.USER_FORM_CHANGE, name, value })
     },
 
-    handleSubmit: (form, event) => {
+    handleSubmit: (event, form) => {
       event.preventDefault();
+      dispatch(UserActions.submitUser(form.fields));
+    },
 
-      UserFormActions.submitUser(dispatch, form);
+    handleDelete: (event, userId) => {
+      event.preventDefault();
+      dispatch(UserActions.deleteUser(userId));
     }
   }
 }
 
 function mapStateToProps(state) {
   return {
-    users: state.users,
+    userList: state.userList,
     userForm: state.userForm
   };
 }
 
 Home.propTypes = {
-  users: PropTypes.object.isRequired,
+  userList: PropTypes.object.isRequired,
   userForm: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 };

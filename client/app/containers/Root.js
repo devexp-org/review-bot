@@ -4,16 +4,16 @@ import React, { PropTypes, Component } from 'react';
 
 class Root extends Component {
 
-  renderInitialState() {
-    if (this.props.initialState) {
-      const innerHtml = `window.__INITIAL_STATE__ = ${JSON.stringify(this.props.initialState)}`;
-      return <script dangerouslySetInnerHTML={{ __html: innerHtml }} />;
-    }
-  }
-
   renderEnvironment() {
     const innerHtml = `window.__ENVIRONMENT__ = '${__ENVIRONMENT__}'`;
     return (<script dangerouslySetInnerHTML={{ __html: innerHtml }} />);
+  }
+
+  renderInitialState() {
+    if (this.props.initialState) {
+      const innerHtml = `window.__INITIAL_STATE__ = ${JSON.stringify(this.props.initialState)}`;
+      return (<script dangerouslySetInnerHTML={{ __html: innerHtml }} />);
+    }
   }
 
   render() {

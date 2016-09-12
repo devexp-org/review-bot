@@ -1,15 +1,14 @@
 import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
-import * as UserActions from '../actions/UserInfo';
 import UserCard from '../components/UserCard';
+import * as UserActions from '../actions/user';
 
-// @connect(state => { user: state.user })
 class User extends Component {
 
   static readyOnActions(dispatch, params) {
     return Promise.all([
-      dispatch(UserActions.fetchUserIfNeeded(params.id))
+      dispatch(UserActions.fetchUserInfo(params.id))
     ]);
   }
 
@@ -18,17 +17,17 @@ class User extends Component {
   }
 
   getUser() {
-    return this.props.user[this.props.params.id];
+    return this.props.userInfo[this.props.params.id];
   }
 
   renderUser() {
     const user = this.getUser();
 
-    if (!user || user.readyState === UserActions.USER_FETCHING) {
+    if (!user || user.readyState === UserActions.USER_INFO_FETCHING) {
       return <p>Loading...</p>;
     }
 
-    if (user.readyState === UserActions.USER_FETCH_FAILED) {
+    if (user.readyState === UserActions.USER_INFO_FETCH_FAILED) {
       return <p>Failed to fetch user</p>;
     }
 
@@ -38,12 +37,7 @@ class User extends Component {
   render() {
     return (
       <div>
-        <Helmet
-          title={this.getUser() ? this.getUser().name : ''}
-          meta={[
-            { name: 'description', content: 'User Profile' }
-          ]}
-        />
+        <Helmet title={this.getUser() ? this.getUser().name : ''} />
         {this.renderUser()}
       </div>
     );
@@ -52,13 +46,13 @@ class User extends Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.user
+    userInfo: state.userInfo
   };
 }
 
 User.propTypes = {
-  user: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
+  userInfo: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 };
 

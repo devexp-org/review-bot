@@ -1,25 +1,28 @@
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
-class UserList extends Component {
+const UserList = (props) => {
+  const userList = props.userList;
 
-  render() {
-    return (
-      <ul>
-        {this.props.users.map((user) => {
-          return (
-            <li key={user._id}>
-              <Link to={'user/' + user.login}>{user.login}</Link>
-            </li>
-          );
-        })}
-      </ul>
-    );
-  }
-}
+  const onDelete = (userId) => (event) => props.onDelete(event, userId);
+
+  return (
+    <ul>
+      {userList.map((user) => {
+        return (
+          <li key={user._id}>
+            <Link to={'user/' + user.login}>{user.login}</Link>
+            {' – '}
+            <span onClick={onDelete(user.login)}>[x]</span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
 
 UserList.propTypes = {
-  users: PropTypes.array.isRequired
+  userList: PropTypes.array.isRequired
 };
 
 export default UserList;
