@@ -2,7 +2,7 @@ import {
   USER_FETCHING,
   USER_FETCHED,
   USER_FETCH_FAILED
-} from '../actions/user';
+} from '../actions/UserInfo';
 
 export default function user(state = {}, action) {
   switch (action.type) {

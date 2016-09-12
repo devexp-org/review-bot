@@ -1,8 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
-import * as UsersActions from '../actions/users';
-import * as UserFormActions from '../actions/user-form';
+import * as UsersActions from '../actions/UserList';
+import * as UserFormActions from '../actions/UserForm';
 import UserList from '../components/UserList';
 
 // @connect(state => { users: state.users })
@@ -35,17 +35,19 @@ class Home extends Component {
 
   render() {
     var form = this.props.userForm;
+
+    const handleSubmit = (form) => (event) => this.props.handleSubmit(form, event);
     const handleChange = (name) => (event) => this.props.handleChange(name, event);
 
     return (
       <div>
         <Helmet title="Home" />
         <h4>New user</h4>
-        <form onSubmit={this.props.handleSubmit}>
+        <form onSubmit={handleSubmit(form)}>
           <input
             size="25"
             name="login"
-            value={form.login && form.login.value || ''}
+            value={form.login || ''}
             onChange={handleChange('login')}
           />
           <button type="submit">Add</button>
@@ -61,21 +63,22 @@ function mapDispatchToProps(dispatch) {
   return {
     dispatch,
 
-    handleChange: (field, event) => {
-      dispatch({ type: USER_FORM_CHANGE, field, value: event.target.value })
+    handleChange: (name, event) => {
+      dispatch({ type: UserFormActions.USER_FORM_CHANGE, name, value: event.target.value })
     },
 
-    handleSubmit: (event) => {
+    handleSubmit: (form, event) => {
       event.preventDefault();
-      dispatch({ type: UserFormActions.USER_FORM_SUBMIT, form })
+
+      UserFormActions.submitUser(dispatch, form);
     }
   }
 }
 
 function mapStateToProps(state) {
   return {
-    userForm: state.userForm,
-    users: state.users
+    users: state.users,
+    userForm: state.userForm
   };
 }
 

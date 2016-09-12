@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
-import userForm from './user-form';
-import users from './users';
-import user from './user';
+import userInfo from './UserInfo';
+import userList from './UserList';
+import userForm from './UserForm';
 
 export default combineReducers({
-  userForm,
-  users,
-  user
+  userInfo,
+  userList,
+  userForm
 });

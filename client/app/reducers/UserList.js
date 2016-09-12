@@ -3,7 +3,7 @@ import {
   USERS_FETCHING,
   USERS_FETCHED,
   USERS_FETCH_FAILED
-} from '../actions/users';
+} from '../actions/UserList';
 
 export default function users(state = {
   readyState: USERS_INVALID,

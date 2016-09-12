@@ -68,6 +68,24 @@ export default function setup(options, imports) {
       .catch(res.handleError.bind(res, logger));
   });
 
+  userRoute.delete('/:id', function (req, res) {
+    const id = req.params.id;
+
+    UserModel
+      .findByLogin(id)
+      .then(user => {
+        if (!user) {
+          return Promise.reject(
+            new NotFoundError(`User was not found (${id})`)
+          );
+        }
+        return user;
+      })
+      .then(user => user.remove())
+      .then(res.json.bind(res))
+      .catch(res.handleError.bind(res, logger));
+  });
+
   return userRoute;
 
 }

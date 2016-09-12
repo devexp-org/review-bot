@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
-import * as UserActions from '../actions/user';
+import * as UserActions from '../actions/UserInfo';
 import UserCard from '../components/UserCard';
 
 // @connect(state => { user: state.user })
