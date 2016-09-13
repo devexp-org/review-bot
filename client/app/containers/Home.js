@@ -7,27 +7,31 @@ import * as UserActions from '../actions/user';
 class Home extends Component {
 
   static readyOnActions(dispatch) {
-    return Promise.all([
-      dispatch(UserActions.fetchUserList())
-    ]);
+    return dispatch(UserActions.fetchUserList());
   }
 
   componentDidMount() {
-    Home.readyOnActions(this.props.dispatch);
+    if (this.props.userList.list === null) {
+      this.constructor.readyOnActions(this.props.dispatch);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch({ type: UserActions.USER_LIST_FREE });
   }
 
   renderUserList() {
     const userList = this.props.userList;
 
     if (userList.readyState === UserActions.USER_LIST_FETCHING) {
-      return <p>Loading...</p>;
+      return (<p>Loading...</p>);
     }
 
     if (userList.readyState === UserActions.USER_LIST_FETCH_FAILED) {
-      return <p>Failed to fetch userList</p>;
+      return (<p>Failed to fetch userList</p>);
     }
 
-    return <UserList userList={userList.list} onDelete={this.props.handleDelete} />;
+    return (<UserList userList={userList.list} onDelete={this.props.handleDelete} />);
   }
 
   renderUserForm() {

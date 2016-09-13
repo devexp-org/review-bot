@@ -7,13 +7,20 @@ import * as UserActions from '../actions/user';
 class User extends Component {
 
   static readyOnActions(dispatch, params) {
-    return Promise.all([
-      dispatch(UserActions.fetchUserInfo(params.id))
-    ]);
+    return dispatch(UserActions.fetchUserInfo(params.id));
   }
 
   componentDidMount() {
-    User.readyOnActions(this.props.dispatch, this.props.params);
+    if (!this.getUser()) {
+      User.readyOnActions(this.props.dispatch, this.props.params);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.dispatch({
+      type: UserActions.USER_INFO_FREE,
+      userId: this.props.params.id
+    });
   }
 
   getUser() {

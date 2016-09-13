@@ -6,8 +6,8 @@ import { Provider } from 'react-redux';
 import Helmet from 'react-helmet';
 
 import Root from './containers/Root';
-import routes from './Routes';
-import configureStore from './configureStore';
+import routes from './routes';
+import configureStore from './store';
 
 const isClient = typeof document !== 'undefined';
 
@@ -76,7 +76,7 @@ function serverMiddleware(req, res) {
     } else if (renderProps) {
       handleRoute(res, renderProps);
     } else {
-      // This should actually never happen, as Routes.js has a catch-all '*' path.
+      // This should actually never happen, as routes.js has a catch-all '*' path.
       res.sendStatus(404);
     }
   });

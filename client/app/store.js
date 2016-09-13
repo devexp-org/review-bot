@@ -13,8 +13,8 @@ export default function configureStore(initialState) {
     // Enable Webpack hot module replacement for reducers
     module.hot.accept('./reducers', () => {
       // eslint-disable-next-line global-require
-      const nextRootReducer = require('./reducers').default;
-      store.replaceReducer(nextRootReducer);
+      const nextReducer = require('./reducers').default;
+      store.replaceReducer(nextReducer);
     });
   }
 
