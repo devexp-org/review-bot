@@ -7,7 +7,7 @@ import * as UserActions from '../actions/user';
 class User extends Component {
 
   static readyOnActions(dispatch, params) {
-    return dispatch(UserActions.fetchUserInfo(params.id));
+    return dispatch(UserActions.fetchUser(params.id));
   }
 
   componentDidMount() {
@@ -17,10 +17,7 @@ class User extends Component {
   }
 
   componentWillUnmount() {
-    this.props.dispatch({
-      type: UserActions.USER_INFO_FREE,
-      userId: this.props.params.id
-    });
+    UserActions.freeUser(this.props.params.id);
   }
 
   getUser() {
@@ -30,11 +27,11 @@ class User extends Component {
   renderUser() {
     const user = this.getUser();
 
-    if (!user || user.readyState === UserActions.USER_INFO_FETCHING) {
+    if (!user || user.readyState === UserActions.USER_FETCHING) {
       return <p>Loading...</p>;
     }
 
-    if (user.readyState === UserActions.USER_INFO_FETCH_FAILED) {
+    if (user.readyState === UserActions.USER_FETCH_FAILED) {
       return <p>Failed to fetch user</p>;
     }
 

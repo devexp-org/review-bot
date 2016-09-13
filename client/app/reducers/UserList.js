@@ -1,36 +1,36 @@
-import {
-  USER_LIST_FETCHING,
-  USER_LIST_FETCHED,
-  USER_LIST_FETCH_FAILED,
-  USER_LIST_FREE,
-  USER_INFO_DELETED
-} from '../actions/user';
+import * as UserActions from '../actions/user';
+import * as UserFormActions from '../actions/userForm';
+import * as UserListActions from '../actions/userList';
 
 export default function users(state = {
-  readyState: USER_LIST_FETCH_FAILED,
-  list: null
+  list: null,
+  readyState: UserListActions.USER_LIST_INVALID
 }, action) {
   switch (action.type) {
-    case USER_LIST_FETCHING:
+    case UserListActions.USER_LIST_FETCHING:
       return Object.assign({}, state, {
-        readyState: USER_LIST_FETCHING
+        readyState: UserListActions.USER_LIST_FETCHING
       });
-    case USER_LIST_FETCH_FAILED:
+    case UserListActions.USER_LIST_FETCH_FAILED:
       return Object.assign({}, state, {
-        readyState: USER_LIST_FETCH_FAILED,
-        error: action.error
+        error: action.error,
+        readyState: UserListActions.USER_LIST_FETCH_FAILED
       });
-    case USER_LIST_FETCHED:
+    case UserListActions.USER_LIST_FETCHED:
       return Object.assign({}, state, {
-        readyState: USER_LIST_FETCHED,
-        list: action.result
+        list: action.result,
+        readyState: UserListActions.USER_LIST_FETCHED
       });
-    case USER_LIST_FREE:
+    case UserListActions.USER_LIST_FREE:
       return Object.assign({}, state, {
-        readyState: USER_LIST_FETCH_FAILED,
-        list: null
+        list: null,
+        readyState: UserListActions.USER_LIST_INVALID
       });
-    case USER_INFO_DELETED:
+    case UserFormActions.USER_FORM_SUBMITED:
+      return Object.assign({}, state, {
+        list: state.list.concat(action.result)
+      });
+    case UserActions.USER_DELETED:
       return Object.assign({}, state, {
         list: state.list.filter(user => user.login !== action.userId)
       });

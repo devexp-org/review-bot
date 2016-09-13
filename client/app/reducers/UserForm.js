@@ -1,37 +1,38 @@
-import {
-  USER_FORM_CHANGE,
-  USER_FORM_SUBMITING,
-  USER_FORM_SUBMITED,
-  USER_FORM_SUBMIT_FAILED
-} from '../actions/user';
+import * as UserFormActions from '../actions/userForm';
 
 export default function user(state = {
-  fields: {},
+  values: {},
   errors: {},
-  readyState: USER_FORM_SUBMITED
+  readyState: UserFormActions.USER_FORM_READY
 }, action) {
   switch (action.type) {
-    case USER_FORM_CHANGE:
+    case UserFormActions.USER_FORM_CHANGE:
       return Object.assign({}, state, {
-        fields: {
+        values: {
           [action.name]: action.value
         }
       });
-    case USER_FORM_SUBMITING:
+    case UserFormActions.USER_FORM_SUBMITING:
       return Object.assign({}, state, {
-        readyState: USER_FORM_SUBMITING
+        readyState: UserFormActions.USER_FORM_SUBMITING
       });
-    case USER_FORM_SUBMIT_FAILED:
+    case UserFormActions.USER_FORM_SUBMIT_FAILED:
       return Object.assign({}, state, {
-        readyState: USER_FORM_SUBMIT_FAILED,
-        errors: action.result.errors
+        readyState: UserFormActions.USER_FORM_SUBMIT_FAILED
       });
-    case USER_FORM_SUBMITED:
-      return Object.assign({}, state, {
-        readyState: USER_FORM_SUBMITED,
-        fields: {},
-        errors: {}
-      });
+    case UserFormActions.USER_FORM_SUBMITED:
+      if (action.status === 422) {
+        return Object.assign({}, state, {
+          errors: action.result.errors,
+          readyState: UserFormActions.USER_FORM_ERROR
+        });
+      } else {
+        return Object.assign({}, state, {
+          values: {},
+          errors: {},
+          readyState: UserFormActions.USER_FORM_READY
+        });
+      }
     default:
       return state;
   }
