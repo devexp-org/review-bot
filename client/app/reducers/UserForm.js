@@ -8,9 +8,7 @@ export default function user(state = {
   switch (action.type) {
     case UserFormActions.USER_FORM_CHANGE:
       return Object.assign({}, state, {
-        values: {
-          [action.name]: action.value
-        }
+        values: { [action.name]: action.value }
       });
     case UserFormActions.USER_FORM_SUBMITING:
       return Object.assign({}, state, {

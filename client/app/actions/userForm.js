@@ -21,8 +21,10 @@ export function submitUser(form) {
       })
       .then(response => response.json().then(x => [x, response.status]))
       .then(
-        ([result, status]) => dispatch({ type: USER_FORM_SUBMITED, result, status }),
-        (error)  => dispatch({ type: USER_FORM_SUBMIT_FAILED, error })
+        ([result, status]) =>
+          dispatch({ type: USER_FORM_SUBMITED, result, status }),
+        (error)  =>
+          dispatch({ type: USER_FORM_SUBMIT_FAILED, error })
       );
   };
 }

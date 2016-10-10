@@ -16,25 +16,43 @@ module.exports = {
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new webpack.DefinePlugin({
+      "process.env.BROWSER": JSON.stringify(true)
+    }),
     new webpack.NoErrorsPlugin()
   ],
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      loader: 'babel',
-      include: path.join(__dirname, 'app'),
-      query: {
-        plugins: [
-          ['react-transform', {
-            transforms: [{
-              transform: 'react-transform-hmr',
-              imports: ['react'],
-              locals: ['module']
-            }]
-          }],
-          ['transform-object-assign']
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        loader: 'babel',
+        include: path.join(__dirname, 'app'),
+        query: {
+          plugins: [
+            ['react-transform', {
+              transforms: [{
+                transform: 'react-transform-hmr',
+                imports: ['react'],
+                locals: ['module']
+              }]
+            }],
+            ['transform-object-assign']
+          ]
+        }
+      },
+      {
+        test: /\.css$/,
+        loader: [
+          'style-loader',
+          'css-loader?importLoaders=1',
+          'postcss-loader'
         ]
       }
-    }]
+    ]
+  },
+  postcss: function () {
+    return [
+      require('autoprefixer')
+    ];
   }
 };

@@ -1,9 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
-import UserList from '../containers/UserList';
 import * as UserActions from '../actions/user';
 import * as UserFormActions from '../actions/userForm';
 import * as UserListActions from '../actions/userList';
+
+if (process.env.BROWSER) require('./Home.css');
 
 class Home extends Component {
 
@@ -11,9 +12,11 @@ class Home extends Component {
     return (
       <div>
         <Helmet title="Home" />
-        <UserList />
+        {this.props.children}
       </div>
     );
   }
 
 }
+
+export default Home;

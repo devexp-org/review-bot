@@ -32,9 +32,10 @@ function renderComponentWithRoot(Component, props, store) {
   const head = Helmet.rewind();
   const initialState = store.getState();
 
-  return '<!doctype html>\n' + renderToStaticMarkup(
-    <Root content={componentHtml} initialState={initialState} head={head} />
-  );
+  return '<!DOCTYPE html>\n' +
+    renderToStaticMarkup(
+      <Root head={head} content={componentHtml} initialState={initialState} />
+    );
 }
 
 function handleError(res, error) {
@@ -53,7 +54,6 @@ function handleRoute(res, renderProps) {
   const store = configureStore();
   const status = routeIsUnmatched(renderProps) ? 404 : 200;
   const readyOnAllActions = renderProps.components
-    .map(x => { console.info(x.displayName); return x; })
     .filter(component => component.readyOnActions)
     .map(component => {
       return component.readyOnActions(store.dispatch, renderProps.params);
@@ -77,7 +77,7 @@ function serverMiddleware(req, res) {
     } else if (renderProps) {
       handleRoute(res, renderProps);
     } else {
-      // This should actually never happen, as routes.js has a catch-all '*' path.
+      // This should actually never happen, if routes.js has a catch-all '*' path.
       res.sendStatus(404);
     }
   });
