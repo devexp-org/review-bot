@@ -7,6 +7,9 @@ export const USER_FORM_SUBMITING = 'USER_FORM_SUBMITING';
 export const USER_FORM_SUBMITED = 'USER_FORM_SUBMITED';
 export const USER_FORM_SUBMIT_FAILED = 'USER_FORM_SUBMIT_FAILED';
 
+export const USER_FORM_ADD_CONTACT = 'USER_FORM_ADD_CONTACT';
+export const USER_FORM_CHANGE_CONTACT = 'USER_FORM_CHANGE_CONTACT';
+
 const ENDPOINT = config.api.prefix + 'users/';
 
 export function submitUser(form) {

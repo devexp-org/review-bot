@@ -5,6 +5,8 @@ export default function user(state = {
   errors: {},
   readyState: UserFormActions.USER_FORM_READY
 }, action) {
+  let values, contacts;
+
   switch (action.type) {
     case UserFormActions.USER_FORM_CHANGE:
       return Object.assign({}, state, {
@@ -31,6 +33,20 @@ export default function user(state = {
       return Object.assign({}, state, {
         readyState: UserFormActions.USER_FORM_SUBMIT_FAILED
       });
+    case UserFormActions.USER_FORM_ADD_CONTACT:
+      contacts = (state.values.contacts || []).slice();
+      contacts.push({ id: 'email', account: '' });
+
+      values = Object.assign({}, state.values, { contacts });
+
+      return Object.assign({}, state, { values });
+    case UserFormActions.USER_FORM_CHANGE_CONTACT:
+      contacts = (state.values.contacts || []).slice();
+      contacts[action.index][action.name] = action.value;
+
+      values = Object.assign({}, state.values, { contacts });
+
+      return Object.assign({}, state, { values });
     default:
       return state;
   }
