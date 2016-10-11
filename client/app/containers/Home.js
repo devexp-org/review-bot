@@ -4,7 +4,7 @@ import * as UserActions from '../actions/user';
 import * as UserFormActions from '../actions/userForm';
 import * as UserListActions from '../actions/userList';
 
-if (process.env.BROWSER) require('./Home.css');
+import './Home.css';
 
 class Home extends Component {
 

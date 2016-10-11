@@ -1,3 +1,5 @@
+import config from '../config';
+
 export const USER_FETCHING = 'USER_FETCHING';
 export const USER_FETCHED = 'USER_FETCHED';
 export const USER_FETCH_FAILED = 'USER_FETCH_FAILED';
@@ -6,7 +8,7 @@ export const USER_DELETED = 'USER_DELETED';
 export const USER_DELETE_FAILED = 'USER_DELETE_FAILED';
 export const USER_FREE = 'USER_FREE';
 
-const ENDPOINT = 'http://localhost:8080/users/';
+const ENDPOINT = config.api.prefix + 'users/';
 
 export function fetchUser(userId) {
   return (dispatch) => {

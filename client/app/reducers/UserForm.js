@@ -14,10 +14,6 @@ export default function user(state = {
       return Object.assign({}, state, {
         readyState: UserFormActions.USER_FORM_SUBMITING
       });
-    case UserFormActions.USER_FORM_SUBMIT_FAILED:
-      return Object.assign({}, state, {
-        readyState: UserFormActions.USER_FORM_SUBMIT_FAILED
-      });
     case UserFormActions.USER_FORM_SUBMITED:
       if (action.status === 422) {
         return Object.assign({}, state, {
@@ -31,6 +27,10 @@ export default function user(state = {
           readyState: UserFormActions.USER_FORM_READY
         });
       }
+    case UserFormActions.USER_FORM_SUBMIT_FAILED:
+      return Object.assign({}, state, {
+        readyState: UserFormActions.USER_FORM_SUBMIT_FAILED
+      });
     default:
       return state;
   }

@@ -1,7 +1,13 @@
 /* global __ENVIRONMENT__ */
 /* eslint-disable no-console */
 
-require('babel-core/register');
+require('babel-core/register')({
+  plugins: [
+    ['transform-require-ignore', {
+      extensions: ['.css']
+    }]
+  ]
+});
 
 const path = require('path');
 const express = require('express');

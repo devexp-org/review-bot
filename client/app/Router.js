@@ -7,6 +7,7 @@ import Helmet from 'react-helmet';
 
 import Root from './containers/Root';
 import routes from './routes';
+import config from '../config/current.json';
 import configureStore from './store';
 
 const isClient = typeof document !== 'undefined';
@@ -34,7 +35,7 @@ function renderComponentWithRoot(Component, props, store) {
 
   return '<!DOCTYPE html>\n' +
     renderToStaticMarkup(
-      <Root head={head} content={componentHtml} initialState={initialState} />
+      <Root head={head} config={config} content={componentHtml} initialState={initialState} />
     );
 }
 

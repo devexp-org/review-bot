@@ -1,3 +1,5 @@
+import config from '../config';
+
 export const USER_FORM_READY = 'USER_FORM_READY';
 export const USER_FORM_ERROR = 'USER_FORM_ERROR';
 export const USER_FORM_CHANGE = 'USER_FORM_CHANGE';
@@ -5,7 +7,7 @@ export const USER_FORM_SUBMITING = 'USER_FORM_SUBMITING';
 export const USER_FORM_SUBMITED = 'USER_FORM_SUBMITED';
 export const USER_FORM_SUBMIT_FAILED = 'USER_FORM_SUBMIT_FAILED';
 
-const ENDPOINT = 'http://localhost:8080/users/';
+const ENDPOINT = config.api.prefix + 'users/';
 
 export function submitUser(form) {
   return (dispatch) => {

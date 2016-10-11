@@ -4,6 +4,13 @@ import React, { PropTypes, Component } from 'react';
 
 class Root extends Component {
 
+  renderConfig() {
+    if (this.props.config) {
+      const innerHtml = `window.__CONFIG__ = ${JSON.stringify(this.props.config)}`;
+      return (<script dangerouslySetInnerHTML={{ __html: innerHtml }} />);
+    }
+  }
+
   renderEnvironment() {
     const innerHtml = `window.__ENVIRONMENT__ = '${__ENVIRONMENT__}'`;
     return (<script dangerouslySetInnerHTML={{ __html: innerHtml }} />);
@@ -28,6 +35,7 @@ class Root extends Component {
         </head>
         <body>
           <div id="root" dangerouslySetInnerHTML={{ __html: this.props.content }} />
+          {this.renderConfig()}
           {this.renderEnvironment()}
           {this.renderInitialState()}
           {head.script.toComponent()}
