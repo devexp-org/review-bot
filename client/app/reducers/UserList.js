@@ -26,10 +26,6 @@ export default function users(state = {
         list: null,
         readyState: UserListActions.USER_LIST_INVALID
       });
-    case UserFormActions.USER_FORM_SUBMITED:
-      return Object.assign({}, state, {
-        list: state.list.concat(action.result)
-      });
     case UserActions.USER_DELETED:
       return Object.assign({}, state, {
         list: state.list.filter(user => user.login !== action.userId)

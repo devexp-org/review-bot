@@ -8,6 +8,10 @@ export default function user(state = {
   let values, contacts;
 
   switch (action.type) {
+    case UserFormActions.USER_EDIT:
+      return Object.assign({}, state, {
+        values: action.user
+      });
     case UserFormActions.USER_FORM_CHANGE:
       return Object.assign({}, state, {
         values: { [action.name]: action.value }

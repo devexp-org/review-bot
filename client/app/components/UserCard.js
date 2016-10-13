@@ -5,13 +5,22 @@ import * as UserFormActions from '../actions/userForm';
 
 class UserCard extends Component {
 
+  componentDidMount() {
+    console.info(this.props.user);
+    this.props.dispatch({
+      type: UserFormActions.USER_EDIT,
+      user: this.props.user
+    });
+  }
+
   renderUserForm() {
     const form = this.props.userForm;
+    const login = this.props.user.login;
 
     const contacts = form.values.contacts || [];
     const isSubmiting = form.readyState === UserFormActions.USER_FORM_SUBMITING;
 
-    const handleSubmit = (form) => (event) => this.props.handleSubmit(event, form);
+    const handleSubmit = (form) => (event) => this.props.handleSubmit(login, event, form);
     const handleChange = (name, index) => (event) => this.props.handleChange(event, name, index);
 
     return (
@@ -80,9 +89,9 @@ function mapDispatchToProps(dispatch) {
       })
     },
 
-    handleSubmit: (event, form) => {
+    handleSubmit: (login, event, form) => {
       event.preventDefault();
-      dispatch(UserFormActions.submitUser(form.values));
+      dispatch(UserFormActions.updateUser(login, form.values));
     },
 
     handleAddContact: () => {

@@ -11,13 +11,14 @@ class User extends Component {
   }
 
   componentDidMount() {
+    console.info('did mount');
     if (!this.getUser()) {
       User.readyOnActions(this.props.dispatch, this.props.params);
     }
   }
 
   componentWillUnmount() {
-    UserActions.freeUser(this.props.params.id);
+    this.props.dispatch(UserActions.freeUser(this.props.params.id));
   }
 
   getUser() {
