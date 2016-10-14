@@ -22,6 +22,7 @@ class UserCard extends Component {
 
     const handleSubmit = (form) => (event) => this.props.handleSubmit(login, event, form);
     const handleChange = (name, index) => (event) => this.props.handleChange(event, name, index);
+    const handleDeleteContact = (index) => (event) => this.props.handleDeleteContact(event, index);
 
     return (
       <form onSubmit={handleSubmit(form)}>
@@ -40,6 +41,9 @@ class UserCard extends Component {
                   onChange={handleChange('account', index)}
                   value={contact.account || ''}
                 />
+                <button type="button" onClick={handleDeleteContact(index)}>
+                  X
+                </button>
               </div>
             );
           })
@@ -96,6 +100,10 @@ function mapDispatchToProps(dispatch) {
 
     handleAddContact: () => {
       dispatch({ type: UserFormActions.USER_FORM_ADD_CONTACT });
+    },
+
+    handleDeleteContact: (event, index) => {
+      dispatch({ type: UserFormActions.USER_FORM_DELETE_CONTACT, index });
     }
   }
 }

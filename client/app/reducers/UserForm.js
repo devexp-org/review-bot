@@ -13,9 +13,10 @@ export default function user(state = {
         values: action.user
       });
     case UserFormActions.USER_FORM_CHANGE:
-      return Object.assign({}, state, {
-        values: { [action.name]: action.value }
+      values = Object.assign({}, state.values, {
+        [action.name]: action.value
       });
+      return Object.assign({}, state, { values });
     case UserFormActions.USER_FORM_SUBMITING:
       return Object.assign({}, state, {
         readyState: UserFormActions.USER_FORM_SUBMITING
@@ -40,6 +41,13 @@ export default function user(state = {
     case UserFormActions.USER_FORM_ADD_CONTACT:
       contacts = (state.values.contacts || []).slice();
       contacts.push({ id: 'email', account: '' });
+
+      values = Object.assign({}, state.values, { contacts });
+
+      return Object.assign({}, state, { values });
+    case UserFormActions.USER_FORM_DELETE_CONTACT:
+      contacts = (state.values.contacts || []).slice();
+      contacts.splice(action.index, 1);
 
       values = Object.assign({}, state.values, { contacts });
 
