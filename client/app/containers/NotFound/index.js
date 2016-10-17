@@ -1,7 +1,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 
-const NoMatch = () => {
+const NotFound = () => {
   return (
     <div>
       <Helmet title="Not Found" />
@@ -10,4 +10,4 @@ const NoMatch = () => {
   );
 };
 
-export default NoMatch;
+export default NotFound;

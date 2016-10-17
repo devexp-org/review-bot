@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, IndexRedirect } from 'react-router';
-import App from './containers/App';
-import User from './containers/User';
-import Home from './containers/Home';
-import UserList from './containers/UserList';
-import NoMatch from './containers/NoMatch';
+import App from './containers/App/';
+import Home from './containers/Home/';
+import UserCard from './containers/UserCard/';
+import UserList from './containers/UserList/';
+import NotFound from './containers/NotFound/';
 
 export default (
   <Route component={App}>
@@ -12,7 +12,7 @@ export default (
       <IndexRedirect to="users" />
       <Route path="users" component={UserList} />
     </Route>
-    <Route path="user/:id" component={User} />
-    <Route path="*" component={NoMatch} />
+    <Route path="user/:id" component={UserCard} />
+    <Route path="*" component={NotFound} />
   </Route>
 );

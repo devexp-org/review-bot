@@ -5,7 +5,7 @@ import { Router, match, RouterContext, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 import Helmet from 'react-helmet';
 
-import Root from './containers/Root';
+import Root from './containers/Root/';
 import routes from './routes';
 import config from '../config/current.json';
 import configureStore from './store';

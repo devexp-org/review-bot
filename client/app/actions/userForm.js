@@ -1,19 +1,22 @@
+import join from 'url-join';
 import config from '../config';
+import { handleSubmitResponse } from './utils';
 
-export const USER_EDIT = 'USER_EDIT';
+import * as contacts from './contactList';
 
 export const USER_FORM_READY = 'USER_FORM_READY';
 export const USER_FORM_ERROR = 'USER_FORM_ERROR';
 export const USER_FORM_CHANGE = 'USER_FORM_CHANGE';
-export const USER_FORM_SUBMITING = 'USER_FORM_SUBMITING';
+
 export const USER_FORM_SUBMITED = 'USER_FORM_SUBMITED';
+export const USER_FORM_SUBMITING = 'USER_FORM_SUBMITING';
 export const USER_FORM_SUBMIT_FAILED = 'USER_FORM_SUBMIT_FAILED';
 
-export const USER_FORM_ADD_CONTACT = 'USER_FORM_ADD_CONTACT';
-export const USER_FORM_DELETE_CONTACT = 'USER_FORM_DELETE_CONTACT';
-export const USER_FORM_CHANGE_CONTACT = 'USER_FORM_CHANGE_CONTACT';
+export const USER_FORM_UPDATED = 'USER_FORM_UPDATED';
+export const USER_FORM_UPDATING = 'USER_FORM_UPDATING';
+export const USER_FORM_UPDATE_FAILED = 'USER_FORM_UPDATE_FAILED';
 
-const ENDPOINT = config.api.prefix + 'users/';
+export const ENDPOINT = join(config.api.prefix, 'users');
 
 export function submitUser(form) {
   return (dispatch) => {
@@ -27,21 +30,15 @@ export function submitUser(form) {
           'Content-Type': 'application/json'
         }
       })
-      .then(response => response.json().then(x => [x, response.status]))
-      .then(
-        ([result, status]) =>
-          dispatch({ type: USER_FORM_SUBMITED, result, status }),
-        (error)  =>
-          dispatch({ type: USER_FORM_SUBMIT_FAILED, error })
-      );
+      .then(handleSubmitResponse(null, dispatch, USER_FORM_SUBMITED, USER_FORM_SUBMIT_FAILED));
   };
 }
 
-export function updateUser(login, form) {
+export function updateUser(id, form) {
   return (dispatch) => {
-    dispatch({ type: USER_FORM_SUBMITING });
+    dispatch({ type: USER_FORM_UPDATING });
 
-    return fetch(ENDPOINT + login, {
+    return fetch(join(ENDPOINT, id), {
         body: JSON.stringify(form),
         method: 'PUT',
         headers: {
@@ -49,12 +46,61 @@ export function updateUser(login, form) {
           'Content-Type': 'application/json'
         }
       })
-      .then(response => response.json().then(x => [x, response.status]))
-      .then(
-        ([result, status]) =>
-          dispatch({ type: USER_FORM_SUBMITED, result, status }),
-        (error)  =>
-          dispatch({ type: USER_FORM_SUBMIT_FAILED, error })
-      );
+      .then(handleSubmitResponse(id, dispatch, USER_FORM_UPDATED, USER_FORM_UPDATE_FAILED));
   };
+}
+
+const INITIAL_STATE = {
+  error: '',
+  values: {},
+  errors: {},
+  readyState: USER_FORM_READY
+};
+
+export default function reducer(state = INITIAL_STATE, action) {
+  switch (action.type) {
+
+    case USER_FORM_CHANGE:
+      return Object.assign({}, state, {
+        values: Object.assign({}, state.values, {
+          [action.name]: action.value
+        })
+      });
+
+    case USER_FORM_UPDATING:
+    case USER_FORM_SUBMITING:
+      return Object.assign({}, state, {
+        error: '',
+        readyState: action.type
+      });
+
+    case USER_FORM_UPDATE_FAILED:
+    case USER_FORM_SUBMIT_FAILED:
+      return Object.assign({}, state, {
+        error: action.reason,
+        errors: action.errors,
+        readyState: action.type
+      });
+
+    case USER_FORM_UPDATED:
+      return Object.assign({}, state, {
+        readyState: USER_FORM_READY
+      });
+
+    case USER_FORM_SUBMITED:
+      return INITIAL_STATE;
+
+    case contacts.USER_ADD_CONTACT:
+    case contacts.USER_DELETE_CONTACT:
+    case contacts.USER_CHANGE_CONTACT:
+      return Object.assign({}, state, {
+        values: Object.assign({}, state.values, {
+          contacts: contacts.reducer(state.values.contacts, action)
+        })
+      });
+
+    default:
+      return state;
+
+  }
 }

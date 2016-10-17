@@ -1,21 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import * as UserActions from '../actions/user';
-import * as UserFormActions from '../actions/userForm';
+import * as UserActions from '../../actions/userInfo';
+import * as UserFormActions from '../../actions/userForm';
 
 class UserCard extends Component {
 
-  componentDidMount() {
-    console.info(this.props.user);
-    this.props.dispatch({
-      type: UserFormActions.USER_EDIT,
-      user: this.props.user
-    });
-  }
-
   renderUserForm() {
     const form = this.props.userForm;
-    const login = this.props.user.login;
+    const login = this.props.user.info.login;
 
     const contacts = form.values.contacts || [];
     const isSubmiting = form.readyState === UserFormActions.USER_FORM_SUBMITING;
@@ -59,15 +51,36 @@ class UserCard extends Component {
     );
   }
 
-  render() {
-    const user = this.props.user;
+  renderUserContacts() {
+    const contacts = this.props.user.info.contacts || [];
+    const handleEdit = () => this.props.handleEdit(this.props.id);
 
     return (
       <div>
         <ul>
-          <li>Name: {user.login}</li>
+          {contacts.map(item => {
+            return (
+              <li>
+                {item.id} &mdash; {item.account}
+              </li>
+            );
+          })}
         </ul>
-        {this.renderUserForm()}
+        <button type="button" onClick={handleEdit}>Edit</button>
+      </div>
+    );
+  }
+
+  render() {
+    const user = this.props.user;
+    const form = user.readyState === UserActions.USER_EDIT;
+
+    return (
+      <div>
+        <ul>
+          <li>Name: {user.info.login}</li>
+        </ul>
+        {form ? this.renderUserForm() : this.renderUserContacts()}
       </div>
     );
   }
@@ -79,9 +92,13 @@ UserCard.propTypes = {
   dispatch: PropTypes.func.isRequired
 };
 
-function mapDispatchToProps(dispatch) {
+function mapDispatchToProps(dispatch, props) {
   return {
     dispatch,
+
+    handleEdit: (userId) => {
+      dispatch({ type: UserFormActions.USER_EDIT, userId: props.id, user: props.user.info });
+    },
 
     handleChange: (event, name, index) => {
       const value = event.target.value;

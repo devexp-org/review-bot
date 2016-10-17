@@ -1,8 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
-import UserCard from '../components/UserCard';
-import * as UserActions from '../actions/user';
+import UserCard from '../../components/UserCard/';
+import * as UserActions from '../../actions/userInfo';
 
 class User extends Component {
 
@@ -11,7 +11,6 @@ class User extends Component {
   }
 
   componentDidMount() {
-    console.info('did mount');
     if (!this.getUser()) {
       User.readyOnActions(this.props.dispatch, this.props.params);
     }
@@ -36,7 +35,7 @@ class User extends Component {
       return <p>Failed to fetch user</p>;
     }
 
-    return <UserCard user={user.info} />;
+    return <UserCard id={this.props.params.id} user={user} />;
   }
 
   render() {

@@ -39,7 +39,7 @@ class Root extends Component {
           {this.renderEnvironment()}
           {this.renderInitialState()}
           {head.script.toComponent()}
-          <script src={!process.env.NODE_ENV ? '/app.js' : '/app.min.js'} />
+          <script src="/app.js" />
         </body>
       </html>
     );
@@ -48,6 +48,7 @@ class Root extends Component {
 
 Root.propTypes = {
   head: PropTypes.object.isRequired,
+  config: PropTypes.object.isRequired,
   content: PropTypes.string.isRequired,
   initialState: PropTypes.object.isRequired
 };

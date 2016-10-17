@@ -10,9 +10,7 @@ class App extends Component {
         <Helmet
           title="DevExp"
           titleTemplate="DevExp - %s"
-          meta={[
-            { charset: 'utf-8' }
-          ]}
+          meta={[{ charset: 'utf-8' }]}
         />
         <nav>
           <ul>
