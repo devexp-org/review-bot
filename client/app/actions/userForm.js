@@ -5,6 +5,8 @@ import { handleSubmitResponse } from './utils';
 
 import * as contacts from './contactList';
 
+export const USER_FORM_EDIT = 'USER_FORM_EDIT';
+
 export const USER_FORM_READY = 'USER_FORM_READY';
 export const USER_FORM_ERROR = 'USER_FORM_ERROR';
 export const USER_FORM_CHANGE = 'USER_FORM_CHANGE';
@@ -18,6 +20,13 @@ export const USER_FORM_UPDATING = 'USER_FORM_UPDATING';
 export const USER_FORM_UPDATE_FAILED = 'USER_FORM_UPDATE_FAILED';
 
 export const ENDPOINT = join(config.api.prefix, 'users');
+
+
+export function editUser(user) {
+  return (dispatch) => {
+    dispatch({ type: USER_FORM_EDIT, user });
+  }
+}
 
 export function submitUser(form) {
   return (dispatch) => {
@@ -61,6 +70,14 @@ const INITIAL_STATE = {
 
 export default function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
+
+    case USER_FORM_EDIT:
+      return Object.assign({}, state, {
+        error: '',
+        values: action.user,
+        errors: {},
+        readyState: USER_FORM_READY
+      });
 
     case USER_FORM_CHANGE:
       return Object.assign({}, state, {

@@ -11,7 +11,7 @@ class UserCard extends Component {
   }
 
   componentDidMount() {
-    if (!this.props.userInfo.readyState) {
+    if (this.props.userInfo.readyState === UserActions.USER_READY) {
       this.constructor.readyOnActions(this.props.dispatch, this.props.params);
     }
   }
@@ -23,7 +23,7 @@ class UserCard extends Component {
   render() {
     const user = this.props.userInfo;
 
-    if (!user.readyState ||
+    if (
       user.readyState === UserActions.USER_READY ||
       user.readyState === UserActions.USER_FETCHING
     ) {
