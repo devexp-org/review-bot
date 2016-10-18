@@ -7,7 +7,7 @@ class UserCard extends Component {
 
   renderUserForm() {
     const form = this.props.userForm;
-    const login = this.props.user.info.login;
+    const login = this.props.user.login;
 
     const contacts = form.values.contacts || [];
     const isSubmiting = form.readyState === UserFormActions.USER_FORM_SUBMITING;
@@ -52,7 +52,7 @@ class UserCard extends Component {
   }
 
   renderUserContacts() {
-    const contacts = this.props.user.info.contacts || [];
+    const contacts = this.props.user.contacts || [];
     const handleEdit = () => this.props.handleEdit(this.props.id);
 
     return (
@@ -78,7 +78,7 @@ class UserCard extends Component {
     return (
       <div>
         <ul>
-          <li>Name: {user.info.login}</li>
+          <li>Name: {user.login}</li>
         </ul>
         {form ? this.renderUserForm() : this.renderUserContacts()}
       </div>
@@ -97,7 +97,7 @@ function mapDispatchToProps(dispatch, props) {
     dispatch,
 
     handleEdit: (userId) => {
-      dispatch({ type: UserFormActions.USER_EDIT, userId: props.id, user: props.user.info });
+      dispatch({ type: UserFormActions.USER_EDIT, userId: props.id, user: props.user });
     },
 
     handleChange: (event, name, index) => {

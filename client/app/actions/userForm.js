@@ -1,5 +1,6 @@
 import join from 'url-join';
 import config from '../config';
+import { fetchUserListSilent } from './userList';
 import { handleSubmitResponse } from './utils';
 
 import * as contacts from './contactList';
@@ -30,7 +31,8 @@ export function submitUser(form) {
           'Content-Type': 'application/json'
         }
       })
-      .then(handleSubmitResponse(null, dispatch, USER_FORM_SUBMITED, USER_FORM_SUBMIT_FAILED));
+      .then(handleSubmitResponse(null, dispatch, USER_FORM_SUBMITED, USER_FORM_SUBMIT_FAILED))
+      .then(() => dispatch(fetchUserListSilent()));
   };
 }
 

@@ -23,7 +23,9 @@ export function fetchUser(userId) {
   };
 }
 
-export const INITIAL_STATE = {};
+export const INITIAL_STATE = {
+  readyState: USER_READY
+};
 
 export default function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {

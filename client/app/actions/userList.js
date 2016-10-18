@@ -27,6 +27,13 @@ export function fetchUserList() {
   };
 }
 
+export function fetchUserListSilent() {
+  return (dispatch) => {
+    return fetch(ENDPOINT)
+      .then(handleFetchResponse(null, dispatch, USER_LIST_FETCHED, USER_LIST_FETCH_FAILED))
+  };
+}
+
 export function deleteUser(userId) {
   return (dispatch) => {
     dispatch({ type: USER_DELETING, id: userId });
@@ -36,7 +43,9 @@ export function deleteUser(userId) {
   };
 }
 
-const INITIAL_STATE = {}
+export const INITIAL_STATE = {
+  readyState: USER_LIST_READY
+};
 
 export default function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {

@@ -23,21 +23,20 @@ class UserList extends Component {
     this.props.dispatch(UserListActions.freeUserList());
   }
 
-  renderUserList() {
-  }
-
   render() {
+    let list;
     const userList = this.props.userList;
 
     if (
+      !userList.readyState ||
       userList.readyState === UserListActions.USER_LIST_READY ||
       userList.readyState === UserListActions.USER_LIST_FETCHING
     ) {
-      return (<p>Loading...</p>);
+      list = (<p>Loading...</p>);
     }
 
     if (userList.readyState === UserListActions.USER_LIST_FETCH_FAILED) {
-      return (<p>Failed to fetch users</p>);
+      list = (<p>Failed to fetch users</p>);
     }
 
     return (
@@ -45,7 +44,7 @@ class UserList extends Component {
         <h4>New user</h4>
         <UserAddForm />
         <h5>Users:</h5>
-        <UserListComponent items={userList.items} onDelete={this.props.handleDelete} />
+        { list ? list : <UserListComponent items={userList.items} onDelete={this.props.handleDelete} /> }
       </div>
     );
   }
