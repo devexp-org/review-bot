@@ -15,7 +15,7 @@ export const USER_DELETE_FAILED     = 'USER_DELETE_FAILED';
 export const ENDPOINT = join(config.api.prefix, 'users');
 
 export function freeUserList() {
-  return { type: USER_LIST_READY }
+  return { type: USER_LIST_READY };
 }
 
 export function fetchUserList() {
@@ -23,14 +23,14 @@ export function fetchUserList() {
     dispatch({ type: USER_LIST_FETCHING });
 
     return fetch(ENDPOINT)
-      .then(handleFetchResponse(null, dispatch, USER_LIST_FETCHED, USER_LIST_FETCH_FAILED))
+      .then(handleFetchResponse(null, dispatch, USER_LIST_FETCHED, USER_LIST_FETCH_FAILED));
   };
 }
 
 export function fetchUserListSilent() {
   return (dispatch) => {
     return fetch(ENDPOINT)
-      .then(handleFetchResponse(null, dispatch, USER_LIST_FETCHED, USER_LIST_FETCH_FAILED))
+      .then(handleFetchResponse(null, dispatch, USER_LIST_FETCHED, USER_LIST_FETCH_FAILED));
   };
 }
 
@@ -39,7 +39,7 @@ export function deleteUser(userId) {
     dispatch({ type: USER_DELETING, id: userId });
 
     return fetch(join(ENDPOINT, userId), { method: 'DELETE' })
-      .then(handleFetchResponse(userId, dispatch, USER_DELETED, USER_DELETE_FAILED))
+      .then(handleFetchResponse(userId, dispatch, USER_DELETED, USER_DELETE_FAILED));
   };
 }
 
@@ -72,7 +72,7 @@ export default function reducer(state = INITIAL_STATE, action) {
     case USER_DELETED:
       if (state.readyState === USER_LIST_FETCHED) {
         return Object.assign({}, state, {
-          items: state.items.filter(user => user.login !== action.id),
+          items: state.items.filter(user => user.login !== action.id)
         });
       }
       return state;

@@ -34,14 +34,14 @@ function mapDispatchToProps(dispatch) {
   return {
     handleChange: (event, name) => {
       const value = event.target.value;
-      dispatch({ type: UserFormActions.USER_FORM_CHANGE, name, value })
+      dispatch({ type: UserFormActions.USER_FORM_CHANGE, name, value });
     },
 
     handleSubmit: (event, form) => {
       event.preventDefault();
       dispatch(UserFormActions.submitUser(form.values));
     }
-  }
+  };
 }
 
 function mapStateToProps(state) {

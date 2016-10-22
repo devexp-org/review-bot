@@ -1,5 +1,5 @@
 import join from 'url-join';
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router';
 import React, { Component, PropTypes } from 'react';
 
 class UserCard extends Component {

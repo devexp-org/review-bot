@@ -19,7 +19,7 @@ export function fetchUser(userId) {
     dispatch({ type: USER_FETCHING, id: userId });
 
     return fetch(join(ENDPOINT, userId))
-      .then(handleFetchResponse(userId, dispatch, USER_FETCHED, USER_FETCH_FAILED))
+      .then(handleFetchResponse(userId, dispatch, USER_FETCHED, USER_FETCH_FAILED));
   };
 }
 

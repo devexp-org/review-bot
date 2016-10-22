@@ -73,7 +73,7 @@ function mapDispatchToProps(dispatch) {
         name,
         index,
         value
-      })
+      });
     },
 
     handleSubmit: (event, login, form) => {
@@ -88,7 +88,7 @@ function mapDispatchToProps(dispatch) {
     handleDeleteContact: (event, index) => {
       dispatch({ type: UserContactListActions.USER_DELETE_CONTACT, index });
     }
-  }
+  };
 }
 
 function mapStateToProps(state) {

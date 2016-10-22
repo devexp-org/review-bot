@@ -17,7 +17,7 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      "process.env.BROWSER": JSON.stringify(true)
+      'process.env.BROWSER': JSON.stringify(true)
     }),
     new webpack.NoErrorsPlugin()
   ],

@@ -1,7 +1,6 @@
 class FetchError extends Error {}
 
 function reason(error) {
-  console.info(error);
   if (error.response && error.response.status === 404) {
     return 'not found';
   }
@@ -13,7 +12,7 @@ function reason(error) {
   return 'unknown';
 }
 
-export const handleFetchResponse = (id, dispatch,  success, failure) => (response) => {
+export const handleFetchResponse = (id, dispatch, success, failure) => (response) => {
   return Promise.resolve(response)
     .then(response => {
       if (!response.ok) {
@@ -24,7 +23,7 @@ export const handleFetchResponse = (id, dispatch,  success, failure) => (respons
     .then(response => response.json())
     .then(result => dispatch({ type: success, id, data: result }))
     .catch(error => dispatch({ type: failure, id, error, reason: reason(error) }));
-}
+};
 
 export const handleSubmitResponse = (id, dispatch, success, failure) => (response) => {
   return Promise.resolve(response)
@@ -46,4 +45,4 @@ export const handleSubmitResponse = (id, dispatch, success, failure) => (respons
     })
     .then(result => dispatch({ type: success, id, data: result }))
     .catch(error => dispatch({ type: failure, id, error, errors: error.errors, reason: reason(error) }));
-}
+};

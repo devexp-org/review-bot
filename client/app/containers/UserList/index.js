@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import UserAddForm from '../../containers/UserAddForm';
 import UserListComponent from '../../components/UserList';
 
-import * as UserInfoActions from '../../actions/userInfo';
 import * as UserListActions from '../../actions/userList';
 
 class UserList extends Component {
@@ -58,7 +57,7 @@ function mapDispatchToProps(dispatch) {
       event.preventDefault();
       dispatch(UserListActions.deleteUser(userId));
     }
-  }
+  };
 }
 
 function mapStateToProps(state) {
