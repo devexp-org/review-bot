@@ -16,14 +16,14 @@ export default function reducer(state = INITIAL_STATE, action) {
       return state.concat(INITIAL_CONTACT);
 
     case USER_DELETE_CONTACT:
-      return [].concat(before(state, index), after(state, index));
+      return [].concat(before(state, action.index), after(state, action.index));
 
     case USER_CHANGE_CONTACT:
       let contact = Object.assign({}, state[action.index], {
         [action.name]: action.value
       });
 
-      return [].concat(before(state, index), contact, after(state, index));
+      return [].concat(before(state, action.index), contact, after(state, action.index));
 
     default:
       return state;

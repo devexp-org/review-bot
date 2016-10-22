@@ -1,11 +1,10 @@
 import join from 'url-join';
 import config from '../config';
+import { USER_FETCHED } from './userInfo';
 import { fetchUserListSilent } from './userList';
 import { handleSubmitResponse } from './utils';
 
 import * as contacts from './contactList';
-
-export const USER_FORM_EDIT = 'USER_FORM_EDIT';
 
 export const USER_FORM_READY = 'USER_FORM_READY';
 export const USER_FORM_ERROR = 'USER_FORM_ERROR';
@@ -21,12 +20,6 @@ export const USER_FORM_UPDATE_FAILED = 'USER_FORM_UPDATE_FAILED';
 
 export const ENDPOINT = join(config.api.prefix, 'users');
 
-
-export function editUser(user) {
-  return (dispatch) => {
-    dispatch({ type: USER_FORM_EDIT, user });
-  }
-}
 
 export function submitUser(form) {
   return (dispatch) => {
@@ -71,10 +64,10 @@ const INITIAL_STATE = {
 export default function reducer(state = INITIAL_STATE, action) {
   switch (action.type) {
 
-    case USER_FORM_EDIT:
+    case USER_FETCHED:
       return Object.assign({}, state, {
         error: '',
-        values: action.user,
+        values: action.data,
         errors: {},
         readyState: USER_FORM_READY
       });
@@ -114,7 +107,7 @@ export default function reducer(state = INITIAL_STATE, action) {
     case contacts.USER_CHANGE_CONTACT:
       return Object.assign({}, state, {
         values: Object.assign({}, state.values, {
-          contacts: contacts.reducer(state.values.contacts, action)
+          contacts: contacts.default(state.values.contacts, action)
         })
       });
 

@@ -3,21 +3,12 @@ import { connect } from 'react-redux';
 
 import * as UserActions from '../../actions/userInfo';
 import * as UserFormActions from '../../actions/userForm';
+import * as UserContactListActions from '../../actions/contactList';
 
 class UserEditForm extends Component {
 
   static readyOnActions(dispatch, params) {
     return dispatch(UserActions.fetchUser(params.id));
-  }
-
-  componentDidMount() {
-    if (this.props.userInfo.readyState === UserActions.USER_READY) {
-      this.constructor.readyOnActions(this.props.dispatch, this.props.params);
-    }
-
-    if (this.props.userInfo.readyState === UserActions.USER_FETCHED) {
-      this.props.dispatch(UserFormActions.editUser(this.props.userInfo));
-    }
   }
 
   componentWillUnmount() {
@@ -78,24 +69,24 @@ function mapDispatchToProps(dispatch) {
     handleChange: (event, name, index) => {
       const value = event.target.value;
       dispatch({
-        type: UserFormActions.USER_FORM_CHANGE_CONTACT,
+        type: UserContactListActions.USER_CHANGE_CONTACT,
         name,
         index,
         value
       })
     },
 
-    handleSubmit: (login, event, form) => {
+    handleSubmit: (event, login, form) => {
       event.preventDefault();
       dispatch(UserFormActions.updateUser(login, form.values));
     },
 
     handleAddContact: () => {
-      dispatch({ type: UserFormActions.USER_FORM_ADD_CONTACT });
+      dispatch({ type: UserContactListActions.USER_ADD_CONTACT });
     },
 
     handleDeleteContact: (event, index) => {
-      dispatch({ type: UserFormActions.USER_FORM_DELETE_CONTACT, index });
+      dispatch({ type: UserContactListActions.USER_DELETE_CONTACT, index });
     }
   }
 }
