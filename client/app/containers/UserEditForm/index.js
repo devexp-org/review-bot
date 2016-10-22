@@ -11,6 +11,12 @@ class UserEditForm extends Component {
     return dispatch(UserActions.fetchUser(params.id));
   }
 
+  componentDidMount() {
+    if (this.props.userInfo.readyState === UserActions.USER_READY) {
+      this.constructor.readyOnActions(this.props.dispatch, this.props.params);
+    }
+  }
+
   componentWillUnmount() {
     this.props.dispatch(UserActions.freeUser(this.props.params.id));
   }

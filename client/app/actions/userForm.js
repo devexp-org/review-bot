@@ -1,6 +1,6 @@
 import join from 'url-join';
 import config from '../config';
-import { USER_FETCHED } from './userInfo';
+import { USER_READY, USER_FETCHED } from './userInfo';
 import { fetchUserListSilent } from './userList';
 import { handleSubmitResponse } from './utils';
 
@@ -62,7 +62,11 @@ const INITIAL_STATE = {
 };
 
 export default function reducer(state = INITIAL_STATE, action) {
+  console.info(action.type);
   switch (action.type) {
+
+    case USER_READY:
+      return INITIAL_STATE;
 
     case USER_FETCHED:
       return Object.assign({}, state, {
