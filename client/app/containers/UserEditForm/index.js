@@ -34,8 +34,10 @@ class UserEditForm extends Component {
 
     return (
       <form onSubmit={handleSubmit}>
+        <div>{ form.error }</div>
         {
           contacts.map((contact, index) => {
+            const errorIndex = 'contacts.' + index;
             return (
               <div>
                 <select value={contact.id} onChange={handleChange('id', index)}>
@@ -52,6 +54,8 @@ class UserEditForm extends Component {
                 <button type="button" onClick={handleDeleteContact(index)}>
                   ✕
                 </button>
+                {form.errors[errorIndex + '.id'] ? (<div>{form.errors[errorIndex + '.id'].message}</div>) : ''}
+                {form.errors[errorIndex + '.account'] ? (<div>{form.errors[errorIndex + '.account'].message}</div>) : ''}
               </div>
             );
           })

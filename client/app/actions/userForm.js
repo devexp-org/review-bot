@@ -62,7 +62,6 @@ const INITIAL_STATE = {
 };
 
 export default function reducer(state = INITIAL_STATE, action) {
-  console.info(action.type);
   switch (action.type) {
 
     case USER_READY:
