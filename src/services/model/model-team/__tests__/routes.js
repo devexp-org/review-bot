@@ -43,13 +43,31 @@ describe('services/model/model-team/routes', function () {
     app.use('/', router);
   });
 
-  describe('/add', function () {
+  describe('GET /', function () {
+
+    beforeEach(function () {
+      TeamModel.find
+        .returns(Promise.resolve([team]));
+    });
+
+    it('should return a team list', function (done) {
+      request(app)
+        .get('/')
+        .expect('[{"name":"name","members":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}]')
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end(done);
+    });
+
+  });
+
+  describe('POST /', function () {
 
     it('should create a new team', function (done) {
       request(app)
-        .post('/add')
+        .post('/')
         .field('name', 'testteam')
-        .expect('{"data":{"name":"name","members":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}}')
+        .expect('{"name":"name","members":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -61,7 +79,7 @@ describe('services/model/model-team/routes', function () {
       team.save.returns(Promise.reject(new Error('Team "testteam" already exists')));
 
       request(app)
-        .post('/add')
+        .post('/')
         .field('name', 'testteam')
         .expect('{"message":"Team \\"testteam\\" already exists"}')
         .expect('Content-Type', /application\/json/)
@@ -71,12 +89,12 @@ describe('services/model/model-team/routes', function () {
 
   });
 
-  describe('/get/:name', function () {
+  describe('GET /:id', function () {
 
     it('should return a team', function (done) {
       request(app)
-        .get('/get/testteam')
-        .expect('{"data":{"name":"name","members":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}}')
+        .get('/testteam')
+        .expect('{"name":"name","members":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -88,10 +106,73 @@ describe('services/model/model-team/routes', function () {
         .returns(Promise.resolve(null));
 
       request(app)
-        .get('/get/foo')
+        .get('/foo')
         .expect(/not found/)
         .expect('Content-Type', /application\/json/)
-        .expect(500)
+        .expect(404)
+        .end(done);
+    });
+
+  });
+
+  describe('PUT /:id', function () {
+
+    it('should update a team', function (done) {
+      request(app)
+        .put('/testteam')
+        .send({ name: 'testteam', reviewConfig: { approveCount: 5, totalReviewers: 10 } })
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end(() => {
+          assert(team.save.calledAfter(team.set));
+          assert.calledWith(team.set, 'name', 'testteam');
+          assert.calledWith(team.set, 'reviewConfig', {
+            approveCount: 5,
+            totalReviewers: 10
+          });
+          done();
+        });
+    });
+
+    it('should return an error if a team is not found', function (done) {
+      TeamModel.findByName
+        .withArgs('foo')
+        .returns(Promise.resolve(null));
+
+      request(app)
+        .put('/foo')
+        .send({ name: 'testteam', reviewConfig: {} })
+        .expect(/not found/)
+        .expect('Content-Type', /application\/json/)
+        .expect(404)
+        .end(done);
+    });
+
+  });
+
+  describe('DELETE /:id', function () {
+
+    it('should delete a team', function (done) {
+      request(app)
+        .delete('/testteam')
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end(() => {
+          assert.called(team.remove);
+          done();
+        });
+    });
+
+    it('should return an error if a team is not found', function (done) {
+      TeamModel.findByName
+        .withArgs('foo')
+        .returns(Promise.resolve(null));
+
+      request(app)
+        .delete('/foo')
+        .expect(/not found/)
+        .expect('Content-Type', /application\/json/)
+        .expect(404)
         .end(done);
     });
 

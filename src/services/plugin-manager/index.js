@@ -4,9 +4,7 @@ export function findPlugins(config) {
   const plugins = [];
 
   forEach(config.services, (service, serviceName) => {
-
     forEach(Object.keys(service), (key) => {
-
       if (key.substr(0, 8) === '#plugin:') {
         plugins.push({
           service: key.substr(8),
@@ -14,9 +12,7 @@ export function findPlugins(config) {
           dependency: serviceName
         });
       }
-
     });
-
   });
 
   return plugins;

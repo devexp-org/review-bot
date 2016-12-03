@@ -20,6 +20,19 @@
         "/users": "http-routes-user"
       }
     }
+  },
+
+  "http-routes-team": {
+    "path": "./src/services/model/model-team/routes",
+    "dependencies": [
+      "model",
+      "logger"
+    ],
+    "#plugin:http": {
+      "routes": {
+        "/teams": "http-routes-team"
+      }
+    }
   }
 
 }

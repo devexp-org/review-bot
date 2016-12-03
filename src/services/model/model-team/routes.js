@@ -1,5 +1,7 @@
 import { Router as router } from 'express';
 
+import { NotFoundError } from '../error';
+
 export default function setup(options, imports) {
 
   const logger = imports.logger.getLogger('http-team');
@@ -7,33 +9,85 @@ export default function setup(options, imports) {
 
   const teamRoute = router();
 
-  teamRoute.post('/add', function (req, res) {
-    const name = req.body.name;
+  teamRoute.get('/', function (req, res) {
+    TeamModel
+      .find({})
+      .then(res.json.bind(res))
+      .catch(res.handleError.bind(res, logger));
+  });
 
-    const team = new TeamModel({ name });
+  teamRoute.post('/', function (req, res) {
+    const team = new TeamModel({
+      name: req.body.name,
+      reviewConfig: req.body.reviewConfig
+    });
 
     team
       .validate()
       .then(team.save.bind(team))
-      .then(res.success.bind(res))
+      .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });
 
-  teamRoute.get('/get/:name', function (req, res) {
-    const name = req.params.name;
+  teamRoute.get('/:id', function (req, res) {
+    const id = req.params.id;
 
     TeamModel
-      .findByName(name)
+      .findByName(id)
       .then(team => {
         if (!team) {
-          return Promise.reject(new Error(
-            `Team "${name}" is not found`
-          ));
+          return Promise.reject(
+            new NotFoundError(`Team was not found (${id})`)
+          );
         }
 
         return team;
       })
-      .then(res.success.bind(res))
+      .then(res.json.bind(res))
+      .catch(res.handleError.bind(res, logger));
+  });
+
+  teamRoute.put('/:id', function (req, res) {
+    const id = req.params.id;
+
+    const name = req.body.name || '';
+    const reviewConfig = req.body.reviewConfig || {};
+
+    TeamModel
+      .findByName(id)
+      .then(team => {
+        if (!team) {
+          return Promise.reject(
+            new NotFoundError(`Team was not found (${id})`)
+          );
+        }
+        return team;
+      })
+      .then(team => {
+        return team
+          .set('name', name)
+          .set('reviewConfig', reviewConfig)
+          .save();
+      })
+      .then(res.json.bind(res))
+      .catch(res.handleError.bind(res, logger));
+  });
+
+  teamRoute.delete('/:id', function (req, res) {
+    const id = req.params.id;
+
+    TeamModel
+      .findByName(id)
+      .then(team => {
+        if (!team) {
+          return Promise.reject(
+            new NotFoundError(`Team was not found (${id})`)
+          );
+        }
+        return team;
+      })
+      .then(team => team.remove())
+      .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });
 

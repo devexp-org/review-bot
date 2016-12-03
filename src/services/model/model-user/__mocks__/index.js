@@ -14,6 +14,7 @@ export function userModelMock() {
 
   const stub = sinon.stub().returns(user);
 
+  stub.find = sinon.stub().returns(Promise.resolve([]));
   stub.findById = sinon.stub().returns(Promise.resolve(null));
   stub.findByLogin = sinon.stub().returns(Promise.resolve(null));
 

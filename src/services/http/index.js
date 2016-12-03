@@ -8,7 +8,7 @@ import responseJSON from './response';
 export default function setup(options, imports) {
 
   const app = express();
-  const port = options.port || 0; // if the port is `0` then a random port is used
+  const port = options.port || 0; // if the port set to `0` then a random port is used
   const logger = imports.logger.getLogger('http');
 
   app.use(bodyParser.json());
@@ -18,7 +18,7 @@ export default function setup(options, imports) {
   forEach(options.middlewares, (middlewareName) => {
     const middlewareModule = imports[middlewareName];
     if (!middlewareModule) {
-      throw new Error(`Cannot find the middleware module "${middlewareName}"`);
+      throw new Error(`Cannot find middleware module "${middlewareName}"`);
     }
 
     app.use(middlewareModule);
@@ -27,7 +27,7 @@ export default function setup(options, imports) {
   forEach(options.routes, (routeName, route) => {
     const routerModule = imports[routeName];
     if (!routerModule) {
-      throw new Error(`Cannot find the route module "${routeName}"`);
+      throw new Error(`Cannot find route module "${routeName}"`);
     }
 
     app.use(route, routerModule);

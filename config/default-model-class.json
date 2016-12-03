@@ -1,7 +1,19 @@
 {
+  "model-team": {
+    "path": "./src/services/model/model-team",
+    "#plugin:model": {
+      "models": {
+        "team": "model-team"
+      }
+    }
+  },
 
   "model-user": {
-    "path": "./src/services/model/model-user"
+    "path": "./src/services/model/model-user",
+    "#plugin:model": {
+      "models": {
+        "user": "model-user"
+      }
+    }
   }
-
 }

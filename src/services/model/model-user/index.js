@@ -30,7 +30,7 @@ export function baseSchema() {
 export function setupModel(modelName, model) {
 
   /**
-   * Find user by login
+   * Finds user by login
    *
    * @param {String} login
    *
@@ -39,7 +39,8 @@ export function setupModel(modelName, model) {
   model.statics.findByLogin = function (login) {
     return this
       .model(modelName)
-      .findOne({ login });
+      .findOne({ login })
+      .exec();
   };
 
   /**

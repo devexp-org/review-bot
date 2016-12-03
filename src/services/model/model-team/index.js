@@ -36,7 +36,8 @@ export function setupModel(modelName, model) {
   model.statics.findByName = function (name) {
     return this
       .model(modelName)
-      .findOne({ name });
+      .findOne({ name })
+      .exec();
   };
 
   /**
@@ -50,7 +51,8 @@ export function setupModel(modelName, model) {
     return this
       .model(modelName)
       .findOne({ name })
-      .populate('members');
+      .populate('members')
+      .exec();
   };
 
 }

@@ -69,13 +69,11 @@
     "model": {
       "path": "./src/services/model",
       "options": {
-        "models": {
-          "user": "model-user"
-        }
+        "models": {}
       },
       "dependencies": [
         "mongoose",
-        "model-user"
+        "plugin-manager"
       ]
     },
 
