@@ -31,7 +31,7 @@ export default class PluginBroker {
    */
   setupModel(name, model) {
     forEach(this.get(name), (plugin) => {
-      model.plugin(plugin);
+      model.plugin(plugin, name);
     });
   }
 

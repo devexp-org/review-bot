@@ -6,6 +6,10 @@
 
   "services": {
 
+    "queue": {
+      "path": "./src/services/queue"
+    },
+
     "events": {
       "path": "./src/services/events"
     },
@@ -36,6 +40,21 @@
           }
         }
       }
+    },
+
+    "github": {
+      "path": "./src/services/github",
+      "options": {
+        "host": "api.github.com",
+        "debug": false,
+        "version": "3.0.0",
+        "timeout": 5000,
+        "protocol": "https",
+        "headers": {
+          "user-agent": "DevExp/2.0.0"
+        }
+      },
+      "dependencies": []
     },
 
     "plugin-manager": {
@@ -69,7 +88,8 @@
     "model": {
       "path": "./src/services/model",
       "options": {
-        "models": {}
+        "models": {},
+        "plugins": {}
       },
       "dependencies": [
         "mongoose",
@@ -78,6 +98,35 @@
     },
 
     "#include:model-class": "./default-model-class.json",
+
+    "team-manager": {
+      "path": "./src/services/team-manager",
+      "dependencies": [
+        "model"
+      ]
+    },
+
+    "pull-request-model": {
+      "path": "./src/services/pull-request-model",
+      "dependencies": [
+        "model"
+      ]
+    },
+
+    "pull-request-github": {
+      "path": "./src/services/pull-request-github-delayed",
+      "dependencies": [
+        "github"
+      ]
+    },
+
+    "pull-request-review": {
+      "path": "./src/services/pull-request-review",
+      "dependencies": [
+        "events",
+        "logger"
+      ]
+    },
 
     "#comment:__LASTLINE__": ""
   }

@@ -3,6 +3,7 @@ import { get } from 'lodash';
 export default function mock() {
 
   const model = {
+    add: sinon.stub().returnsThis(),
     set: sinon.stub().returnsThis(),
     pre: sinon.stub().returnsThis(),
     path: sinon.stub().returnsThis(),

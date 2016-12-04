@@ -40,6 +40,15 @@ describe('services/model/model-team', function () {
       teamModel.setupModel('team', model);
     });
 
+    it('should add static method "findAll"', function () {
+      const staticMock = staticModelMock();
+
+      assert.property(model.statics, 'findAll');
+      assert.isFunction(model.statics.findAll);
+
+      model.statics.findAll.call(staticMock, 'team');
+    });
+
     it('should add static method "findByName"', function () {
       const staticMock = staticModelMock();
 

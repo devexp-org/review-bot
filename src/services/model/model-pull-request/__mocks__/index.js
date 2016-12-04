@@ -23,6 +23,10 @@ export function pullRequestMock(mixin) {
     files: []
   };
 
+  pullRequest.toString = function () {
+    return '#' + this.id;
+  };
+
   return instanceMock(pullRequest, mixin);
 
 }

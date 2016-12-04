@@ -27,6 +27,19 @@ export function baseSchema() {
 export function setupModel(modelName, model) {
 
   /**
+   * Gets all teams
+   *
+   * @return {Promise.<Array.<Team>>}
+   */
+  model.statics.findAll = function () {
+    return this
+      .model(modelName)
+      .find({})
+      .populate('members')
+      .exec();
+  };
+
+  /**
    * Find team by name
    *
    * @param {String} name
