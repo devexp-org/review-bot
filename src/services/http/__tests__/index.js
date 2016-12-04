@@ -40,8 +40,8 @@ describe('services/http', function () {
       .then(app => {
         request(app)
           .get('/')
-          .expect('Content-Type', /text\/html/)
           .expect('Review Service')
+          .expect('Content-Type', /text\/html/)
           .expect(200)
           .end(err => {
             app.shutdown().then(() => done(err), done);
@@ -57,7 +57,7 @@ describe('services/http', function () {
         request(app)
           .get('/')
           .expect('Content-Type', /text\/html/)
-          .expect('Content-Length', '96')
+          .expect('Content-Length', '103')
           .expect(200)
           .end(err => {
             app.shutdown().then(() => done(err), done);
@@ -97,13 +97,13 @@ describe('services/http', function () {
 
   });
 
-  it('should throw an error if route module is not given', function () {
+  it('should throw an error if route module was not given', function () {
     imports.index = null;
 
     assert.throws(() => service(options, imports), /cannot.*index/i);
   });
 
-  it('should throw an error if middleware module is not given', function () {
+  it('should throw an error if middleware module was not given', function () {
     imports.responseJSON = null;
 
     assert.throws(() => service(options, imports), /cannot.*responseJSON/i);

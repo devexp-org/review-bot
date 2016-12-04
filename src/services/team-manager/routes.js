@@ -1,5 +1,5 @@
 import { Router as router } from 'express';
-import { NotFoundError } from '../model/error';
+import { NotFoundError } from '../http/error';
 
 export default function setup(options, imports) {
 

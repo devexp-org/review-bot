@@ -3,7 +3,8 @@ import path from 'path';
 import _ from 'lodash';
 
 /**
- * Returns a parsed json file if the file exists, otherwise return an empty object.
+ * Returns a parsed json file if the config file exists,
+ * otherwise return an empty object.
  *
  * @param {String} configPath
  *
@@ -16,7 +17,7 @@ const requireIfExists = function (configPath) {
     try {
       config = JSON.parse(fs.readFileSync(configPath));
     } catch (e) {
-      throw new Error(`Cannot parse the file "${configPath}":\n` + e.message);
+      throw new Error(`Cannot parse file "${configPath}":\n` + e.message);
     }
 
     return config;
@@ -25,6 +26,18 @@ const requireIfExists = function (configPath) {
   return {};
 };
 
+/**
+ * Walks through json and does edits:
+ *   - removes array elements started with '#comment:'
+ *   - removes keys in object started with '#comment:'
+ *   - parse `#include:filepath` in object keys and
+ *     merges content of the filepath to the object.
+ *
+ * @param {String} basePath
+ * @param {Object} json
+ *
+ * @return {Object}
+ */
 export function transform(basePath, json) {
 
   const visit = function (context) {

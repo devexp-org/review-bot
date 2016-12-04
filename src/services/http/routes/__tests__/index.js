@@ -26,7 +26,7 @@ describe('services/http/routes/index', function () {
     request(app)
       .get('/')
       .expect('Content-Type', /text\/html/)
-      .expect('Content-Length', '96')
+      .expect('Content-Length', '103')
       .expect(200)
       .end(done);
   });

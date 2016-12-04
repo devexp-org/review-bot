@@ -1,14 +1,17 @@
+import { forEach } from 'lodash';
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import responseTime from 'response-time';
 import enableDestroy from 'server-destroy';
-import { forEach } from 'lodash';
+
 import responseJSON from './response';
 
 export default function setup(options, imports) {
 
   const app = express();
-  const port = options.port || 0; // if the port set to `0` then a random port is used
+  // A random port will be selected if the port set to `0`
+  const port = options.port || 0;
   const logger = imports.logger.getLogger('http');
 
   app.use(bodyParser.json());
@@ -17,6 +20,7 @@ export default function setup(options, imports) {
 
   forEach(options.middlewares, (middlewareName) => {
     const middlewareModule = imports[middlewareName];
+
     if (!middlewareModule) {
       throw new Error(`Cannot find middleware module "${middlewareName}"`);
     }
@@ -26,6 +30,7 @@ export default function setup(options, imports) {
 
   forEach(options.routes, (routeName, route) => {
     const routerModule = imports[routeName];
+
     if (!routerModule) {
       throw new Error(`Cannot find route module "${routeName}"`);
     }
@@ -39,6 +44,7 @@ export default function setup(options, imports) {
 
   return new Promise(resolve => {
     const server = app.listen(port, () => {
+      // Enable destroying a server, and all currently open connections.
       enableDestroy(server);
 
       const address = server.address();

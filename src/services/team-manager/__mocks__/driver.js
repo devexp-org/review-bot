@@ -17,3 +17,5 @@ export function driverFrontEndMock() {
   };
 
 }
+
+export default driverFrontEndMock;

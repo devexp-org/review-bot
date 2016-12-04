@@ -1,22 +1,22 @@
 export default function mock() {
+  const statics = staticMock();
 
-  const statics = {
-    find: sinon.stub().returnsThis(),
-    sort: sinon.stub().returnsThis(),
-    skip: sinon.stub().returnsThis(),
-    limit: sinon.stub().returnsThis(),
-    populate: sinon.stub().returnsThis(),
+  return { model: sinon.stub().returns(statics) };
+}
 
-    exec: sinon.stub().returns(Promise.resolve(null)),
+export function staticMock(obj) {
+  const statics = sinon.stub().returns(obj);
 
-    findOne: sinon.stub().returnsThis(),
-    findById: sinon.stub().returns(null)
-  };
+  statics.find = sinon.stub().returnsThis();
+  statics.sort = sinon.stub().returnsThis();
+  statics.skip = sinon.stub().returnsThis();
+  statics.limit = sinon.stub().returnsThis();
+  statics.populate = sinon.stub().returnsThis();
 
-  const model = {
-    model: sinon.stub().returns(statics)
-  };
+  statics.exec = sinon.stub().returns(Promise.resolve(null));
 
-  return model;
+  statics.findOne = sinon.stub().returnsThis();
+  statics.findById = sinon.stub().returns(Promise.resolve(null));
 
+  return statics;
 }

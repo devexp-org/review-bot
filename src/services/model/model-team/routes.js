@@ -1,6 +1,6 @@
 import { Router as router } from 'express';
 
-import { NotFoundError } from '../error';
+import { NotFoundError } from '../../http/error';
 
 export default function setup(options, imports) {
 
@@ -10,8 +10,7 @@ export default function setup(options, imports) {
   const teamRoute = router();
 
   teamRoute.get('/', function (req, res) {
-    TeamModel
-      .find({})
+    TeamModel.find({}).exec()
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });

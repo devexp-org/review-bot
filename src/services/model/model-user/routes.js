@@ -1,6 +1,6 @@
 import { Router as router } from 'express';
 
-import { NotFoundError } from '../error';
+import { NotFoundError } from '../../http/error';
 
 export default function setup(options, imports) {
 
@@ -10,8 +10,7 @@ export default function setup(options, imports) {
   const userRoute = router();
 
   userRoute.get('/', function (req, res) {
-    UserModel
-      .find({})
+    UserModel.find({}).exec()
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });
@@ -34,7 +33,7 @@ export default function setup(options, imports) {
       .then(user => {
         if (!user) {
           return Promise.reject(
-            new NotFoundError(`User was not found (${id})`)
+            new NotFoundError(`User ${id} was not found`)
           );
         }
 
@@ -54,7 +53,7 @@ export default function setup(options, imports) {
       .then(user => {
         if (!user) {
           return Promise.reject(
-            new NotFoundError(`User was not found (${id})`)
+            new NotFoundError(`User ${id} was not found`)
           );
         }
         return user;
@@ -76,7 +75,7 @@ export default function setup(options, imports) {
       .then(user => {
         if (!user) {
           return Promise.reject(
-            new NotFoundError(`User was not found (${id})`)
+            new NotFoundError(`User ${id} was not found`)
           );
         }
         return user;

@@ -8,16 +8,6 @@ export default function setup(options, imports) {
   const plugins = {};
   const mongoose = imports.mongoose;
 
-  const setup = function setup(modelName, module) {
-    const schema = module.baseSchema();
-    const mongooseModel = new Schema(schema);
-
-    module.setupModel(modelName, mongooseModel);
-    broker.setupModel(modelName, mongooseModel);
-
-    mongoose.model(modelName, mongooseModel);
-  };
-
   forEach(options.plugins, (list, modelName) => {
 
     forEach(list, (pluginName) => {
@@ -37,6 +27,16 @@ export default function setup(options, imports) {
   });
 
   const broker = new PluginBroker(plugins);
+
+  const setup = function setup(modelName, module) {
+    const schema = module.baseSchema();
+    const mongooseModel = new Schema(schema);
+
+    module.setupModel(modelName, mongooseModel);
+    broker.setupModel(modelName, mongooseModel);
+
+    mongoose.model(modelName, mongooseModel);
+  };
 
   forEach(options.models, (moduleName, modelName) => {
     const module = imports[moduleName];

@@ -128,6 +128,62 @@
       ]
     },
 
+    "review": {
+      "path": "./src/services/review",
+      "options": {
+        "approveCount": 2,
+        "totalReviewers": 2,
+        "steps": [
+          "remove-author",
+          "remove-already-reviewers",
+          "ignore",
+          "random",
+          "prefered",
+          "commiters",
+          "load"
+        ],
+        "stepsOptions": {
+          "commiters": {
+            "max": 4,
+            "since": [4, "month"],
+            "filesToCheck": 5,
+            "commitsCount": 10
+          },
+          "load": { "max": 5 },
+          "random": { "max": 5 }
+        }
+      },
+      "dependencies": [
+        "logger",
+        "team-manager",
+        "review-step-commiters",
+        "review-step-ignore",
+        "review-step-random",
+        "review-step-load",
+        "review-step-remove-already-reviewers",
+        "review-step-remove-author",
+        "review-step-prefered"
+      ]
+    },
+
+    "#include:review-steps": "./default-review-steps.json",
+
+    "command": {
+      "path": "./src/services/command",
+      "options": {
+        "events": ["github:issue_comment"]
+      },
+      "dependencies": [
+        "queue",
+        "events",
+        "logger",
+        "team-manager",
+        "pull-request-model"
+      ]
+    },
+
+    "#include:command": "./default-command.json",
+
     "#comment:__LASTLINE__": ""
   }
 

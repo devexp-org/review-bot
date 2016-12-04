@@ -7,6 +7,7 @@ describe('services/logger', function () {
 
   it('the mock object should have the same methods', function () {
     options = {};
+
     const obj = service(options, imports);
     const mock = serviceMock();
     const methods = Object.keys(mock);

@@ -1,0 +1,120 @@
+{
+
+  "command-add": {
+    "path": "./src/services/command/command-add",
+    "dependencies": [
+      "events",
+      "logger",
+      "command",
+      "team-manager",
+      "pull-request-review"
+    ]
+  },
+
+  "command-busy": {
+    "path": "./src/services/command/command-busy",
+    "dependencies": [
+      "events",
+      "logger",
+      "review",
+      "command",
+      "team-manager",
+      "pull-request-review"
+    ]
+  },
+
+  "command-change": {
+    "path": "./src/services/command/command-change",
+    "dependencies": [
+      "events",
+      "logger",
+      "command",
+      "team-manager",
+      "pull-request-review"
+    ]
+  },
+
+  "command-ok": {
+    "path": "./src/services/command/command-ok",
+    "dependencies": [
+      "events",
+      "logger",
+      "command",
+      "team-manager",
+      "pull-request-review"
+    ]
+  },
+
+  "command-not-ok": {
+    "path": "./src/services/command/command-not-ok",
+    "dependencies": [
+      "events",
+      "logger",
+      "command",
+      "pull-request-review"
+    ]
+  },
+
+  "command-ping": {
+    "path": "./src/services/command/command-ping",
+    "dependencies": [
+      "events",
+      "logger",
+      "command"
+    ]
+  },
+
+  "command-remove": {
+    "path": "./src/services/command/command-remove",
+    "dependencies": [
+      "events",
+      "logger",
+      "command",
+      "pull-request-review"
+    ]
+  },
+
+  "command-replace": {
+    "path": "./src/services/command/command-replace",
+    "dependencies": [
+      "events",
+      "logger",
+      "review",
+      "command",
+      "team-manager",
+      "pull-request-review"
+    ]
+  },
+
+  "command-start": {
+    "path": "./src/services/command/command-start",
+    "dependencies": [
+      "logger",
+      "events",
+      "command",
+      "pull-request-review"
+    ]
+  },
+
+  "command-stop": {
+    "path": "./src/services/command/command-stop",
+    "dependencies": [
+      "logger",
+      "events",
+      "command",
+      "pull-request-review"
+    ]
+  },
+
+  "command-help": {
+    "path": "./src/services/command/command-help",
+    "options": {
+      "link": "https://example.com/help"
+    },
+    "dependencies": [
+      "events",
+      "command"
+    ]
+  }
+
+}

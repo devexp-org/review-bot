@@ -16,9 +16,7 @@ describe('services/github', function () {
     const mock = serviceMock();
     const methods = Object.keys(mock);
 
-    methods.forEach(method => {
-      assert.property(obj, method);
-    });
+    methods.forEach(method => assert.property(obj, method));
   });
 
   it('should authenticate to GitHub if credentials was given', function () {

@@ -23,7 +23,7 @@ application
   });
 
 process.once('SIGINT', () => {
-  console.log(''); // echo newline char, after "^C"
+  console.log(''); // echo newline char, after "^C".
 
   Promise.resolve()
     .then(() => application.shutdown())

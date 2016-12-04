@@ -2,7 +2,6 @@ import express from 'express';
 import request from 'supertest';
 import service from '../routes';
 import responseJSON from '../../http/response';
-import responseModel from '../../model/response';
 
 import { driverFrontEndMock } from '../__mocks__/driver';
 import loggerMock from '../../logger/__mocks__/';
@@ -47,7 +46,6 @@ describe('services/team-manager/routes', function () {
 
   beforeEach(function () {
     app.use(responseJSON());
-    app.use(responseModel());
     app.use('/', router);
   });
 

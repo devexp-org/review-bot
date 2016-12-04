@@ -3,7 +3,6 @@ import request from 'supertest';
 import service from '../routes';
 import bodyParser from 'body-parser';
 import responseJSON from '../../../http/response';
-import responseModel from '../../response';
 
 import modelMock from '../../../model/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
@@ -39,15 +38,13 @@ describe('services/model/model-team/routes', function () {
   beforeEach(function () {
     app.use(bodyParser.json());
     app.use(responseJSON());
-    app.use(responseModel());
     app.use('/', router);
   });
 
   describe('GET /', function () {
 
     beforeEach(function () {
-      TeamModel.find
-        .returns(Promise.resolve([team]));
+      TeamModel.exec.returns(Promise.resolve([team]));
     });
 
     it('should return a team list', function (done) {

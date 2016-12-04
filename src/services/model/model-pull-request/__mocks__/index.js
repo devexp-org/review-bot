@@ -1,3 +1,4 @@
+import { staticMock } from '../../../model/__mocks__/static';
 import { instanceMock } from '../../../model/__mocks__/schema';
 
 export function pullRequestMock(mixin) {
@@ -35,11 +36,10 @@ export function pullRequestModelMock(mixinSchema, mixinModel) {
 
   const pullRequest = pullRequestMock(mixinSchema);
 
-  const stub = sinon.stub().returns(pullRequest);
+  const stub = staticMock(pullRequest);
 
-  stub.findById = sinon.stub().returns(Promise.resolve(null));
-  stub.findByUser = sinon.stub().returns(Promise.resolve());
-  stub.findByRepositoryAndNumber = sinon.stub().returns(Promise.resolve());
+  stub.findByUser = sinon.stub().returns(Promise.resolve([]));
+  stub.findByRepositoryAndNumber = sinon.stub().returns(Promise.resolve(null));
 
   if (mixinModel) {
     mixinModel(stub);

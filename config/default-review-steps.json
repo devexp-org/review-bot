@@ -1,0 +1,42 @@
+{
+
+  "review-step-load": {
+    "path": "./src/services/review/steps/load",
+    "dependencies": [
+      "pull-request-model"
+    ]
+  },
+
+  "review-step-remove-author": {
+    "path": "./src/services/review/steps/remove_author"
+  },
+
+  "review-step-remove-already-reviewers": {
+    "path": "./src/services/review/steps/remove_already_reviewers"
+  },
+
+  "review-step-ignore": {
+    "path": "./src/services/review/steps/ignore"
+  },
+
+  "review-step-commiters": {
+    "path": "./src/services/review/steps/commiters",
+    "dependencies": [
+      "logger",
+      "github"
+    ]
+  },
+
+  "review-step-random": {
+    "path": "./src/services/review/steps/random"
+  },
+
+  "review-step-prefered": {
+    "path": "./src/services/review/steps/prefered",
+    "dependencies": [
+      "logger",
+      "team-manager"
+    ]
+  }
+
+}

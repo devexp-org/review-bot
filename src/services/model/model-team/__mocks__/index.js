@@ -1,7 +1,7 @@
+import { staticMock } from '../../../model/__mocks__/static';
 import { instanceMock } from '../../../model/__mocks__/schema';
 
 export function teamMock() {
-
   const team = {
     name: 'name',
     members: [],
@@ -15,21 +15,15 @@ export function teamMock() {
   };
 
   return instanceMock(team);
-
 }
 
 export function teamModelMock() {
-
   const team = teamMock();
+  const stub = staticMock(team);
 
-  const stub = sinon.stub().returns(team);
-
-  stub.find = sinon.stub().returns(Promise.resolve(null));
   stub.findAll = sinon.stub().returns(Promise.resolve([]));
-  stub.findById = sinon.stub().returns(Promise.resolve(null));
   stub.findByName = sinon.stub().returns(Promise.resolve(null));
   stub.findByNameWithMembers = sinon.stub().returns(Promise.resolve(null));
 
   return stub;
-
 }

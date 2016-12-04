@@ -1,29 +1,51 @@
-export default function middleware() {
+export default function setup() {
 
   return function (req, res, next) {
 
-    /**
-     * Send failure response.
-     *
-     * @param {Object} [error] — error message (default: Internal Error).
-     * @param {Number} [status] — http response status (default: 500).
-     */
-    res.error = function (error, status) {
-      error = error || 'Internal Error';
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
 
-      this
-        .status(status || 500)
-        .json({ error });
-    };
+    res.handleError = function (logger, err) {
 
-    /**
-     * Send success response.
-     *
-     * @param {*} [data] — response data.
-     */
-    res.success = function (data) {
-      data = data || {};
-      this.json({ data });
+      const plainError = Object.keys(err).length === 0;
+
+      let resError = { message: err.message };
+      let logError = plainError ? err.message : String(err);
+      let resStatus = 500;
+      let logMethod = 'error';
+
+      switch (err.name) {
+
+        case 'CastError':
+          resStatus = 400;
+
+        case 'MongoError':
+          logError = err.name + ': ' + err.errmsg;
+          resError.message = err.errmsg;
+          break;
+
+        case 'NotFoundError':
+          resStatus = 404;
+          logMethod = 'info';
+          break;
+
+        case 'ValidationError': {
+          resError = err;
+          resStatus = 422;
+          logMethod = 'warn';
+          break;
+        }
+
+        default:
+          break;
+
+      }
+
+      logger[logMethod](logError);
+
+      res.status(resStatus).json(resError);
+
     };
 
     next();

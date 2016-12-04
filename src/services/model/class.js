@@ -1,7 +1,7 @@
 import { forEach } from 'lodash';
 
 /**
- * Plugin broker helps to extend models
+ * Plugin broker helps to extend models.
  */
 export default class PluginBroker {
 
@@ -13,7 +13,7 @@ export default class PluginBroker {
   }
 
   /**
-   * Returns plugins.
+   * Returns plugins for given model.
    *
    * @param {String} model - model name.
    *
@@ -24,7 +24,7 @@ export default class PluginBroker {
   }
 
   /**
-   * Adds plugins to model.
+   * Applies plugins to given model.
    *
    * @param {String} name - model name.
    * @param {Object} model - mongoose model.

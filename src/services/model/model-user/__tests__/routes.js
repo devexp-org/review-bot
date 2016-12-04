@@ -3,7 +3,6 @@ import request from 'supertest';
 import service from '../routes';
 import bodyParser from 'body-parser';
 import responseJSON from '../../../http/response';
-import responseModel from '../../response';
 
 import modelMock from '../../../model/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
@@ -39,15 +38,13 @@ describe('services/model/model-user/routes', function () {
   beforeEach(function () {
     app.use(bodyParser.json());
     app.use(responseJSON());
-    app.use(responseModel());
     app.use('/', router);
   });
 
   describe('GET /', function () {
 
     beforeEach(function () {
-      UserModel.find
-        .returns(Promise.resolve([user]));
+      UserModel.exec.returns(Promise.resolve([user]));
     });
 
     it('should return a user list', function (done) {

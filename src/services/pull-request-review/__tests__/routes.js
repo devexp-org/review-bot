@@ -2,7 +2,6 @@ import express from 'express';
 import request from 'supertest';
 import service from '../routes';
 import responseJSON from '../../http/response';
-import responseModel from '../../model/response';
 
 import loggerMock from '../../logger/__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
@@ -32,7 +31,6 @@ describe('services/pull-request-review/routes', function () {
 
   beforeEach(function () {
     app.use(responseJSON());
-    app.use(responseModel());
     app.use('/', router);
   });
 
