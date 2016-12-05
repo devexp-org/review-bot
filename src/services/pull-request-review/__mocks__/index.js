@@ -20,6 +20,7 @@ export function pullRequestReviewMixin(stub) {
   stub.review = {
     status: 'notstarted',
     history: [],
+    reviewers: [],
     started_at: new Date(2000, 1, 1),
     updated_at: new Date(2000, 1, 2),
     completed_at: null

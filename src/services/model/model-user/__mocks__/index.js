@@ -4,6 +4,8 @@ import { instanceMock } from '../../../model/__mocks__/schema';
 export function userMock() {
   const user = { login: 'testuser', contacts: [] };
 
+  user.getContacts = sinon.stub().returns([]);
+
   return instanceMock(user);
 }
 

@@ -24,6 +24,7 @@
     "check-code": "npm run eslint && npm test"
   },
   "dependencies": {
+    "@slack/client": "^3.4.0",
     "badgs": "^1.1.1",
     "body-parser": "^1.15.2",
     "eventemitter2": "^2.1.0",
