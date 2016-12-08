@@ -1,23 +1,20 @@
 import { get, find, cloneDeep } from 'lodash';
 
-export default class AbstractDriver {
+export class StaticDriver {
 
-  makeDriver(team, config) {
-    return new AbstractDriverFrontEnd(team, config);
-  }
-
-}
-
-export class AbstractDriverFrontEnd {
-
-  constructor(team, config) {
+  /**
+   * @constructor
+   *
+   * @param {Team} team
+   */
+  constructor(team) {
     this.name = team.name;
-    this.options = team.reviewConfig || {};
     this.members = team.members || [];
+    this.options = team.reviewConfig || {};
   }
 
   /**
-   * Returns option for review.
+   * Returns review option.
    *
    * @param {String} option
    * @param {String|Number} defaultValue
@@ -29,30 +26,42 @@ export class AbstractDriverFrontEnd {
   }
 
   /**
-   * Returns "active" developers who may be chosen to review.
+   * Returns candidates for review.
    *
    * @param {PullRequest} pullRequest
    *
-   * @return {Promise.<Array.<Developer>>}
+   * @return {Promise.<Array.<Reviewer>>}
    */
-  getMembersForReview(pullRequest) {
+  getCandidates(pullRequest) {
     return Promise.resolve(cloneDeep(this.members));
   }
 
   /**
-   * Find team member by login.
-   * The member is not necessary to be an "active member" returned from `getMembersForReview`
+   * Find reviewer by `pull request` and `login`.
    *
    * @param {PullRequest} pullRequest
    * @param {String} login
    *
-   * @return {Promise.<Developer>}
+   * @return {Promise.<Reviewer>}
    */
   findTeamMember(pullRequest, login) {
-    return this.getMembersForReview()
+    return this.getCandidates()
       .then(team => find(team, { login }));
   }
 
 }
 
+export class StaticDriverFactory {
 
+  /**
+   * Returns static driver.
+   *
+   * @param {Team} team
+   *
+   * @return {TeamDriver}
+   */
+  makeDriver(team) {
+    return new StaticDriver(team);
+  }
+
+}

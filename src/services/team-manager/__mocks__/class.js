@@ -1,8 +1,8 @@
-export default function mock(mockDriverFrontEnd, teamName) {
+export default function mock(mockDriver, teamName) {
 
   return {
     findTeamByPullRequest: sinon.stub()
-      .returns(Promise.resolve(mockDriverFrontEnd))
+      .returns(Promise.resolve(mockDriver))
   };
 
 }

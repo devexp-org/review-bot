@@ -1,4 +1,4 @@
-import BadgeBase from '../../../services/badges/class';
+import BadgeBase from '../../../modules/badges';
 
 export default class ReviewBadgeBuilder extends BadgeBase {
 
@@ -43,7 +43,7 @@ export default class ReviewBadgeBuilder extends BadgeBase {
   }
 
   /**
-   * Create review status badge.
+   * Build review status badge.
    *
    * @param {Object} review
    * @param {String} review.status
@@ -59,7 +59,7 @@ export default class ReviewBadgeBuilder extends BadgeBase {
   }
 
   /**
-   * Create reviewer badge.
+   * Build reviewer badge.
    *
    * @param {Object}  reviewer
    * @param {String}  reviewer.login

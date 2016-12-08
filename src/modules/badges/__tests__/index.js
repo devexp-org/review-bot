@@ -1,4 +1,4 @@
-import BadgeBase from '../class';
+import BadgeBase from '../';
 
 describe('services/badges/class', function () {
 

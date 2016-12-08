@@ -53,7 +53,7 @@ export default class Review {
       'totalReviewers', this.options.totalReviewers
     );
 
-    return team.getMembersForReview(review.pullRequest)
+    return team.getCandidates(review.pullRequest)
       .then(members => {
         review.members = members;
         return review;

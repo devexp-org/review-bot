@@ -1,5 +1,7 @@
+import { forEach } from 'lodash';
 import minimatch from 'minimatch';
-import DefaultDriver from './driver';
+
+import { StaticDriverFactory } from './driver-static/class';
 
 export default class TeamManager {
 
@@ -10,11 +12,11 @@ export default class TeamManager {
    * @param {Object} teamModel
    */
   constructor(drivers, teamModel) {
-    this.drivers = drivers || {};
+    this.drivers = drivers;
     this.teamModel = teamModel;
 
-    this.defaultDriver = new DefaultDriver();
-    this.drivers.default = this.defaultDriver;
+    this.defaultFactory = new StaticDriverFactory();
+    this.drivers.default = this.defaultFactory;
   }
 
   /**
@@ -23,26 +25,13 @@ export default class TeamManager {
    * @return {Promise.<Array.<TeamRoute>>}
    */
   getRoutes() {
-    return this.teamModel
-      .findAll()
+    return this.teamModel.find({}).exec()
       .then(array => {
         const routes = [];
 
-        [].concat(array).forEach(team => {
-          [].concat(team.patterns).forEach(pattern => {
-            let factory;
-            let options = {};
-
-            if (team.driver && this.drivers[team.driver.name]) {
-              factory = this.drivers[team.driver.name];
-              options = team.driver.options;
-            } else {
-              factory = this.defaultDriver;
-            }
-
-            const teamDriver = factory.makeDriver(team, options);
-
-            routes.push({ team: teamDriver, pattern });
+        forEach(array, (team) => {
+          forEach(team.patterns, (pattern) => {
+            routes.push({ team: this.getDriver(team), pattern });
           });
         });
 
@@ -51,12 +40,32 @@ export default class TeamManager {
   }
 
   /**
+   * Returns driver for given team.
+   *
+   * @param {Object} team
+   *
+   * @return {Object}
+   */
+  getDriver(team) {
+    const driverName = team.driver && team.driver.name;
+
+    if (driverName && driverName in this.drivers) {
+      const options = team.driver.options || options;
+      const factory = this.drivers[driverName];
+
+      return factory.makeDriver(team, options);
+    } else {
+      return this.defaultFactory.makeDriver(team);
+    }
+  }
+
+  /**
    * Match route and then return it
    *
    * @protected
    * @param {PullRequest} pullRequest
    *
-   * @return {Promise}
+   * @return {TeamRoute}
    */
   find(pullRequest) {
     return this.getRoutes()
@@ -80,7 +89,7 @@ export default class TeamManager {
    *
    * @param {PullRequest} pullRequest
    *
-   * @return {Promise.<Object>}
+   * @return {Promise.<Team>}
    */
   findTeamByPullRequest(pullRequest) {
     return this.find(pullRequest).then(route => route.team);

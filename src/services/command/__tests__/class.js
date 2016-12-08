@@ -1,8 +1,8 @@
 import { forEach } from 'lodash';
 import CommandDispatcher, { buildRegExp } from '../class';
 
-import teamMock from '../../team-manager/__mocks__/driver';
 import queueMock from '../../queue/__mocks__/';
+import { teamMock } from '../../team-manager/__mocks__/';
 import teamManagerMock from '../../team-manager/__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
   '../../model/model-pull-request/__mocks__/';

@@ -1,5 +1,5 @@
 import teamManagerMock from './class';
-import { driverFrontEndMock } from './driver';
+import { staticDriverMock } from '../driver-static/__mocks__/';
 
 export function membersMock() {
   return [
@@ -23,9 +23,11 @@ export function membersMock() {
   ];
 }
 
-export default function (teamName, member) {
-  const frontend = driverFrontEndMock();
-  frontend.findTeamMember.returns(Promise.resolve(member));
+export { staticDriverMock as teamMock };
 
-  return teamManagerMock(frontend, teamName);
+export default function (teamName, member) {
+  const driver = staticDriverMock();
+  driver.findTeamMember.returns(Promise.resolve(member));
+
+  return teamManagerMock(driver, teamName);
 }

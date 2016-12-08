@@ -21,7 +21,6 @@ export function teamModelMock() {
   const team = teamMock();
   const stub = staticMock(team);
 
-  stub.findAll = sinon.stub().returns(Promise.resolve([]));
   stub.findByName = sinon.stub().returns(Promise.resolve(null));
   stub.findByNameWithMembers = sinon.stub().returns(Promise.resolve(null));
 

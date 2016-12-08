@@ -5,12 +5,12 @@ import { NotFoundError } from '../http/error';
 export default function setup(options, imports) {
 
   const events = imports.events;
-  const logger = imports.logger.getLogger('http-badges');
+  const logger = imports.logger.getLogger('http.badges');
   const PullRequestModel = imports['pull-request-model'];
 
   const badgesRouter = router();
 
-  badgesRouter.get('/:org/:repo/:number/update_badges', function (req, res) {
+  badgesRouter.get('/:org/:repo/:number/update-badges', function (req, res) {
 
     const org = req.params.org;
     const repo = req.params.repo;

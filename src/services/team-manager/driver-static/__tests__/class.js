@@ -1,18 +1,23 @@
-import DefaultDriver from '../driver';
+import { StaticDriverFactory } from '../class';
 
-describe('services/team-manager/driver', function () {
+import { teamMock } from '../../../model/model-team/__mocks__/';
 
-  let driver, frontend;
+describe('services/team-manager/driver-static', function () {
+
+  let team, driver, factory;
 
   beforeEach(function () {
-    driver = new DefaultDriver();
-    frontend = driver.makeDriver({});
+    team = teamMock();
+
+    factory = new StaticDriverFactory();
+
+    driver = factory.makeDriver(team);
   });
 
-  describe('#getMembersForReview', function () {
+  describe('#getCandidates', function () {
 
     it('should be resolved to array', function (done) {
-      frontend.getMembersForReview()
+      driver.getCandidates()
         .then(members => {
           assert.isArray(members);
           assert.lengthOf(members, 0);
@@ -25,14 +30,14 @@ describe('services/team-manager/driver', function () {
   describe('#findTeamMember', function () {
 
     it('should find member by login', function (done) {
-      sinon.stub(frontend, 'getMembersForReview')
+      sinon.stub(driver, 'getCandidates')
         .returns(Promise.resolve([
           { id: 1, login: 'a' },
           { id: 2, login: 'b' },
           { id: 3, login: 'c' }
         ]));
 
-      frontend.findTeamMember(null, 'b')
+      driver.findTeamMember(null, 'b')
         .then(member => assert.deepEqual(member, { id: 2, login: 'b' }))
         .then(done, done);
     });
@@ -41,19 +46,18 @@ describe('services/team-manager/driver', function () {
 
   describe('#getOption', function () {
 
-    let team;
-
     beforeEach(function () {
-      team = { name: 'team', reviewConfig: { foo: 'bar' }, members: [] };
-      frontend = driver.makeDriver(team);
+      team.reviewConfig = { foo: 'bar' };
+
+      driver = factory.makeDriver(team);
     });
 
     it('should return team option', function () {
-      assert.equal(frontend.getOption('foo'), 'bar');
+      assert.equal(driver.getOption('foo'), 'bar');
     });
 
     it('should return default option if team option is undefined', function () {
-      assert.equal(frontend.getOption('bar', 'baz'), 'baz');
+      assert.equal(driver.getOption('bar', 'baz'), 'baz');
     });
 
   });

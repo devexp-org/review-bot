@@ -1,5 +1,6 @@
 import ReviewBadgeBuilder from './class';
 
+export const SECTION = 'review:badge';
 export const POSITION = 100;
 
 export default function setup(options, imports) {
@@ -23,7 +24,7 @@ export default function setup(options, imports) {
 
     queue.dispatch('pull-request#' + pullRequest.id, () => {
       pullRequestGitHub.setBodySection(
-        pullRequest, 'review:badge', badgeContent, POSITION
+        pullRequest, SECTION, badgeContent, POSITION
       );
       return pullRequestGitHub.syncPullRequestWithGitHub(pullRequest);
     })
@@ -37,7 +38,5 @@ export default function setup(options, imports) {
   events.on('review:approved', updateBadges);
   events.on('review:complete', updateBadges);
   events.on('review:update_badges', updateBadges);
-
-  return {};
 
 }

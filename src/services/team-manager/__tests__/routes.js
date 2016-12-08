@@ -3,9 +3,8 @@ import request from 'supertest';
 import service from '../routes';
 import responseJSON from '../../http/response';
 
-import { driverFrontEndMock } from '../__mocks__/driver';
 import loggerMock from '../../logger/__mocks__/';
-import teamManagerMock from '../__mocks__/';
+import teamManagerMock, { teamMock } from '../__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
   '../../model/model-pull-request/__mocks__/';
 
@@ -17,8 +16,8 @@ describe('services/team-manager/routes', function () {
   beforeEach(function () {
     app = express();
 
+    driver = teamMock();
     logger = loggerMock();
-    driver = driverFrontEndMock();
     members = [{ login: 'foo' }, { login: 'bar' }];
     pullRequest = pullRequestMock();
     teamManager = teamManagerMock();
@@ -39,7 +38,7 @@ describe('services/team-manager/routes', function () {
       .withArgs('github/hubot', '1')
       .returns(Promise.resolve(pullRequest));
 
-    driver.getMembersForReview.returns(Promise.resolve(members));
+    driver.getCandidates.returns(Promise.resolve(members));
 
     router = service(options, imports);
   });

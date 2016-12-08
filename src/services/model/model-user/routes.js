@@ -4,7 +4,7 @@ import { NotFoundError } from '../../http/error';
 
 export default function setup(options, imports) {
 
-  const logger = imports.logger.getLogger('http-user');
+  const logger = imports.logger.getLogger('http.model.user');
   const UserModel = imports.model('user');
 
   const userRoute = router();

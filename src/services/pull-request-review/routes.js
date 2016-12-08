@@ -2,7 +2,7 @@ import { Router as router } from 'express';
 
 export default function setup(options, imports) {
 
-  const logger = imports.logger.getLogger('http-pull-request');
+  const logger = imports.logger.getLogger('http.model.pull-request');
   const PullRequestModel = imports['pull-request-model'];
 
   const pullRequestReviewRouter = router();

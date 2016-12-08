@@ -1,45 +1,31 @@
 import { find } from 'lodash';
-import AbstractDriver, { AbstractDriverFrontEnd } from '../driver';
+import { StaticDriver, StaticDriverFactory } from '../driver-static/class';
 
-export default class GitHubDriver extends AbstractDriver {
-
-  constructor(github) {
-    super();
-
-    this.github = github;
-  }
-
-  makeDriver(team, config) {
-    return new GitHubDriverFrontEnd(this.github, team, config);
-  }
-
-}
-
-export class GitHubDriverFrontEnd extends AbstractDriverFrontEnd {
+export class GitHubDriver extends StaticDriver {
 
   /**
    * @constructor
    *
-   * @param {Object} github - GitHub API module
    * @param {Object} team
-   * @param {Object} config
+   * @param {Object} github - GitHub API module
+   * @param {Object} driverConfig
    */
-  constructor(github, team, config) {
-    super(team, config);
+  constructor(team, github, driverConfig) {
+    super(team);
 
-    if (!config.orgName) {
+    if (!driverConfig.orgName) {
       throw new Error('Required parameter "orgName" is not given');
     }
 
     this.github = github;
-    this.orgName = config.orgName;
-    this.slugName = config.slugName;
+    this.orgName = driverConfig.orgName;
+    this.slugName = driverConfig.slugName;
   }
 
   /**
    * @override
    */
-  getMembersForReview() {
+  getCandidates() {
     if (!this.slugName) {
       return this.getMembersByOrgName(this.orgName);
     } else {
@@ -105,6 +91,19 @@ export class GitHubDriverFrontEnd extends AbstractDriverFrontEnd {
         resolve(result);
       });
     });
+  }
+
+}
+
+export class GitHubDriverFactory extends StaticDriverFactory {
+
+  constructor(github) {
+    super();
+    this.github = github;
+  }
+
+  makeDriver(team, driverConfig) {
+    return new GitHubDriver(team, this.github, driverConfig);
   }
 
 }

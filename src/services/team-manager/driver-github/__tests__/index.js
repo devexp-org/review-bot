@@ -3,7 +3,7 @@ import githubMock from '../../../github/__mocks__/index';
 
 describe('services/team-manager/driver-github', function () {
 
-  let options, imports, driver, github;
+  let options, imports, factory, github;
 
   beforeEach(function () {
     github = githubMock();
@@ -13,9 +13,9 @@ describe('services/team-manager/driver-github', function () {
   });
 
   it('should be resolved to AbstractDriver', function () {
-    driver = service(options, imports);
+    factory = service(options, imports);
 
-    assert.property(driver, 'makeDriver');
+    assert.property(factory, 'makeDriver');
   });
 
 });

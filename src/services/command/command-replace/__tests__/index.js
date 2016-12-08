@@ -1,7 +1,7 @@
 import service from '../';
 
-import teamMock from '../../../team-manager/__mocks__/driver';
 import commandMock from '../../__mocks__/';
+import { teamMock } from '../../../team-manager/__mocks__/';
 import teamManagerMock from '../../../team-manager/__mocks__/class';
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';

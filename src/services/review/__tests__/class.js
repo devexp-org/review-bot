@@ -4,7 +4,7 @@ import loggerMock from '../../logger/__mocks__/';
 import { membersMock } from '../../team-manager/__mocks__/';
 import teamManagerMock from '../../team-manager/__mocks__/class';
 import { pullRequestMock } from '../../model/model-pull-request/__mocks__/';
-import { driverFrontEndMock } from '../../team-manager/__mocks__/driver';
+import { teamMock } from '../../team-manager/__mocks__/';
 
 describe('services/review/class', function () {
 
@@ -15,8 +15,8 @@ describe('services/review/class', function () {
 
     logger = loggerMock();
 
-    teamDriver = driverFrontEndMock();
-    teamDriver.getMembersForReview.returns(Promise.resolve(membersMock()));
+    teamDriver = teamMock();
+    teamDriver.getCandidates.returns(Promise.resolve(membersMock()));
 
     teamManager = teamManagerMock();
     teamManager.findTeamByPullRequest.returns(teamDriver);

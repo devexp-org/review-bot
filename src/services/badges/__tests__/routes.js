@@ -1,6 +1,7 @@
-import service from '../routes';
 import express from 'express';
 import request from 'supertest';
+
+import service from '../routes';
 import responseJSON from '../../../services/http/response';
 
 import eventsMock from '../../../services/events/__mocks__/';
@@ -36,9 +37,9 @@ describe('services/badges', function () {
 
   });
 
-  it('should emit event `review:update_badges` on `/:org/:repo/:number/update_badges`', function (done) {
+  it('should emit event `review:update_badges`', function (done) {
     request(app)
-      .get('/org/repo/1/update_badges')
+      .get('/org/repo/1/update-badges')
       .expect('"ok"')
       .expect('Content-Type', /text\/html/)
       .expect(200)
@@ -54,7 +55,7 @@ describe('services/badges', function () {
       .returns(Promise.resolve(null));
 
     request(app)
-      .get('/org/repo/1/update_badges')
+      .get('/org/repo/1/update-badges')
       .expect('{"message":"Pull request org/repo#1 is not found"}')
       .expect('Content-Type', /application\/json/)
       .expect(404)

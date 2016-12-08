@@ -3,7 +3,7 @@ import { NotFoundError } from '../http/error';
 
 export default function setup(options, imports) {
 
-  const logger = imports.logger.getLogger('http-team-manager');
+  const logger = imports.logger.getLogger('http.team-manager');
   const teamManager = imports['team-manager'];
   const PullRequestModel = imports['pull-request-model'];
 
@@ -30,7 +30,7 @@ export default function setup(options, imports) {
           ));
         }
 
-        return team.getMembersForReview(pullRequest);
+        return team.getCandidates(pullRequest);
       })
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));

@@ -23,7 +23,7 @@ describe('services/team/class', function () {
     });
 
     it('should use team driver', function (done) {
-      teamModel.findAll.returns(Promise.resolve([
+      teamModel.exec.returns(Promise.resolve([
         {
           name: 'team1',
           driver: { name: 'default', options: {} },
@@ -37,7 +37,7 @@ describe('services/team/class', function () {
     });
 
     it('should use the first matched route', function (done) {
-      teamModel.findAll.returns(Promise.resolve([
+      teamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['github/hubot'] },
         { name: 'team2', patterns: ['nodejs/node'] },
         { name: 'team3', patterns: ['*'] }
@@ -49,7 +49,7 @@ describe('services/team/class', function () {
     });
 
     it('should interpret "*" as "always match"', function (done) {
-      teamModel.findAll.returns(Promise.resolve([
+      teamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['*'] }
       ]));
 
@@ -59,7 +59,7 @@ describe('services/team/class', function () {
     });
 
     it('should understand wildcard', function (done) {
-      teamModel.findAll.returns(Promise.resolve([
+      teamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['nodejs/*'] }
       ]));
 
@@ -69,7 +69,7 @@ describe('services/team/class', function () {
     });
 
     it('should return an error if there are no matched routes', function (done) {
-      teamModel.findAll.returns(Promise.resolve([
+      teamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['other-org/other-repo'] }
       ]));
 
