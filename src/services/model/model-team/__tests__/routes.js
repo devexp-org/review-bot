@@ -50,7 +50,7 @@ describe('services/model/model-team/routes', function () {
     it('should return a team list', function (done) {
       request(app)
         .get('/')
-        .expect('[{"name":"name","members":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}]')
+        .expect('[{"name":"name","members":[],"patterns":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}]')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -64,7 +64,7 @@ describe('services/model/model-team/routes', function () {
       request(app)
         .post('/')
         .field('name', 'testteam')
-        .expect('{"name":"name","members":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}')
+        .expect('{"name":"name","members":[],"patterns":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -91,7 +91,7 @@ describe('services/model/model-team/routes', function () {
     it('should return a team', function (done) {
       request(app)
         .get('/testteam')
-        .expect('{"name":"name","members":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}')
+        .expect('{"name":"name","members":[],"patterns":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);

@@ -13,11 +13,9 @@ export function baseSchema() {
       ref: 'user',
       type: Schema.Types.ObjectId
     }],
+    patterns: [String],
     reviewConfig: {
-      steps: [{
-        name: String,
-        options: {}
-      }],
+      steps: [{ name: String, options: Object }],
       approveCount: Number,
       totalReviewers: Number
     }

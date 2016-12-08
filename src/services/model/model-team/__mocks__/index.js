@@ -5,6 +5,7 @@ export function teamMock() {
   const team = {
     name: 'name',
     members: [],
+    patterns: [],
     reviewConfig: {
       steps: [
         { name: 'load', options: { max: 5 } }

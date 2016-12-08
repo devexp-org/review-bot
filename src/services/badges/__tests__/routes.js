@@ -41,11 +41,11 @@ describe('services/badges', function () {
     request(app)
       .get('/org/repo/1/update-badges')
       .expect('"ok"')
-      .expect('Content-Type', /text\/html/)
+      .expect('Content-Type', /application\/json/)
       .expect(200)
-      .end(() => {
+      .end(error => {
         assert.calledWith(events.emit, 'review:update_badges');
-        done();
+        done(error);
       });
   });
 

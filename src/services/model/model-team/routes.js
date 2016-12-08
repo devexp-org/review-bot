@@ -50,6 +50,7 @@ export default function setup(options, imports) {
     const id = req.params.id;
 
     const name = req.body.name || '';
+    const patterns = req.body.patterns || '';
     const reviewConfig = req.body.reviewConfig || {};
 
     TeamModel
@@ -65,6 +66,7 @@ export default function setup(options, imports) {
       .then(team => {
         return team
           .set('name', name)
+          .set('patterns', patterns)
           .set('reviewConfig', reviewConfig)
           .save();
       })
