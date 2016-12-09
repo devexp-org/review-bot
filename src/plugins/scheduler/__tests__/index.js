@@ -1,13 +1,13 @@
 import proxyquire from 'proxyquire';
 
-import eventsMock from '../../events/__mocks__/';
-import loggerMock from '../../logger/__mocks__/';
+import eventsMock from '../../../services/events/__mocks__/';
+import loggerMock from '../../../services/logger/__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
-  '../../model/model-pull-request/__mocks__/';
+  '../../../services/model/model-pull-request/__mocks__/';
 import {
   pullRequestReviewMixin,
   pullRequestModelReviewMixin
-} from '../../pull-request-review/__mocks__/';
+} from '../../../services/pull-request-review/__mocks__/';
 
 describe('services/schedule', function () {
 

@@ -11,6 +11,7 @@ export function staticMock(obj) {
   statics.sort = sinon.stub().returnsThis();
   statics.skip = sinon.stub().returnsThis();
   statics.limit = sinon.stub().returnsThis();
+  statics.select = sinon.stub().returnsThis();
   statics.populate = sinon.stub().returnsThis();
 
   statics.exec = sinon.stub().returns(Promise.resolve(null));

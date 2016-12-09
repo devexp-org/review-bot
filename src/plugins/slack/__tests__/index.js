@@ -1,7 +1,7 @@
 import proxyquire from 'proxyquire';
 
 import slackMock from '../__mocks__/';
-import loggerMock from '../../logger/__mocks__/';
+import loggerMock from '../../../services/logger/__mocks__/';
 
 describe('services/slack', function () {
 

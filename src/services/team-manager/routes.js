@@ -23,14 +23,16 @@ export default function setup(options, imports) {
           ));
         }
 
-        const team = teamManager.findTeamByPullRequest(pullRequest);
+        return teamManager.findTeamByPullRequest(pullRequest);
+      })
+      .then(team => {
         if (!team) {
           return Promise.reject(new NotFoundError(
             `Team for pull request ${org}/${repo}/${number} is not found`
           ));
         }
 
-        return team.getCandidates(pullRequest);
+        return team.getCandidates();
       })
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));

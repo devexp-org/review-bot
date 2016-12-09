@@ -1,6 +1,6 @@
 import proxyquire from 'proxyquire';
 import jabberMock from '../__mocks__/';
-import loggerMock from '../../logger/__mocks__/';
+import loggerMock from '../../../services/logger/__mocks__/';
 
 describe('services/jabber', function () {
 

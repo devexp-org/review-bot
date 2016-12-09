@@ -1,11 +1,11 @@
 import ProjectConfig from '../class';
 
-import loggerMock from '../../logger/__mocks__/';
-import githubMock from '../../github/__mocks__/';
-import { teamMock } from '../../team-manager/__mocks__/';
-import teamManagerMock from '../../team-manager/__mocks__/';
-import { pullRequestMock } from '../../model/model-pull-request/__mocks__/';
-import { pullRequestModelReviewMixin } from '../../pull-request-review/__mocks__/';
+import loggerMock from '../../../services/logger/__mocks__/';
+import githubMock from '../../../services/github/__mocks__/';
+import { teamMock } from '../../../services/team-manager/__mocks__/';
+import teamManagerMock from '../../../services/team-manager/__mocks__/';
+import { pullRequestMock } from '../../../services/model/model-pull-request/__mocks__/';
+import { pullRequestModelReviewMixin } from '../../../services/pull-request-review/__mocks__/';
 
 describe('services/project-config/config', function () {
 

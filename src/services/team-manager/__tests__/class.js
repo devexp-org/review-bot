@@ -24,12 +24,16 @@ describe('services/team/class', function () {
 
     it('should use team driver', function (done) {
       teamModel.exec.returns(Promise.resolve([
-        {
+        { name: 'team1', patterns: ['nodejs/node'] }
+      ]));
+
+      teamModel.findByNameWithMembers
+        .withArgs('team1')
+        .returns(Promise.resolve({
           name: 'team1',
           driver: { name: 'default', options: {} },
           patterns: ['nodejs/node']
-        }
-      ]));
+        }));
 
       dispatcher.findTeamByPullRequest(pullRequest)
         .then(result => assert.equal(result.name, 'team1'))
@@ -43,6 +47,10 @@ describe('services/team/class', function () {
         { name: 'team3', patterns: ['*'] }
       ]));
 
+      teamModel.findByNameWithMembers
+        .withArgs('team2')
+        .returns(Promise.resolve({ name: 'team2' }));
+
       dispatcher.findTeamByPullRequest(pullRequest)
         .then(result => assert.equal(result.name, 'team2'))
         .then(done, done);
@@ -52,6 +60,10 @@ describe('services/team/class', function () {
       teamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['*'] }
       ]));
+
+      teamModel.findByNameWithMembers
+        .withArgs('team1')
+        .returns(Promise.resolve({ name: 'team1' }));
 
       dispatcher.findTeamByPullRequest(pullRequest)
         .then(result => assert.equal(result.name, 'team1'))
@@ -63,6 +75,10 @@ describe('services/team/class', function () {
         { name: 'team1', patterns: ['nodejs/*'] }
       ]));
 
+      teamModel.findByNameWithMembers
+        .withArgs('team1')
+        .returns(Promise.resolve({ name: 'team1' }));
+
       dispatcher.findTeamByPullRequest(pullRequest)
         .then(result => assert.equal(result.name, 'team1'))
         .then(done, done);
@@ -72,6 +88,10 @@ describe('services/team/class', function () {
       teamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['other-org/other-repo'] }
       ]));
+
+      teamModel.findByNameWithMembers
+        .withArgs('team1')
+        .returns(Promise.resolve({ name: 'team1' }));
 
       dispatcher.findTeamByPullRequest(pullRequest)
         .then(() => assert.fail())

@@ -25,13 +25,13 @@ export default class TeamManager {
    * @return {Promise.<Array.<TeamRoute>>}
    */
   getRoutes() {
-    return this.teamModel.find({}).exec()
+    return this.teamModel.find({}).select({ name: 1, patterns: 1 }).exec()
       .then(array => {
         const routes = [];
 
         forEach(array, (team) => {
           forEach(team.patterns, (pattern) => {
-            routes.push({ team: this.getDriver(team), pattern });
+            routes.push({ team: team.name, pattern });
           });
         });
 
@@ -42,21 +42,20 @@ export default class TeamManager {
   /**
    * Returns driver for given team.
    *
-   * @param {Object} team
+   * @param {Object} teamName
    *
    * @return {Object}
    */
-  getDriver(team) {
-    const driverName = team.driver && team.driver.name;
+  getDriver(teamName) {
+    return this.teamModel
+      .findByNameWithMembers(teamName)
+      .then(team => {
+        const driverName = team.driver && team.driver.name;
+        const driverConfig = team.driver && team.driver.options || {};
+        const driverFactory = this.drivers[driverName] || this.defaultFactory;
 
-    if (driverName && driverName in this.drivers) {
-      const options = team.driver.options || options;
-      const factory = this.drivers[driverName];
-
-      return factory.makeDriver(team, options);
-    } else {
-      return this.defaultFactory.makeDriver(team);
-    }
+        return driverFactory.makeDriver(team, driverConfig);
+      });
   }
 
   /**
@@ -92,7 +91,7 @@ export default class TeamManager {
    * @return {Promise.<Team>}
    */
   findTeamByPullRequest(pullRequest) {
-    return this.find(pullRequest).then(route => route.team);
+    return this.find(pullRequest).then(route => this.getDriver(route.team));
   }
 
   /**

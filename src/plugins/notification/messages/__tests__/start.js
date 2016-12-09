@@ -1,7 +1,7 @@
 import service from '../start';
-import eventsMock from '../../../events/__mocks__/';
-import loggerMock from '../../../logger/__mocks__/';
-import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';
+import eventsMock from '../../../../services/events/__mocks__/';
+import loggerMock from '../../../../services/logger/__mocks__/';
+import { pullRequestMock } from '../../../../services/model/model-pull-request/__mocks__/';
 
 describe('services/notification/start', function () {
 

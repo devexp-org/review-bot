@@ -1,6 +1,6 @@
 import service from '../';
-import modelMock from '../../model/__mocks__/';
-import { userMock, userModelMock } from '../../model/model-user/__mocks__/';
+import modelMock from '../../../services/model/__mocks__/';
+import { userMock, userModelMock } from '../../../services/model/model-user/__mocks__/';
 
 describe('services/notification', function () {
 

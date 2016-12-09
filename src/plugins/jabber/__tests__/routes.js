@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
 import service from '../routes';
-import responseJSON from '../../http/response';
+import responseJSON from '../../../services/http/response';
 
 import jabberMock from '../__mocks__/';
 

@@ -28,11 +28,9 @@ export class StaticDriver {
   /**
    * Returns candidates for review.
    *
-   * @param {PullRequest} pullRequest
-   *
    * @return {Promise.<Array.<Reviewer>>}
    */
-  getCandidates(pullRequest) {
+  getCandidates() {
     return Promise.resolve(cloneDeep(this.members));
   }
 
