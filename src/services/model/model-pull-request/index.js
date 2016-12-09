@@ -82,6 +82,20 @@ export function setupModel(modelName, model) {
   });
 
   /**
+   * Finds pull requests by id.
+   *
+   * @param {String} login
+   *
+   * @return {Promise.<PullRequest>}
+   */
+  model.statics.findById = function (login) {
+    return this
+      .model(modelName)
+      .findOne({ id: login })
+      .exec();
+  };
+
+  /**
    * Finds pull requests by user.
    *
    * @param {String} login

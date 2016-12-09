@@ -27,8 +27,8 @@ export default class PullRequestGitHub {
   loadPullRequestFromGitHub(local) {
     return new Promise((resolve, reject) => {
       const req = {
-        user: local.owner,
         repo: local.repository.name,
+        owner: local.owner,
         number: local.number
       };
 
@@ -52,9 +52,10 @@ export default class PullRequestGitHub {
 
     return new Promise((resolve, reject) => {
       const req = {
-        user: local.owner,
         repo: local.repository.name,
         body: local.body,
+        base: 'master',
+        owner: local.owner,
         title: local.title,
         number: local.number
       };
@@ -73,8 +74,8 @@ export default class PullRequestGitHub {
   loadPullRequestFiles(local) {
     return new Promise((resolve, reject) => {
       const req = {
-        user: local.owner,
         repo: local.repository.name,
+        owner: local.owner,
         number: local.number,
         per_page: 100
       };

@@ -1,0 +1,13 @@
+{
+
+  "autoassign": {
+    "path": "./src/plugins/autoassign",
+    "dependencies": [
+      "events",
+      "logger",
+      "review",
+      "pull-request-review"
+    ]
+  }
+
+}

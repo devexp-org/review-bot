@@ -35,28 +35,29 @@ export default class Review {
    * @return {Promise.<Review>}
    */
   setTeam(review) {
-    const team = this.teamManager.findTeamByPullRequest(review.pullRequest);
+    return this.teamManager.findTeamByPullRequest(review.pullRequest)
+      .then(team => {
+        if (!team) {
+          return Promise.reject(new Error(
+            `Team is not found for pull request ${review.pullRequest}`
+          ));
+        }
 
-    if (!team) {
-      return Promise.reject(new Error(
-        `Team is not found for pull request ${review.pullRequest}`
-      ));
-    }
+        review.team = team;
 
-    review.team = team;
+        review.approveCount = team.getOption(
+          'approveCount', this.options.approveCount
+        );
 
-    review.approveCount = team.getOption(
-      'approveCount', this.options.approveCount
-    );
+        review.totalReviewers = team.getOption(
+          'totalReviewers', this.options.totalReviewers
+        );
 
-    review.totalReviewers = team.getOption(
-      'totalReviewers', this.options.totalReviewers
-    );
-
-    return team.getCandidates(review.pullRequest)
-      .then(members => {
-        review.members = members;
-        return review;
+        return team.getCandidates(review.pullRequest)
+          .then(members => {
+            review.members = members;
+            return review;
+          });
       });
   }
 
@@ -83,7 +84,11 @@ export default class Review {
    * @return {Promise.<Array.<Function>>}
    */
   getSteps(review) {
-    const stepNames = review.team.getOption('steps', this.options.steps);
+    let stepNames = review.team.getOption('steps');
+
+    if (isEmpty(stepNames)) {
+      stepNames = this.options.steps;
+    }
 
     if (isEmpty(stepNames)) {
       return Promise.reject(new Error('There are no any steps for given team'));

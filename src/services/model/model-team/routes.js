@@ -103,12 +103,25 @@ export default function setup(options, imports) {
 
   teamRoute.post('/:id/members', function (req, res) {
     const id = req.params.id;
-    const user = req.body.user;
+    const login = req.body.login;
 
-    Promise.all([findByName(id), findByLogin(user)])
+    Promise.all([findByName(id, true), findByLogin(login)])
       .then(([team, user]) => {
-        team.members.push(user);
-        return 'ok';
+        team.members.push(user); // TODO unique
+        return team.save();
+      })
+      .then(res.json.bind(res))
+      .catch(res.handleError.bind(res, logger));
+  });
+
+  teamRoute.delete('/:id/members', function (req, res) {
+    const id = req.params.id;
+    const login = req.body.login;
+
+    findByName(id, true)
+      .then(team => {
+        team.members = team.members.filter(member => member.login !== login);
+        return team.save();
       })
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));

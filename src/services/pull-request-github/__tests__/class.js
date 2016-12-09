@@ -30,7 +30,7 @@ describe('services/pull-request-github/class', function () {
             github.pullRequests.get,
             sinon.match({
               repo: sinon.match.string,
-              user: sinon.match.string,
+              owner: sinon.match.string,
               number: sinon.match.number
             })
           );
@@ -71,7 +71,7 @@ describe('services/pull-request-github/class', function () {
             github.pullRequests.update,
             sinon.match({
               repo: sinon.match.string,
-              user: sinon.match.string,
+              owner: sinon.match.string,
               number: sinon.match.number
             })
           );
@@ -117,7 +117,7 @@ describe('services/pull-request-github/class', function () {
             github.pullRequests.getFiles,
             sinon.match({
               repo: sinon.match.string,
-              user: sinon.match.string,
+              owner: sinon.match.string,
               number: sinon.match.number,
               per_page: sinon.match.number
             })

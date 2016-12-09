@@ -1,5 +1,17 @@
 {
 
+  "http-routes-badges": {
+    "path": "./src/plugins/badges-http",
+    "options": {
+      "template": "flat-square"
+    },
+    "#plugin:http": {
+      "routes": {
+        "/badges": "http-routes-badges"
+      }
+    }
+  },
+
   "http-routes-user": {
     "path": "./src/services/model/model-user/routes",
     "dependencies": [
@@ -22,6 +34,21 @@
     "#plugin:http": {
       "routes": {
         "/teams": "http-routes-team"
+      }
+    }
+  },
+
+  "http-routes-github": {
+    "path": "./src/services/pull-request-webhook",
+    "dependencies": [
+      "events",
+      "logger",
+      "pull-request-model",
+      "pull-request-github"
+    ],
+    "#plugin:http": {
+      "routes": {
+        "/github": "http-routes-github"
       }
     }
   }

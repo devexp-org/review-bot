@@ -184,6 +184,10 @@
 
     "#include:command": "./default-command.json",
 
+    "#include:badges": "./default-badges.json",
+
+    "#include:plugins": "./default-plugins.json",
+
     "#comment:__LASTLINE__": ""
   }
 

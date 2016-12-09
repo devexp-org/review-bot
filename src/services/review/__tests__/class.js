@@ -19,7 +19,7 @@ describe('services/review/class', function () {
     teamDriver.getCandidates.returns(Promise.resolve(membersMock()));
 
     teamManager = teamManagerMock();
-    teamManager.findTeamByPullRequest.returns(teamDriver);
+    teamManager.findTeamByPullRequest.returns(Promise.resolve(teamDriver));
 
     pullRequest = pullRequestMock();
 
@@ -183,7 +183,7 @@ describe('services/review/class', function () {
     });
 
     it('should return rejected promise if team is not found', function (done) {
-      teamManager.findTeamByPullRequest.returns(null);
+      teamManager.findTeamByPullRequest.returns(Promise.resolve(null));
 
       review.choose(pullRequest)
         .then(() => { throw new Error('should reject promise'); })

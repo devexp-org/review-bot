@@ -19,6 +19,7 @@ export default function setup() {
 
         case 'CastError':
           resStatus = 400;
+          break;
 
         case 'MongoError':
           logError = err.name + ': ' + err.errmsg;
