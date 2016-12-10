@@ -1,5 +1,5 @@
 import util from 'util';
-import { find, reject, cloneDeep } from 'lodash';
+import { find, reject, isEmpty, cloneDeep } from 'lodash';
 
 export const EVENT_NAME = 'review:command:replace';
 export const COMMAND_RE = '/replace (@?\\w+)';
@@ -47,6 +47,10 @@ export default function commandService(options, imports) {
 
     return review.choose(pullRequest)
       .then(({ reviewers }) => {
+        if (isEmpty(reviewers)) {
+          return pullRequest;
+        }
+
         pullRequestReviewers = reject(
           pullRequestReviewers, { login: oldReviewerLogin }
         );

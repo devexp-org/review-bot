@@ -53,8 +53,8 @@ export function getCommits(github, logger, pullRequest, since, commitsCount = 10
     const promise = [];
 
     const options = {
-      user: pullRequest.owner,
       repo: pullRequest.repository.name,
+      owner: pullRequest.owner,
       per_page: commitsCount
     };
 

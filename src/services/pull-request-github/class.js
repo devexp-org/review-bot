@@ -54,7 +54,7 @@ export default class PullRequestGitHub {
       const req = {
         repo: local.repository.name,
         body: local.body,
-        base: 'master',
+        base: local.base.ref,
         owner: local.owner,
         title: local.title,
         number: local.number
@@ -106,6 +106,7 @@ export default class PullRequestGitHub {
 
   setPayload(local, payload) {
     const remote = payload.pull_request;
+
     remote.repository = payload.repository;
 
     local.set(remote);

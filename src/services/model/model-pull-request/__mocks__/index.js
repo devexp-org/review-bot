@@ -11,6 +11,7 @@ export function pullRequestMock(mixin) {
     html_url: 'html_url',
     state: 'open',
     user: { id: 3, login: 'user.login' },
+    base: { ref: 'master' },
     owner: 'repository.owner.login',
     repository: {
       id: 4,

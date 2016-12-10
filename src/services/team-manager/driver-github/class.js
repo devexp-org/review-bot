@@ -34,6 +34,10 @@ export class GitHubDriver extends StaticDriver {
     }
   }
 
+  syncMembers(members) {
+
+  }
+
   /**
    * Find team id by org name and slug
    *

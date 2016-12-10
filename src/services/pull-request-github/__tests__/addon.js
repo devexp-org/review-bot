@@ -9,7 +9,7 @@ describe('services/pull-request-github/addon', function () {
     const plugin = service();
     plugin(schema);
 
-    assert.calledWith(schema.add, { section: {} });
+    assert.calledWith(schema.add, { section: Object });
   });
 
 });

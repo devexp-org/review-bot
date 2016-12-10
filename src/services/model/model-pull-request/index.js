@@ -13,6 +13,9 @@ export function baseSchema() {
       type: String,
       'enum': ['open', 'closed']
     },
+    base: {
+      ref: String
+    },
     user: {
       id: Number,
       login: String,

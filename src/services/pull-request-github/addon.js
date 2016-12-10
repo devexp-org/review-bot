@@ -5,8 +5,8 @@ export default function setup(options, imports) {
    *
    * @param {Object} schema - mongoose schema.
    */
-  return function (schema) {
-    schema.add({ section: {} });
+  return function plugin(schema) {
+    schema.add({ section: Object });
   };
 
 }
