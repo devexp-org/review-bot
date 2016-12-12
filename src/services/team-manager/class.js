@@ -1,8 +1,6 @@
 import { forEach } from 'lodash';
 import minimatch from 'minimatch';
 
-import { StaticDriverFactory } from './driver-static/class';
-
 export default class TeamManager {
 
   /**
@@ -11,16 +9,23 @@ export default class TeamManager {
    * @param {Array} drivers
    * @param {Object} teamModel
    */
-  constructor(drivers, teamModel) {
-    this.drivers = drivers;
-    this.teamModel = teamModel;
+  constructor(drivers, userModel, teamModel) {
+    if (!drivers.static) {
+      throw new Error('Required driver "static" is not given');
+    }
 
-    this.defaultFactory = new StaticDriverFactory();
-    this.drivers.default = this.defaultFactory;
+    this.drivers = drivers;
+    this.UserModel = userModel;
+    this.TeamModel = teamModel;
   }
 
-  getDrivers() {
-    return this.drivers;
+  /**
+   * Returns all teams. Only name and patterns.
+   *
+   * @return {Promise.<Array.<Team>>}
+   */
+  getTeams() {
+    return this.teamModel.find({}).select({ name: 1, patterns: 1 }).exec();
   }
 
   /**
@@ -29,7 +34,7 @@ export default class TeamManager {
    * @return {Promise.<Array.<TeamRoute>>}
    */
   getRoutes() {
-    return this.teamModel.find({}).select({ name: 1, patterns: 1 }).exec()
+    return this.getTeams()
       .then(array => {
         const routes = [];
 
@@ -44,19 +49,32 @@ export default class TeamManager {
   }
 
   /**
+   * Returns all drivers
+   *
+   * @return {Array}
+   */
+  getDrivers() {
+    return this.drivers;
+  }
+
+  /**
    * Returns driver for given team.
    *
    * @param {Object} teamName
    *
    * @return {Object}
    */
-  getDriver(teamName) {
+  getTeamDriver(teamName) {
     return this.teamModel
-      .findByNameWithMembers(teamName)
+      .findByName(teamName)
       .then(team => {
         const driverName = team.driver && team.driver.name;
         const driverConfig = team.driver && team.driver.options || {};
-        const driverFactory = this.drivers[driverName] || this.defaultFactory;
+        const driverFactory = this.drivers[driverName];
+
+        if (!driverFactory) {
+          throw new Error(`Unknown driver '${driverName}' of '${teamName}'`);
+        }
 
         return driverFactory.makeDriver(team, driverConfig);
       });
@@ -88,6 +106,60 @@ export default class TeamManager {
   }
 
   /**
+   * Synchronizes all team members to database
+   *
+   * @param {String} teamName
+   *
+   * @returns {Promise}
+   */
+  sync() {
+    return this.getTeams()
+      .then(array => {
+        return Promise.all(array.map(team => this.syncTeam(team.name)));
+      });
+  }
+
+  /**
+   * Synchronizes users in team to database
+   *
+   * @param {String} teamName
+   *
+   * @returns {Promise}
+   */
+  syncTeam(teamName) {
+    this.getTeamDriver(teamName)
+      .then(driver => {
+        return driver.getCandidates()
+          .then(this.syncUsers.bind(this, driver))
+          .then(this.syncTeamMembers.bind(this, teamName))
+      });
+  }
+
+  syncUsers(driver, members) {
+    const promise = map(members, (member) => {
+      return this.UserModel
+        .findByLogin(member.login)
+        .then(user => {
+          if (user) return user;
+
+          user = driver.createUser(member);
+          return user.validate().then(user.save.bind(user));
+        });
+    });
+
+    return Promise.all(promise);
+  }
+
+  syncTeamMembes(teamName, members) {
+    return this.TeamModel.findByName(teamName)
+      .then(team => {
+        if (!team) return;
+        team.set('members', members);
+        return team.save();
+      });
+  }
+
+  /**
    * Return team of matched route
    *
    * @param {PullRequest} pullRequest
@@ -95,7 +167,7 @@ export default class TeamManager {
    * @return {Promise.<Team>}
    */
   findTeamByPullRequest(pullRequest) {
-    return this.find(pullRequest).then(route => this.getDriver(route.team));
+    return this.find(pullRequest).then(route => this.getTeamDriver(route.team));
   }
 
   /**

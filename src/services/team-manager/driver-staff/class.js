@@ -28,7 +28,8 @@ export default class YandexStaffDriver extends StaticDriver {
   getCandidates() {
     return this.staff
       .getUsersInOffice(this.groupId)
-      .then(team => cloneDeep(team));
+      .then(team => cloneDeep(team))
+      .then(this.sync.bind(this));
   }
 
   /**
@@ -38,6 +39,46 @@ export default class YandexStaffDriver extends StaticDriver {
     return this.staff
       .apiUserInfo(login)
       .then(user => this.staff._addAvatarAndUrl(user));
+  }
+
+  sync(members) {
+    return this.syncUsers(members).then(this.syncTeam.bind(this));
+  }
+
+  syncTeam(members) {
+    return this.TeamModel.findByName(this.name)
+      .then(team => {
+        if (!team) {
+          return members;
+        }
+
+        team.members = members;
+        return team.save();
+      })
+      .then(() => members);
+  }
+
+  syncUsers(members) {
+    const promise = map(members, (member) => {
+      return this.UserModel
+        .findByLogin(member.login)
+        .then(user => {
+          if (user) {
+            return user;
+          }
+
+          user = new this.UserModel({
+            login: member.login,
+            contacts: [
+              { id: 'email', account: member.login + '@yandex-team.ru' }
+              { id: 'jabber', account: member.login + '@yandex-team.ru' }
+            ]
+          });
+          return user.validate().then(user.save.bind(user));
+        });
+    });
+
+    return Promise.all(promise);
   }
 
 }
