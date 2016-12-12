@@ -51,6 +51,18 @@
         "/github": "http-routes-github"
       }
     }
-  }
+  },
 
+  "http-routes-team-manager": {
+    "path": "./src/services/team-manager/routes",
+    "dependencies": [
+      "logger",
+      "team-manager"
+    ],
+    "#plugin:http": {
+      "routes": {
+        "/team-manager": "http-routes-team-manager"
+      }
+    }
+  }
 }

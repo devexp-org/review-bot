@@ -1,4 +1,4 @@
-import { find } from 'lodash';
+import { map, find } from 'lodash';
 import { StaticDriver, StaticDriverFactory } from '../driver-static/class';
 
 export class GitHubDriver extends StaticDriver {
@@ -7,10 +7,12 @@ export class GitHubDriver extends StaticDriver {
    * @constructor
    *
    * @param {Object} team
-   * @param {Object} github - GitHub API module
    * @param {Object} driverConfig
+   * @param {Object} github - GitHub API module
+   * @param {Object} TeamModel
+   * @param {Object} UserModel
    */
-  constructor(team, github, driverConfig) {
+  constructor(team, driverConfig, github, TeamModel, UserModel) {
     super(team);
 
     if (!driverConfig.orgName) {
@@ -20,6 +22,9 @@ export class GitHubDriver extends StaticDriver {
     this.github = github;
     this.orgName = driverConfig.orgName;
     this.slugName = driverConfig.slugName;
+
+    this.TeamModel = TeamModel;
+    this.UserModel = UserModel;
   }
 
   /**
@@ -27,15 +32,46 @@ export class GitHubDriver extends StaticDriver {
    */
   getCandidates() {
     if (!this.slugName) {
-      return this.getMembersByOrgName(this.orgName);
+      return this.getMembersByOrgName(this.orgName).then(this.sync.bind(this));
     } else {
       return this.getTeamId(this.orgName, this.slugName)
-        .then(teamId => this.getMembersByTeamId(teamId));
+        .then(teamId => this.getMembersByTeamId(teamId))
+        .then(this.sync.bind(this));
     }
   }
 
-  syncMembers(members) {
+  sync(members) {
+    return this.syncUsers(members).then(this.syncTeam.bind(this));
+  }
 
+  syncTeam(members) {
+    return this.TeamModel.findByName(this.name)
+      .then(team => {
+        if (!team) {
+          return members;
+        }
+
+        team.members = members;
+        return team.save();
+      })
+      .then(() => members);
+  }
+
+  syncUsers(members) {
+    const promise = map(members, (member) => {
+      return this.UserModel
+        .findByLogin(member.login)
+        .then(user => {
+          if (user) {
+            return user;
+          }
+
+          user = new this.UserModel({ login: member.login });
+          return user.validate().then(user.save.bind(user));
+        });
+    });
+
+    return Promise.all(promise);
   }
 
   /**
@@ -101,13 +137,30 @@ export class GitHubDriver extends StaticDriver {
 
 export class GitHubDriverFactory extends StaticDriverFactory {
 
-  constructor(github) {
+  constructor(github, TeamModel, UserModel) {
     super();
     this.github = github;
+    this.TeamModel = TeamModel;
+    this.UserModel = UserModel;
   }
 
   makeDriver(team, driverConfig) {
-    return new GitHubDriver(team, this.github, driverConfig);
+    return new GitHubDriver(team, driverConfig, this.github, this.TeamModel, this.UserModel);
+  }
+
+  name() {
+    return 'github';
+  }
+
+  config() {
+    return {
+      orgName: {
+        type: 'string'
+      },
+      slugName: {
+        type: 'string'
+      }
+    };
   }
 
 }

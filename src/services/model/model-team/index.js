@@ -9,6 +9,10 @@ export function baseSchema() {
       minlength: 2,
       maxlength: 256
     },
+    driver: {
+      name: String,
+      options: Object
+    },
     members: [{
       ref: 'user',
       type: Schema.Types.ObjectId

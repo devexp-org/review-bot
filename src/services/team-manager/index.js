@@ -5,7 +5,7 @@ export default function setup(options, imports) {
 
   const model = imports.model;
 
-  const drivers = [];
+  const drivers = {};
   forEach(options.drivers, (driverName) => {
     const driverModule = imports[driverName];
 
@@ -13,7 +13,7 @@ export default function setup(options, imports) {
       throw new Error(`Cannot find driver module "${driverName}"`);
     }
 
-    drivers.push(driverModule);
+    drivers[driverModule.name()] = driverModule;
   });
 
   return new TeamManager(drivers, model('team'));

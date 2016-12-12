@@ -8,7 +8,7 @@ import teamManagerMock, { teamMock } from '../__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
   '../../model/model-pull-request/__mocks__/';
 
-describe('services/team-manager/routes', function () {
+describe.skip('services/team-manager/routes', function () {
 
   let app, options, imports, router;
   let driver, logger, members, pullRequest, teamManager, pullRequestModel;

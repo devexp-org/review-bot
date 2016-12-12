@@ -19,6 +19,10 @@ export default class TeamManager {
     this.drivers.default = this.defaultFactory;
   }
 
+  getDrivers() {
+    return this.drivers;
+  }
+
   /**
    * Returns all routes
    *

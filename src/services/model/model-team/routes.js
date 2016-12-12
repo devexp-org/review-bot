@@ -46,6 +46,7 @@ export default function setup(options, imports) {
   teamRoute.post('/', function (req, res) {
     const team = new TeamModel({
       name: req.body.name,
+      driver: req.body.driver,
       reviewConfig: req.body.reviewConfig
     });
 
@@ -68,6 +69,7 @@ export default function setup(options, imports) {
     const id = req.params.id;
 
     const name = req.body.name || '';
+    const driver = req.body.driver || {};
     const patterns = req.body.patterns || '';
     const reviewConfig = req.body.reviewConfig || {};
 
@@ -75,6 +77,7 @@ export default function setup(options, imports) {
       .then(team => {
         return team
           .set('name', name)
+          .set('driver', driver)
           .set('patterns', patterns)
           .set('reviewConfig', reviewConfig)
           .save();

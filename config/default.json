@@ -101,9 +101,25 @@
 
     "team-manager": {
       "path": "./src/services/team-manager",
+      "options": {
+        "drivers": {}
+      },
       "dependencies": [
         "model"
       ]
+    },
+
+    "team-driver-github": {
+      "path": "./src/services/team-manager/driver-github",
+      "dependencies": [
+        "model",
+        "github"
+      ],
+      "#plugin:team-manager": {
+        "drivers": {
+          "github": "team-driver-github"
+        }
+      }
     },
 
     "pull-request-model": {

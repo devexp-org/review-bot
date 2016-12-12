@@ -62,4 +62,12 @@ export class StaticDriverFactory {
     return new StaticDriver(team);
   }
 
+  name() {
+    return 'static';
+  }
+
+  config() {
+    return {};
+  }
+
 }
