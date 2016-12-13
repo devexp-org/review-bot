@@ -16,10 +16,6 @@ export default function setup(options, imports) {
     drivers[driverModule.name()] = driverModule;
   });
 
-  const teamManager = new TeamManager(drivers, model('user'), model('team'));
+  return new TeamManager(drivers, model('team'));
 
-  const timer = setTimeout(() => teamManager.sync(), 1000 * 3600 * 60);
-  timer.unref();
-
-  return teamManager;
 }

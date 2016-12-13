@@ -1,8 +1,8 @@
 import { cloneDeep } from 'lodash';
 
-import Team from '../../../services/team-dispatcher/team';
+import { StaticDriver } from '../../../services/team-manager/driver-static/class';
 
-export default class YandexStaffTeam extends Team {
+export default class YandexStaffTeam extends StaticDriver {
 
   /**
    * @constructor

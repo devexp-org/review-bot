@@ -2,8 +2,8 @@ import ProjectConfig from '../class';
 
 import loggerMock from '../../../services/logger/__mocks__/';
 import githubMock from '../../../services/github/__mocks__/';
-import { teamMock } from '../../../services/team-manager/__mocks__/';
 import teamManagerMock from '../../../services/team-manager/__mocks__/';
+import { teamDriverMock } from '../../../services/team-manager/__mocks__/';
 import { pullRequestMock } from '../../../services/model/model-pull-request/__mocks__/';
 import { pullRequestModelReviewMixin } from '../../../services/pull-request-review/__mocks__/';
 
@@ -31,7 +31,7 @@ describe('services/project-config/config', function () {
       { filename: '5.txt' }
     ];
 
-    team = teamMock();
+    team = teamDriverMock();
 
     team.findTeamMember
       .withArgs('foo').returns(Promise.resolve({ login: 'foo' }));

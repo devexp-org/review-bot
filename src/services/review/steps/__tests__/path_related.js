@@ -5,7 +5,7 @@ import service, {
 
 import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';
 import { reviewMembersMock } from '../../__mocks__/';
-import { membersMock } from '../../../team-manager/__mocks__/';
+import { membersMock } from '../../../command/__mocks__/';
 import { pullRequestReviewMixin } from '../../../pull-request-review/__mocks__/';
 
 describe('services/review/steps/path_related', function () {

@@ -4,10 +4,10 @@ import loggerMock from '../../../services/logger/__mocks__/index';
 import eventsMock from '../../../services/events/__mocks__/index';
 import startrekMock from '../__mocks__/index';
 import componentsAPIMock from '../../components-api/__mocks__/index';
-import { pullRequestMock } from
-  '../../../services/model/collections/__mocks__/pull-request';
+// import { pullRequestMock } from
+//   '../../../services/model/collections/__mocks__/pull-request';
 
-describe('plugins/startrek/set-issue-status', function () {
+describe.skip('plugins/startrek/set-issue-status', function () {
 
   let options, imports;
   let events, logger, startrek, componentsAPI, payload, pullRequest;

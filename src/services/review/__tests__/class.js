@@ -1,10 +1,10 @@
 import Review from '../class';
 
 import loggerMock from '../../logger/__mocks__/';
-import { membersMock } from '../../team-manager/__mocks__/';
+import { membersMock } from '../../command/__mocks__/';
 import teamManagerMock from '../../team-manager/__mocks__/class';
 import { pullRequestMock } from '../../model/model-pull-request/__mocks__/';
-import { teamMock } from '../../team-manager/__mocks__/';
+import { teamDriverMock } from '../../team-manager/__mocks__/';
 
 describe('services/review/class', function () {
 
@@ -15,7 +15,7 @@ describe('services/review/class', function () {
 
     logger = loggerMock();
 
-    teamDriver = teamMock();
+    teamDriver = teamDriverMock();
     teamDriver.getCandidates.returns(Promise.resolve(membersMock()));
 
     teamManager = teamManagerMock();

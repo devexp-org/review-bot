@@ -1,58 +1,63 @@
 import TeamManager from '../class';
 import { teamModelMock } from '../../model/model-team/__mocks__/';
 import { pullRequestMock } from '../../model/model-pull-request/__mocks__/';
+import { teamDriverFactoryMock } from '../__mocks__/';
 
-describe('services/team/class', function () {
+describe('services/team-manager/class', function () {
 
-  let teamModel, pullRequest;
+  let teamModel, pullRequest, teamDriverFactory;
 
   beforeEach(function () {
     teamModel = teamModelMock();
 
     pullRequest = pullRequestMock();
 
+    teamDriverFactory = teamDriverFactoryMock();
+
     pullRequest.repository.full_name = 'nodejs/node';
   });
 
   describe('#findTeamByPullRequest', function () {
 
-    let dispatcher;
+    let team, manager;
 
     beforeEach(function () {
-      dispatcher = new TeamManager({}, teamModel);
-    });
+      team = {
+        name: 'team1',
+        driver: { name: 'static', options: {} },
+        patterns: ['nodejs/node']
+      };
 
-    it('should use team driver', function (done) {
-      teamModel.exec.returns(Promise.resolve([
-        { name: 'team1', patterns: ['nodejs/node'] }
-      ]));
-
-      teamModel.findByNameWithMembers
+      teamModel.findByName
         .withArgs('team1')
-        .returns(Promise.resolve({
-          name: 'team1',
-          driver: { name: 'default', options: {} },
-          patterns: ['nodejs/node']
-        }));
+        .returns(Promise.resolve(team));
 
-      dispatcher.findTeamByPullRequest(pullRequest)
-        .then(result => assert.equal(result.name, 'team1'))
-        .then(done, done);
+      teamDriverFactory.makeDriver
+        .withArgs(team)
+        .returns(1);
+
+      manager = new TeamManager({ 'static': teamDriverFactory }, teamModel);
     });
 
     it('should use the first matched route', function (done) {
+      const otherTeam = { name: 'team2', driver: { name: 'static' } };
+
       teamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['github/hubot'] },
         { name: 'team2', patterns: ['nodejs/node'] },
         { name: 'team3', patterns: ['*'] }
       ]));
 
-      teamModel.findByNameWithMembers
+      teamModel.findByName
         .withArgs('team2')
-        .returns(Promise.resolve({ name: 'team2' }));
+        .returns(Promise.resolve(otherTeam));
 
-      dispatcher.findTeamByPullRequest(pullRequest)
-        .then(result => assert.equal(result.name, 'team2'))
+      teamDriverFactory.makeDriver
+        .withArgs(otherTeam)
+        .returns(2);
+
+      manager.findTeamByPullRequest(pullRequest)
+        .then(result => assert.equal(result, 2))
         .then(done, done);
     });
 
@@ -61,12 +66,8 @@ describe('services/team/class', function () {
         { name: 'team1', patterns: ['*'] }
       ]));
 
-      teamModel.findByNameWithMembers
-        .withArgs('team1')
-        .returns(Promise.resolve({ name: 'team1' }));
-
-      dispatcher.findTeamByPullRequest(pullRequest)
-        .then(result => assert.equal(result.name, 'team1'))
+      manager.findTeamByPullRequest(pullRequest)
+        .then(result => assert.equal(result, 1))
         .then(done, done);
     });
 
@@ -75,29 +76,32 @@ describe('services/team/class', function () {
         { name: 'team1', patterns: ['nodejs/*'] }
       ]));
 
-      teamModel.findByNameWithMembers
-        .withArgs('team1')
-        .returns(Promise.resolve({ name: 'team1' }));
-
-      dispatcher.findTeamByPullRequest(pullRequest)
-        .then(result => assert.equal(result.name, 'team1'))
+      manager.findTeamByPullRequest(pullRequest)
+        .then(result => assert.equal(result, 1))
         .then(done, done);
     });
 
-    it('should return an error if there are no matched routes', function (done) {
+    it('should return an error if there is no matched route', function (done) {
       teamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['other-org/other-repo'] }
       ]));
 
-      teamModel.findByNameWithMembers
-        .withArgs('team1')
-        .returns(Promise.resolve({ name: 'team1' }));
-
-      dispatcher.findTeamByPullRequest(pullRequest)
+      manager.findTeamByPullRequest(pullRequest)
         .then(() => assert.fail())
-        .catch(e => {
-          assert.match(e.message, /no one route match/i);
-        })
+        .catch(e => assert.match(e.message, /no one route match/i))
+        .then(done, done);
+    });
+
+    it('should return an error if there is no matched driver', function (done) {
+      team.driver.name = 'unknown';
+
+      teamModel.exec.returns(Promise.resolve([
+        { name: 'team1', patterns: ['*'] }
+      ]));
+
+      manager.findTeamByPullRequest(pullRequest)
+        .then(() => assert.fail())
+        .catch(e => assert.match(e.message, /unknown driver/i))
         .then(done, done);
     });
 

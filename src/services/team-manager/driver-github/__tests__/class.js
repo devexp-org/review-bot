@@ -1,12 +1,11 @@
 import { GitHubDriverFactory } from '../class';
 
-import { userModelMock } from '../../../model/model-user/__mocks__/';
-import { teamMock, teamModelMock } from '../../../model/model-team/__mocks__/';
+import { teamMock } from '../../../model/model-team/__mocks__/';
 import githubMock from '../../../github/__mocks__/';
 
 describe('services/team-manager/driver-github/class', function () {
 
-  let team, github, factory, config, driver, teamModel, userModel;
+  let team, github, factory, config, driver;
 
   beforeEach(function () {
     config = {
@@ -15,12 +14,9 @@ describe('services/team-manager/driver-github/class', function () {
 
     team = teamMock();
 
-    teamModel = teamModelMock();
-    userModel = userModelMock();
-
     github = githubMock();
 
-    factory = new GitHubDriverFactory(github, teamModel, userModel);
+    factory = new GitHubDriverFactory(github);
   });
 
   it('should be resolved to AbstractDriver', function () {

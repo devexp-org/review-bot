@@ -1,16 +1,18 @@
-import { get, find, cloneDeep } from 'lodash';
+import { get, find } from 'lodash';
 
 export class StaticDriver {
 
   /**
    * @constructor
    *
-   * @param {Team} team
+   * @param {Object} team
+   * @param {TeamModel} TeamModel
    */
-  constructor(team) {
+  constructor(team, TeamModel) {
     this.name = team.name;
-    this.members = team.members || [];
-    this.options = team.reviewConfig || {};
+    this.options = team.reviewConfig;
+
+    this.TeamModel = TeamModel;
   }
 
   /**
@@ -31,18 +33,19 @@ export class StaticDriver {
    * @return {Promise.<Array.<Reviewer>>}
    */
   getCandidates() {
-    return Promise.resolve(cloneDeep(this.members));
+    return this.TeamModel
+      .findByNameWithMembers(this.name)
+      .then(team => team.members);
   }
 
   /**
-   * Find reviewer by `pull request` and `login`.
+   * Finds reviewer by `pull request` and `login`.
    *
-   * @param {PullRequest} pullRequest
    * @param {String} login
    *
    * @return {Promise.<Reviewer>}
    */
-  findTeamMember(pullRequest, login) {
+  findTeamMember(login) {
     return this.getCandidates()
       .then(team => find(team, { login }));
   }
@@ -52,14 +55,12 @@ export class StaticDriver {
 export class StaticDriverFactory {
 
   /**
-   * Returns static driver.
+   * @constructor
    *
-   * @param {Team} team
-   *
-   * @return {TeamDriver}
+   * @param {TeamModel} TeamModel
    */
-  makeDriver(team) {
-    return new StaticDriver(team);
+  constructor(TeamModel) {
+    this.TeamModel = TeamModel;
   }
 
   name() {
@@ -68,6 +69,17 @@ export class StaticDriverFactory {
 
   config() {
     return {};
+  }
+
+  /**
+   * Returns static driver.
+   *
+   * @param {Team} team
+   *
+   * @return {TeamDriver}
+   */
+  makeDriver(team) {
+    return new StaticDriver(team, this.TeamModel);
   }
 
 }

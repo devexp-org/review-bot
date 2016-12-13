@@ -1,7 +1,7 @@
 import service from '../index';
 import staffMock from '../__mocks__/index';
 
-describe('plugins/yandex-staff', function () {
+describe.skip('plugins/yandex-staff', function () {
 
   const methods = [
     'getUsers',

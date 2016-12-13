@@ -2,8 +2,8 @@ import { forEach } from 'lodash';
 import CommandDispatcher, { buildRegExp } from '../class';
 
 import queueMock from '../../queue/__mocks__/';
-import { teamMock } from '../../team-manager/__mocks__/';
 import teamManagerMock from '../../team-manager/__mocks__/';
+import { teamDriverMock } from '../../team-manager/__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
   '../../model/model-pull-request/__mocks__/';
 
@@ -14,7 +14,7 @@ describe('services/command/class', function () {
 
   beforeEach(function () {
 
-    team = teamMock();
+    team = teamDriverMock();
 
     queue = queueMock();
 

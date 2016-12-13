@@ -1,7 +1,7 @@
 import service from '../index';
 import staffMock from '../../../../plugins/yandex-staff/__mocks__/index';
 
-describe('plugins/team-dispatcher/yandex', function () {
+describe.skip('plugins/team-dispatcher/yandex', function () {
 
   let team, staff, options, imports;
 

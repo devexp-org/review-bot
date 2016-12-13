@@ -1,23 +1,28 @@
 import { StaticDriverFactory } from '../class';
 
-import { teamMock } from '../../../model/model-team/__mocks__/';
+import { teamMock, teamModelMock } from '../../../model/model-team/__mocks__/';
 
-describe('services/team-manager/driver-static', function () {
+describe('services/team-manager/driver-static/class', function () {
 
-  let team, driver, factory;
+  let team, teamModel, teamDriver, factory;
 
   beforeEach(function () {
     team = teamMock();
 
-    factory = new StaticDriverFactory();
+    teamModel = teamModelMock();
 
-    driver = factory.makeDriver(team);
+    factory = new StaticDriverFactory(teamModel);
+
+    teamDriver = factory.makeDriver(team);
+
+    teamModel.findByNameWithMembers
+      .returns(Promise.resolve(team));
   });
 
   describe('#getCandidates', function () {
 
     it('should be resolved to array', function (done) {
-      driver.getCandidates()
+      teamDriver.getCandidates()
         .then(members => {
           assert.isArray(members);
           assert.lengthOf(members, 0);
@@ -30,14 +35,14 @@ describe('services/team-manager/driver-static', function () {
   describe('#findTeamMember', function () {
 
     it('should find member by login', function (done) {
-      sinon.stub(driver, 'getCandidates')
+      sinon.stub(teamDriver, 'getCandidates')
         .returns(Promise.resolve([
           { id: 1, login: 'a' },
           { id: 2, login: 'b' },
           { id: 3, login: 'c' }
         ]));
 
-      driver.findTeamMember(null, 'b')
+      teamDriver.findTeamMember('b')
         .then(member => assert.deepEqual(member, { id: 2, login: 'b' }))
         .then(done, done);
     });
@@ -49,15 +54,15 @@ describe('services/team-manager/driver-static', function () {
     beforeEach(function () {
       team.reviewConfig = { foo: 'bar' };
 
-      driver = factory.makeDriver(team);
+      teamDriver = factory.makeDriver(team);
     });
 
     it('should return team option', function () {
-      assert.equal(driver.getOption('foo'), 'bar');
+      assert.equal(teamDriver.getOption('foo'), 'bar');
     });
 
     it('should return default option if team option is undefined', function () {
-      assert.equal(driver.getOption('bar', 'baz'), 'baz');
+      assert.equal(teamDriver.getOption('bar', 'baz'), 'baz');
     });
 
   });

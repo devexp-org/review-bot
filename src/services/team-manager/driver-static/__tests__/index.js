@@ -1,24 +1,20 @@
 import service from '../index';
 import modelMock from '../../../model/__mocks__/index';
-import githubMock from '../../../github/__mocks__/index';
 
-describe('services/team-manager/driver-github', function () {
+describe('services/team-manager/driver-static', function () {
 
-  let options, imports, factory, github, model;
+  let options, imports, factory, model;
 
   beforeEach(function () {
     model = modelMock();
-    github = githubMock();
 
     options = {};
-    imports = { model, github };
+    imports = { model };
   });
 
   it('should be resolved to AbstractDriver', function () {
     factory = service(options, imports);
 
-    assert.property(factory, 'name');
-    assert.property(factory, 'config');
     assert.property(factory, 'makeDriver');
   });
 

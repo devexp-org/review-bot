@@ -1,17 +1,17 @@
 import _ from 'lodash';
 import service, { findReviewersInDescription } from '../prefered-reviewers';
 
-import { pullRequestMock } from
-  '../../../../services/model/collections/__mocks__/pull-request';
-import teamDispatcherMock from
-  '../../../../services/team-dispatcher/__mocks__/index';
+// import { pullRequestMock } from
+//   '../../../../services/model/collections/__mocks__/pull-request';
+// import teamDispatcherMock from
+//   '../../../../services/team-dispatcher/__mocks__/index';
 
-import { reviewMembersMock } from
-  '../../../../services/review/__mocks__/index';
-import { members as membersMock } from
-  '../../../../services/team-dispatcher/__mocks__/index';
+// import { reviewMembersMock } from
+//   '../../../../services/review/__mocks__/index';
+// import { members as membersMock } from
+//   '../../../../services/team-dispatcher/__mocks__/index';
 
-describe('plugins/review/steps/prefered-reviewers', function () {
+describe.skip('plugins/review/steps/prefered-reviewers', function () {
 
   describe('#findReviewersInDescription', function () {
 

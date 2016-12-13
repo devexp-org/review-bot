@@ -1,6 +1,6 @@
 import StarTrek from '../class';
 
-describe('plugins/startrack/class', function () {
+describe.skip('plugins/startrack/class', function () {
 
   let got, options, startrek;
 

@@ -1,7 +1,7 @@
 import service from '../';
 
 import commandMock from '../../__mocks__/';
-import { teamMock } from '../../../team-manager/__mocks__/';
+import { teamDriverMock } from '../../../team-manager/__mocks__/';
 import teamManagerMock from '../../../team-manager/__mocks__/class';
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
@@ -18,7 +18,7 @@ describe('services/command/start', function () {
 
   beforeEach(function () {
 
-    team = teamMock();
+    team = teamDriverMock();
     team.findTeamMember.returns(Promise.resolve({ login: 'Hawkeye' }));
 
     events = eventsMock();

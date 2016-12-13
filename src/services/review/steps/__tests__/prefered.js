@@ -1,15 +1,14 @@
 import _ from 'lodash';
 import service, { findReviewersInDescription } from
   '../prefered';
+import teamManagerMock, { teamDriverMock } from
+  '../../../team-manager/__mocks__/';
+import { membersMock } from '../../../command/__mocks__/';
+import { reviewMembersMock } from '../../../review/__mocks__/';
 import { pullRequestMock } from
   '../../../model/model-pull-request/__mocks__/';
-import { reviewMembersMock } from
-  '../../../review/__mocks__/';
-import teamManagerMock, { membersMock } from
-  '../../../team-manager/__mocks__/';
-import {
-  pullRequestReviewMixin
-} from '../../../pull-request-review/__mocks__/';
+import { pullRequestReviewMixin } from
+  '../../../pull-request-review/__mocks__/';
 
 describe('services/review/steps/prefered', function () {
 
@@ -34,12 +33,14 @@ describe('services/review/steps/prefered', function () {
   });
 
   describe('service', function () {
-    let step, team, pullRequest, options, teamManager;
+    let step, team, pullRequest, options, teamManager, teamDriver;
 
     beforeEach(() => {
       options = { max: 10 };
 
-      teamManager = teamManagerMock();
+      teamDriver = teamDriverMock();
+
+      teamManager = teamManagerMock(teamDriver);
 
       step = service({}, { 'team-manager': teamManager });
 

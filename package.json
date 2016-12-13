@@ -77,9 +77,9 @@
     "instrument": false
   },
   "config": {
-    "mocha": "mocha --compilers js:babel-core/register --require ./tests/setup.js --reporter progress",
+    "mocha": "mocha --compilers js:babel-core/register --require ./tests/setup.js --reporter progress --recursive",
     "istanbul": "nyc --all --require babel-core/register --reporter text --reporter html npm test",
     "pattern_e2e": "./tests/e2e/**/*.js",
-    "pattern_test": "./src/modules/**/__tests__/**.js ./src/services/**/__tests__/**.js ./src/plugins/**/__tests__/**.js"
+    "pattern_test": "./src/**/__tests__/**.js"
   }
 }

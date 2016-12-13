@@ -4,86 +4,47 @@ import service from '../routes';
 import responseJSON from '../../http/response';
 
 import loggerMock from '../../logger/__mocks__/';
-import teamManagerMock, { teamMock } from '../__mocks__/';
-import { pullRequestMock, pullRequestModelMock } from
-  '../../model/model-pull-request/__mocks__/';
+import teamManagerMock from '../__mocks__/';
 
-describe.skip('services/team-manager/routes', function () {
+describe('services/team-manager/routes', function () {
 
   let app, options, imports, router;
-  let driver, logger, members, pullRequest, teamManager, pullRequestModel;
+  let logger, teamManager, drivers;
 
   beforeEach(function () {
     app = express();
 
-    driver = teamMock();
     logger = loggerMock();
-    members = [{ login: 'foo' }, { login: 'bar' }];
-    pullRequest = pullRequestMock();
     teamManager = teamManagerMock();
-    pullRequestModel = pullRequestModelMock();
 
     options = {};
-    imports = {
-      logger,
-      'team-manager': teamManager,
-      'pull-request-model': pullRequestModel
-    };
+    imports = { logger, 'team-manager': teamManager };
 
-    teamManager.findTeamByPullRequest
-      .withArgs(pullRequest)
-      .returns(driver);
+    drivers = [
+      { name: () => 'static', config: () => { return {}; } },
+      { name: () => 'github', config: () => { return { orgName: { type: 'string' } }; } }
+    ];
 
-    pullRequestModel.findByRepositoryAndNumber
-      .withArgs('github/hubot', '1')
-      .returns(Promise.resolve(pullRequest));
-
-    driver.getCandidates.returns(Promise.resolve(members));
+    teamManager.getDrivers.returns(drivers);
 
     router = service(options, imports);
-  });
 
-  beforeEach(function () {
     app.use(responseJSON());
     app.use('/', router);
+
   });
 
-  describe('GET /:org/:repo/:number/members', function () {
+  describe('GET /drivers', function () {
 
-    it('should return team members for review', function (done) {
+    it('should return all drivers', function (done) {
       request(app)
-        .get('/github/hubot/1/members')
-        .expect('[{"login":"foo"},{"login":"bar"}]')
+        .get('/drivers')
+        .expect('{"static":{},"github":{"orgName":{"type":"string"}}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
     });
 
-    it('should return an error if pull request is not found', function (done) {
-      pullRequestModel.findByRepositoryAndNumber
-        .withArgs('github/hubot', '1')
-        .returns(Promise.resolve(null));
-
-      request(app)
-        .get('/github/hubot/1/members')
-        .expect(/not found/)
-        .expect('Content-Type', /application\/json/)
-        .expect(404)
-        .end(done);
-    });
-
-    it('should return an error if team is not found', function (done) {
-      teamManager.findTeamByPullRequest
-        .withArgs(pullRequest)
-        .returns(null);
-
-      request(app)
-        .get('/github/hubot/1/members')
-        .expect(/not found/)
-        .expect('Content-Type', /application\/json/)
-        .expect(404)
-        .end(done);
-    });
   });
 
 });

@@ -1,7 +1,7 @@
 import service from '../index';
 import startrekMock from '../__mocks__/index';
 
-describe('plugins/startrek', function () {
+describe.skip('plugins/startrek', function () {
 
   const methods = [
     'parseIssue',

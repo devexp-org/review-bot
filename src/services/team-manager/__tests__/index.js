@@ -6,8 +6,7 @@ import { teamModelMock } from '../../model/model-team/__mocks__/';
 
 describe('services/team-manager', function () {
 
-  let options, imports;
-  let model;
+  let options, imports, model;
 
   beforeEach(function () {
     model = modelMock();
@@ -29,7 +28,7 @@ describe('services/team-manager', function () {
   });
 
   it('should throw an error if driver module was not given', function () {
-    options.drivers = ['my-driver'];
+    options.drivers = ['unknown-driver'];
 
     assert.throws(() => service(options, imports), /cannot find/i);
   });

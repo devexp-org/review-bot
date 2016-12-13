@@ -5,7 +5,7 @@ import responseJSON from '../../../services/http/response';
 
 import staffMock from '../__mocks__/index';
 
-describe('plugins/yandex-staff/routes', function () {
+describe.skip('plugins/yandex-staff/routes', function () {
 
   let app, options, imports, router;
   let staff, users;

@@ -1,7 +1,7 @@
 import service from '../index';
 import eventsMock from '../__mocks__/index';
 
-describe('plugins/components-api', function () {
+describe.skip('plugins/components-api', function () {
 
   const methods = [
     'getResponsibles'

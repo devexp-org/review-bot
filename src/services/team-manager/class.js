@@ -7,16 +7,12 @@ export default class TeamManager {
    * @constructor
    *
    * @param {Array} drivers
-   * @param {Object} teamModel
+   * @param {TeamModel} TeamModel
    */
-  constructor(drivers, userModel, teamModel) {
-    if (!drivers.static) {
-      throw new Error('Required driver "static" is not given');
-    }
-
+  constructor(drivers, TeamModel) {
     this.drivers = drivers;
-    this.UserModel = userModel;
-    this.TeamModel = teamModel;
+
+    this.TeamModel = TeamModel;
   }
 
   /**
@@ -25,11 +21,11 @@ export default class TeamManager {
    * @return {Promise.<Array.<Team>>}
    */
   getTeams() {
-    return this.teamModel.find({}).select({ name: 1, patterns: 1 }).exec();
+    return this.TeamModel.find({}).select({ name: 1, patterns: 1 }).exec();
   }
 
   /**
-   * Returns all routes
+   * Returns all routes.
    *
    * @return {Promise.<Array.<TeamRoute>>}
    */
@@ -49,7 +45,7 @@ export default class TeamManager {
   }
 
   /**
-   * Returns all drivers
+   * Returns all drivers.
    *
    * @return {Array}
    */
@@ -65,7 +61,7 @@ export default class TeamManager {
    * @return {Object}
    */
   getTeamDriver(teamName) {
-    return this.teamModel
+    return this.TeamModel
       .findByName(teamName)
       .then(team => {
         const driverName = team.driver && team.driver.name;
@@ -81,7 +77,7 @@ export default class TeamManager {
   }
 
   /**
-   * Match route and then return it
+   * Match route and then return it.
    *
    * @protected
    * @param {PullRequest} pullRequest
@@ -106,61 +102,7 @@ export default class TeamManager {
   }
 
   /**
-   * Synchronizes all team members to database
-   *
-   * @param {String} teamName
-   *
-   * @returns {Promise}
-   */
-  sync() {
-    return this.getTeams()
-      .then(array => {
-        return Promise.all(array.map(team => this.syncTeam(team.name)));
-      });
-  }
-
-  /**
-   * Synchronizes users in team to database
-   *
-   * @param {String} teamName
-   *
-   * @returns {Promise}
-   */
-  syncTeam(teamName) {
-    this.getTeamDriver(teamName)
-      .then(driver => {
-        return driver.getCandidates()
-          .then(this.syncUsers.bind(this, driver))
-          .then(this.syncTeamMembers.bind(this, teamName))
-      });
-  }
-
-  syncUsers(driver, members) {
-    const promise = map(members, (member) => {
-      return this.UserModel
-        .findByLogin(member.login)
-        .then(user => {
-          if (user) return user;
-
-          user = driver.createUser(member);
-          return user.validate().then(user.save.bind(user));
-        });
-    });
-
-    return Promise.all(promise);
-  }
-
-  syncTeamMembes(teamName, members) {
-    return this.TeamModel.findByName(teamName)
-      .then(team => {
-        if (!team) return;
-        team.set('members', members);
-        return team.save();
-      });
-  }
-
-  /**
-   * Return team of matched route
+   * Returns driver of team of matched route.
    *
    * @param {PullRequest} pullRequest
    *
@@ -171,7 +113,10 @@ export default class TeamManager {
   }
 
   /**
+   * Returns `true` if pattern match to pull request full name and `false` otherwise.
+   *
    * @protected
+   *
    * @param {String} pattern
    * @param {PullRequest} pullRequest
    *
