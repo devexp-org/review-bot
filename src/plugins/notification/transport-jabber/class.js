@@ -122,10 +122,12 @@ export default class Jabber extends AbstractTransport {
    *
    * @override
    *
-   * @param {String} to - user jid
+   * @param {String} user - user login
    * @param {String} body - message body
    */
-  send(to, body) {
+  send(user, body) {
+    const to = user.login + '@yandex-team.ru';
+
     if (this._client && this._online) {
       this._send(to, body);
     } else {

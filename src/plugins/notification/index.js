@@ -1,5 +1,5 @@
 function getServiceName(transport) {
-  return 'notification-service-' + transport;
+  return 'notification-' + transport;
 }
 
 /**
@@ -13,30 +13,25 @@ function getServiceName(transport) {
 export default function setup(options, imports) {
 
   const model = imports.model;
-  const userModel = model('user');
+  const UserModel = model('user');
 
-  return function send(to, message) {
+  return function send(team, addressee, message) {
 
-    return userModel.findByLogin(to)
+    return UserModel.findByLogin(addressee)
       .then(user => {
         if (!user) {
-          throw new Error(`The user '${to}" is not found`);
+          throw new Error(`The user '${addressee}" is not found`);
         }
 
-        const userContacts = user.getContacts();
+        const serviceName = getServiceName(team.notification);
+        const sendService = imports[serviceName];
 
-        for (let i = 0; i < userContacts.length; i++) {
-          const contact = userContacts[i];
-          const serviceName = getServiceName(contact.id);
-
-          if (serviceName in imports) {
-            const sendService = imports[serviceName];
-            sendService(contact.account, message);
-            break;
-          }
+        if (!sendService) {
+          throw new Error(`The transport '${serviceName}" is not found`);
         }
+
+        sendService(user, message);
       });
-
   };
 
 }

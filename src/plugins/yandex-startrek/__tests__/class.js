@@ -1,6 +1,6 @@
-import StarTrek from '../class';
+import YandexStarTrek from '../class';
 
-describe('plugins/startrack/class', function () {
+describe('plugins/startrek/class', function () {
 
   let got, options, startrek;
 
@@ -14,7 +14,7 @@ describe('plugins/startrack/class', function () {
       token: 'token'
     };
 
-    startrek = new StarTrek(got, options);
+    startrek = new YandexStarTrek(got, options);
   });
 
   describe('#request', function () {
@@ -22,7 +22,7 @@ describe('plugins/startrack/class', function () {
     it('should not send message in silent mode', function (done) {
       options.silent = true;
 
-      startrek = new StarTrek(got, options);
+      startrek = new YandexStarTrek(got, options);
 
       startrek.request('http://example.com', 'post', {})
         .then(() => assert.notCalled(got.post))

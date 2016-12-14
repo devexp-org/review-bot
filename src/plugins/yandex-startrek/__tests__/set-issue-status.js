@@ -26,7 +26,7 @@ describe('plugins/startrek/set-issue-status', function () {
       events: ['review:start']
     };
 
-    imports = { events, logger, startrek };
+    imports = { events, logger, 'yandex-startrek': startrek };
 
     startrek.parseIssue.returns(['TEST-1']);
 

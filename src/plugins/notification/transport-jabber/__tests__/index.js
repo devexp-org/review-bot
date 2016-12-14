@@ -1,30 +1,28 @@
 import proxyquire from 'proxyquire';
+import jabberMock from '../__mocks__/';
+import loggerMock from '../../../../services/logger/__mocks__/';
 
-import slackMock from '../__mocks__/';
-import loggerMock from '../../../services/logger/__mocks__/';
-
-describe('services/slack', function () {
+describe.skip('services/jabber', function () {
 
   let options, imports;
-  let service, logger, slack;
+  let service, logger, jabber;
 
   beforeEach(function () {
-    slack = slackMock();
     logger = loggerMock();
+    jabber = jabberMock();
 
-    options = { token: 'token' };
+    options = {};
     imports = { logger };
 
     service = proxyquire('../', {
-      './class': { 'default': slack }
+      './class': { 'default': jabber }
     }).default;
-
   });
 
   it('the mock object should have the same methods', function () {
 
     const obj = service(options, imports);
-    const methods = Object.keys(slack);
+    const methods = Object.keys(jabber);
 
     methods.forEach(method => {
       assert.property(obj, method);
@@ -35,17 +33,17 @@ describe('services/slack', function () {
   it('should try connect to jabber', function () {
     service(options, imports);
 
-    assert.called(slack.connect);
+    assert.called(jabber.connect);
   });
 
   it('should close connection when shutdown', function () {
     const callback = sinon.stub();
-    const slackService = service(options, imports);
+    const jabberService = service(options, imports);
 
-    slackService.close.callsArg(0);
-    slackService.shutdown(callback);
+    jabberService.close.callsArg(0);
+    jabberService.shutdown(callback);
 
-    assert.called(slack.close);
+    assert.called(jabber.close);
   });
 
 });

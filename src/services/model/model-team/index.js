@@ -18,6 +18,7 @@ export function baseSchema() {
       type: Schema.Types.ObjectId
     }],
     patterns: [String],
+    notification: String,
     reviewConfig: {
       steps: [{ name: String, options: Object }],
       approveCount: Number,

@@ -5,8 +5,10 @@ import eventsMock from '../../../services/events/__mocks__/';
 import startrekMock from '../__mocks__/index';
 import { pullRequestMock } from
   '../../../services/model/model-pull-request/__mocks__/';
+import { pullRequestReviewMixin } from
+  '../../../services/pull-request-review/__mocks__/';
 
-describe.skip('plugins/startrek/update-reviewers', function () {
+describe('plugins/startrek/update-reviewers', function () {
 
   let options, imports;
   let events, logger, startrek, payload, pullRequest;
@@ -17,7 +19,7 @@ describe.skip('plugins/startrek/update-reviewers', function () {
     logger = loggerMock();
     startrek = startrekMock();
 
-    pullRequest = pullRequestMock();
+    pullRequest = pullRequestMock(pullRequestReviewMixin);
 
     payload = { pullRequest };
 
@@ -26,7 +28,7 @@ describe.skip('plugins/startrek/update-reviewers', function () {
       events: ['review:start']
     };
 
-    imports = { events, logger, startrek };
+    imports = { events, logger, 'yandex-startrek': startrek };
 
     pullRequest.review.status = 'inprogress';
     pullRequest.review.reviewers = [

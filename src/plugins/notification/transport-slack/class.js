@@ -92,7 +92,7 @@ export default class Slack extends AbstractTransport {
    * @param {String} body - message body
    */
   send(to, body) {
-    const mail = to + '@' + this._host;
+    const mail = to.login + '@' + this._host;
     const user = this._client.dataStore.getUserByEmail(mail);
 
     if (!user || !user.id) {

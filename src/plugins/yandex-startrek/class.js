@@ -7,7 +7,6 @@ export default class YandexStarTrek {
    */
   constructor(request, options) {
     this._request = request;
-
     this._options = options;
   }
 

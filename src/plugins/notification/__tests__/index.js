@@ -2,7 +2,7 @@ import service from '../';
 import modelMock from '../../../services/model/__mocks__/';
 import { userMock, userModelMock } from '../../../services/model/model-user/__mocks__/';
 
-describe('services/notification', function () {
+describe.skip('services/notification', function () {
 
   let model, user, userModel, options, imports;
 
