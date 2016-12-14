@@ -26,7 +26,7 @@
     }
   },
 
-  "pull-request-github-plugin": {
+  "#comment:pull-request-github-plugin": {
     "path": "./src/services/pull-request-github/addon",
     "#plugin:model": {
       "plugins": {
@@ -35,7 +35,7 @@
     }
   },
 
-  "pull-request-review-plugin": {
+  "#comment:pull-request-review-plugin": {
     "path": "./src/services/pull-request-review/addon",
     "#plugin:model": {
       "plugins": {

@@ -122,21 +122,23 @@
       }
     },
 
-    "pull-request-model": {
-      "path": "./src/services/pull-request-model",
-      "dependencies": [
-        "model"
-      ]
-    },
-
-    "pull-request-github": {
+    "#comment:pull-request-github": {
       "path": "./src/services/pull-request-github-delayed",
       "dependencies": [
         "github"
       ]
     },
 
-    "pull-request-review": {
+    "#comment:#include:badges": "./default-badges.json",
+
+    "#comment:pull-request-model": {
+      "path": "./src/services/pull-request-model",
+      "dependencies": [
+        "model"
+      ]
+    },
+
+    "#comment:pull-request-review": {
       "path": "./src/services/pull-request-review",
       "dependencies": [
         "events",
@@ -144,7 +146,7 @@
       ]
     },
 
-    "review": {
+    "#comment:review": {
       "path": "./src/services/review",
       "options": {
         "approveCount": 2,
@@ -182,9 +184,9 @@
       ]
     },
 
-    "#include:review-steps": "./default-review-steps.json",
+    "#comment:#include:review-steps": "./default-review-steps.json",
 
-    "command": {
+    "#comment:command": {
       "path": "./src/services/command",
       "options": {
         "events": ["github:issue_comment"]
@@ -198,11 +200,9 @@
       ]
     },
 
-    "#include:command": "./default-command.json",
+    "#comment:#include:command": "./default-command.json",
 
-    "#include:badges": "./default-badges.json",
-
-    "#include:plugins": "./default-plugins.json",
+    "#comment:#include:plugins": "./default-plugins.json",
 
     "#comment:__LASTLINE__": ""
   }

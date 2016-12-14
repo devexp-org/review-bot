@@ -18,7 +18,6 @@ export default function setup(options, imports) {
    * @param {Object} payload
    */
   function updateBadges(payload) {
-
     const pullRequest = payload.pullRequest;
     const badgeContent = builder.build(payload.pullRequest.review);
 
@@ -29,7 +28,6 @@ export default function setup(options, imports) {
       return pullRequestGitHub.syncPullRequestWithGitHub(pullRequest);
     })
     .catch(logger.error.bind(logger));
-
   }
 
   // Subscribe to events for creating review badges.
