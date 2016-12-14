@@ -1,3 +1,14 @@
+# MAIN
+[x] events
+[x] github
+[ ] http
+[x] logger
+[ ] model
+[x] mongoose
+[x] plugin-manager
+[x] queue
+[ ] team-manager
+
 # MAJOR
 * startrek
 * notification

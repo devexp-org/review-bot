@@ -5,6 +5,7 @@ describe('services/plugin-manager', function () {
   let options, imports, app, config;
 
   beforeEach(function () {
+
     config = {
       services: {
         serviceA: {

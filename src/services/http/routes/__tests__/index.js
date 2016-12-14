@@ -20,7 +20,7 @@ describe('services/http/routes/index', function () {
     router = service(options, imports);
   });
 
-  it('should return index.html', function (done) {
+  it('should return index.html on `GET /`', function (done) {
     app.use(router);
 
     request(app)
@@ -28,6 +28,15 @@ describe('services/http/routes/index', function () {
       .expect('Content-Type', /text\/html/)
       .expect('Content-Length', '103')
       .expect(200)
+      .end(done);
+  });
+
+  it('should not return index.html on `GET /index.html`', function (done) {
+    app.use(router);
+
+    request(app)
+      .get('/index.html')
+      .expect(404)
       .end(done);
   });
 

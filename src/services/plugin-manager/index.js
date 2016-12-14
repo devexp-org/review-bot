@@ -16,11 +16,9 @@ export function findPlugins(config) {
   });
 
   return plugins;
-
 }
 
 export default function setup(options, imports) {
-
   const app = imports.__app__;
   const plugins = findPlugins(app.getConfig());
 
@@ -28,5 +26,4 @@ export default function setup(options, imports) {
     app.addOptions(plugin.service, plugin.options);
     app.addDependency(plugin.service, plugin.dependency);
   });
-
 }
