@@ -38,7 +38,7 @@ export default function setup(options, imports) {
   }
 
   teamRoute.get('/', function (req, res) {
-    TeamModel.find({}).exec()
+    TeamModel.find({}).limit(50).exec()
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });

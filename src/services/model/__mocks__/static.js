@@ -4,7 +4,7 @@ export default function mock() {
   return { model: sinon.stub().returns(statics) };
 }
 
-export function staticMock(obj) {
+export function staticMock(obj, mixin) {
   const statics = sinon.stub().returns(obj);
 
   statics.find = sinon.stub().returnsThis();
@@ -18,6 +18,10 @@ export function staticMock(obj) {
 
   statics.findOne = sinon.stub().returnsThis();
   statics.findById = sinon.stub().returns(Promise.resolve(null));
+
+  if (mixin) {
+    mixin(statics);
+  }
 
   return statics;
 }

@@ -7,19 +7,22 @@ import handleError from '../../../http/middlewares/handle-error';
 import modelMock from '../../../model/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
 import { teamMock, teamModelMock } from '../__mocks__/';
+import { userMock, userModelMock } from '../../model-user/__mocks__/';
 
 describe('services/model/model-team/routes', function () {
 
   let app, options, imports, router;
-  let model, logger, team, TeamModel;
+  let model, logger, team, user, TeamModel, UserModel;
 
   beforeEach(function () {
     app = express();
 
     team = teamMock();
+    user = userMock();
     model = modelMock();
     logger = loggerMock();
     TeamModel = teamModelMock();
+    UserModel = userModelMock();
 
     options = {};
     imports = { logger, model };
@@ -28,16 +31,27 @@ describe('services/model/model-team/routes', function () {
       .withArgs('team')
       .returns(TeamModel);
 
+    model
+      .withArgs('user')
+      .returns(UserModel);
+
     TeamModel.findByName
-      .withArgs('testteam')
+      .withArgs('test-team')
       .returns(Promise.resolve(team));
 
-    router = service(options, imports);
-  });
+    TeamModel.findByNameWithMembers
+      .withArgs('test-team')
+      .returns(Promise.resolve(team));
 
-  beforeEach(function () {
+    UserModel.findByLogin
+      .withArgs('testuser')
+      .returns(Promise.resolve(user));
+
+    router = service(options, imports);
+
     app.use(bodyParser.json());
     app.use(handleError());
+
     app.use('/', router);
   });
 
@@ -50,7 +64,7 @@ describe('services/model/model-team/routes', function () {
     it('should return a team list', function (done) {
       request(app)
         .get('/')
-        .expect('[{"name":"name","members":[],"patterns":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}]')
+        .expect('[{"name":"name","members":[],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":3}}]')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -63,8 +77,8 @@ describe('services/model/model-team/routes', function () {
     it('should create a new team', function (done) {
       request(app)
         .post('/')
-        .field('name', 'testteam')
-        .expect('{"name":"name","members":[],"patterns":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}')
+        .send({ name: 'test-team' })
+        .expect('{"name":"name","members":[],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":3}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -73,12 +87,12 @@ describe('services/model/model-team/routes', function () {
     it('should return an error if team already exsits', function (done) {
       const team = new TeamModel();
 
-      team.save.returns(Promise.reject(new Error('Team "testteam" already exists')));
+      team.save.returns(Promise.reject(new Error('Team "test-team" already exists')));
 
       request(app)
         .post('/')
-        .field('name', 'testteam')
-        .expect('{"message":"Team \\"testteam\\" already exists"}')
+        .send({ 'name': 'test-team' })
+        .expect('{"message":"Team \\"test-team\\" already exists"}')
         .expect('Content-Type', /application\/json/)
         .expect(500)
         .end(done);
@@ -90,8 +104,8 @@ describe('services/model/model-team/routes', function () {
 
     it('should return a team', function (done) {
       request(app)
-        .get('/testteam')
-        .expect('{"name":"name","members":[],"patterns":[],"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":2}}')
+        .get('/test-team')
+        .expect('{"name":"name","members":[],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":3}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -116,13 +130,13 @@ describe('services/model/model-team/routes', function () {
 
     it('should update a team', function (done) {
       request(app)
-        .put('/testteam')
-        .send({ name: 'testteam', reviewConfig: { approveCount: 5, totalReviewers: 10 } })
+        .put('/test-team')
+        .send({ name: 'test-team', reviewConfig: { approveCount: 5, totalReviewers: 10 } })
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(() => {
           assert(team.save.calledAfter(team.set));
-          assert.calledWith(team.set, 'name', 'testteam');
+          assert.calledWith(team.set, 'name', 'test-team');
           assert.calledWith(team.set, 'reviewConfig', {
             approveCount: 5,
             totalReviewers: 10
@@ -138,7 +152,7 @@ describe('services/model/model-team/routes', function () {
 
       request(app)
         .put('/foo')
-        .send({ name: 'testteam', reviewConfig: {} })
+        .send({ name: 'test-team', reviewConfig: {} })
         .expect(/not found/)
         .expect('Content-Type', /application\/json/)
         .expect(404)
@@ -151,7 +165,7 @@ describe('services/model/model-team/routes', function () {
 
     it('should delete a team', function (done) {
       request(app)
-        .delete('/testteam')
+        .delete('/test-team')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(() => {
@@ -170,6 +184,51 @@ describe('services/model/model-team/routes', function () {
         .expect(/not found/)
         .expect('Content-Type', /application\/json/)
         .expect(404)
+        .end(done);
+    });
+
+  });
+
+  describe('GET /:id/members', function () {
+
+    beforeEach(function () {
+      team.members = [{ login: 'foo' }, { login: 'bar' }];
+    });
+
+    it('should return a member list', function (done) {
+      request(app)
+        .get('/test-team/members')
+        .expect('[{"login":"foo"},{"login":"bar"}]')
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end(done);
+    });
+
+  });
+
+  describe('POST /:id/members', function () {
+
+    it('should add a user to a team', function (done) {
+      request(app)
+        .post('/test-team/members')
+        .send({ login: 'testuser' })
+        .expect('{"name":"name","members":[{"login":"testuser","contacts":[]}],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":3}}')
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end(done);
+    });
+
+    it.skip('should return an error if user is already a member', function (done) {
+      const team = new TeamModel();
+
+      // team.save.returns(Promise.reject(new Error('Team "test-team" is already exists')));
+
+      request(app)
+        .post('/test-team/members')
+        .send( { login: 'testuser' })
+        .expect('{"message":"User \\"testuser\\" is already member"}')
+        .expect('Content-Type', /application\/json/)
+        .expect(500)
         .end(done);
     });
 

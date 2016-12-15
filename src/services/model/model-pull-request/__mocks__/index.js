@@ -38,15 +38,11 @@ export function pullRequestModelMock(mixinSchema, mixinModel) {
 
   const pullRequest = pullRequestMock(mixinSchema);
 
-  const stub = staticMock(pullRequest);
+  const stub = staticMock(pullRequest, mixinModel);
 
   stub.findById = sinon.stub().returns(Promise.resolve(null));
   stub.findByUser = sinon.stub().returns(Promise.resolve([]));
   stub.findByRepositoryAndNumber = sinon.stub().returns(Promise.resolve(null));
-
-  if (mixinModel) {
-    mixinModel(stub);
-  }
 
   return stub;
 

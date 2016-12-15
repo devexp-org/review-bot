@@ -1,17 +1,17 @@
 import { staticMock } from '../../../model/__mocks__/static';
 import { instanceMock } from '../../../model/__mocks__/schema';
 
-export function userMock() {
+export function userMock(mixin) {
   const user = { login: 'testuser', contacts: [] };
 
   user.getContacts = sinon.stub().returns([]);
 
-  return instanceMock(user);
+  return instanceMock(user, mixin);
 }
 
-export function userModelMock() {
-  const user = userMock();
-  const stub = staticMock(user);
+export function userModelMock(schemaMixin, modelMixin) {
+  const user = userMock(schemaMixin);
+  const stub = staticMock(user, modelMixin);
 
   stub.findByLogin = sinon.stub().returns(Promise.resolve(null));
 

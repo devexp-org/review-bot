@@ -9,8 +9,22 @@ export default function setup(options, imports) {
 
   const userRoute = router();
 
+  function findByLogin(id) {
+    return UserModel
+      .findByLogin(id)
+      .then(user => {
+        if (!user) {
+          return Promise.reject(
+            new NotFoundError(`User ${id} was not found`)
+          );
+        }
+
+        return user;
+      });
+  }
+
   userRoute.get('/', function (req, res) {
-    UserModel.find({}).exec()
+    UserModel.find({}).limit(50).exec()
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });
@@ -28,36 +42,16 @@ export default function setup(options, imports) {
   userRoute.get('/:id', function (req, res) {
     const id = req.params.id;
 
-    UserModel
-      .findByLogin(id)
-      .then(user => {
-        if (!user) {
-          return Promise.reject(
-            new NotFoundError(`User ${id} was not found`)
-          );
-        }
-
-        return user;
-      })
+    findByLogin(id)
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });
 
   userRoute.put('/:id', function (req, res) {
     const id = req.params.id;
-
     const contacts = req.body.contacts || [];
 
-    UserModel
-      .findByLogin(id)
-      .then(user => {
-        if (!user) {
-          return Promise.reject(
-            new NotFoundError(`User ${id} was not found`)
-          );
-        }
-        return user;
-      })
+    findByLogin(id)
       .then(user => {
         return user
           .set('contacts', contacts)
@@ -70,16 +64,7 @@ export default function setup(options, imports) {
   userRoute.delete('/:id', function (req, res) {
     const id = req.params.id;
 
-    UserModel
-      .findByLogin(id)
-      .then(user => {
-        if (!user) {
-          return Promise.reject(
-            new NotFoundError(`User ${id} was not found`)
-          );
-        }
-        return user;
-      })
+    findByLogin(id)
       .then(user => user.remove())
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));

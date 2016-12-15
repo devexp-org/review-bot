@@ -14,6 +14,7 @@ describe('services/model/model-user/routes', function () {
   let model, logger, user, UserModel;
 
   beforeEach(function () {
+
     app = express();
 
     user = userMock();
@@ -33,12 +34,12 @@ describe('services/model/model-user/routes', function () {
       .returns(Promise.resolve(user));
 
     router = service(options, imports);
-  });
 
-  beforeEach(function () {
     app.use(bodyParser.json());
     app.use(handleError());
+
     app.use('/', router);
+
   });
 
   describe('GET /', function () {
