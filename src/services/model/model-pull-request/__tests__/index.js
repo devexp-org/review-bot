@@ -79,6 +79,15 @@ describe('services/model/model-pull-request', function () {
 
     });
 
+    it('should add static method "findById"', function () {
+      const staticMock = staticModelMock();
+
+      assert.property(model.statics, 'findById');
+      assert.isFunction(model.statics.findById);
+
+      model.statics.findById.call(staticMock, '1234567890');
+    });
+
     it('should add static method "findByUser"', function () {
       const staticMock = staticModelMock();
 

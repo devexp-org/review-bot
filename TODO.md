@@ -4,6 +4,8 @@
 [x] http
 [x] logger
 [ ] model
+  * routes для pull_request'ов
+  * typedef'ы для моделей (класс/инстанс)
 [x] mongoose
 [x] plugin-manager
 [x] queue
@@ -19,4 +21,3 @@
 * logger: отдельный стрим с ошибками и трейсом. В основном стриме сообщения без трейсов
 
 # MINOR
-

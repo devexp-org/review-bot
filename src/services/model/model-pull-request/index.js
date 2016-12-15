@@ -13,8 +13,13 @@ export function baseSchema() {
       type: String,
       'enum': ['open', 'closed']
     },
+    head: {
+      ref: String,
+      sha: String
+    },
     base: {
-      ref: String
+      ref: String,
+      sha: String
     },
     user: {
       id: Number,
@@ -45,12 +50,12 @@ export function baseSchema() {
       html_url: String,
       avatar_url: String
     },
-    comments: Number,
-    review_comments: Number,
     commits: Number,
+    comments: Number,
     additions: Number,
     deletions: Number,
     changed_files: Number,
+    review_comments: Number,
     files: {
       type: Array,
       'default': []
@@ -70,7 +75,7 @@ export function setupModel(modelName, model) {
   };
 
   /**
-   * Returns repo owner.
+   * Returns repository owner.
    *
    * @return {String}
    */
@@ -87,14 +92,14 @@ export function setupModel(modelName, model) {
   /**
    * Finds pull requests by id.
    *
-   * @param {String} login
+   * @param {String} id
    *
    * @return {Promise.<PullRequest>}
    */
-  model.statics.findById = function (login) {
+  model.statics.findById = function (id) {
     return this
       .model(modelName)
-      .findOne({ id: login })
+      .findOne({ id })
       .exec();
   };
 

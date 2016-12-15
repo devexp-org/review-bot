@@ -10,8 +10,9 @@ export function pullRequestMock(mixin) {
     number: 2,
     html_url: 'html_url',
     state: 'open',
+    head: { ref: 'head.ref', sha: 'head.sha' },
+    base: { ref: 'base.ref', sha: 'base.sha' },
     user: { id: 3, login: 'user.login' },
-    base: { ref: 'master' },
     owner: 'repository.owner.login',
     repository: {
       id: 4,
@@ -39,6 +40,7 @@ export function pullRequestModelMock(mixinSchema, mixinModel) {
 
   const stub = staticMock(pullRequest);
 
+  stub.findById = sinon.stub().returns(Promise.resolve(null));
   stub.findByUser = sinon.stub().returns(Promise.resolve([]));
   stub.findByRepositoryAndNumber = sinon.stub().returns(Promise.resolve(null));
 
