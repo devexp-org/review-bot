@@ -2,16 +2,10 @@ export default function setup() {
 
   return function (req, res, next) {
 
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-
     res.handleError = function (logger, err) {
 
-      const plainError = Object.keys(err).length === 0;
-
       let resError = { message: err.message };
-      let logError = plainError ? err.message : String(err);
+      let logError = err.name + ': ' + err.message;
       let resStatus = 500;
       let logMethod = 'error';
 
@@ -22,8 +16,8 @@ export default function setup() {
           break;
 
         case 'MongoError':
-          logError = err.name + ': ' + err.errmsg;
-          resError.message = err.errmsg;
+          logError = err.name + ': ' + (err.errmsg || err.message);
+          resError.message = err.errmsg || err.message;
           break;
 
         case 'NotFoundError':
@@ -34,7 +28,13 @@ export default function setup() {
         case 'ValidationError': {
           resError = err;
           resStatus = 422;
-          logMethod = 'warn';
+          logMethod = 'info';
+          break;
+        }
+
+        case 'UniqueConstraintError': {
+          resStatus = 422;
+          logMethod = 'info';
           break;
         }
 

@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
 import service from '../routes';
-import responseJSON from '../../http/response';
+import handleError from '../../http/middlewares/handle-error';
 
 import loggerMock from '../../logger/__mocks__/';
 import teamManagerMock from '../__mocks__/';
@@ -29,7 +29,7 @@ describe('services/team-manager/routes', function () {
 
     router = service(options, imports);
 
-    app.use(responseJSON());
+    app.use(handleError());
     app.use('/', router);
 
   });

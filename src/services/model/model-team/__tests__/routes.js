@@ -2,7 +2,7 @@ import express from 'express';
 import request from 'supertest';
 import service from '../routes';
 import bodyParser from 'body-parser';
-import responseJSON from '../../../http/response';
+import handleError from '../../../http/middlewares/handle-error';
 
 import modelMock from '../../../model/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
@@ -37,7 +37,7 @@ describe('services/model/model-team/routes', function () {
 
   beforeEach(function () {
     app.use(bodyParser.json());
-    app.use(responseJSON());
+    app.use(handleError());
     app.use('/', router);
   });
 

@@ -1,5 +1,19 @@
 {
 
+  "http-middleware-cors-headers": {
+    "path": "./src/services/http/middlewares/cors-headers",
+    "#plugin:http": {
+      "middlewares": ["http-middleware-cors-headers"]
+    }
+  },
+
+  "http-middleware-handle-error": {
+    "path": "./src/services/http/middlewares/handle-error",
+    "#plugin:http": {
+      "middlewares": ["http-middleware-handle-error"]
+    }
+  },
+
   "http-routes-badges": {
     "path": "./src/plugins/badges-http",
     "options": {

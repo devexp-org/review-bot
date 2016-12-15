@@ -5,18 +5,17 @@ import bodyParser from 'body-parser';
 import responseTime from 'response-time';
 import enableDestroy from 'server-destroy';
 
-import responseJSON from './response';
-
 export default function setup(options, imports) {
 
   const app = express();
+
   // A random port will be selected if the port set to `0`
-  const port = options.port || 0;
+  const port = process.env[options.port] || options.port || 0;
+
   const logger = imports.logger.getLogger('http');
 
   app.use(bodyParser.json());
   app.use(responseTime());
-  app.use(responseJSON());
 
   forEach(options.middlewares, (middlewareName) => {
     const middlewareModule = imports[middlewareName];

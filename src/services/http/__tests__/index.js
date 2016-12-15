@@ -5,7 +5,7 @@ import loggerMock from '../../logger/__mocks__/';
 
 import indexRoute from '../routes/index';
 import staticRoute from '../routes/static';
-import resposeJSON from '../response';
+import corsHeadersMiddleware from '../middlewares/cors-headers';
 
 describe('services/http', function () {
 
@@ -18,7 +18,9 @@ describe('services/http', function () {
         '/': 'index',
         '/public': 'bundle'
       },
-      middlewares: ['responseJSON']
+      middlewares: [
+        'cors-headers'
+      ]
     };
 
     const localAssets = path.resolve(__dirname, './assets');
@@ -27,7 +29,7 @@ describe('services/http', function () {
       index: indexRoute({ assets: localAssets }, {}),
       bundle: staticRoute({ assets: localAssets }, {}),
       logger: loggerMock(),
-      responseJSON: resposeJSON()
+      'cors-headers': corsHeadersMiddleware()
     };
 
   });
@@ -104,9 +106,9 @@ describe('services/http', function () {
   });
 
   it('should throw an error if middleware module was not given', function () {
-    imports.responseJSON = null;
+    imports['cors-headers'] = null;
 
-    assert.throws(() => service(options, imports), /cannot.*responseJSON/i);
+    assert.throws(() => service(options, imports), /cannot.*cors-headers/i);
   });
 
 });

@@ -1,7 +1,7 @@
 # MAIN
 [x] events
 [x] github
-[ ] http
+[x] http
 [x] logger
 [ ] model
 [x] mongoose
