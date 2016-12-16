@@ -30,8 +30,8 @@ export function withUserCollection(test, config, done) {
         user = new UserModel();
 
         user.set({
-          login: 'testuser',
-          html_url: 'https://github.com/testuser',
+          login: 'test-user',
+          html_url: 'https://github.com/test-user',
           avatar_url: 'https://avatars.githubusercontent.com/u/19480?v=3'
         });
 
@@ -49,7 +49,7 @@ export function withUserCollection(test, config, done) {
 
 }
 
-describe('services/model-class/user', function () {
+describe('services/model/model-user', function () {
 
   it('should setup user model', function (done) {
 
@@ -72,8 +72,8 @@ describe('services/model-class/user', function () {
         const UserModel = imports.UserModel;
 
         return Promise.resolve()
-          .then(() => UserModel.findByLogin('testuser'))
-          .then(result => assert.equal(result.login, 'testuser'));
+          .then(() => UserModel.findByLogin('test-user'))
+          .then(result => assert.equal(result.login, 'test-user'));
       }, {}, done);
 
     });

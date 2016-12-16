@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import secret from '../../config/secret';
-import { withPullRequest } from './model';
+import { withPullRequestCollection } from './model/model-pull-request';
 
 export function withGitHub(test, config, done) {
 
@@ -44,13 +44,15 @@ export function withGitHub(test, config, done) {
     }
   });
 
-  config.services.github = _.merge({}, config.services.github, secret.services.github);
+  config.services.github = _.merge(
+    {}, config.services.github, secret.services.github
+  );
 
-  withPullRequest(test, config, done);
+  withPullRequestCollection(test, config, done);
 
 }
 
-describe('services/pull-request-github', function () {
+describe.skip('services/pull-request-github', function () {
 
   this.timeout(5000);
 

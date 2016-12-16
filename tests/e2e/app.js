@@ -12,12 +12,10 @@ export function withApp(test, config, done) {
     .then(done, done);
 }
 
-function customizer(objValue, srcValue) {
-  if (isArray(objValue)) {
-    return objValue.concat(srcValue);
-  }
-}
-
 export function merge(object, sources) {
-  return mergeWith(object, sources, customizer);
+  return mergeWith(object, sources, function (objValue, srcValue) {
+    if (isArray(objValue)) {
+      return objValue.concat(srcValue);
+    }
+  });
 }

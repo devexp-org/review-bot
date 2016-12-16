@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { withPullRequest } from './model';
+import { withPullRequestCollection } from './model/model-pull-request';
 
 export function withPullRequestReview(test, config, done) {
 
@@ -38,7 +38,7 @@ export function withPullRequestReview(test, config, done) {
     }
   }, config);
 
-  withPullRequest(imports => {
+  withPullRequestCollection(imports => {
     imports.pullRequest.set('review.reviewers', [{ login: 'foo' }]);
     return test(imports);
   }, config, done);
