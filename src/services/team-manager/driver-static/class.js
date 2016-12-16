@@ -1,36 +1,23 @@
-import { get, find } from 'lodash';
+import { find } from 'lodash';
+import { AbstractDriver, AbstractDriverFactory } from '../driver-abstract/class';
 
-export class StaticDriver {
+export class StaticDriver extends AbstractDriver {
 
   /**
    * @constructor
    *
-   * @param {Object} team
+   * @param {Team} team
+   * @param {Object} driverConfig
    * @param {TeamModel} TeamModel
    */
-  constructor(team, TeamModel) {
-    this.name = team.name;
-    this.options = team.reviewConfig;
+  constructor(team, driverConfig, TeamModel) {
+    super(team, driverConfig);
 
     this.TeamModel = TeamModel;
   }
 
   /**
-   * Returns review option.
-   *
-   * @param {String} option
-   * @param {String|Number} defaultValue
-   *
-   * @return {String|Number}
-   */
-  getOption(option, defaultValue) {
-    return get(this.options, option, defaultValue);
-  }
-
-  /**
-   * Returns candidates for review.
-   *
-   * @return {Promise.<Array.<Reviewer>>}
+   * @override
    */
   getCandidates() {
     return this.TeamModel
@@ -39,11 +26,7 @@ export class StaticDriver {
   }
 
   /**
-   * Finds reviewer by `pull request` and `login`.
-   *
-   * @param {String} login
-   *
-   * @return {Promise.<Reviewer>}
+   * @override
    */
   findTeamMember(login) {
     return this.getCandidates()
@@ -52,7 +35,7 @@ export class StaticDriver {
 
 }
 
-export class StaticDriverFactory {
+export class StaticDriverFactory extends AbstractDriverFactory {
 
   /**
    * @constructor
@@ -60,26 +43,30 @@ export class StaticDriverFactory {
    * @param {TeamModel} TeamModel
    */
   constructor(TeamModel) {
+    super();
+
     this.TeamModel = TeamModel;
   }
 
+  /**
+   * @override
+   */
   name() {
     return 'static';
   }
 
+  /**
+   * @override
+   */
   config() {
     return {};
   }
 
   /**
-   * Returns static driver.
-   *
-   * @param {Team} team
-   *
-   * @return {TeamDriver}
+   * @override
    */
-  makeDriver(team) {
-    return new StaticDriver(team, this.TeamModel);
+  makeDriver(team, driverConfig) {
+    return new StaticDriver(team, driverConfig, this.TeamModel);
   }
 
 }

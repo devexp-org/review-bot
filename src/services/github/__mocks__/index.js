@@ -6,6 +6,10 @@ export default function mock() {
     getTeamMembers: sinon.stub().callsArg(1)
   };
 
+  const usersMock = {
+    getForUser: sinon.stub().callsArg(1)
+  };
+
   const reposMock = {
     getCommits: sinon.stub().callsArg(1),
     getContent: sinon.stub().callsArg(1)
@@ -19,6 +23,7 @@ export default function mock() {
 
   return {
     orgs: orgsMock,
+    users: usersMock,
     repos: reposMock,
     pullRequests: pullRequestsMock
   };

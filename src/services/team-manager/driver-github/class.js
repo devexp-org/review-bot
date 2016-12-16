@@ -6,7 +6,7 @@ export class GitHubDriver extends StaticDriver {
   /**
    * @constructor
    *
-   * @param {Object} team
+   * @param {Team} team
    * @param {Object} driverConfig
    * @param {Object} github - GitHub API module
    */
@@ -35,6 +35,22 @@ export class GitHubDriver extends StaticDriver {
   }
 
   /**
+   * @override
+   */
+  findTeamMember(login) {
+    return new Promise((resolve, reject) => {
+      this.github.users.getForUser({ username: login }, (err, result) => {
+        if (err) {
+          reject(new Error('GitHub API: ' + err));
+          return;
+        }
+
+        resolve(result);
+      });
+    });
+  }
+
+  /**
    * Finds team id by org name and slug
    *
    * @protected
@@ -47,7 +63,7 @@ export class GitHubDriver extends StaticDriver {
     return new Promise((resolve, reject) => {
       this.github.orgs.getTeams({ org: orgName, per_page: 100 }, (err, result) => {
         if (err) {
-          reject(new Error('GitHub API: Error: ' + err));
+          reject(new Error('GitHub API: ' + err));
           return;
         }
 
@@ -69,7 +85,7 @@ export class GitHubDriver extends StaticDriver {
 
       this.github.orgs.getTeamMembers(req, (err, result) => {
         if (err) {
-          reject(new Error('GitHub API: Error: ' + err));
+          reject(new Error('GitHub API: ' + err));
           return;
         }
 
@@ -84,7 +100,7 @@ export class GitHubDriver extends StaticDriver {
 
       this.github.orgs.getMembers(req, (err, result) => {
         if (err) {
-          reject(new Error('GitHub API: Error: ' + err));
+          reject(new Error('GitHub API: ' + err));
           return;
         }
 

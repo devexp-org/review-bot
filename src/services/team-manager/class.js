@@ -11,17 +11,26 @@ export default class TeamManager {
    */
   constructor(drivers, TeamModel) {
     this.drivers = drivers;
-
     this.TeamModel = TeamModel;
   }
 
   /**
-   * Returns all teams. Only name and patterns.
+   * Returns all teams.
+   * Only name and patterns.
    *
    * @return {Promise.<Array.<Team>>}
    */
   getTeams() {
     return this.TeamModel.find({}).select({ name: 1, patterns: 1 }).exec();
+  }
+
+  /**
+   * Returns all drivers.
+   *
+   * @return {Array.<TeamDriver>}
+   */
+  getDrivers() {
+    return this.drivers;
   }
 
   /**
@@ -45,20 +54,11 @@ export default class TeamManager {
   }
 
   /**
-   * Returns all drivers.
-   *
-   * @return {Array}
-   */
-  getDrivers() {
-    return this.drivers;
-  }
-
-  /**
    * Returns driver for given team.
    *
-   * @param {Object} teamName
+   * @param {String} teamName
    *
-   * @return {Object}
+   * @return {TeamDriver}
    */
   getTeamDriver(teamName) {
     return this.TeamModel
@@ -102,18 +102,19 @@ export default class TeamManager {
   }
 
   /**
-   * Returns driver of team of matched route.
+   * Returns driver of matched route.
    *
    * @param {PullRequest} pullRequest
    *
    * @return {Promise.<Team>}
    */
   findTeamByPullRequest(pullRequest) {
-    return this.find(pullRequest).then(route => this.getTeamDriver(route.team));
+    return this.find(pullRequest)
+      .then(route => this.getTeamDriver(route.team));
   }
 
   /**
-   * Returns `true` if pattern match to pull request full name and `false` otherwise.
+   * Returns `true` if pattern match to pull request and `false` otherwise.
    *
    * @protected
    *

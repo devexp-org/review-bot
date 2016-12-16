@@ -6,6 +6,7 @@ export default function setup(options, imports) {
   const model = imports.model;
 
   const drivers = {};
+
   forEach(options.drivers, (driverName) => {
     const driverModule = imports[driverName];
 

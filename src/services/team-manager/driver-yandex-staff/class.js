@@ -6,11 +6,11 @@ export default class YandexStaffDriver extends StaticDriver {
   /**
    * @constructor
    *
-   * @param {Object} team
+   * @param {Team} team
    * @param {Object} driverConfig
-   * @param {Object} yandexStaff - yandex staff module
+   * @param {Object} staff - yandex staff module
    */
-  constructor(team, driverConfig, yandexStaff) {
+  constructor(team, driverConfig, staff) {
     super(team);
 
     if (!driverConfig.groupId) {
@@ -18,14 +18,14 @@ export default class YandexStaffDriver extends StaticDriver {
     }
 
     this.groupId = driverConfig.groupId;
-    this.yandexStaff = yandexStaff;
+    this.staff = staff;
   }
 
   /**
    * @override
    */
   getCandidates() {
-    return this.yandexStaff
+    return this.staff
       .getUsersInOffice(this.groupId)
       .then(team => cloneDeep(team));
   }
@@ -34,19 +34,19 @@ export default class YandexStaffDriver extends StaticDriver {
    * @override
    */
   findTeamMember(login) {
-    return this.yandexStaff
+    return this.staff
       .apiUserInfo(login)
-      .then(user => this.yandexStaff._addAvatarAndUrl(user));
+      .then(user => this.staff._addAvatarAndUrl(user));
   }
 
 }
 
 export class YandexStaffDriverFactory extends StaticDriverFactory {
 
-  constructor(yandexStaff) {
+  constructor(staff) {
     super();
 
-    this.yandexStaff = yandexStaff;
+    this.staff = staff;
   }
 
   name() {
@@ -62,7 +62,7 @@ export class YandexStaffDriverFactory extends StaticDriverFactory {
   }
 
   makeDriver(team, driverConfig) {
-    return new YandexStaffDriver(team, driverConfig, this.yandexStaff);
+    return new YandexStaffDriver(team, driverConfig, this.staff);
   }
 
 }

@@ -1,11 +1,11 @@
 import { YandexStaffDriverFactory } from '../class';
 
-import yandexStaffMock from '../../../../plugins/yandex-staff/__mocks__/';
 import { teamMock } from '../../../model/model-team/__mocks__/';
+import yandexStaffMock from '../../../../plugins/yandex-staff/__mocks__/';
 
 describe('services/team-manager/driver-yandex-staff/class', function () {
 
-  let team, factory, driver, config, yandexStaff;
+  let team, factory, driver, config, staff;
 
   beforeEach(function () {
     config = {
@@ -14,12 +14,12 @@ describe('services/team-manager/driver-yandex-staff/class', function () {
 
     team = teamMock();
 
-    yandexStaff = yandexStaffMock();
+    staff = yandexStaffMock();
 
-    factory = new YandexStaffDriverFactory(yandexStaff);
+    factory = new YandexStaffDriverFactory(staff);
   });
 
-  it('should be resolved to AbstractDriver', function () {
+  it('should be resolved to StaticDriver', function () {
     driver = factory.makeDriver(team, config);
 
     assert.property(driver, 'getOption');
@@ -33,12 +33,12 @@ describe('services/team-manager/driver-yandex-staff/class', function () {
 
   describe('#getCandidates', function () {
 
-    it('should return people in office for members for review', function (done) {
+    it('should return people in office for candidates to review', function (done) {
       const users = [{ login: 'foo' }, { login: 'bar' }];
 
       driver = factory.makeDriver(team, config);
 
-      yandexStaff.getUsersInOffice
+      staff.getUsersInOffice
         .withArgs(1)
         .returns(Promise.resolve(users));
 
@@ -51,16 +51,16 @@ describe('services/team-manager/driver-yandex-staff/class', function () {
 
   describe('#findTeamMember', function () {
 
-    it('should search user in yandex staff', function (done) {
+    it('should search user in staff', function (done) {
       const fooUser = { login: 'foo' };
 
       driver = factory.makeDriver(team, config);
 
-      yandexStaff.apiUserInfo
+      staff.apiUserInfo
         .withArgs('foo')
         .returns(Promise.resolve(fooUser));
 
-      yandexStaff._addAvatarAndUrl
+      staff._addAvatarAndUrl
         .returnsArg(0);
 
       driver.findTeamMember('foo')

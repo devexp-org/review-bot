@@ -44,7 +44,7 @@ describe('services/model/model-team/routes', function () {
       .returns(Promise.resolve(team));
 
     UserModel.findByLogin
-      .withArgs('testuser')
+      .withArgs('test-user')
       .returns(Promise.resolve(user));
 
     router = service(options, imports);
@@ -91,7 +91,7 @@ describe('services/model/model-team/routes', function () {
 
       request(app)
         .post('/')
-        .send({ 'name': 'test-team' })
+        .send({ name: 'test-team' })
         .expect('{"message":"Team \\"test-team\\" already exists"}')
         .expect('Content-Type', /application\/json/)
         .expect(500)
@@ -134,14 +134,14 @@ describe('services/model/model-team/routes', function () {
         .send({ name: 'test-team', reviewConfig: { approveCount: 5, totalReviewers: 10 } })
         .expect('Content-Type', /application\/json/)
         .expect(200)
-        .end(() => {
+        .end(err => {
           assert(team.save.calledAfter(team.set));
           assert.calledWith(team.set, 'name', 'test-team');
           assert.calledWith(team.set, 'reviewConfig', {
             approveCount: 5,
             totalReviewers: 10
           });
-          done();
+          done(err);
         });
     });
 
@@ -168,9 +168,9 @@ describe('services/model/model-team/routes', function () {
         .delete('/test-team')
         .expect('Content-Type', /application\/json/)
         .expect(200)
-        .end(() => {
+        .end(err => {
           assert.called(team.remove);
-          done();
+          done(err);
         });
     });
 
@@ -211,25 +211,74 @@ describe('services/model/model-team/routes', function () {
     it('should add a user to a team', function (done) {
       request(app)
         .post('/test-team/members')
-        .send({ login: 'testuser' })
-        .expect('{"name":"name","members":[{"login":"testuser","contacts":[]}],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":3}}')
+        .send({ login: 'test-user' })
+        .expect('{"name":"name","members":[{"login":"test-user","contacts":[]}],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":3}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
     });
 
-    it.skip('should return an error if user is already a member', function (done) {
-      const team = new TeamModel();
-
-      // team.save.returns(Promise.reject(new Error('Team "test-team" is already exists')));
+    it('should return an error if user is already a member', function (done) {
+      team.members = [{ login: 'test-user' }];
 
       request(app)
         .post('/test-team/members')
-        .send( { login: 'testuser' })
-        .expect('{"message":"User \\"testuser\\" is already member"}')
+        .send({ login: 'test-user' })
+        .expect('{"message":"\\"test-user\\" is already member of \\"name\\""}')
         .expect('Content-Type', /application\/json/)
-        .expect(500)
+        .expect(422)
         .end(done);
+    });
+
+    it('should return an error if user is not found', function (done) {
+      UserModel.findByLogin
+        .withArgs('foo')
+        .returns(Promise.resolve(null));
+
+      request(app)
+        .post('/test-team/members')
+        .send({ login: 'foo' })
+        .expect('{"message":"User \\"foo\\" is not found"}')
+        .expect('Content-Type', /application\/json/)
+        .expect(404)
+        .end(done);
+    });
+
+  });
+
+  describe('DELETE /:id/members', function () {
+
+    it('should remove a member', function (done) {
+      team.members = [{ login: 'foo' }, { login: 'bar' }];
+
+      request(app)
+        .delete('/test-team/members')
+        .send({ login: 'foo' })
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end(err => {
+          assert.deepEqual(team.members, [{ login: 'bar' }]);
+          assert.called(team.save);
+          done(err);
+        });
+    });
+
+    it('should not return an error if a member is not found', function (done) {
+      team.members = [{ login: 'foo' }, { login: 'bar' }];
+
+      UserModel.findByLogin
+        .withArgs('baz')
+        .returns(Promise.resolve(null));
+
+      request(app)
+        .delete('/test-team/members')
+        .send({ login: 'baz' })
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end(err => {
+          assert.deepEqual(team.members, [{ login: 'foo' }, { login: 'bar' }]);
+          done(err);
+        });
     });
 
   });

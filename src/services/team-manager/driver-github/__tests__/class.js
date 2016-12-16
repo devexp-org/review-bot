@@ -19,7 +19,7 @@ describe('services/team-manager/driver-github/class', function () {
     factory = new GitHubDriverFactory(github);
   });
 
-  it('should be resolved to AbstractDriver', function () {
+  it('should be resolved to StaticDriver', function () {
     driver = factory.makeDriver(team, config);
 
     assert.property(driver, 'getOption');
@@ -31,7 +31,7 @@ describe('services/team-manager/driver-github/class', function () {
     assert.throws(() => factory.makeDriver(team, {}), /orgName/);
   });
 
-  it('should use method `getMembers` to obtain team if slug is not given', function (done) {
+  it('should use method `getMembers` to obtain a team if slug is not given', function (done) {
     driver = factory.makeDriver(team, config);
 
     github.orgs.getMembers.callsArgWith(1, null, []);
@@ -44,7 +44,7 @@ describe('services/team-manager/driver-github/class', function () {
       .then(done, done);
   });
 
-  it('should use method `getTeamMembers` to obtain team if slug is given', function (done) {
+  it('should use method `getTeamMembers` to obtain a team if slug is given', function (done) {
     config.slugName = 'devs';
 
     driver = factory.makeDriver(team, config);
@@ -70,7 +70,7 @@ describe('services/team-manager/driver-github/class', function () {
       driver = factory.makeDriver(team, config);
     });
 
-    it('should rejected promise if github return error', function (done) {
+    it('should rejected promise if github return an error', function (done) {
       github.orgs.getTeams
         .callsArgWith(1, new Error('just error'));
 
@@ -100,11 +100,41 @@ describe('services/team-manager/driver-github/class', function () {
       driver = factory.makeDriver(team, config);
     });
 
-    it('should rejected promise if github return error', function (done) {
+    it('should rejected promise if github return an error', function (done) {
       github.orgs.getMembers
         .callsArgWith(1, new Error('just error'));
 
       driver.getMembersByOrgName('github')
+        .then(() => assert.fail())
+        .catch(e => assert.match(e.message, /just error/))
+        .then(done, done);
+    });
+
+  });
+
+  describe('#findTeamMember', function () {
+
+    beforeEach(function () {
+      driver = factory.makeDriver(team, config);
+    });
+
+    it('should use method `getForUser` to obtain a user', function (done) {
+      github.users.getForUser
+        .callsArgWith(1, null, { login: 'octocat' });
+
+      driver.findTeamMember('octocat')
+        .then(() => assert.calledWith(
+          github.users.getForUser,
+          sinon.match({ username: 'octocat' })
+        ))
+        .then(done, done);
+    });
+
+    it('should rejected promise if github return an error', function (done) {
+      github.users.getForUser
+        .callsArgWith(1, new Error('just error'));
+
+      driver.findTeamMember('octocat')
         .then(() => assert.fail())
         .catch(e => assert.match(e.message, /just error/))
         .then(done, done);
@@ -120,7 +150,7 @@ describe('services/team-manager/driver-github/class', function () {
       driver = factory.makeDriver(team, config);
     });
 
-    it('should rejected promise if github return error', function (done) {
+    it('should rejected promise if github return an error', function (done) {
       github.orgs.getTeamMembers
         .callsArgWith(1, new Error('just error'));
 

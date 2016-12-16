@@ -18,4 +18,22 @@ describe('plugins/team-manager/driver-yandex-staff', function () {
     assert.property(factory, 'makeDriver');
   });
 
+  describe('#name', function () {
+
+    it('should return `yandex-staff`', function () {
+      factory = service(options, imports);
+      assert.equal(factory.name(), 'yandex-staff');
+    });
+
+  });
+
+  describe('#config', function () {
+
+    it('should return driver config', function () {
+      factory = service(options, imports);
+      assert.isObject(factory.config());
+    });
+
+  });
+
 });

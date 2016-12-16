@@ -5,10 +5,10 @@ import { teamDriverFactoryMock } from '../__mocks__/';
 
 describe('services/team-manager/class', function () {
 
-  let teamModel, pullRequest, teamDriverFactory;
+  let TeamModel, pullRequest, teamDriverFactory;
 
   beforeEach(function () {
-    teamModel = teamModelMock();
+    TeamModel = teamModelMock();
 
     pullRequest = pullRequestMock();
 
@@ -28,7 +28,7 @@ describe('services/team-manager/class', function () {
         patterns: ['nodejs/node']
       };
 
-      teamModel.findByName
+      TeamModel.findByName
         .withArgs('team1')
         .returns(Promise.resolve(team));
 
@@ -36,19 +36,19 @@ describe('services/team-manager/class', function () {
         .withArgs(team)
         .returns(1);
 
-      manager = new TeamManager({ 'static': teamDriverFactory }, teamModel);
+      manager = new TeamManager({ 'static': teamDriverFactory }, TeamModel);
     });
 
     it('should use the first matched route', function (done) {
       const otherTeam = { name: 'team2', driver: { name: 'static' } };
 
-      teamModel.exec.returns(Promise.resolve([
+      TeamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['github/hubot'] },
         { name: 'team2', patterns: ['nodejs/node'] },
         { name: 'team3', patterns: ['*'] }
       ]));
 
-      teamModel.findByName
+      TeamModel.findByName
         .withArgs('team2')
         .returns(Promise.resolve(otherTeam));
 
@@ -62,7 +62,7 @@ describe('services/team-manager/class', function () {
     });
 
     it('should interpret "*" as "always match"', function (done) {
-      teamModel.exec.returns(Promise.resolve([
+      TeamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['*'] }
       ]));
 
@@ -72,7 +72,7 @@ describe('services/team-manager/class', function () {
     });
 
     it('should understand wildcard', function (done) {
-      teamModel.exec.returns(Promise.resolve([
+      TeamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['nodejs/*'] }
       ]));
 
@@ -82,7 +82,7 @@ describe('services/team-manager/class', function () {
     });
 
     it('should return an error if there is no matched route', function (done) {
-      teamModel.exec.returns(Promise.resolve([
+      TeamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['other-org/other-repo'] }
       ]));
 
@@ -95,7 +95,7 @@ describe('services/team-manager/class', function () {
     it('should return an error if there is no matched driver', function (done) {
       team.driver.name = 'unknown';
 
-      teamModel.exec.returns(Promise.resolve([
+      TeamModel.exec.returns(Promise.resolve([
         { name: 'team1', patterns: ['*'] }
       ]));
 

@@ -2,7 +2,7 @@ import { staticMock } from '../../../model/__mocks__/static';
 import { instanceMock } from '../../../model/__mocks__/schema';
 
 export function userMock(mixin) {
-  const user = { login: 'testuser', contacts: [] };
+  const user = { login: 'test-user', contacts: [] };
 
   user.getContacts = sinon.stub().returns([]);
 

@@ -30,7 +30,7 @@ describe('services/model/model-user/routes', function () {
       .returns(UserModel);
 
     UserModel.findByLogin
-      .withArgs('testuser')
+      .withArgs('test-user')
       .returns(Promise.resolve(user));
 
     router = service(options, imports);
@@ -51,7 +51,7 @@ describe('services/model/model-user/routes', function () {
     it('should return a user list', function (done) {
       request(app)
         .get('/')
-        .expect('[{"login":"testuser","contacts":[]}]')
+        .expect('[{"login":"test-user","contacts":[]}]')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -64,8 +64,8 @@ describe('services/model/model-user/routes', function () {
     it('should create a new user', function (done) {
       request(app)
         .post('/')
-        .field('login', 'testuser')
-        .expect('{"login":"testuser","contacts":[]}')
+        .send({ login: 'test-user' })
+        .expect('{"login":"test-user","contacts":[]}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -74,12 +74,12 @@ describe('services/model/model-user/routes', function () {
     it('should return an error if the user already exsits', function (done) {
       const user = new UserModel();
 
-      user.save.returns(Promise.reject(new Error('User "testuser" already exists')));
+      user.save.returns(Promise.reject(new Error('User "test-user" already exists')));
 
       request(app)
         .post('/')
-        .field('login', 'testuser')
-        .expect('{"message":"User \\"testuser\\" already exists"}')
+        .send({ login: 'test-user' })
+        .expect('{"message":"User \\"test-user\\" already exists"}')
         .expect('Content-Type', /application\/json/)
         .expect(500)
         .end(done);
@@ -91,8 +91,8 @@ describe('services/model/model-user/routes', function () {
 
     it('should return a user', function (done) {
       request(app)
-        .get('/testuser')
-        .expect('{"login":"testuser","contacts":[]}')
+        .get('/test-user')
+        .expect('{"login":"test-user","contacts":[]}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -123,25 +123,25 @@ describe('services/model/model-user/routes', function () {
 
     it('should update a user', function (done) {
       request(app)
-        .put('/testuser')
+        .put('/test-user')
         .send({ contacts })
         .expect('Content-Type', /application\/json/)
         .expect(200)
-        .end(() => {
+        .end(err => {
           assert(user.save.calledAfter(user.set));
           assert.calledWith(user.set, 'contacts', contacts);
-          done();
+          done(err);
         });
     });
 
     it('should delete all contacts if an empty body passed', function (done) {
       request(app)
-        .put('/testuser')
+        .put('/test-user')
         .expect('Content-Type', /application\/json/)
         .expect(200)
-        .end(() => {
+        .end(err => {
           assert.calledWith(user.set, 'contacts', []);
-          done();
+          done(err);
         });
     });
 
@@ -165,12 +165,12 @@ describe('services/model/model-user/routes', function () {
 
     it('should delete a user', function (done) {
       request(app)
-        .delete('/testuser')
+        .delete('/test-user')
         .expect('Content-Type', /application\/json/)
         .expect(200)
-        .end(() => {
+        .end(err => {
           assert.called(user.remove);
-          done();
+          done(err);
         });
     });
 

@@ -15,7 +15,7 @@ export default function setup(options, imports) {
       .then(user => {
         if (!user) {
           return Promise.reject(
-            new NotFoundError(`User ${id} was not found`)
+            new NotFoundError(`User "${id}" is not found`)
           );
         }
 

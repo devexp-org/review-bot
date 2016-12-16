@@ -4,18 +4,18 @@ import { teamMock, teamModelMock } from '../../../model/model-team/__mocks__/';
 
 describe('services/team-manager/driver-static/class', function () {
 
-  let team, teamModel, teamDriver, factory;
+  let team, TeamModel, teamDriver, factory;
 
   beforeEach(function () {
     team = teamMock();
 
-    teamModel = teamModelMock();
+    TeamModel = teamModelMock();
 
-    factory = new StaticDriverFactory(teamModel);
+    factory = new StaticDriverFactory(TeamModel);
 
     teamDriver = factory.makeDriver(team);
 
-    teamModel.findByNameWithMembers
+    TeamModel.findByNameWithMembers
       .returns(Promise.resolve(team));
   });
 
@@ -45,24 +45,6 @@ describe('services/team-manager/driver-static/class', function () {
       teamDriver.findTeamMember('b')
         .then(member => assert.deepEqual(member, { id: 2, login: 'b' }))
         .then(done, done);
-    });
-
-  });
-
-  describe('#getOption', function () {
-
-    beforeEach(function () {
-      team.reviewConfig = { foo: 'bar' };
-
-      teamDriver = factory.makeDriver(team);
-    });
-
-    it('should return team option', function () {
-      assert.equal(teamDriver.getOption('foo'), 'bar');
-    });
-
-    it('should return default option if team option is undefined', function () {
-      assert.equal(teamDriver.getOption('bar', 'baz'), 'baz');
     });
 
   });

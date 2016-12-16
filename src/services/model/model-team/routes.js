@@ -1,6 +1,10 @@
+import { find } from 'lodash';
 import { Router as router } from 'express';
 
-import { NotFoundError } from '../../../modules/errors';
+import {
+  NotFoundError,
+  UniqueConstraintError
+} from '../../../modules/errors';
 
 export default function setup(options, imports) {
 
@@ -29,7 +33,7 @@ export default function setup(options, imports) {
       .then(user => {
         if (!user) {
           return Promise.reject(
-            new NotFoundError(`User ${login} is not found`)
+            new NotFoundError(`User "${login}" is not found`)
           );
         }
 
@@ -68,10 +72,10 @@ export default function setup(options, imports) {
   teamRoute.put('/:id', function (req, res) {
     const id = req.params.id;
 
-    const name = req.body.name || '';
-    const driver = req.body.driver || {};
-    const patterns = req.body.patterns || '';
-    const reviewConfig = req.body.reviewConfig || {};
+    const name = req.body.name;
+    const driver = req.body.driver;
+    const patterns = req.body.patterns;
+    const reviewConfig = req.body.reviewConfig;
 
     findByName(id)
       .then(team => {
@@ -110,7 +114,14 @@ export default function setup(options, imports) {
 
     Promise.all([findByName(id, true), findByLogin(login)])
       .then(([team, user]) => {
-        team.members.push(user); // TODO unique
+        if (find(team.members, { login: user.login })) {
+          return Promise.reject(new UniqueConstraintError(
+            `"${user.login}" is already member of "${team.name}"`
+          ));
+        }
+
+        team.members.push(user);
+
         return team.save();
       })
       .then(res.json.bind(res))
