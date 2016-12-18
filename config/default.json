@@ -60,22 +60,6 @@
       "path": "./src/services/plugin-manager"
     },
 
-    "http": {
-      "path": "./src/services/http",
-      "options": {
-        "port": 80,
-        "routes": {},
-        "middlewares": []
-      },
-      "dependencies": [
-        "events",
-        "logger",
-        "plugin-manager"
-      ]
-    },
-
-    "#include:http-routes": "./default-http-routes.json",
-
     "mongoose": {
       "path": "./src/services/mongoose",
       "options": {
@@ -98,28 +82,34 @@
 
     "#include:model-class": "./default-model-class.json",
 
+    "http": {
+      "path": "./src/services/http",
+      "options": {
+        "port": 80,
+        "routes": {},
+        "middlewares": []
+      },
+      "dependencies": [
+        "events",
+        "logger",
+        "plugin-manager"
+      ]
+    },
+
+    "#include:http-routes": "./default-http-routes.json",
+
     "team-manager": {
       "path": "./src/services/team-manager",
       "options": {
         "drivers": {}
       },
       "dependencies": [
-        "model"
+        "model",
+        "plugin-manager"
       ]
     },
 
-    "team-driver-github": {
-      "path": "./src/services/team-manager/driver-github",
-      "dependencies": [
-        "model",
-        "github"
-      ],
-      "#plugin:team-manager": {
-        "drivers": {
-          "github": "team-driver-github"
-        }
-      }
-    },
+    "#include:team-drivers": "./default-team-drivers.json",
 
     "#comment:pull-request-github": {
       "path": "./src/services/pull-request-github-delayed",

@@ -1,0 +1,27 @@
+{
+
+  "team-driver-static": {
+    "path": "./src/services/team-manager/driver-static",
+    "dependencies": [
+      "model"
+    ],
+    "#plugin:team-manager": {
+      "drivers": {
+        "static": "team-driver-static"
+      }
+    }
+  },
+
+  "team-driver-github": {
+    "path": "./src/services/team-manager/driver-github",
+    "dependencies": [
+      "github"
+    ],
+    "#plugin:team-manager": {
+      "drivers": {
+        "github": "team-driver-github"
+      }
+    }
+  }
+
+}

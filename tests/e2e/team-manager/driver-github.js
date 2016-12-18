@@ -4,7 +4,7 @@ import { withGitHub } from '../github';
 import { withTeamModel } from '../model/model-team';
 import { withPullRequestModel } from '../model/model-pull-request';
 import { withTeamManager } from '../team-manager/';
-import defaultConfig from '../../../config/default';
+import defaultConfig from '../../../config/default-team-drivers';
 
 export function withTeamDriverGitHub(next) {
 
@@ -21,9 +21,8 @@ export function withTeamDriverGitHub(next) {
           ]
         },
         'team-driver-github': {
-          path: defaultConfig.services['team-driver-github'].path,
+          path: defaultConfig['team-driver-github'].path,
           dependencies: [
-            'model',
             'github'
           ]
         }
@@ -38,9 +37,7 @@ export function withTeamDriverGitHub(next) {
           team.set({
             driver: {
               name: 'github',
-              options: {
-                orgName: 'devexp-org'
-              }
+              options: { orgName: 'devexp-org' }
             },
             patterns: ['artems/devkit']
           });
@@ -75,38 +72,90 @@ describe('services/team-manager/driver-github', function () {
     )
   );
 
-  it('should get candidates using GitHub API', function (done) {
+  describe('#getCandidates', function () {
 
-    test(imports => {
-      const manager = imports['team-manager'];
-      const pullRequest = imports.pullRequest;
+    it('should get candidates using GitHub API (-slugName)', function (done) {
 
-      return manager.findTeamByPullRequest(pullRequest)
-        .then(teamDriver => {
-          return teamDriver.getCandidates();
-        })
-        .then(candidates => {
-          assert.sameMembers(
-            candidates.map(x => x.login),
-            ['artems', 'd4rkr00t', 'sbmaxx']
-          );
-        });
-    }, {}, done);
+      test(imports => {
+        const manager = imports['team-manager'];
+        const TeamModel = imports.model('team');
+        const pullRequest = imports.pullRequest;
+
+        return TeamModel
+          .findByName('test-team').then(team => {
+            team.set({
+              driver: {
+                options: { orgName: 'devexp-org' }
+              }
+            });
+            return team.save();
+          })
+          .then(() => {
+            return manager.findTeamByPullRequest(pullRequest);
+          })
+          .then(teamDriver => {
+            return teamDriver.getCandidates();
+          })
+          .then(candidates => {
+            assert.sameMembers(
+              candidates.map(x => x.login),
+                ['artems', 'd4rkr00t', 'mishanga', 'sbmaxx']
+            );
+          });
+      }, {}, done);
+
+    });
+
+    it('should get candidates using GitHub API (+slugName)', function (done) {
+
+      test(imports => {
+        const manager = imports['team-manager'];
+        const TeamModel = imports.model('team');
+        const pullRequest = imports.pullRequest;
+
+        return TeamModel
+          .findByName('test-team').then(team => {
+            team.set({
+              driver: {
+                options: { orgName: 'devexp-org', slugName: 'all' }
+              }
+            });
+            return team.save();
+          })
+          .then(() => {
+            return manager.findTeamByPullRequest(pullRequest);
+          })
+          .then(teamDriver => {
+            return teamDriver.getCandidates();
+          })
+          .then(candidates => {
+            assert.sameMembers(
+              candidates.map(x => x.login),
+                ['artems', 'd4rkr00t', 'mishanga', 'sbmaxx']
+            );
+          });
+      }, {}, done);
+
+    });
 
   });
 
-  it('should find user using GitHub API', function (done) {
+  describe('#findTeamByPullRequest', function () {
 
-    test(imports => {
-      const manager = imports['team-manager'];
-      const pullRequest = imports.pullRequest;
+    it('should find user using GitHub API', function (done) {
 
-      return manager.findTeamByPullRequest(pullRequest)
-        .then(teamDriver => {
-          return teamDriver.findTeamMember('mishanga');
-        })
-        .then(user => assert.equal(user.login, 'mishanga'));
-    }, {}, done);
+      test(imports => {
+        const manager = imports['team-manager'];
+        const pullRequest = imports.pullRequest;
+
+        return manager.findTeamByPullRequest(pullRequest)
+          .then(teamDriver => {
+            return teamDriver.findTeamMember('veged');
+          })
+          .then(user => assert.equal(user.login, 'veged'));
+      }, {}, done);
+
+    });
 
   });
 

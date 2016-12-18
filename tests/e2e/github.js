@@ -13,7 +13,8 @@ export function withGitHub(next) {
     });
 
     config.services.github = merge(
-      {}, config.services.github, secret.services.github
+      config.services.github,
+      secret.services.github
     );
 
     next(test, config, done);
