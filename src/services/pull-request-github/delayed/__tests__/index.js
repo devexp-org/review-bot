@@ -1,7 +1,7 @@
 import service from '../';
-import serviceMock from '../../pull-request-github/__mocks__/';
+import serviceMock from '../../__mocks__/';
 
-describe('services/pull-request-github-delayed', function () {
+describe('services/pull-request-github/delayed', function () {
 
   let options, imports, github;
 
@@ -13,15 +13,11 @@ describe('services/pull-request-github-delayed', function () {
   });
 
   it('the mock object should have the same methods', function () {
-
     const obj = service(options, imports);
     const mock = serviceMock();
     const methods = Object.keys(mock);
 
-    methods.forEach(method => {
-      assert.property(obj, method);
-    });
-
+    methods.forEach(method => assert.property(obj, method));
   });
 
 });

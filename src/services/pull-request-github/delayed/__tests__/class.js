@@ -1,15 +1,16 @@
 import PullRequestGitHubDelayed from '../class';
 
-import githubMock from '../../github/__mocks__/';
-import { pullRequestMock } from '../../model/model-pull-request/__mocks__/';
+import githubMock from '../../../github/__mocks__/';
+import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';
 
-describe('services/pull-request-github-delayed/class', function () {
+describe('services/pull-request-github/delayed/class', function () {
 
   let github, options, pullRequest, pullRequestGitHub;
 
   beforeEach(function () {
-    github = githubMock();
     options = {};
+
+    github = githubMock();
     pullRequest = pullRequestMock();
 
     pullRequestGitHub = new PullRequestGitHubDelayed(github, options, 1000);

@@ -1,4 +1,4 @@
-import PullRequestGitHub from '../pull-request-github/class';
+import PullRequestGitHub from '../class';
 
 export default class PullRequestGitHubDelayed extends PullRequestGitHub {
 

@@ -111,8 +111,8 @@
 
     "#include:team-drivers": "./default-team-drivers.json",
 
-    "#comment:pull-request-github": {
-      "path": "./src/services/pull-request-github-delayed",
+    "pull-request-github": {
+      "path": "./src/services/pull-request-github/delayed",
       "dependencies": [
         "github"
       ]
