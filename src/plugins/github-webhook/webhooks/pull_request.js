@@ -10,8 +10,7 @@ export default function webhook(payload, imports) {
 
   const events = imports.events;
   const logger = imports.logger.getLogger('http.webhook');
-
-  const PullRequestModel = imports['pull-request-model'];
+  const PullRequestModel = imports.model('pull_request');
   const pullRequestGitHub = imports['pull-request-github'];
 
   let isNewPullRequest = false;

@@ -1,60 +1,57 @@
-import _ from 'lodash';
-import secret from '../../config/secret';
-import { withPullRequestCollection } from './model/model-pull-request';
+import { merge, withApp } from './app';
+import { withModel } from './model/';
+import { withGitHub } from './github';
+import { withPullRequestModel } from './model/model-pull-request';
 
-export function withGitHub(test, config, done) {
+export function withPullRequestGitHub(next) {
 
-  config = _.merge(config, {
-    services: {
-      github: {
-        path: './src/services/github',
-        options: {
-          host: 'api.github.com',
-          debug: false,
-          version: '3.0.0',
-          timeout: 2000,
-          protocol: 'https',
-          headers: { 'user-agent': 'DevExp-App' }
+  return function (test, config, done) {
+
+    config = merge(config, {
+      services: {
+        model: {
+          options: {
+            plugins: {
+              pull_request: ['pull-request-github-addon']
+            }
+          },
+          dependencies: ['pull-request-github-addon']
         },
-        dependencies: []
-      },
-      model: {
-        options: {
-          addons: {
-            pull_request: [
-              'pull-request-github-addon'
-            ]
-          }
+        'pull-request-github': {
+          path: './src/services/pull-request-github',
+          options: {
+            separator: {
+              top: '<div id=\'devexp-content-top\'></div><hr>',
+              bottom: '<div id=\'devexp-content-bottom\'></div>'
+            }
+          },
+          dependencies: ['logger', 'github']
         },
-        dependencies: ['mongoose', 'pull-request-github-addon']
-      },
-      'pull-request-github': {
-        path: './src/services/pull-request-github',
-        options: {
-          separator: {
-            top: "<div id='devexp-content-top'></div><hr>",
-            bottom: "<div id='devexp-content-bottom'></div>"
-          }
-        },
-        dependencies: ['logger', 'github']
-      },
-      'pull-request-github-addon': {
-        path: './src/services/pull-request-github/addon'
+        'pull-request-github-addon': {
+          path: './src/services/pull-request-github/addon'
+        }
       }
-    }
-  });
+    });
 
-  config.services.github = _.merge(
-    {}, config.services.github, secret.services.github
-  );
+    next(test, config, done);
 
-  withPullRequestCollection(test, config, done);
+  };
 
 }
 
-describe.skip('services/pull-request-github', function () {
+describe('services/pull-request-github', function () {
 
   this.timeout(5000);
+
+  const test = withPullRequestGitHub(
+    withPullRequestModel(
+      withModel(
+        withGitHub(
+          withApp
+        )
+      )
+    )
+  );
 
   let date, time;
 
@@ -73,7 +70,7 @@ describe.skip('services/pull-request-github', function () {
 
     it('should load pull request from github', function (done) {
 
-      withGitHub(imports => {
+      test(imports => {
         const pullRequest = imports.pullRequest;
         const pullRequestGitHub = imports['pull-request-github'];
 
@@ -95,7 +92,7 @@ describe.skip('services/pull-request-github', function () {
 
     it('should update pull request title and body on github', function (done) {
 
-      withGitHub(imports => {
+      test(imports => {
         const pullRequest = imports.pullRequest;
         const pullRequestGitHub = imports['pull-request-github'];
 
@@ -119,7 +116,7 @@ describe.skip('services/pull-request-github', function () {
 
     it('should load files from github and set them to pull request', function (done) {
 
-      withGitHub(imports => {
+      test(imports => {
         const pullRequest = imports.pullRequest;
         const pullRequestGitHub = imports['pull-request-github'];
 
@@ -146,7 +143,7 @@ describe.skip('services/pull-request-github', function () {
 
     it('should update body section, save it and then update pull request on github', function (done) {
 
-      withGitHub(imports => {
+      test(imports => {
         const pullRequest = imports.pullRequest;
         const pullRequestGitHub = imports['pull-request-github'];
 
@@ -170,7 +167,7 @@ describe.skip('services/pull-request-github', function () {
     it('should load pull request body from github, keep user text but replace generated sections and then update it on github again', function (done) {
       this.timeout(10000);
 
-      withGitHub(imports => {
+      test(imports => {
         const pullRequest = imports.pullRequest;
         const pullRequestGitHub = imports['pull-request-github'];
 

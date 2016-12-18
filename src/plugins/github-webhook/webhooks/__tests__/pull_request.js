@@ -1,17 +1,19 @@
 import webhook from '../pull_request';
+import modelMock from '../../../model/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
 import eventsMock from '../../../events/__mocks__/';
 import pullRequestGitHubMock from '../../../pull-request-github/__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
   '../../../model/model-pull-request/__mocks__/';
 
-describe('services/pull-request-webhook/webhooks/pull_request', function () {
+describe('services/github-webhook/webhooks/pull_request', function () {
 
-  let payload, imports, logger, events;
+  let payload, imports, logger, events, model;
   let pullRequest, PullRequestModel, pullRequestGitHub;
 
   beforeEach(function () {
 
+    model = modelMock();
     logger = loggerMock();
     events = eventsMock();
     pullRequest = pullRequestMock();
@@ -19,9 +21,9 @@ describe('services/pull-request-webhook/webhooks/pull_request', function () {
     pullRequestGitHub = pullRequestGitHubMock(pullRequest);
 
     imports = {
+      model,
       events,
       logger,
-      'pull-request-model': PullRequestModel,
       'pull-request-github': pullRequestGitHub
     };
 
@@ -40,6 +42,10 @@ describe('services/pull-request-webhook/webhooks/pull_request', function () {
         }
       }
     };
+
+    model
+      .withArgs('pull_request')
+      .returns(PullRequestModel);
 
     PullRequestModel.findById
       .returns(Promise.resolve(pullRequest));

@@ -11,20 +11,22 @@ import util from 'util';
 export default function webhook(payload, imports) {
 
   const events = imports.events;
+  const logger = imports.logger.getLogger('http.webhook');
+  const PullRequestModel = imports.model('pull_request');
+
   const repositoryName = payload.repository.full_name;
   const pullRequestNumber = payload.issue.number;
-
-  const PullRequestModel = imports['pull-request-model'];
 
   return PullRequestModel
     .findByRepositoryAndNumber(repositoryName, pullRequestNumber)
     .then(pullRequest => {
       if (!pullRequest) {
         return Promise.reject(new Error(util.format(
-          'Pull request %s/%s not found', repositoryName, pullRequestNumber
+          'Pull request %s/%s is not found', repositoryName, pullRequestNumber
         )));
       }
 
+      logger.info('Issue comment %s', pullRequest);
       events.emit(
         'github:issue_comment',
         { pullRequest, comment: payload.comment }

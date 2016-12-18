@@ -1,22 +1,26 @@
 import webhook from '../issue_comment';
-import loggerMock from '../../../logger/__mocks__/';
+import modelMock from '../../../model/__mocks__/';
 import eventsMock from '../../../events/__mocks__/';
+import loggerMock from '../../../logger/__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
   '../../../model/model-pull-request/__mocks__/';
 
-describe('services/pull-request-webhook/webhooks/issue_comment', function () {
+describe('services/github-webhook/webhooks/issue_comment', function () {
 
-  let payload, imports, logger, events;
+  let payload, imports, logger, events, model;
   let pullRequest, PullRequestModel;
 
   beforeEach(function () {
 
+    model = modelMock();
     logger = loggerMock();
     events = eventsMock();
 
+    pullRequest = pullRequestMock();
+
     PullRequestModel = pullRequestModelMock();
 
-    imports = { 'pull-request-model': PullRequestModel, logger, events };
+    imports = { model, logger, events };
 
     payload = {
       action: 'issue_comment',
@@ -30,7 +34,9 @@ describe('services/pull-request-webhook/webhooks/issue_comment', function () {
       }
     };
 
-    pullRequest = pullRequestMock();
+    model
+      .withArgs('pull_request')
+      .returns(PullRequestModel);
 
     PullRequestModel.findByRepositoryAndNumber
       .returns(Promise.resolve(pullRequest));

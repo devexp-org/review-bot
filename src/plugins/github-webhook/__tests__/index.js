@@ -3,7 +3,7 @@ import request from 'supertest';
 import proxyquire from 'proxyquire';
 import bodyParser from 'body-parser';
 import loggerMock from '../../logger/__mocks__/';
-import responseJSON from '../../http/response';
+import handleError from '../../http/middlewares/handle-error';
 
 describe('services/pull-request-webhook', function () {
 
@@ -44,16 +44,16 @@ describe('services/pull-request-webhook', function () {
 
     request(app)
       .get('/webhook')
+      .expect('ok')
       .expect('Content-Type', /text\/html/)
       .expect(200)
-      .expect('ok')
       .end(done);
   });
 
   describe('`/webhook` without bodyParser', function () {
 
     it('should fail if body-parser is not installed', function (done) {
-      app.use(responseJSON());
+      app.use(handleError());
       app.use(router);
 
       request(app)
@@ -70,16 +70,14 @@ describe('services/pull-request-webhook', function () {
 
     beforeEach(function () {
       app.use(bodyParser.json());
-      app.use(responseJSON());
-
+      app.use(handleError());
       app.use(router);
     });
 
     it('should response `pong` on `ping`', function (done) {
       request(app)
         .post('/webhook')
-        .type('json')
-        .send('{"action": "ping"}')
+        .send({ action: 'ping' })
         .set('x-github-event', 'ping')
         .expect('Content-Type', /text\/html/)
         .expect(200)
@@ -90,35 +88,32 @@ describe('services/pull-request-webhook', function () {
     it('should call pullRequestHook on `pull_request`', function (done) {
       request(app)
         .post('/webhook')
-        .type('json')
-        .send('{"action": "pull_request"}')
+        .send({ action: 'pull_request' })
         .set('x-github-event', 'pull_request')
         .expect(200)
-        .end(function () {
+        .end(err => {
           assert.called(pullRequestHookStub);
-          done();
+          done(err);
         });
     });
 
     it('should call issueCommentHook on `issue_comment`', function (done) {
       request(app)
         .post('/webhook')
-        .type('json')
-        .send('{"action": "issue_comment"}')
+        .send({ action: 'issue_comment' })
         .set('x-github-event', 'issue_comment')
         .expect(200)
-        .end(function () {
+        .end(err => {
           assert.called(issueCommentHookStub);
-          done();
+          done(err);
         });
     });
 
     it('should fail on unknown event', function (done) {
       request(app)
         .post('/webhook')
-        .type('json')
-        .send('{"action": "foo"}')
         .set('x-github-event', 'foo')
+        .send({ action: 'foo' })
         .expect(/unknown event/i)
         .end(done);
     });

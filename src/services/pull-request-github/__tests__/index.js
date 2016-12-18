@@ -1,27 +1,25 @@
 import service from '../';
 import serviceMock from '../__mocks__/';
 
+import githubMock from '../../github/__mocks__/';
+
 describe('services/pull-request-github', function () {
 
   let options, imports, github;
 
   beforeEach(function () {
-    github = sinon.stub();
+    github = githubMock();
 
     options = {};
     imports = { github };
   });
 
   it('the mock object should have the same methods', function () {
-
     const obj = service(options, imports);
     const mock = serviceMock();
     const methods = Object.keys(mock);
 
-    methods.forEach(method => {
-      assert.property(obj, method);
-    });
-
+    methods.forEach(method => assert.property(obj, method));
   });
 
 });

@@ -27,7 +27,7 @@ export default function setup(options, imports) {
       return;
     }
 
-    logger.info('New event, event=%s, action=%s', eventName, req.body.action);
+    logger.info('Webhook: event=%s, action=%s', eventName, req.body.action);
 
     switch (eventName) {
       case 'ping': {
@@ -49,7 +49,7 @@ export default function setup(options, imports) {
 
       default: {
         const errorMessage = `Unknown event "${eventName}"`;
-        res.handleError(logger, new Error(errorMessage));
+        reject(new Error(errorMessage));
       }
     }
 
