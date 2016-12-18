@@ -53,8 +53,7 @@
         "headers": {
           "user-agent": "DevExp/2.0.0"
         }
-      },
-      "dependencies": []
+      }
     },
 
     "plugin-manager": {

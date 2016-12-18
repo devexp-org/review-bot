@@ -1,64 +1,71 @@
-import { merge } from '../app';
-import { withModel } from '../model';
+import { withModel } from '../model/';
+import { merge, withApp } from '../app';
+import defaultConfig from '../../../config/default-model-class';
 
-export function withTeamCollection(test, config, done) {
+export function withTeamModel(next) {
 
-  config = merge({
-    services: {
-      model: {
-        options: {
-          models: {
-            team: 'model-team'
-          }
+  return function (test, config, done) {
+
+    config = merge({
+      services: {
+        model: {
+          options: {
+            models: {
+              team: 'model-team'
+            }
+          },
+          dependencies: ['model-team']
         },
-        dependencies: ['model-team']
-      },
-      'model-team': {
-        path: './src/services/model/model-team'
+        'model-team': {
+          path: defaultConfig['model-team'].path
+        }
       }
-    }
-  }, config);
+    }, config);
 
-  withModel(imports => {
+    next(imports => {
 
-    let team;
-    const TeamModel = imports.model('team');
+      let team;
+      const TeamModel = imports.model('team');
 
-    return TeamModel
-      .remove({})
-      .then(() => {
-        team = new TeamModel();
+      return TeamModel
+        .remove({})
+        .then(() => {
+          team = new TeamModel();
 
-        team.set({
-          name: 'test-team',
-          driver: { name: 'static' },
-          members: [],
-          patterns: [],
-          reviewConfig: {
-            approveCount: 2,
-            totalReviewers: 3
-          }
-        });
+          team.set({
+            name: 'test-team',
+            driver: { name: 'static' },
+            members: [],
+            patterns: [],
+            reviewConfig: {
+              approveCount: 2,
+              totalReviewers: 3
+            }
+          });
 
-        return team.save();
-      })
-      .then(() => {
-        imports.team = team;
-        imports.TeamModel = TeamModel;
+          return team.save();
+        })
+        .then(() => {
+          imports.team = team;
+          imports.TeamModel = TeamModel;
 
-        return imports;
-      })
-      .then(test);
+          return imports;
+        })
+        .then(test);
 
-  }, config, done);
+    }, config, done);
+
+  };
 
 }
 
 describe('services/model/model-team', function () {
 
+  const test = withTeamModel(withModel(withApp));
+
   it('should setup team model', function (done) {
 
-    withTeamCollection(imports => {
+    test(imports => {
       const team = imports.team;
       const TeamModel = imports.TeamModel;
 
@@ -74,7 +81,7 @@ describe('services/model/model-team', function () {
 
     it('should return team filtered by name', function (done) {
 
-      withTeamCollection(imports => {
+      test(imports => {
         const TeamModel = imports.TeamModel;
 
         return Promise.resolve()
@@ -86,7 +93,7 @@ describe('services/model/model-team', function () {
 
     it('should return null if team is not found', function (done) {
 
-      withTeamCollection(imports => {
+      test(imports => {
         const TeamModel = imports.TeamModel;
 
         return Promise.resolve()

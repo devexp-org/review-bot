@@ -1,75 +1,85 @@
 import { merge, withApp } from '../app';
+import defaultConfig from '../../../config/default';
+import testingConfig from '../../../config/testing';
 
-export const MONGODB_HOST = 'mongodb://localhost/devexp_test';
+export function withModel(next) {
 
-export function withModel(test, config, done) {
+  return function (test, config, done) {
 
-  config = merge({
-    services: {
-      logger: {
-        path: './src/services/logger',
-        options: { handlers: {} }
-      },
-      mongoose: {
-        path: './src/services/mongoose',
-        options: { host: MONGODB_HOST },
-        dependencies: ['logger']
-      },
-      model: {
-        path: './src/services/model',
-        dependencies: ['mongoose']
+    config = merge({
+      services: {
+        logger: {
+          path: defaultConfig.services.logger.path,
+          options: { handlers: {} }
+        },
+        mongoose: {
+          path: defaultConfig.services.mongoose.path,
+          options: {
+            host: testingConfig.services.mongoose.options.host
+          },
+          dependencies: ['logger']
+        },
+        model: {
+          path: defaultConfig.services.model.path,
+          dependencies: ['mongoose']
+        }
       }
-    }
-  }, config);
+    }, config);
 
-  withApp(test, config, done);
+    next(test, config, done);
+
+  };
 
 }
 
-export function withFooCollection(test, config, done) {
+export function withFooModel(next) {
 
-  config = merge({
-    services: {
-      model: {
-        options: {
-          models: {
-            foo: 'model-foo'
-          }
+  return function (test, config, done) {
+
+    config = merge({
+      services: {
+        model: {
+          options: {
+            models: {
+              foo: 'model-foo'
+            }
+          },
+          dependencies: ['model-foo']
         },
-        dependencies: ['model-foo']
-      },
-      'model-foo': {
-        module: function () {
-          return {
-            baseSchema: function () {
-              return { _id: String, property: String };
-            },
-            setupModel: function () {}
-          };
+        'model-foo': {
+          module: function () {
+            return {
+              baseSchema: function () {
+                return { _id: String, property: String };
+              },
+              setupModel: function () {}
+            };
+          }
         }
       }
-    }
-  }, config);
+    }, config);
 
-  withModel(imports => {
+    next(imports => {
 
-    let foo;
-    const FooModel = imports.model('foo');
+      let foo;
+      const FooModel = imports.model('foo');
 
-    return FooModel
-      .remove({})
-      .then(() => {
-        foo = new FooModel();
-        foo.set({ _id: 'foo', property: 'foo' });
-        return foo.save();
-      })
-      .then(() => {
-        imports.foo = foo;
-        return imports;
-      })
-      .then(test);
+      return FooModel
+        .remove({})
+        .then(() => {
+          foo = new FooModel();
+          foo.set({ _id: 'foo', property: 'foo' });
+          return foo.save();
+        })
+        .then(() => {
+          imports.foo = foo;
+          return imports;
+        })
+        .then(test);
 
-  }, config, done);
+    }, config, done);
+
+  };
 
 }
 
@@ -102,7 +112,7 @@ describe('services/model', function () {
       }
     };
 
-    withFooCollection(imports => {
+    withFooModel(withModel(withApp))(imports => {
       const foo = imports.foo;
       assert.equal(foo.newProperty, 1);
     }, config, done);

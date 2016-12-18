@@ -22,22 +22,4 @@ describe('services/team-manager/driver-github', function () {
     assert.property(factory, 'makeDriver');
   });
 
-  describe('#name', function () {
-
-    it('should return `github`', function () {
-      factory = service(options, imports);
-      assert.equal(factory.name(), 'github');
-    });
-
-  });
-
-  describe('#config', function () {
-
-    it('should return driver config', function () {
-      factory = service(options, imports);
-      assert.isObject(factory.config());
-    });
-
-  });
-
 });

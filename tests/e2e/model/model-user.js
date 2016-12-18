@@ -1,59 +1,66 @@
-import { merge } from '../app';
-import { withModel } from '../model';
+import { withModel } from '../model/';
+import { merge, withApp } from '../app';
+import defaultConfig from '../../../config/default-model-class';
 
-export function withUserCollection(test, config, done) {
+export function withUserModel(next) {
 
-  config = merge({
-    services: {
-      model: {
-        options: {
-          models: {
-            user: 'model-user'
-          }
+  return function (test, config, done) {
+
+    config = merge({
+      services: {
+        model: {
+          options: {
+            models: {
+              user: 'model-user'
+            }
+          },
+          dependencies: ['model-user']
         },
-        dependencies: ['model-user']
-      },
-      'model-user': {
-        path: './src/services/model/model-user'
+        'model-user': {
+          path: defaultConfig['model-user'].path
+        }
       }
-    }
-  }, config);
+    }, config);
 
-  withModel(imports => {
+    next(imports => {
 
-    let user;
-    const UserModel = imports.model('user');
+      let user;
+      const UserModel = imports.model('user');
 
-    return UserModel
-      .remove({})
-      .then(() => {
-        user = new UserModel();
+      return UserModel
+        .remove({})
+        .then(() => {
+          user = new UserModel();
 
-        user.set({
-          login: 'test-user',
-          html_url: 'https://github.com/test-user',
-          avatar_url: 'https://avatars.githubusercontent.com/u/19480?v=3'
-        });
+          user.set({
+            login: 'test-user',
+            html_url: 'https://github.com/test-user',
+            avatar_url: 'https://avatars.githubusercontent.com/u/19480?v=3'
+          });
 
-        return user.save();
-      })
-      .then(() => {
-        imports.user = user;
-        imports.UserModel = UserModel;
+          return user.save();
+        })
+        .then(() => {
+          imports.user = user;
+          imports.UserModel = UserModel;
 
-        return imports;
-      })
-      .then(test);
+          return imports;
+        })
+        .then(test);
 
-  }, config, done);
+    }, config, done);
+
+  };
 
 }
 
 describe('services/model/model-user', function () {
 
+  const test = withUserModel(withModel(withApp));
+
   it('should setup user model', function (done) {
 
-    withUserCollection(imports => {
+    test(imports => {
       const user = imports.user;
       const UserModel = imports.UserModel;
 
@@ -68,7 +75,7 @@ describe('services/model/model-user', function () {
 
     it('should return user filtered by login', function (done) {
 
-      withUserCollection(imports => {
+      test(imports => {
         const UserModel = imports.UserModel;
 
         return Promise.resolve()
@@ -80,7 +87,7 @@ describe('services/model/model-user', function () {
 
     it('should return null if user was not found', function (done) {
 
-      withUserCollection(imports => {
+      test(imports => {
         const UserModel = imports.UserModel;
 
         return Promise.resolve()

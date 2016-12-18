@@ -20,22 +20,4 @@ describe('services/team-manager/driver-static', function () {
     assert.property(factory, 'makeDriver');
   });
 
-  describe('#name', function () {
-
-    it('should return `static`', function () {
-      factory = service(options, imports);
-      assert.equal(factory.name(), 'static');
-    });
-
-  });
-
-  describe('#config', function () {
-
-    it('should return driver config', function () {
-      factory = service(options, imports);
-      assert.isObject(factory.config());
-    });
-
-  });
-
 });

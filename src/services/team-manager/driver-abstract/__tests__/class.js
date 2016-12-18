@@ -62,4 +62,20 @@ describe('services/team-manager/driver-abstract/class', function () {
 
   });
 
+  describe('#name', function () {
+
+    it('should return `github`', function () {
+      assert.equal(factory.name(), '');
+    });
+
+  });
+
+  describe('#config', function () {
+
+    it('should return driver config', function () {
+      assert.isObject(factory.config());
+    });
+
+  });
+
 });
