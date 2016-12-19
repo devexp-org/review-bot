@@ -5,15 +5,13 @@ export default class Review {
   /**
    * @constructor
    *
-   * @param {Object} options
+   * @param {Array} steps
    * @param {Object} imports
    */
-  constructor(options, imports) {
-    this.imports = imports;
-    this.options = options;
-
+  constructor(steps, imports) {
+    this.steps = steps;
     this.logger = imports.logger;
-    this.teamManager = imports['team-manager'];
+    this.teamManager = imports.teamManager;
   }
 
   /**
