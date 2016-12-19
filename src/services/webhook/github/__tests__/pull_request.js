@@ -6,7 +6,7 @@ import pullRequestGitHubMock from '../../../pull-request-github/__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
   '../../../model/model-pull-request/__mocks__/';
 
-describe('services/github-webhook/webhooks/pull_request', function () {
+describe('services/webhook/github/pull_request', function () {
 
   let payload, imports, logger, events, model;
   let pullRequest, PullRequestModel, pullRequestGitHub;

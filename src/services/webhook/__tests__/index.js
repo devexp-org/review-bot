@@ -5,7 +5,7 @@ import bodyParser from 'body-parser';
 import loggerMock from '../../logger/__mocks__/';
 import handleError from '../../http/middlewares/handle-error';
 
-describe('services/pull-request-webhook', function () {
+describe('services/webhook', function () {
 
   let options, imports;
   let app, router, service, logger;
@@ -25,10 +25,10 @@ describe('services/pull-request-webhook', function () {
     issueCommentHookStub = sinon.stub().returns(Promise.resolve({}));
 
     const routes = proxyquire('../index', {
-      './webhooks/pull_request': {
+      './github/pull_request': {
         'default': pullRequestHookStub
       },
-      './webhooks/issue_comment': {
+      './github/issue_comment': {
         'default': issueCommentHookStub
       }
     });
@@ -39,25 +39,25 @@ describe('services/pull-request-webhook', function () {
 
   });
 
-  it('should response `ok` on `/webhook`', function (done) {
+  it('should response `ok` on `/github`', function (done) {
     app.use(router);
 
     request(app)
-      .get('/webhook')
+      .get('/github')
       .expect('ok')
       .expect('Content-Type', /text\/html/)
       .expect(200)
       .end(done);
   });
 
-  describe('`/webhook` without bodyParser', function () {
+  describe('`/github` without bodyParser', function () {
 
     it('should fail if body-parser is not installed', function (done) {
       app.use(handleError());
       app.use(router);
 
       request(app)
-        .post('/webhook')
+        .post('/github')
         .type('json')
         .expect('Content-Type', /application\/json/)
         .expect(500)
@@ -66,7 +66,7 @@ describe('services/pull-request-webhook', function () {
 
   });
 
-  describe('`/webhook` with header `x-github-event`', function () {
+  describe('`/github` with header `x-github-event`', function () {
 
     beforeEach(function () {
       app.use(bodyParser.json());
@@ -76,7 +76,7 @@ describe('services/pull-request-webhook', function () {
 
     it('should response `pong` on `ping`', function (done) {
       request(app)
-        .post('/webhook')
+        .post('/github')
         .send({ action: 'ping' })
         .set('x-github-event', 'ping')
         .expect('Content-Type', /text\/html/)
@@ -87,7 +87,7 @@ describe('services/pull-request-webhook', function () {
 
     it('should call pullRequestHook on `pull_request`', function (done) {
       request(app)
-        .post('/webhook')
+        .post('/github')
         .send({ action: 'pull_request' })
         .set('x-github-event', 'pull_request')
         .expect(200)
@@ -99,7 +99,7 @@ describe('services/pull-request-webhook', function () {
 
     it('should call issueCommentHook on `issue_comment`', function (done) {
       request(app)
-        .post('/webhook')
+        .post('/github')
         .send({ action: 'issue_comment' })
         .set('x-github-event', 'issue_comment')
         .expect(200)
@@ -111,7 +111,7 @@ describe('services/pull-request-webhook', function () {
 
     it('should fail on unknown event', function (done) {
       request(app)
-        .post('/webhook')
+        .post('/github')
         .set('x-github-event', 'foo')
         .send({ action: 'foo' })
         .expect(/unknown event/i)

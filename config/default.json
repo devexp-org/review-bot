@@ -118,15 +118,6 @@
       ]
     },
 
-    "#comment:#include:badges": "./default-badges.json",
-
-    "#comment:pull-request-model": {
-      "path": "./src/services/pull-request-model",
-      "dependencies": [
-        "model"
-      ]
-    },
-
     "#comment:pull-request-review": {
       "path": "./src/services/pull-request-review",
       "dependencies": [
@@ -174,6 +165,19 @@
     },
 
     "#comment:#include:review-steps": "./default-review-steps.json",
+
+    "#comment:badges-review": {
+      "path": "./src/services/badges/badges-review",
+      "options": {
+        "url": "http://localhost/badges/"
+      },
+      "dependencies": [
+        "queue",
+        "events",
+        "logger",
+        "pull-request-github"
+      ]
+    },
 
     "#comment:command": {
       "path": "./src/services/command",

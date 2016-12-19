@@ -45,7 +45,7 @@ export function withPullRequestReview(test, config, done) {
 
 }
 
-describe('services/pull-request-review', function () {
+describe.skip('services/pull-request-review', function () {
 
   describe('addon', function () {
 

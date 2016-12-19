@@ -1,11 +1,10 @@
 import express from 'express';
 import request from 'supertest';
-
 import service from '../routes';
-import responseJSON from '../../../services/http/response';
 
-import eventsMock from '../../../services/events/__mocks__/';
-import loggerMock from '../../../services/logger/__mocks__/';
+import eventsMock from '../../events/__mocks__/';
+import loggerMock from '../../logger/__mocks__/';
+import handleError from '../../http/middlewares/handle-error';
 import { pullRequestMock, pullRequestModelMock } from
   '../../../services/model/model-pull-request/__mocks__/';
 
@@ -32,7 +31,7 @@ describe('services/badges', function () {
 
     router = service(options, imports);
 
-    app.use(responseJSON());
+    app.use(handleError());
     app.use('/', router);
 
   });

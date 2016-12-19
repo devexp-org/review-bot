@@ -5,7 +5,7 @@ import loggerMock from '../../../logger/__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
   '../../../model/model-pull-request/__mocks__/';
 
-describe('services/github-webhook/webhooks/issue_comment', function () {
+describe('services/webhook/github/issue_comment', function () {
 
   let payload, imports, logger, events, model;
   let pullRequest, PullRequestModel;

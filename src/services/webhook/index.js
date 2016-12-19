@@ -1,8 +1,8 @@
 import { isPlainObject } from 'lodash';
 import { Router as router } from 'express';
 
-import pullRequestHook from './webhooks/pull_request';
-import issueCommentHook from './webhooks/issue_comment';
+import pullRequestHook from './github/pull_request';
+import issueCommentHook from './github/issue_comment';
 
 const GITHUB_HEADER_EVENT = 'x-github-event';
 
@@ -10,13 +10,13 @@ export default function setup(options, imports) {
 
   const logger = imports.logger.getLogger('http.webhook');
 
-  const githubRouter = router();
+  const webhookRouter = router();
 
-  githubRouter.get('/webhook', function (req, res) {
+  webhookRouter.get('/github', function (req, res) {
     res.send('ok').end();
   });
 
-  githubRouter.post('/webhook', function (req, res) {
+  webhookRouter.post('/github', function (req, res) {
     const reject = (e) => res.handleError(logger, e);
     const resolve = () => res.json({ status: 'ok' });
 
@@ -27,7 +27,7 @@ export default function setup(options, imports) {
       return;
     }
 
-    logger.info('Webhook: event=%s, action=%s', eventName, req.body.action);
+    logger.info('event=%s, action=%s', eventName, req.body.action);
 
     switch (eventName) {
       case 'ping': {
@@ -48,13 +48,12 @@ export default function setup(options, imports) {
       }
 
       default: {
-        const errorMessage = `Unknown event "${eventName}"`;
-        reject(new Error(errorMessage));
+        reject(new Error(`Unknown event "${eventName}"`));
       }
     }
 
   });
 
-  return githubRouter;
+  return webhookRouter;
 
 }

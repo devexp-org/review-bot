@@ -65,17 +65,17 @@
     }
   },
 
-  "#comment:http-routes-github": {
-    "path": "./src/services/pull-request-webhook",
+  "http-routes-webhook": {
+    "path": "./src/services/webhook",
     "dependencies": [
+      "model",
       "events",
       "logger",
-      "pull-request-model",
       "pull-request-github"
     ],
     "#plugin:http": {
       "routes": {
-        "/github": "http-routes-github"
+        "/webhook": "http-routes-webhook"
       }
     }
   }
