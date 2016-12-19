@@ -52,6 +52,32 @@
     }
   },
 
+  "http-routes-pull-request": {
+    "path": "./src/services/model/model-pull-request/routes",
+    "dependencies": [
+      "model",
+      "logger"
+    ],
+    "#plugin:http": {
+      "routes": {
+        "/pulls": "http-routes-pull-request"
+      }
+    }
+  },
+
+  "http-routes-pull-request-review": {
+    "path": "./src/services/pull-request-review/routes",
+    "dependencies": [
+      "model",
+      "logger"
+    ],
+    "#plugin:http": {
+      "routes": {
+        "/pulls-review": "http-routes-pull-request-review"
+      }
+    }
+  },
+
   "http-routes-team-manager": {
     "path": "./src/services/team-manager/routes",
     "dependencies": [

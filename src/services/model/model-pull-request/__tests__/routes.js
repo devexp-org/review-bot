@@ -85,4 +85,21 @@ describe('services/model/model-pull-request/routes', function () {
 
   });
 
+  describe('GET /pulls-by/:username', function () {
+
+    it('should return pull requests by user', function (done) {
+      PullRequestModel.findByUser
+        .withArgs('foo')
+        .returns(Promise.resolve([pullRequest]));
+
+      request(app)
+        .get('/pulls-by/foo')
+        .expect(/"id":1/)
+        .expect('Content-Type', /application\/json/)
+        .expect(200)
+        .end(done);
+    });
+
+  });
+
 });

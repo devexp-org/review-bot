@@ -1,4 +1,4 @@
-import service from '../index';
+import service from '../';
 import serviceMock from '../__mocks__/';
 
 import loggerMock from '../../logger/__mocks__/';

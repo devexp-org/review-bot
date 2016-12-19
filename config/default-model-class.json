@@ -1,4 +1,5 @@
 {
+
   "model-team": {
     "path": "./src/services/model/model-team",
     "#plugin:model": {
@@ -35,7 +36,7 @@
     }
   },
 
-  "#comment:pull-request-review-plugin": {
+  "pull-request-review-plugin": {
     "path": "./src/services/pull-request-review/addon",
     "#plugin:model": {
       "plugins": {

@@ -3,17 +3,19 @@ import PullRequestReview from '../class';
 import loggerMock from '../../logger/__mocks__/';
 import eventsMock from '../../events/__mocks__/';
 import { pullRequestMock } from '../../model/model-pull-request/__mocks__/';
+import { pullRequestReviewMixin } from '../__mocks__/';
 
 describe('services/pull-request-review/class', function () {
 
-  let pullRequest, pullRequestReview, review;
   let logger, events, options, imports;
+  let pullRequest, pullRequestReview, review;
 
   beforeEach(function () {
+
     logger = loggerMock();
     events = eventsMock();
 
-    pullRequest = pullRequestMock();
+    pullRequest = pullRequestMock(pullRequestReviewMixin);
 
     options = {};
     imports = { events, logger };
@@ -22,11 +24,13 @@ describe('services/pull-request-review/class', function () {
 
     review = {
       status: 'notstarted',
-      history: [],
-      reviewers: [{ login: 'foo' }, { login: 'bar' }]
+      reviewers: [{ login: 'foo' }, { login: 'bar' }],
+      approveCount: 2
     };
 
     pullRequest.review = review;
+
+    pullRequest.hasReviewers.returns(true);
 
   });
 
@@ -83,6 +87,14 @@ describe('services/pull-request-review/class', function () {
         .then(done, done);
     });
 
+    it('should not reject a promise if pull request status is "notstarted"', function (done) {
+      review.status = 'notstarted';
+
+      pullRequestReview.startReview(pullRequest)
+        .then(() => {})
+        .then(done, done);
+    });
+
     it('should not reject a promise if pull request status is "changesneeded"', function (done) {
       review.status = 'changesneeded';
 
@@ -91,7 +103,7 @@ describe('services/pull-request-review/class', function () {
         .then(done, done);
     });
 
-    it('should reject a promise if pull request status is "notstarted"', function (done) {
+    it('should reject a promise if pull request status is not "notstarted" or "changesneeded"', function (done) {
       review.status = 'inprogress';
 
       pullRequestReview.startReview(pullRequest)
@@ -101,7 +113,7 @@ describe('services/pull-request-review/class', function () {
     });
 
     it('should reject promise if reviewers were not selected', function (done) {
-      review.reviewers = [];
+      pullRequest.hasReviewers.returns(false);
 
       pullRequestReview.startReview(pullRequest)
         .then(() => assert.fail())
@@ -113,17 +125,17 @@ describe('services/pull-request-review/class', function () {
 
   describe('#stopReview', function () {
 
-    it('should emit event `review:updated`', function (done) {
+    beforeEach(function () {
       review.status = 'inprogress';
+    });
 
+    it('should emit event `review:updated`', function (done) {
       pullRequestReview.stopReview(pullRequest)
         .then(() => assert.calledWith(events.emit, 'review:updated'))
         .then(done, done);
     });
 
     it('should set status to "notstarted"', function (done) {
-      review.status = 'inprogress';
-
       pullRequestReview.stopReview(pullRequest)
         .then(() => assert.calledWith(
           pullRequest.set, 'review', sinon.match({ status: 'notstarted' })
@@ -132,8 +144,6 @@ describe('services/pull-request-review/class', function () {
     });
 
     it('should update property "updated_at"', function (done) {
-      review.status = 'inprogress';
-
       pullRequestReview.stopReview(pullRequest)
         .then(() => assert.calledWith(
           pullRequest.set, 'review', sinon.match.has('updated_at')
@@ -141,7 +151,7 @@ describe('services/pull-request-review/class', function () {
         .then(done, done);
     });
 
-    it('should not reject promise when pull request status is "notstarted"', function (done) {
+    it('should not reject promise if pull request status is "notstarted"', function (done) {
       review.status = 'notstarted';
 
       pullRequestReview.stopReview(pullRequest)
@@ -149,30 +159,19 @@ describe('services/pull-request-review/class', function () {
         .then(done, done);
     });
 
-    it('should not reject promise when pull request status is "changesneeded"', function (done) {
+    it('should not reject promise if pull request status is "complete"', function (done) {
+      review.status = 'complete';
+
+      pullRequestReview.stopReview(pullRequest)
+        .then(() => {})
+        .then(done, done);
+    });
+
+    it('should not reject promise if pull request status is "changesneeded"', function (done) {
       review.status = 'changesneeded';
 
       pullRequestReview.stopReview(pullRequest)
         .then(() => {})
-        .then(done, done);
-    });
-
-    it('should reject promise if pull request status is not "notstarted"', function (done) {
-      review.status = 'inprogress';
-
-      pullRequestReview.startReview(pullRequest)
-        .then(() => assert.fail())
-        .catch(e => assert.match(e.message, /is not opened/))
-        .then(done, done);
-    });
-
-    it('should reject promise if reviewers were not selected', function (done) {
-      review.status = 'notstarted';
-      review.reviewers = [];
-
-      pullRequestReview.startReview(pullRequest)
-        .then(() => assert.fail())
-        .catch(e => assert.match(e.message, /not selected/))
         .then(done, done);
     });
 
@@ -204,7 +203,7 @@ describe('services/pull-request-review/class', function () {
         .then(done, done);
     });
 
-    it('should not reject promise if reviewer approve pull request twice', function (done) {
+    it('should not reject promise if reviewer approve twice', function (done) {
       review.reviewers = [{ login: 'foo', approved: true }, { login: 'bar' }];
 
       pullRequestReview.approveReview(pullRequest, 'foo')
@@ -237,13 +236,34 @@ describe('services/pull-request-review/class', function () {
           .then(done, done);
       });
 
-      it('should set property "complete_at"', function (done) {
+      it('should update property "updated_at"', function (done) {
+        pullRequestReview.approveReview(pullRequest, 'foo')
+          .then(() => assert.calledWith(
+            pullRequest.set, 'review', sinon.match.has('updated_at')
+          ))
+          .then(done, done);
+      });
+
+      it('should set property "completed_at"', function (done) {
         pullRequestReview.approveReview(pullRequest, 'foo')
           .then(() => assert.calledWith(
             pullRequest.set, 'review', sinon.match.has('completed_at')
           ))
           .then(done, done);
       });
+
+      it('should not update the property "completed_at" if that property already exists', function (done) {
+        const sometime = new Date();
+
+        review.completed_at = sometime;
+
+        pullRequestReview.approveReview(pullRequest, 'foo')
+          .then(() => assert.calledWith(
+            pullRequest.set, 'review', sinon.match.has('completed_at', sometime)
+          ))
+          .then(done, done);
+      });
+
     });
 
   });
@@ -253,6 +273,16 @@ describe('services/pull-request-review/class', function () {
     it('should emit event `review:changesneeded`', function (done) {
       pullRequestReview.changesNeeded(pullRequest, 'foo')
         .then(() => assert.calledWith(events.emit, 'review:changesneeded'))
+        .then(done, done);
+    });
+
+    it('should set status to "changesneeded"', function (done) {
+      pullRequestReview.changesNeeded(pullRequest, 'foo')
+        .then(() => assert.calledWith(
+          pullRequest.set, 'review', sinon.match({
+            status: 'changesneeded'
+          })
+        ))
         .then(done, done);
     });
 
@@ -294,16 +324,6 @@ describe('services/pull-request-review/class', function () {
         )
         .then(() => assert.calledWith(
           pullRequest.set, 'review.reviewers', [{ login: 'baz' }]
-        ))
-        .then(done, done);
-    });
-
-    it('should update reviewer ranks in pull request', function (done) {
-      pullRequestReview.updateReview(
-          pullRequest, { ranks: [{ login: 'baz', rank: 1 }] }
-        )
-        .then(() => assert.deepEqual(
-          pullRequest.review.history[0].ranks, [{ login: 'baz', rank: 1 }]
         ))
         .then(done, done);
     });

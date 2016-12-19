@@ -7,7 +7,7 @@ export default function setup(options, imports) {
   const logger = imports.logger.getLogger('http.model.pull-request');
   const PullRequestModel = imports.model('pull_request');
 
-  const pullRequestRoute = router();
+  const pullRequestRouter = router();
 
   function findById(id) {
     return PullRequestModel
@@ -23,7 +23,7 @@ export default function setup(options, imports) {
       });
   }
 
-  pullRequestRoute.get('/', function (req, res) {
+  pullRequestRouter.get('/', function (req, res) {
     PullRequestModel
       .find({})
       .sort('-updated_at')
@@ -33,7 +33,7 @@ export default function setup(options, imports) {
       .catch(res.handleError.bind(res, logger));
   });
 
-  pullRequestRoute.get('/:id', function (req, res) {
+  pullRequestRouter.get('/:id', function (req, res) {
     const id = req.params.id;
 
     findById(id)
@@ -41,6 +41,14 @@ export default function setup(options, imports) {
       .catch(res.handleError.bind(res, logger));
   });
 
-  return pullRequestRoute;
+  pullRequestRouter.get('/pulls-by/:username', (req, res) => {
+    const login = req.params.username;
+
+    PullRequestModel.findByUser(login)
+      .then(res.json.bind(res))
+      .catch(res.handleError.bind(res, logger));
+  });
+
+  return pullRequestRouter;
 
 }

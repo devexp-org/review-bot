@@ -1,17 +1,15 @@
 export default function mock(pullRequest) {
 
-  const promise = () => Promise.resolve(pullRequest);
-
   if (pullRequest) {
-    pullRequest.hasReviewers = sinon.stub();
+    pullRequest.hasReviewers = sinon.stub().returns(false);
   }
 
   return {
-    stopReview: sinon.stub().returns(promise()),
-    startReview: sinon.stub().returns(promise()),
-    approveReview: sinon.stub().returns(promise()),
-    changesNeeded: sinon.stub().returns(promise()),
-    updateReview: sinon.stub().returns(promise())
+    stopReview: sinon.stub().returns(Promise.resolve(pullRequest)),
+    startReview: sinon.stub().returns(Promise.resolve(pullRequest)),
+    updateReview: sinon.stub().returns(Promise.resolve(pullRequest)),
+    approveReview: sinon.stub().returns(Promise.resolve(pullRequest)),
+    changesNeeded: sinon.stub().returns(Promise.resolve(pullRequest))
   };
 
 }
@@ -19,7 +17,6 @@ export default function mock(pullRequest) {
 export function pullRequestReviewMixin(stub) {
   stub.review = {
     status: 'notstarted',
-    history: [],
     reviewers: [],
     started_at: new Date(2000, 1, 1),
     updated_at: new Date(2000, 1, 2),

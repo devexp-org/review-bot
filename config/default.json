@@ -118,7 +118,7 @@
       ]
     },
 
-    "#comment:pull-request-review": {
+    "pull-request-review": {
       "path": "./src/services/pull-request-review",
       "dependencies": [
         "events",

@@ -9,11 +9,11 @@ export default class PullRequestReview {
    * @param {Object} options
    * @param {Object} imports
    */
-  constructor(options, { events, logger }) {
-    this.options = options;
+  constructor(options, imports) {
+    this.events = imports.events;
+    this.logger = imports.logger;
 
-    this.events = events;
-    this.logger = logger;
+    this.options = options;
   }
 
   /**
@@ -26,17 +26,17 @@ export default class PullRequestReview {
   startReview(pullRequest) {
     const review = pullRequest.get('review');
 
-    if (review.status !== 'notstarted' && review.status !== 'changesneeded') {
+    if (!pullRequest.hasReviewers()) {
       return Promise.reject(new Error(util.format(
-        'Try to start is not opened review. Status is %s. %s',
-        review.status,
+        'Try to start review where reviewers were not selected. %s',
         pullRequest
       )));
     }
 
-    if (isEmpty(review.reviewers)) {
+    if (review.status !== 'notstarted' && review.status !== 'changesneeded') {
       return Promise.reject(new Error(util.format(
-        'Try to start review where reviewers were not selected. %s',
+        'Try to start is not opened review. Status is %s. %s',
+        review.status,
         pullRequest
       )));
     }
@@ -96,6 +96,7 @@ export default class PullRequestReview {
    */
   approveReview(pullRequest, login) {
 
+    let complete = false;
     let approveCount = 0;
 
     const review = pullRequest.get('review');
@@ -125,17 +126,17 @@ export default class PullRequestReview {
 
     review.updated_at = new Date();
 
-    if (review.status === 'complete') {
+    if (review.status === 'complete' && !review.completed_at) {
+      complete = true;
       review.completed_at = new Date();
     }
 
     pullRequest.set('review', review);
 
     this.logger.info('Review approved by %s. %s', login, pullRequest);
-
     this.events.emit('review:approved', { pullRequest, login });
 
-    if (pullRequest.get('review.status') === 'complete') {
+    if (complete) {
       this.logger.info('Review complete. %s', pullRequest);
       this.events.emit('review:complete', { pullRequest });
     }
@@ -185,24 +186,14 @@ export default class PullRequestReview {
    */
   updateReview(pullRequest, review) {
 
-    if ('ranks' in review) {
-      pullRequest.review.history.push({
-        ranks: review.ranks,
-        update_at: new Date()
-      });
+    if (isEmpty(review.reviewers)) {
+      return Promise.reject(new Error(util.format(
+        'Cannot drop all reviewers from pull request. %s',
+        pullRequest
+      )));
     }
 
-    if ('reviewers' in review) {
-      if (isEmpty(review.reviewers)) {
-        return Promise.reject(new Error(util.format(
-          'Cannot drop all reviewers from pull request. %s',
-          pullRequest
-        )));
-      }
-
-      pullRequest.set('review.reviewers', review.reviewers);
-    }
-
+    pullRequest.set('review.reviewers', review.reviewers);
     pullRequest.set('review.updated_at', new Date());
 
     this.logger.info('Review updated. %s', pullRequest);
