@@ -166,19 +166,6 @@
 
     "#comment:#include:review-steps": "./default-review-steps.json",
 
-    "#comment:badges-review": {
-      "path": "./src/services/badges/badges-review",
-      "options": {
-        "url": "http://localhost/badges/"
-      },
-      "dependencies": [
-        "queue",
-        "events",
-        "logger",
-        "pull-request-github"
-      ]
-    },
-
     "#comment:command": {
       "path": "./src/services/command",
       "options": {
@@ -195,7 +182,7 @@
 
     "#comment:#include:command": "./default-command.json",
 
-    "#comment:#include:plugins": "./default-plugins.json",
+    "#include:plugins": "./default-plugins.json",
 
     "#comment:__LASTLINE__": ""
   }

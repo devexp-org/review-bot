@@ -1,12 +1,25 @@
 {
 
-  "autoassign": {
+  "#comment:autoassign": {
     "path": "./src/plugins/autoassign",
     "dependencies": [
       "events",
       "logger",
       "review",
       "pull-request-review"
+    ]
+  },
+
+  "badges-review": {
+    "path": "./src/services/badges/badges-review",
+    "options": {
+      "url": "http://localhost/badges/"
+    },
+    "dependencies": [
+      "queue",
+      "events",
+      "logger",
+      "pull-request-github"
     ]
   }
 
