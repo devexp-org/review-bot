@@ -1,51 +1,68 @@
-import _ from 'lodash';
-import { withPullRequestCollection } from './model/model-pull-request';
+import { merge, withApp } from './app';
+import { withModel } from './model/';
+import { withTeamModel } from './model/model-team';
+import { withUserModel } from './model/model-user';
+import { withPullRequestModel } from './model/model-pull-request';
+import { withTeamManager } from './team-manager/';
+import { withTeamDriverStatic } from './team-manager/driver-static';
 
-export function withPullRequestReview(test, config, done) {
+export function withPullRequestReview(next) {
 
-  config = _.merge({
-    services: {
-      events: {
-        path: './src/services/events'
-      },
-      model: {
-        options: {
-          addons: {
-            pull_request: ['pull-request-review-addon']
-          }
+  return function (test, config, done) {
+
+    config = merge({
+      services: {
+        events: {
+          path: './src/services/events'
         },
-        dependencies: ['mongoose', 'pull-request-review-addon']
-      },
-      'team-dispatcher': {
-        path: './src/services/team-dispatcher',
-        options: {
-          routes: [{ 'team-static': ['*/*'] }]
+        model: {
+          options: {
+            plugins: {
+              pull_request: ['pull-request-review-plugin']
+            }
+          },
+          dependencies: ['mongoose', 'pull-request-review-plugin']
         },
-        dependencies: ['team-static']
-      },
-      'team-static': {
-        path: './src/services/team-dispatcher/static',
-        options: { members: ['foo', 'bar'] }
-      },
-      'pull-request-review': {
-        path: './src/services/pull-request-review',
-        options: { approveCount: 1 },
-        dependencies: ['team-dispatcher', 'events', 'logger']
-      },
-      'pull-request-review-addon': {
-        path: './src/services/pull-request-review/addon'
+        'pull-request-review': {
+          path: './src/services/pull-request-review',
+          options: { approveCount: 1 },
+          dependencies: ['team-manager', 'events', 'logger']
+        },
+        'pull-request-review-plugin': {
+          path: './src/services/pull-request-review/addon'
+        }
       }
-    }
-  }, config);
+    }, config);
 
-  withPullRequestCollection(imports => {
-    imports.pullRequest.set('review.reviewers', [{ login: 'foo' }]);
-    return test(imports);
-  }, config, done);
+    next(imports => {
+      const pullRequest = imports.pullRequest;
+      pullRequest.set('review.reviewers', [{ login: 'foo' }]);
+      pullRequest.set('review.approveCount', 1);
+
+      return test(imports);
+    }, config, done);
+
+  };
 
 }
 
-describe.skip('services/pull-request-review', function () {
+describe('services/pull-request-review', function () {
+
+  const test = withPullRequestReview(
+    withTeamDriverStatic(
+      withTeamManager(
+        withTeamModel(
+          withUserModel(
+            withPullRequestModel(
+              withModel(
+                withApp
+              )
+            )
+          )
+        )
+      )
+    )
+  );
 
   describe('addon', function () {
 
@@ -53,7 +70,7 @@ describe.skip('services/pull-request-review', function () {
 
       it('should return pull requests filtered by reviewer', function (done) {
 
-        withPullRequestReview(imports => {
+        test(imports => {
           const pullRequest = imports.pullRequest;
           const PullRequestModel = imports.PullRequestModel;
 
@@ -65,12 +82,10 @@ describe.skip('services/pull-request-review', function () {
           });
 
           return pullRequest.save()
-            .then(() => {
-              return PullRequestModel.findByReviewer('sbmaxx')
-                .then(result => {
-                  assert.isArray(result);
-                  assert.lengthOf(result, 1);
-                });
+            .then(() => PullRequestModel.findByReviewer('sbmaxx'))
+            .then(result => {
+              assert.isArray(result);
+              assert.lengthOf(result, 1);
             });
         }, {}, done);
 
@@ -82,7 +97,7 @@ describe.skip('services/pull-request-review', function () {
 
       it('should return all opened pull requests', function (done) {
 
-        withPullRequestReview(imports => {
+        test(imports => {
           const pullRequest = imports.pullRequest;
           const PullRequestModel = imports.PullRequestModel;
 
@@ -92,12 +107,10 @@ describe.skip('services/pull-request-review', function () {
           });
 
           return pullRequest.save()
-            .then(() => {
-              return PullRequestModel.findInReview()
-                .then(result => {
-                  assert.isArray(result);
-                  assert.lengthOf(result, 1);
-                });
+            .then(() => PullRequestModel.findInReview())
+            .then(result => {
+              assert.isArray(result);
+              assert.lengthOf(result, 1);
             });
         }, {}, done);
 
@@ -109,7 +122,7 @@ describe.skip('services/pull-request-review', function () {
 
       it('should return opened pull requests filtered by reviewer', function (done) {
 
-        withPullRequestReview(imports => {
+        test(imports => {
           const pullRequest = imports.pullRequest;
           const PullRequestModel = imports.PullRequestModel;
 
@@ -119,12 +132,10 @@ describe.skip('services/pull-request-review', function () {
           });
 
           return pullRequest.save()
-            .then(() => {
-              return PullRequestModel.findInReviewByReviewer('sbmaxx')
-                .then(result => {
-                  assert.isArray(result);
-                  assert.lengthOf(result, 1);
-                });
+            .then(() => PullRequestModel.findInReviewByReviewer('sbmaxx'))
+            .then(result => {
+              assert.isArray(result);
+              assert.lengthOf(result, 1);
             });
         }, {}, done);
 
@@ -136,27 +147,28 @@ describe.skip('services/pull-request-review', function () {
 
   describe('class', function () {
 
-    const afterSaveAndLoad = function (PullRequestModel, test) {
+    const saveAndLoad = function (PullRequestModel) {
       return function (pullRequest) {
         return pullRequest.save()
-          .then(() => PullRequestModel.findById(pullRequest.id))
-          .then(test);
+          .then(() => PullRequestModel.findById(pullRequest.id));
       };
     };
 
     describe('#startReview', function () {
 
       it('should change status of pull request to "inprogress"', function (done) {
-        withPullRequestReview(imports => {
+        test(imports => {
           const pullRequest = imports.pullRequest;
           const PullRequestModel = imports.PullRequestModel;
           const pullRequestReview = imports['pull-request-review'];
+
           pullRequest.set('review.status', 'notstarted');
 
           return pullRequestReview.startReview(pullRequest)
-            .then(afterSaveAndLoad(PullRequestModel, pullRequestLoaded => {
+            .then(saveAndLoad(PullRequestModel))
+            .then(pullRequestLoaded => {
               assert.equal(pullRequestLoaded.get('review.status'), 'inprogress');
-            }));
+            });
         }, {}, done);
       });
 
@@ -165,16 +177,18 @@ describe.skip('services/pull-request-review', function () {
     describe('#stopReview', function () {
 
       it('should change status of pull request to "notstarted"', function (done) {
-        withPullRequestReview(imports => {
+        test(imports => {
           const pullRequest = imports.pullRequest;
           const PullRequestModel = imports.PullRequestModel;
           const pullRequestReview = imports['pull-request-review'];
+
           pullRequest.set('review.status', 'inprogress');
 
           return pullRequestReview.stopReview(pullRequest)
-            .then(afterSaveAndLoad(PullRequestModel, pullRequestLoaded => {
+            .then(saveAndLoad(PullRequestModel))
+            .then(pullRequestLoaded => {
               assert.equal(pullRequestLoaded.get('review.status'), 'notstarted');
-            }));
+            });
         }, {}, done);
       });
 
@@ -183,37 +197,42 @@ describe.skip('services/pull-request-review', function () {
     describe('#approveReview', function () {
 
       it('should change status of pull request to "complete"', function (done) {
-        withPullRequestReview(imports => {
+        test(imports => {
           const pullRequest = imports.pullRequest;
           const PullRequestModel = imports.PullRequestModel;
           const pullRequestReview = imports['pull-request-review'];
+
           pullRequest.set('review.status', 'inprogress');
 
           return pullRequestReview.approveReview(pullRequest, 'foo')
-            .then(afterSaveAndLoad(PullRequestModel, pullRequestLoaded => {
+            .then(saveAndLoad(PullRequestModel))
+            .then(pullRequestLoaded => {
               assert.equal(pullRequestLoaded.get('review.status'), 'complete');
-            }));
+            });
         }, {}, done);
       });
 
     });
 
-    describe('#updateReviewers', function () {
+    describe('#updateReview', function () {
 
       it('should change reviewers of pull request', function (done) {
-        withPullRequestReview(imports => {
+        test(imports => {
           const pullRequest = imports.pullRequest;
           const PullRequestModel = imports.PullRequestModel;
           const pullRequestReview = imports['pull-request-review'];
+
           pullRequest.set('review.status', 'notstarted');
 
-          return pullRequestReview.updateReviewers(pullRequest, [{ login: 'bar' }])
-            .then(afterSaveAndLoad(PullRequestModel, pullRequestLoaded => {
+          return pullRequestReview.updateReview(pullRequest, { reviewers: [{ login: 'bar' }] })
+            .then(saveAndLoad(PullRequestModel))
+            .then(pullRequestLoaded => {
               const reviewers = pullRequestLoaded.get('review.reviewers');
+
               assert.isArray(reviewers);
               assert.lengthOf(reviewers, 1);
               assert.property(reviewers[0], 'login', 'bar');
-            }));
+            });
         }, {}, done);
 
       });
