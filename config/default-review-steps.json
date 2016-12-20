@@ -2,6 +2,11 @@
 
   "review-step-load": {
     "path": "./src/services/review/steps/load",
+    "#plugin:review": {
+      "stepsOptions": {
+        "load": { "max": 5 }
+      }
+    },
     "dependencies": [
       "pull-request-model"
     ]
@@ -21,6 +26,16 @@
 
   "review-step-commiters": {
     "path": "./src/services/review/steps/commiters",
+    "#plugin:review": {
+      "stepsOptions": {
+        "commiters": {
+          "max": 4,
+          "since": [4, "month"],
+          "filesToCheck": 5,
+          "commitsCount": 10
+        }
+      }
+    },
     "dependencies": [
       "logger",
       "github"
@@ -28,7 +43,12 @@
   },
 
   "review-step-random": {
-    "path": "./src/services/review/steps/random"
+    "path": "./src/services/review/steps/random",
+    "#plugin:review": {
+      "stepsOptions": {
+        "random": { "max": 5 }
+      }
+    }
   },
 
   "review-step-prefered": {

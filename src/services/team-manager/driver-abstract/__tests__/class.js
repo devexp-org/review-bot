@@ -64,7 +64,7 @@ describe('services/team-manager/driver-abstract/class', function () {
 
   describe('#name', function () {
 
-    it('should return `github`', function () {
+    it('should return ``', function () {
       assert.equal(factory.name(), '');
     });
 

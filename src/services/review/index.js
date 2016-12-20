@@ -17,6 +17,6 @@ export default function setup(options, imports) {
     steps[stepModule.name()] = stepModule;
   });
 
-  return new Review(steps, { logger, teamManager });
+  return new Review(steps, options, { logger, teamManager });
 
 }

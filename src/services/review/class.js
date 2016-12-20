@@ -1,4 +1,4 @@
-import { chain, isEmpty } from 'lodash';
+import { isEmpty } from 'lodash';
 
 export default class Review {
 
@@ -6,12 +6,23 @@ export default class Review {
    * @constructor
    *
    * @param {Array} steps
+   * @param {Object} options
    * @param {Object} imports
    */
-  constructor(steps, imports) {
+  constructor(steps, options, imports) {
     this.steps = steps;
     this.logger = imports.logger;
+    this.options = options;
     this.teamManager = imports.teamManager;
+  }
+
+  /**
+   * Returns all steps.
+   *
+   * @return {Object}
+   */
+  getSteps() {
+    return this.steps;
   }
 
   /**
@@ -26,7 +37,7 @@ export default class Review {
   }
 
   /**
-   * Get and then set team for pull request.
+   * Get and set team for pull request.
    *
    * @param {Review} review
    *
@@ -60,14 +71,14 @@ export default class Review {
   }
 
   /**
-   * Find choose reviewer steps for team.
+   * Finds steps for team.
    *
    * @param {Review} review
    *
    * @return {Promise.<Review>}
    */
   setSteps(review) {
-    return this.getSteps(review)
+    return this.loadSteps(review)
       .then(steps => {
         review.steps = steps;
         return review;
@@ -75,13 +86,13 @@ export default class Review {
   }
 
   /**
-   * Get steps for team.
+   * Gets steps for team.
    *
    * @param {Review} review
    *
    * @return {Promise.<Array.<Function>>}
    */
-  getSteps(review) {
+  loadSteps(review) {
     let stepNames = review.team.getOption('steps');
 
     if (isEmpty(stepNames)) {
@@ -95,13 +106,13 @@ export default class Review {
     let notFound = false;
 
     const steps = stepNames.map(name => {
-      const ranker = this.imports['review-step-' + name];
+      const ranker = this.steps[name];
 
       if (!ranker && !notFound) {
         notFound = new Error(`There is no step "${name}"`);
       }
 
-      return { ranker, name };
+      return { name, ranker };
     });
 
     return notFound ? Promise.reject(notFound) : Promise.resolve(steps);
@@ -114,67 +125,18 @@ export default class Review {
    *
    * @return {Promise}
    */
-  stepsQueue(review) {
+  stepQueue(review) {
     const stepsOptions = review.team.getOption(
       'stepsOptions', this.options.stepsOptions || {}
     );
 
-    review.ranks = [];
-
-    return review.steps.reduce((promise, { ranker, name }) => {
+    return review.steps.reduce((promise, { name, ranker }) => {
       return promise.then(review => {
-        return ranker(review, stepsOptions[name]).then(ranks => {
-          this.logger.info('"%s" returns "%s"', name, JSON.stringify(ranks));
+        this.logger.info('review phase is `%s`', name);
 
-          review.ranks.push({ name, ranks });
-
-          return review;
-        });
+        return ranker.process(review, stepsOptions[name]);
       });
     }, Promise.resolve(review));
-  }
-
-  countRanks(review) {
-    let total = review.totalReviewers;
-    let members = {};
-
-    chain(review.ranks)
-      .map('ranks')
-      .flatten()
-      .forEach(({ login, rank }) => {
-        if (!members[login]) {
-          members[login] = 0;
-        }
-        if (Number.isFinite(members[login])) {
-          members[login] += rank;
-        }
-      })
-      .value();
-
-
-    review.reviewers = chain(members)
-      .keys(members)
-      .sort((a, b) => members[b] - members[a])
-      .map((login, rank) => {
-        return { login, rank: members[login] };
-      })
-      .filter(member => {
-        if (member.rank === Infinity) {
-          return true;
-        } else if (member.rank === -Infinity) {
-          return false;
-        } else if ((total--) > 0) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-      .map(member => {
-        return { login: member.login };
-      })
-      .value();
-
-    return review;
   }
 
   /**
@@ -192,15 +154,14 @@ export default class Review {
       .start(pullRequest)
       .then(this.setTeam.bind(this))
       .then(this.setSteps.bind(this))
-      .then(this.stepsQueue.bind(this))
-      .then(this.countRanks.bind(this))
+      .then(this.stepQueue.bind(this))
       .then(review => {
         this.logger.info('Complete %s', review.pullRequest);
 
-        this.logger.info('Reviewers are: %s',
-          isEmpty(review.reviewers)
+        this.logger.info('Reviewers: %s',
+          isEmpty(review.members)
             ? 'ooops, no reviewers were selected...'
-            : review.reviewers.map(x => x.login).join(' ')
+            : review.members.map(x => x.login).join(' ')
         );
 
         return review;
