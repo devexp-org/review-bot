@@ -96,7 +96,7 @@ export default class Review {
     let stepNames = review.team.getOption('steps');
 
     if (isEmpty(stepNames)) {
-      stepNames = this.options.steps;
+      stepNames = this.options.defaultSteps;
     }
 
     if (isEmpty(stepNames)) {
@@ -127,12 +127,16 @@ export default class Review {
    */
   stepQueue(review) {
     const stepsOptions = review.team.getOption(
-      'stepsOptions', this.options.stepsOptions || {}
+      'stepsOptions', this.options.stepsOptions, {}
     );
+
+    const sortByRank = (a, b) => b.rank - a.rank;
 
     return review.steps.reduce((promise, { name, ranker }) => {
       return promise.then(review => {
         this.logger.info('review phase is `%s`', name);
+
+        review.members.sort(sortByRank);
 
         return ranker.process(review, stepsOptions[name]);
       });

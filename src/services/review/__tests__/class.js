@@ -31,8 +31,13 @@ describe('services/review/class', function () {
       .withArgs('steps')
       .returns([]);
 
+    teamDriver.getOption
+      .withArgs('stepsOptions')
+      .returns({});
+
     options = {
       steps: ['step1', 'step2'],
+      defaultSteps: ['step1', 'step2'],
       totalReviewers: 4
     };
 
@@ -60,7 +65,7 @@ describe('services/review/class', function () {
     });
 
     it('should return rejected if there are no steps for team', function (done) {
-      delete options.steps;
+      delete options.defaultSteps;
 
       review.loadSteps({ team: teamDriver, pullRequest })
         .then(() => assert.fail())

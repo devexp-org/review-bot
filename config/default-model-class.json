@@ -43,6 +43,15 @@
         "pull_request": ["pull-request-review-plugin"]
       }
     }
+  },
+
+  "pull-request-complexity-plugin": {
+    "path": "./src/plugins/complexity/addon",
+    "#plugin:model": {
+      "plugins": {
+        "pull_request": ["pull-request-complexity-plugin"]
+      }
+    }
   }
 
 }

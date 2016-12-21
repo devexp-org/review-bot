@@ -1,4 +1,16 @@
 {
+
+  "review-step-preferred": {
+    "path": "./src/services/review/steps/preferred",
+    "#plugin:review": {
+      "steps": ["review-step-preferred"]
+    },
+    "dependencies": [
+      "logger",
+      "team-manager"
+    ]
+  },
+
   "review-step-remove-author": {
     "path": "./src/services/review/steps/remove_author",
     "#plugin:review": {
@@ -62,15 +74,11 @@
     ]
   },
 
-  "review-step-preferred": {
-    "path": "./src/services/review/steps/preferred",
+  "review-step-total": {
+    "path": "./src/services/review/steps/total",
     "#plugin:review": {
-      "steps": ["review-step-preferred"]
-    },
-    "dependencies": [
-      "logger",
-      "team-manager"
-    ]
+      "steps": ["review-step-total"]
+    }
   }
 
 }
