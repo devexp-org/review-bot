@@ -12,7 +12,7 @@ export class RemoveAuthorReviewStep extends AbstractReviewStep
   }
 
   /**
-   * Remove author from review.
+   * Removes author from review.
    *
    * @override
    *
@@ -32,7 +32,7 @@ export class RemoveAuthorReviewStep extends AbstractReviewStep
 /**
  * Create review `remove_author` step.
  *
- * @return {Function}
+ * @return {AbstractReviewStep}
  */
 export default function setup() {
   return new RemoveAuthorReviewStep();
