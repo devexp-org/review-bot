@@ -42,7 +42,7 @@ describe('services/review/steps/random', function () {
       .then(actual => {
         const SpiderManNewRank = find(actual.members, { login: 'Spider-Man' }).rank;
         assert.isAbove(SpiderManNewRank, SpiderManOldRank);
-        assert.isBelow(SpiderManNewRank, SpiderManOldRank + options.max);
+        assert.isBelow(SpiderManNewRank, SpiderManOldRank + options.max + 1);
       })
       .then(done, done);
   });

@@ -1,6 +1,7 @@
 import service from '../load';
 
-import { reviewMembersMock } from '../../__mocks__/';
+import modelMock from '../../../model/__mocks__/';
+import { reviewMock } from '../../__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
   '../../../model/model-pull-request/__mocks__/';
 import {
@@ -10,11 +11,14 @@ import {
 
 describe('services/review/steps/load', function () {
 
-  let members, pullRequest, PullRequestModel;
+  let step, members, model, pullRequest, PullRequestModel;
   let options, imports;
 
   beforeEach(function () {
-    members = reviewMembersMock();
+
+    model = modelMock();
+
+    members = reviewMock();
 
     pullRequest = pullRequestMock();
 
@@ -26,8 +30,30 @@ describe('services/review/steps/load', function () {
     PullRequestModel.findInReviewByReviewer
       .returns(Promise.resolve([]));
 
+    model
+      .withArgs('pull_request')
+      .returns(PullRequestModel);
+
     options = { max: 1 };
-    imports = { 'pull-request-model': PullRequestModel };
+    imports = { model };
+
+    step = service({}, imports);
+  });
+
+  describe('#name', function () {
+
+    it('should return `ignore`', function () {
+      assert.equal(step.name(), 'load');
+    });
+
+  });
+
+  describe('#config', function () {
+
+    it('should return step config', function () {
+      assert.isObject(step.config());
+    });
+
   });
 
   it('should decrease rank if member has active reviews', function (done) {
@@ -48,8 +74,13 @@ describe('services/review/steps/load', function () {
     };
 
     const expected = [
-      { login: 'Hulk', rank: -2 },
-      { login: 'Black Widow', rank: -1 }
+      { login: 'Black Widow', rank: 9 },
+      { login: 'Captain America', rank: 5 },
+      { login: 'Hawkeye', rank: 3 },
+      { login: 'Hulk', rank: 6 },
+      { login: 'Iron Man', rank: 7 },
+      { login: 'Spider-Man', rank: 6 },
+      { login: 'Thor', rank: 3 }
     ];
 
     PullRequestModel.findInReviewByReviewer
@@ -60,20 +91,20 @@ describe('services/review/steps/load', function () {
       .withArgs('Hulk')
       .returns(Promise.resolve([activePull1, activePull2]));
 
-    const step = service({}, imports);
+    step = service({}, imports);
 
-    step(review, options)
-      .then(actual => assert.sameDeepMembers(actual, expected))
+    step.process(review, options)
+      .then(actual => {
+        assert.sameDeepMembers(actual.members, expected);
+      })
       .then(done, done);
   });
 
-  it('should do nothing if there are no reviewers', function (done) {
+  it('should do nothing if there are no team', function (done) {
     const review = { members: [], pullRequest };
 
-    const step = service({}, imports);
-
-    step(review, options)
-      .then(review => assert.sameDeepMembers(review.members, []))
+    step.process(review, options)
+      .then(review => assert.deepEqual(review.members, []))
       .then(done, done);
   });
 

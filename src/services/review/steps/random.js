@@ -15,7 +15,11 @@ export class RandomReviewStep extends AbstractReviewStep
    * @override
    */
   config() {
-    return {};
+    return {
+      max: {
+        type: 'number'
+      }
+    };
   }
 
   /**
