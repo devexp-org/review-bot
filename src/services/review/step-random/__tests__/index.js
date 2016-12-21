@@ -1,5 +1,5 @@
 import { find } from 'lodash';
-import service from '../random';
+import service from '../';
 
 import { reviewMock } from '../../__mocks__/';
 import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';

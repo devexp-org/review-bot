@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import service from '../preferred';
+import service from '../';
 
 import { reviewMock } from '../../__mocks__/';
 import teamManagerMock, { teamDriverMock } from

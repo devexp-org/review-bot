@@ -1,28 +1,31 @@
-import service from '../ignore';
+import service from '../';
 
 import { reviewMock } from '../../__mocks__/';
 import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';
 
-describe('services/review/steps/ignore', function () {
+describe('services/review/steps/remove_reviewers', function () {
 
-  let step, members, pullRequest, options;
+  let step, members, pullRequest;
 
   beforeEach(function () {
     step = service();
 
     members = reviewMock();
 
-    options = { list: ['Captain America', 'Hulk', 'Thor'] };
-
     pullRequest = pullRequestMock();
 
-    pullRequest.user.login = 'Black Widow';
+    pullRequest.review = {
+      reviewers: [
+        { login: 'Hulk' },
+        { login: 'Spider-Man' }
+      ]
+    };
   });
 
   describe('#name', function () {
 
-    it('should return `ignore`', function () {
-      assert.equal(step.name(), 'ignore');
+    it('should return `remove-reviewers`', function () {
+      assert.equal(step.name(), 'remove-reviewers');
     });
 
   });
@@ -35,35 +38,38 @@ describe('services/review/steps/ignore', function () {
 
   });
 
-  it('should remove candidates which logins are in ignore list', function (done) {
+  it('should remove reviewers', function (done) {
     const review = { members, pullRequest };
 
     const expected = [
       'Black Widow',
+      'Captain America',
       'Hawkeye',
       'Iron Man',
-      'Spider-Man'
+      'Thor'
     ];
 
-    step.process(review, options)
+    step.process(review)
       .then(actual => {
-        assert.sameDeepMembers(actual.members.map(x => x.login), expected);
+        assert.deepEqual(actual.members.map(x => x.login), expected);
       })
       .then(done, done);
   });
 
-  it('should do nothing if there are no team', done => {
+  it('should do nothing if there are no candidates', function (done) {
     const review = { members: [], pullRequest };
 
-    step.process(review, options)
+    step.process(review)
       .then(actual => assert.deepEqual(actual.members, []))
       .then(done, done);
   });
 
-  it('should do nothing if there are no ignore list', done => {
+  it('should do nothing if there are no reviewers', function (done) {
     const review = { members, pullRequest };
 
-    step.process(review, {})
+    pullRequest.review.reviewers = [];
+
+    step.process(review)
       .then(actual => assert.deepEqual(actual.members, members))
       .then(done, done);
   });

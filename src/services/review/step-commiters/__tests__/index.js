@@ -1,4 +1,4 @@
-import service from '../commiters';
+import service from '../';
 
 import githubMock from '../../../github/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';

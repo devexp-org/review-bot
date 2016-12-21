@@ -79,7 +79,7 @@
   },
   "config": {
     "mocha": "mocha --compilers js:babel-core/register --require ./tests/setup.js --reporter progress",
-    "istanbul": "nyc --all --require babel-core/register --reporter text --reporter html npm test",
+    "istanbul": "nyc --all --reporter text --reporter html npm test",
     "pattern_e2e": "./tests/e2e/**.js",
     "pattern_test": "./src/{modules,services}/**/__tests__/*.js"
   }

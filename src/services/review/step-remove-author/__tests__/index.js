@@ -1,4 +1,4 @@
-import service from '../remove_author';
+import service from '../';
 
 import { reviewMock } from '../../__mocks__/';
 import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';

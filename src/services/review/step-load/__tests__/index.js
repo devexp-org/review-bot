@@ -1,4 +1,4 @@
-import service from '../load';
+import service from '../';
 
 import modelMock from '../../../model/__mocks__/';
 import { reviewMock } from '../../__mocks__/';

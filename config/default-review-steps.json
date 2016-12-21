@@ -1,7 +1,7 @@
 {
 
   "review-step-preferred": {
-    "path": "./src/services/review/steps/preferred",
+    "path": "./src/services/review/step-preferred",
     "#plugin:review": {
       "steps": ["review-step-preferred"]
     },
@@ -12,28 +12,28 @@
   },
 
   "review-step-remove-author": {
-    "path": "./src/services/review/steps/remove_author",
+    "path": "./src/services/review/step-remove-author",
     "#plugin:review": {
       "steps": ["review-step-remove-author"]
     }
   },
 
   "review-step-remove-reviewers": {
-    "path": "./src/services/review/steps/remove_reviewers",
+    "path": "./src/services/review/step-remove-reviewers",
     "#plugin:review": {
       "steps": ["review-step-remove-reviewers"]
     }
   },
 
   "review-step-ignore": {
-    "path": "./src/services/review/steps/ignore",
+    "path": "./src/services/review/step-ignore",
     "#plugin:review": {
       "steps": ["review-step-ignore"]
     }
   },
 
   "review-step-random": {
-    "path": "./src/services/review/steps/random",
+    "path": "./src/services/review/step-random",
     "#plugin:review": {
       "steps": ["review-step-random"],
       "stepsOptions": {
@@ -43,7 +43,7 @@
   },
 
   "review-step-load": {
-    "path": "./src/services/review/steps/load",
+    "path": "./src/services/review/step-load",
     "#plugin:review": {
       "steps": ["review-step-load"],
       "stepsOptions": {
@@ -56,7 +56,7 @@
   },
 
   "review-step-commiters": {
-    "path": "./src/services/review/steps/commiters",
+    "path": "./src/services/review/step-commiters",
     "#plugin:review": {
       "steps": ["review-step-commiters"],
       "stepsOptions": {
@@ -75,7 +75,7 @@
   },
 
   "review-step-total": {
-    "path": "./src/services/review/steps/total",
+    "path": "./src/services/review/step-total",
     "#plugin:review": {
       "steps": ["review-step-total"]
     }
