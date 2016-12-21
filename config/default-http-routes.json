@@ -60,7 +60,7 @@
     ],
     "#plugin:http": {
       "routes": {
-        "/pulls": "http-routes-pull-request"
+        "/pulls": ["http-routes-pull-request"]
       }
     }
   },
@@ -73,7 +73,7 @@
     ],
     "#plugin:http": {
       "routes": {
-        "/pulls-review": "http-routes-pull-request-review"
+        "/pulls": ["http-routes-pull-request-review"]
       }
     }
   },

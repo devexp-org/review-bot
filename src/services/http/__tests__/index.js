@@ -99,6 +99,23 @@ describe('services/http', function () {
 
   });
 
+  it('should be able to use several modules with the same route', function (done) {
+
+    options.routes = { '/': ['index', 'bundle'] };
+
+    service(options, imports)
+      .then(app => {
+        request(app)
+          .get('/1.txt')
+          .expect(200)
+          .end(err => {
+            app.shutdown().then(() => done(err), done);
+          });
+      })
+      .catch(done);
+
+  });
+
   it('should throw an error if route module was not given', function () {
     imports.index = null;
 

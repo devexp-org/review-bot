@@ -27,14 +27,22 @@ export default function setup(options, imports) {
     app.use(middlewareModule);
   });
 
-  forEach(options.routes, (routeName, route) => {
-    const routerModule = imports[routeName];
+  forEach(options.routes, (routeList, route) => {
 
-    if (!routerModule) {
-      throw new Error(`Cannot find route module "${routeName}"`);
+    if (!Array.isArray(routeList)) {
+      routeList = [routeList];
     }
 
-    app.use(route, routerModule);
+    forEach(routeList, (routeName) => {
+      const routerModule = imports[routeName];
+
+      if (!routerModule) {
+        throw new Error(`Cannot find route module "${routeName}"`);
+      }
+
+      app.use(route, routerModule);
+    });
+
   });
 
   app.get('/', function (req, res) {
