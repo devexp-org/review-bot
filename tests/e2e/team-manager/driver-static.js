@@ -4,7 +4,6 @@ import { withTeamModel } from '../model/model-team';
 import { withUserModel } from '../model/model-user';
 import { withPullRequestModel } from '../model/model-pull-request';
 import { withTeamManager } from '../team-manager/';
-import defaultConfig from '../../../config/default-team-drivers';
 
 export function withTeamDriverStatic(next) {
 
@@ -21,7 +20,7 @@ export function withTeamDriverStatic(next) {
           ]
         },
         'team-driver-static': {
-          path: defaultConfig['team-driver-static'].path,
+          path: './src/services/team-manager/driver-static',
           dependencies: [
             'model'
           ]

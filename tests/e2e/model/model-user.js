@@ -1,6 +1,5 @@
 import { withModel } from '../model/';
 import { merge, withApp } from '../app';
-import defaultConfig from '../../../config/default-model-class';
 
 export function withUserModel(next) {
 
@@ -17,7 +16,7 @@ export function withUserModel(next) {
           dependencies: ['model-user']
         },
         'model-user': {
-          path: defaultConfig['model-user'].path
+          path: './src/services/model/model-user'
         }
       }
     }, config);

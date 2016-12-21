@@ -1,6 +1,5 @@
 import { withModel } from '../model/';
 import { merge, withApp } from '../app';
-import defaultConfig from '../../../config/default-model-class';
 
 export function withTeamModel(next) {
 
@@ -17,7 +16,7 @@ export function withTeamModel(next) {
           dependencies: ['model-team']
         },
         'model-team': {
-          path: defaultConfig['model-team'].path
+          path: './src/services/model/model-team'
         }
       }
     }, config);

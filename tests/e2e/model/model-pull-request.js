@@ -1,6 +1,5 @@
 import { withModel } from '../model/';
 import { merge, withApp } from '../app';
-import defaultConfig from '../../../config/default-model-class';
 import pullRequestHook from '../data/pull_request_webhook';
 
 export function withPullRequestModel(next) {
@@ -18,7 +17,7 @@ export function withPullRequestModel(next) {
           dependencies: ['model-pull-request']
         },
         'model-pull-request': {
-          path: defaultConfig['model-pull-request'].path
+          path: './src/services/model/model-pull-request'
         }
       }
     }, config);

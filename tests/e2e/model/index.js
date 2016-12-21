@@ -1,5 +1,4 @@
 import { merge, withApp } from '../app';
-import defaultConfig from '../../../config/default';
 import testingConfig from '../../../config/testing';
 
 export function withModel(next) {
@@ -9,18 +8,18 @@ export function withModel(next) {
     config = merge({
       services: {
         logger: {
-          path: defaultConfig.services.logger.path,
+          path: './src/services/logger',
           options: { handlers: {} }
         },
         mongoose: {
-          path: defaultConfig.services.mongoose.path,
+          path: './src/services/mongoose',
           options: {
             host: testingConfig.services.mongoose.options.host
           },
           dependencies: ['logger']
         },
         model: {
-          path: defaultConfig.services.model.path,
+          path: './src/services/model',
           dependencies: ['mongoose']
         }
       }

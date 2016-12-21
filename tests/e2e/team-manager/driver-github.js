@@ -4,7 +4,6 @@ import { withGitHub } from '../github';
 import { withTeamModel } from '../model/model-team';
 import { withPullRequestModel } from '../model/model-pull-request';
 import { withTeamManager } from '../team-manager/';
-import defaultConfig from '../../../config/default-team-drivers';
 
 export function withTeamDriverGitHub(next) {
 
@@ -21,7 +20,7 @@ export function withTeamDriverGitHub(next) {
           ]
         },
         'team-driver-github': {
-          path: defaultConfig['team-driver-github'].path,
+          path: './src/services/team-manager/driver-github',
           dependencies: [
             'github'
           ]

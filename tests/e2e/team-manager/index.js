@@ -1,5 +1,4 @@
 import { merge } from '../app';
-import defaultConfig from '../../../config/default';
 
 export function withTeamManager(next) {
 
@@ -8,7 +7,7 @@ export function withTeamManager(next) {
     config = merge({
       services: {
         'team-manager': {
-          path: defaultConfig.services['team-manager'].path,
+          path: './src/services/team-manager',
           options: {
             drivers: []
           },
