@@ -1,6 +1,6 @@
 {
 
-  "#comment:autoassign": {
+  "autoassign": {
     "path": "./src/plugins/autoassign",
     "dependencies": [
       "events",

@@ -1,8 +1,8 @@
 import got from 'got';
-import YandexStarTrack from './class';
+import YandexStarTrek from './class';
 
 export default function setup(options) {
 
-  return new YandexStarTrack(got, options);
+  return new YandexStarTrek(got, options);
 
 }

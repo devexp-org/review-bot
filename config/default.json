@@ -141,7 +141,7 @@
       ]
     },
 
-    "#comment:#include:review-steps": "./default-review-steps.json",
+    "#include:review-steps": "./default-review-steps.json",
 
     "#comment:command": {
       "path": "./src/services/command",

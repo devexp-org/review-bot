@@ -1,6 +1,6 @@
 import { abstractDriverMock } from '../driver-abstract/__mocks__/';
 
-export default function mock() {
+export default function mock(teamDriver) {
 
   return {
     getTeams: sinon.stub().returns(Promise.resolve([])),
@@ -12,7 +12,7 @@ export default function mock() {
     getTeamDriver: sinon.stub().returns(Promise.reject()),
 
     findTeamByPullRequest: sinon.stub()
-      .returns(Promise.resolve(abstractDriverMock()))
+      .returns(Promise.resolve(teamDriver || abstractDriverMock()))
   };
 
 }
