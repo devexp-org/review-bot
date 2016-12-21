@@ -7,7 +7,7 @@ export default function setup(options, imports) {
   const events = imports.events;
   const logger = imports.logger.getLogger('command');
   const teamManager = imports['team-manager'];
-  const PullRequestModel = imports['pull-request-model'];
+  const PullRequestModel = imports.model('pull_request');
 
   const dispatcher = new CommandDispatcher(
     queue, teamManager, PullRequestModel

@@ -143,21 +143,22 @@
 
     "#include:review-steps": "./default-review-steps.json",
 
-    "#comment:command": {
+    "command": {
       "path": "./src/services/command",
       "options": {
         "events": ["github:issue_comment"]
       },
       "dependencies": [
+        "model",
         "queue",
         "events",
         "logger",
         "team-manager",
-        "pull-request-model"
+        "plugin-manager"
       ]
     },
 
-    "#comment:#include:command": "./default-command.json",
+    "#include:command": "./default-command.json",
 
     "#include:plugins": "./default-plugins.json",
 

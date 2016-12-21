@@ -1,4 +1,5 @@
 import service from '../';
+import modelMock from '../../model/__mocks__/';
 import queueMock from '../../queue/__mocks__/';
 import eventsMock from '../../events/__mocks__/';
 import loggerMock from '../../logger/__mocks__/';
@@ -8,7 +9,7 @@ import { pullRequestMock, pullRequestModelMock } from
 
 describe('service/command', function () {
 
-  let queue, events, logger, teamManager;
+  let model, queue, events, logger, teamManager;
   let PullRequestModel;
   let options, imports;
 
@@ -18,6 +19,7 @@ describe('service/command', function () {
       events: ['github:issue_comment']
     };
 
+    model = modelMock();
     queue = queueMock();
     events = eventsMock();
     logger = loggerMock();
@@ -26,12 +28,16 @@ describe('service/command', function () {
 
     PullRequestModel = pullRequestModelMock();
 
+    model
+      .withArgs('pull_request')
+      .returns(PullRequestModel);
+
     imports = {
+      model,
       queue,
       events,
       logger,
-      'team-manager': teamManager,
-      'pull-request-model': PullRequestModel
+      'team-manager': teamManager
     };
 
   });
