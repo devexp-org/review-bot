@@ -1,7 +1,7 @@
 import { YandexStaffDriverFactory } from '../class';
 
 import { teamMock } from '../../../model/model-team/__mocks__/';
-import yandexStaffMock from '../../../../plugins/yandex-staff/__mocks__/';
+import yandexStaffMock from '../../../../junk/yandex-staff/__mocks__/';
 
 describe('services/team-manager/driver-yandex-staff/class', function () {
 

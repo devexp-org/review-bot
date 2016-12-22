@@ -1,5 +1,5 @@
 import service from '../';
-import yandexStaffMock from '../../../../plugins/yandex-staff/__mocks__/';
+import yandexStaffMock from '../../../../junk/yandex-staff/__mocks__/';
 
 describe('plugins/team-manager/driver-yandex-staff', function () {
 

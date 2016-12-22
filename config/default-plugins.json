@@ -11,7 +11,7 @@
   },
 
   "badges-review": {
-    "path": "./src/services/badges/badges-review",
+    "path": "./src/plugins/badges/badges-review",
     "options": {
       "url": "http://localhost/badges/"
     },
@@ -24,7 +24,7 @@
   },
 
   "reminder": {
-    "path": "./src/services/reminder",
+    "path": "./src/plugins/reminder",
     "options": {
       "days": 1
     },

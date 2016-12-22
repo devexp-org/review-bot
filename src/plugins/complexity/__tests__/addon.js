@@ -1,49 +1,35 @@
 import service from '../addon';
 import schemaMock from '../../../services/model/__mocks__/schema';
 
-describe.skip('plugins/complexity/addon', function () {
+describe('plugins/complexity/addon', function () {
 
-  let options, imports, model;
+  let model, plugin;
 
   beforeEach(function () {
     model = schemaMock();
 
-    options = {};
-    imports = {};
+    plugin = service();
+
+    plugin(model);
   });
 
-  describe('#mixin', function () {
+  it('should setup save hook', function (done) {
 
-    it('should setup save hook', function (done) {
+    const context = {
+      additions: 100,
+      deletions: 20,
+      commits: 1
+    };
 
-      const addon = service(options, imports);
-
-      const context = {
-        additions: 100,
-        deletions: 20,
-        commits: 1
-      };
-
-      addon.mixin(model);
-
-      model.pre.callArgOnWith(1, context, function () {
-        assert.equal(context.complexity, 25);
-        done();
-      });
-
+    model.pre.callArgOnWith(1, context, function () {
+      assert.equal(context.complexity, 25);
+      done();
     });
 
   });
 
-  describe('#extender', function () {
-
-    it('should return patial schema', function () {
-      const addon = service(options, imports);
-      const extender = addon.extender();
-
-      assert.isObject(extender);
-    });
-
+  it('should extend pull request schema', function () {
+    assert.calledWith(model.add, { complexity: sinon.match.object });
   });
 
 });

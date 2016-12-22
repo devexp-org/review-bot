@@ -2,9 +2,9 @@ import express from 'express';
 import request from 'supertest';
 import service from '../routes';
 
-import eventsMock from '../../events/__mocks__/';
-import loggerMock from '../../logger/__mocks__/';
-import handleError from '../../http/middlewares/handle-error';
+import eventsMock from '../../../services/events/__mocks__/';
+import loggerMock from '../../../services/logger/__mocks__/';
+import handleError from '../../../services/http/middlewares/handle-error';
 import { pullRequestMock, pullRequestModelMock } from
   '../../../services/model/model-pull-request/__mocks__/';
 
