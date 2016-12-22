@@ -5,14 +5,14 @@ import { forEach } from 'lodash';
 export const EVENT_NAME = 'review:schedule:ping';
 
 export function cancelJob(pullRequest) {
-  const pullId = pullRequest.id;
+  const key = 'pull-' + pullRequest.id;
 
-  return Promise.resolve(schedule.cancelJob('pull-' + pullId));
+  return Promise.resolve(schedule.cancelJob(key));
 }
 
 export function createJob(pullRequest, timeShift, trigger) {
 
-  const pullId = pullRequest.id;
+  const key = 'pull-' + pullRequest.id;
   const startAt = moment(pullRequest.get('review.started_at'));
   const fullDays = moment.duration(moment().diff(startAt)).asDays();
   const expirationTime = startAt.add(fullDays + timeShift, 'days');
@@ -22,12 +22,11 @@ export function createJob(pullRequest, timeShift, trigger) {
     expirationTime.add(1, 'days');
   }
 
-  return cancelJob(pullRequest)
-    .then(() => {
-      return schedule.scheduleJob(
-        'pull-' + pullId, expirationTime.toDate(), trigger
-      );
-    });
+  return cancelJob(pullRequest).then(() => {
+    return schedule.scheduleJob(
+      key, expirationTime.toDate(), trigger
+    );
+  });
 
 }
 
@@ -56,14 +55,14 @@ export function scheduleInReview(PullRequestModel, timeShift, trigger) {
 export default function setup(options, imports) {
 
   const events = imports.events;
-  const logger = imports.logger.getLogger('schedule');
-  const PullRequestModel = imports['pull-request-model'];
+  const logger = imports.logger.getLogger('reminder');
+  const PullRequestModel = imports.model('pull_request');
 
-  function trigger(pullId) {
+  function trigger(id) {
     return PullRequestModel
-      .findById(pullId)
+      .findById(id)
       .then(pullRequest => {
-        if (!pullRequest.review_comments && pullRequest.state !== 'closed') {
+        if (pullRequest.state !== 'closed' && !pullRequest.review_comments) {
           events.emit(EVENT_NAME, { pullRequest });
           createJob(pullRequest);
         }
@@ -76,9 +75,7 @@ export default function setup(options, imports) {
   }
 
   function onReviewStart(payload) {
-    const pullId = payload.pullRequest.id;
-
-    return createJob(payload.pullRequest, options.days, trigger(pullId))
+    return createJob(payload.pullRequest, options.days, trigger)
       .catch(logger.error.bind(logger));
   }
 
@@ -90,7 +87,6 @@ export default function setup(options, imports) {
     logger.info('Shutdown finish');
   }
 
-  events.on('review:approved', onReviewDone);
   events.on('review:complete', onReviewDone);
 
   events.on('review:command:stop', onReviewDone);

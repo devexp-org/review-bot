@@ -2,7 +2,6 @@
 * review: Настраивать шаги через ui
 * command: Добавить test:e2e тестов для command
 * command: подключать обработчики через `plugin-manager`
-* scheduler
 * notification
 * yandex-staff
 * yandex-startrek

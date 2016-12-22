@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
 import service from '../routes';
-import responseJSON from '../../../../services/http/response';
+import handleError from '../../../../services/http/middlewares/handle-error';
 
 import jabberMock from '../__mocks__/';
 
@@ -21,7 +21,7 @@ describe.skip('services/jabber/routes', function () {
   });
 
   beforeEach(function () {
-    app.use(responseJSON());
+    app.use(handleError());
     app.use('/', router);
   });
 

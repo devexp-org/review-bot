@@ -21,6 +21,18 @@
       "logger",
       "pull-request-github"
     ]
+  },
+
+  "reminder": {
+    "path": "./src/services/reminder",
+    "options": {
+      "days": 1
+    },
+    "dependencies": [
+      "model",
+      "events",
+      "logger"
+    ]
   }
 
 }

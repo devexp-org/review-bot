@@ -1,7 +1,7 @@
 import service from '../';
 import express from 'express';
 import request from 'supertest';
-import responseJSON from '../../../services/http/response';
+import handleError from '../../../services/http/middlewares/handle-error';
 
 describe('plugins/badges-http', function () {
 
@@ -15,7 +15,7 @@ describe('plugins/badges-http', function () {
 
     router = service(options, imports);
 
-    app.use(responseJSON());
+    app.use(handleError());
     app.use('/', router);
   });
 

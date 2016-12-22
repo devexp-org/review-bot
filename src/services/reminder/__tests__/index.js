@@ -1,5 +1,6 @@
 import proxyquire from 'proxyquire';
 
+import modelMock from '../../../services/model/__mocks__/';
 import eventsMock from '../../../services/events/__mocks__/';
 import loggerMock from '../../../services/logger/__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
@@ -9,11 +10,13 @@ import {
   pullRequestModelReviewMixin
 } from '../../../services/pull-request-review/__mocks__/';
 
-describe('services/schedule', function () {
+describe('services/reminder', function () {
 
-  let service, schedule, pullRequest, PullRequestModel;
+  let model, service, schedule, pullRequest, PullRequestModel;
 
   beforeEach(function () {
+
+    model = modelMock();
 
     schedule = {
       cancelJob: sinon.stub(),
@@ -23,7 +26,14 @@ describe('services/schedule', function () {
 
     pullRequest = pullRequestMock(pullRequestReviewMixin);
 
-    PullRequestModel = pullRequestModelMock(pullRequestReviewMixin, pullRequestModelReviewMixin);
+    PullRequestModel = pullRequestModelMock(
+      pullRequestReviewMixin,
+      pullRequestModelReviewMixin
+    );
+
+    model
+      .withArgs('pull_request')
+      .returns(PullRequestModel);
 
     service = proxyquire('../index', {
       'node-schedule': schedule
@@ -144,7 +154,7 @@ describe('services/schedule', function () {
       logger = loggerMock();
 
       options = {};
-      imports = { events, logger, 'pull-request-model': PullRequestModel };
+      imports = { events, logger, model };
 
       PullRequestModel.findById
         .withArgs(1).returns(Promise.resolve(pullRequest));
@@ -187,7 +197,7 @@ describe('services/schedule', function () {
       logger = loggerMock();
 
       options = {};
-      imports = { events, logger, 'pull-request-model': PullRequestModel };
+      imports = { events, logger, model };
 
       schedule.scheduledJobs = {
         'pull-1': { cancel: sinon.stub() },
@@ -221,7 +231,7 @@ describe('services/schedule', function () {
       payload = { pullRequest };
 
       options = {};
-      imports = { events, logger, 'pull-request-model': PullRequestModel };
+      imports = { events, logger, model };
 
       PullRequestModel.findInReview.returns(Promise.resolve([]));
     });

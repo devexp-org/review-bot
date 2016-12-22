@@ -1,7 +1,7 @@
 import express from 'express';
 import request from 'supertest';
 import service from '../routes';
-import responseJSON from '../../../services/http/response';
+import handleError from '../../../services/http/middlewares/handle-error';
 
 import staffMock from '../__mocks__/index';
 
@@ -32,7 +32,7 @@ describe('plugins/yandex-staff/routes', function () {
   });
 
   beforeEach(function () {
-    app.use(responseJSON());
+    app.use(handleError());
     app.use('/', router);
   });
 
