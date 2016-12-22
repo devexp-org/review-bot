@@ -18,11 +18,11 @@ export function baseSchema() {
       type: Schema.Types.ObjectId
     }],
     patterns: [String],
-    notification: String,
     reviewConfig: {
       steps: [{ name: String, options: Object }],
       stepsOptions: Object,
-      approveCount: Number
+      approveCount: Number,
+      notification: String
     }
   };
 }
