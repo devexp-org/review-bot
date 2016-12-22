@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash';
+import { merge, isEmpty } from 'lodash';
 
 export default class Review {
 
@@ -56,10 +56,6 @@ export default class Review {
 
         review.approveCount = team.getOption(
           'approveCount', this.options.approveCount
-        );
-
-        review.totalReviewers = team.getOption(
-          'totalReviewers', this.options.totalReviewers
         );
 
         return team.getCandidates(review.pullRequest)
@@ -126,8 +122,10 @@ export default class Review {
    * @return {Promise}
    */
   stepQueue(review) {
-    const stepsOptions = review.team.getOption(
-      'stepsOptions', this.options.stepsOptions, {}
+    const stepsOptions = merge(
+      {},
+      this.options.stepsOptions,
+      review.team.getOption('stepsOptions')
     );
 
     const sortByRank = (a, b) => b.rank - a.rank;
@@ -138,7 +136,7 @@ export default class Review {
 
         review.members.sort(sortByRank);
 
-        return ranker.process(review, stepsOptions[name]);
+        return ranker.process(review, stepsOptions[name] || {});
       });
     }, Promise.resolve(review));
   }

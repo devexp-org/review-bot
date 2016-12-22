@@ -38,7 +38,9 @@ export function withTeamModel(next) {
             patterns: [],
             reviewConfig: {
               approveCount: 2,
-              totalReviewers: 3
+              stepsOptions: {
+                total: 3
+              }
             }
           });
 

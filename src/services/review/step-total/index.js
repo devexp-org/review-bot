@@ -34,7 +34,7 @@ export class TotalReviewStep extends AbstractReviewStep
    * @return {Promise.<Review>}
    */
   process(review, options) {
-    let count = options.max;
+    let count = options.max || 1;
 
     review.reviewers = take(review.members, count);
 

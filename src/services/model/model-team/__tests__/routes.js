@@ -64,7 +64,7 @@ describe('services/model/model-team/routes', function () {
     it('should return a team list', function (done) {
       request(app)
         .get('/')
-        .expect('[{"name":"name","members":[],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":3}}]')
+        .expect('[{"name":"name","members":[],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2}}]')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -78,7 +78,7 @@ describe('services/model/model-team/routes', function () {
       request(app)
         .post('/')
         .send({ name: 'test-team' })
-        .expect('{"name":"name","members":[],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":3}}')
+        .expect('{"name":"name","members":[],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -105,7 +105,7 @@ describe('services/model/model-team/routes', function () {
     it('should return a team', function (done) {
       request(app)
         .get('/test-team')
-        .expect('{"name":"name","members":[],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":3}}')
+        .expect('{"name":"name","members":[],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);
@@ -131,16 +131,13 @@ describe('services/model/model-team/routes', function () {
     it('should update a team', function (done) {
       request(app)
         .put('/test-team')
-        .send({ name: 'test-team', reviewConfig: { approveCount: 5, totalReviewers: 10 } })
+        .send({ name: 'test-team', reviewConfig: { approveCount: 5 } })
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(err => {
           assert(team.save.calledAfter(team.set));
           assert.calledWith(team.set, 'name', 'test-team');
-          assert.calledWith(team.set, 'reviewConfig', {
-            approveCount: 5,
-            totalReviewers: 10
-          });
+          assert.calledWith(team.set, 'reviewConfig', { approveCount: 5 });
           done(err);
         });
     });
@@ -212,7 +209,7 @@ describe('services/model/model-team/routes', function () {
       request(app)
         .post('/test-team/members')
         .send({ login: 'test-user' })
-        .expect('{"name":"name","members":[{"login":"test-user","contacts":[]}],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2,"totalReviewers":3}}')
+        .expect('{"name":"name","members":[{"login":"test-user","contacts":[]}],"patterns":[],"driver":{"name":"static","options":{}},"reviewConfig":{"steps":[{"name":"load","options":{"max":5}}],"approveCount":2}}')
         .expect('Content-Type', /application\/json/)
         .expect(200)
         .end(done);

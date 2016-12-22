@@ -132,15 +132,14 @@
         "steps": [],
         "stepsOptions": {},
         "approveCount": 2,
-        "totalReviewers": 2,
         "defaultSteps": [
-          "review-step-preferred",
-          "review-step-remove-author",
-          "review-step-remove-reviewers",
-          "review-step-load",
-          "review-step-random",
-          "review-step-commiters",
-          "review-step-total"
+          "preferred",
+          "remove-author",
+          "remove-reviewers",
+          "load",
+          "random",
+          "commiters",
+          "total"
         ]
       },
       "dependencies": [

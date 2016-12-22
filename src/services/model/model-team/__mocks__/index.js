@@ -14,8 +14,7 @@ export function teamMock(mixin) {
       steps: [
         { name: 'load', options: { max: 5 } }
       ],
-      approveCount: 2,
-      totalReviewers: 3
+      approveCount: 2
     }
   };
 

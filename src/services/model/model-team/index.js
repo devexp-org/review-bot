@@ -21,8 +21,8 @@ export function baseSchema() {
     notification: String,
     reviewConfig: {
       steps: [{ name: String, options: Object }],
-      approveCount: Number,
-      totalReviewers: Number
+      stepsOptions: Object,
+      approveCount: Number
     }
   };
 }

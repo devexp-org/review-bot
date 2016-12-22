@@ -37,8 +37,7 @@ describe('services/review/class', function () {
 
     options = {
       steps: ['step1', 'step2'],
-      defaultSteps: ['step1', 'step2'],
-      totalReviewers: 4
+      defaultSteps: ['step1', 'step2']
     };
 
     imports = { logger, teamManager, step1, step2 };
@@ -132,6 +131,37 @@ describe('services/review/class', function () {
 
       review.stepQueue({ team: teamDriver, steps, members: memberMock() })
         .then(() => assert.deepEqual(order, ['1', '2', '3', '4']))
+        .then(done, done);
+    });
+
+    it('should merge default and team stepsOptions', function (done) {
+      const steps = [
+        {
+          name: 'step',
+          ranker: {
+            process: function (review, options) {
+              assert.equal(options.option1, 1);
+              assert.equal(options.option2, 0);
+              assert.equal(options.option3, 2);
+              return Promise.resolve(review);
+            }
+          }
+        }
+      ];
+
+      options.stepsOptions = {
+        step: {
+          option2: 0,
+          option3: 2
+        }
+      };
+
+      teamDriver.getOption
+        .withArgs('stepsOptions')
+        .returns({ step: { option1: 1 } });
+
+      review.stepQueue({ team: teamDriver, steps, pullRequest, members: [] })
+        .then(() => {})
         .then(done, done);
     });
 
