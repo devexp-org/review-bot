@@ -1,8 +1,8 @@
 import service from '../';
-import staffMock from '../../../../junk/yandex-staff/__mocks__/';
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
 import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';
+import yandexStaffMock from '../../../../plugins/yandex-staff/__mocks__/';
 
 describe('plugins/notification/absence', function () {
 
@@ -11,9 +11,9 @@ describe('plugins/notification/absence', function () {
 
   beforeEach(function () {
 
-    staff = staffMock();
     events = eventsMock();
     logger = loggerMock();
+    staff = yandexStaffMock();
 
     notification = sinon.stub().returns(Promise.resolve());
 

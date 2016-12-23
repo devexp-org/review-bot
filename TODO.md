@@ -2,9 +2,6 @@
 * review: Настраивать шаги через ui
 * command: Добавить test:e2e тестов для command
 * command: подключать обработчики через `plugin-manager`
-* notification
-* yandex-staff
-* yandex-startrek
 * user: изменить схему контактов на плоскую
 
 # MINOR

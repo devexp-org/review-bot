@@ -1,5 +1,5 @@
-import service from '../index';
-import staffMock from '../__mocks__/index';
+import service from '../';
+import staffMock from '../__mocks__/';
 
 describe('plugins/yandex-staff', function () {
 
