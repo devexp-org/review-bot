@@ -91,6 +91,19 @@
     }
   },
 
+  "http-routes-review": {
+    "path": "./src/services/review/routes",
+    "dependencies": [
+      "logger",
+      "review"
+    ],
+    "#plugin:http": {
+      "routes": {
+        "/review": "http-routes-review"
+      }
+    }
+  },
+
   "http-routes-webhook": {
     "path": "./src/services/webhook",
     "dependencies": [
