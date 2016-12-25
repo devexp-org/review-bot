@@ -12,29 +12,17 @@ export class TotalReviewStep extends AbstractReviewStep
   }
 
   /**
-   * @override
-   */
-  config() {
-    return {
-      max: {
-        type: 'number'
-      }
-    };
-  }
-
-  /**
    * Take defined number of team member for review.
    *
    * @override
    *
    * @param {Review} review
    * @param {Object} options
-   * @param {Number} [options.max] - how many reviewers should be suggested.
    *
    * @return {Promise.<Review>}
    */
   process(review, options) {
-    let count = options.max || 1;
+    let count = review.totalReviewers;
 
     review.reviewers = take(review.members, count);
 

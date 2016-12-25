@@ -58,6 +58,10 @@ export default class Review {
           'approveCount', this.options.approveCount
         );
 
+        review.totalReviewers = team.getOption(
+          'totalReviewers', this.options.totalReviewers
+        );
+
         return team.getCandidates(review.pullRequest)
           .then(members => {
             review.members = members;

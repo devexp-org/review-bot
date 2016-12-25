@@ -19,10 +19,11 @@ export function baseSchema() {
     }],
     patterns: [String],
     reviewConfig: {
-      steps: [{ name: String, options: Object }],
+      steps: [String],
       stepsOptions: Object,
       approveCount: Number,
-      notification: String
+      notification: String,
+      totalReviewers: Number
     }
   };
 }

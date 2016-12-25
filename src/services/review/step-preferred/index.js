@@ -25,14 +25,6 @@ export class PreferredReviewStep extends AbstractReviewStep
   }
 
   /**
-   * @override
-   */
-  config() {
-    return {
-    };
-  }
-
-  /**
    * Finds users in description
    *
    * @param {String} body

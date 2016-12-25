@@ -10,7 +10,7 @@ describe('services/review/steps/total', function () {
   beforeEach(function () {
     members = reviewMock();
 
-    options = { max: 2 };
+    options = {};
 
     pullRequest = pullRequestMock();
 
@@ -33,8 +33,8 @@ describe('services/review/steps/total', function () {
 
   });
 
-  it('should keep only `option.max` reviewers', function (done) {
-    const review = { members, pullRequest };
+  it('should keep only `review.totalReviewers` reviewers', function (done) {
+    const review = { totalReviewers: 2, members, pullRequest };
 
     const expected = [
       { login: 'Black Widow', rank: 10 },
