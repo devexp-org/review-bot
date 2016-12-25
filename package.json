@@ -21,7 +21,12 @@
     "coverage": "BABEL_ENV=test $npm_package_config_istanbul $npm_package_config_pattern_test",
     "coverage:e2e": "$npm_package_config_istanbul $npm_package_config_pattern_test $npm_package_config_pattern_e2e",
     "precommit": "npm run check-code --silent",
-    "check-code": "npm run eslint && npm test"
+    "check-code": "npm run eslint && npm test",
+    "docker:push": "docker push $npm_package_config_docker_image",
+    "docker:build": "docker build -t $npm_package_config_docker_image .",
+    "docker:publish": "npm run docker:build && npm run docker:push",
+    "docker:run": "docker run -p 8080:80 -e QLOUD_HTTP_PORT=80 $npm_package_config_docker_image",
+    "docker:shell": "docker run -i -t --entrypoint /bin/bash $npm_package_config_docker_image"
   },
   "dependencies": {
     "@slack/client": "^3.4.0",
@@ -81,6 +86,7 @@
     "mocha": "mocha --compilers js:babel-core/register --require ./tests/setup.js --reporter progress",
     "istanbul": "nyc --all --reporter text --reporter html npm test",
     "pattern_e2e": "./tests/e2e/**.js",
-    "pattern_test": "./src/!(junk)/**/__tests__/*.js"
+    "pattern_test": "./src/!(junk)/**/__tests__/*.js",
+    "docker_image": "registry.yandex.net/search-interfaces/devexp"
   }
 }
