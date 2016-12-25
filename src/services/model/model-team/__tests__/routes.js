@@ -137,7 +137,7 @@ describe('services/model/model-team/routes', function () {
         .end(err => {
           assert(team.save.calledAfter(team.set));
           assert.calledWith(team.set, 'name', 'test-team');
-          assert.calledWith(team.set, 'reviewConfig', { approveCount: 5 });
+          assert.calledWith(team.set, 'reviewConfig.approveCount', 5);
           done(err);
         });
     });

@@ -72,19 +72,36 @@ export default function setup(options, imports) {
   teamRoute.put('/:id', function (req, res) {
     const id = req.params.id;
 
-    const name = req.body.name;
-    const driver = req.body.driver;
-    const patterns = req.body.patterns;
-    const reviewConfig = req.body.reviewConfig;
-
     findByName(id)
       .then(team => {
-        return team
-          .set('name', name)
-          .set('driver', driver)
-          .set('patterns', patterns)
-          .set('reviewConfig', reviewConfig)
-          .save();
+        if ('name' in req.body) {
+          team.set('name', req.body.name);
+        }
+
+        if ('driver' in req.body) {
+          team.set('driver', req.body.driver);
+        }
+
+        if ('patterns' in req.body) {
+          team.set('patterns', req.body.patterns);
+        }
+
+        if ('reviewConfig' in req.body) {
+          if ('steps' in req.body.reviewConfig) {
+            team.set('reviewConfig.steps', req.body.reviewConfig.steps);
+          }
+          if ('stepsOptions' in req.body.reviewConfig) {
+            team.set('reviewConfig.stepsOptions', req.body.reviewConfig.stepsOptions);
+          }
+          if ('approveCount' in req.body.reviewConfig) {
+            team.set('reviewConfig.approveCount', req.body.reviewConfig.approveCount);
+          }
+          if ('totalReviewers' in req.body.reviewConfig) {
+            team.set('reviewConfig.totalReviewers', req.body.reviewConfig.totalReviewers);
+          }
+        }
+
+        return team.save();
       })
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
