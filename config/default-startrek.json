@@ -1,0 +1,58 @@
+{
+
+  "startrek-update-reviewers": {
+    "path": "./src/plugins/yandex-startrek/update-reviewers",
+    "options": {
+      "queues": [
+        "ISL",
+        "FEI",
+        "SERP",
+        "NERPA",
+        "IMAGESUI",
+        "ISLSUGGEST",
+        "MOBVIDEO",
+        "SAKHALIN",
+        "VIDEOUI"
+      ],
+      "events": [
+        "review:command:ok",
+        "review:command:add",
+        "review:command:busy",
+        "review:command:start",
+        "review:command:change",
+        "review:command:remove"
+      ]
+    },
+    "dependencies": [
+      "events",
+      "logger",
+      "yandex-startrek"
+    ]
+  },
+
+  "startrek-update-status": {
+    "path": "./src/plugins/yandex-startrek/set-issue-status",
+    "options": {
+      "queues": [
+        "ISL",
+        "FEI",
+        "SERP",
+        "NERPA",
+        "IMAGESUI",
+        "ISLSUGGEST",
+        "MOBVIDEO",
+        "SAKHALIN",
+        "VIDEOUI"
+      ],
+      "events": [
+        "review:command:start"
+      ]
+    },
+    "dependencies": [
+      "events",
+      "logger",
+      "yandex-startrek"
+    ]
+  }
+
+}

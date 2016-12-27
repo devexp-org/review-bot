@@ -33,6 +33,26 @@
       "events",
       "logger"
     ]
+  },
+
+  "yandex-startrek": {
+    "path": "./src/plugins/yandex-startrek",
+    "options": {
+      "url": "https://st-api.yandex-team.ru/v2"
+    }
+  },
+
+  "#include:startrek": "./default-startrek.json",
+
+  "yandex-staff": {
+    "path": "./src/plugins/yandex-staff",
+    "options": {
+      "cache": {
+        "getGroupMembers": 86400
+      },
+      "center_url": "https://center.yandex-team.ru/api/v1/",
+      "jabber_url": "https://center.yandex-team.ru/jabber/status-bulk/"
+    }
   }
 
 }

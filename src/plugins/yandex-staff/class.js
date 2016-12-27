@@ -1,5 +1,39 @@
 import _ from 'lodash';
 
+export const fields = {
+  absence: [
+    'gap_type__name',
+    'gap_type__verbose_name',
+    'left_edge',
+    'right_edge',
+    'staff__login'
+  ],
+  where: [
+    'is_vpn',
+    'office__city__name',
+    'office__code',
+    'office__name',
+    'staff__login',
+    'updated_at'
+  ],
+  info: [
+    'birthday',
+    'cars',
+    'city',
+    'family_status',
+    'first_name',
+    'last_name',
+    'login',
+    'mobile_phone',
+    'office',
+    'phones',
+    'position',
+    'uid',
+    'work_email'
+  ],
+  group: ['login']
+};
+
 export default class YandexStaff {
 
   /**
@@ -264,12 +298,8 @@ export default class YandexStaff {
    * @return {String|null}
    */
   _getFields(name) {
-    if (
-      this._options.fields &&
-      this._options.fields[name] &&
-      Array.isArray(this._options.fields[name])
-    ) {
-      return this._options.fields[name].join('|');
+    if (fields && fields[name] && Array.isArray(fields[name])) {
+      return fields[name].join('|');
     }
 
     return null;

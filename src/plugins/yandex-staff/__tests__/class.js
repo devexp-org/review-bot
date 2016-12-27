@@ -16,7 +16,6 @@ describe('plugins/yandex-staff/class', function () {
     beforeEach(function () {
       staff = new YandexStaff(got, {
         center_url: centerUrl,
-        fields: { absence: ['login', 'trip'] },
         cache: { apiAbsence: 60 }
       });
     });
@@ -31,7 +30,6 @@ describe('plugins/yandex-staff/class', function () {
     it('should not cache result if set option to `0`', function (done) {
       staff = new YandexStaff(got, {
         center_url: centerUrl,
-        fields: { absence: ['login', 'trip'] },
         cache: { apiAbsence: 0 }
       });
 
@@ -67,8 +65,7 @@ describe('plugins/yandex-staff/class', function () {
 
     beforeEach(function () {
       staff = new YandexStaff(got, {
-        center_url: centerUrl,
-        fields: { absence: ['login', 'trip'] }
+        center_url: centerUrl
       });
 
       got.callsArgWith(2, null, {});
@@ -78,18 +75,7 @@ describe('plugins/yandex-staff/class', function () {
       staff.apiAbsence('user1')
         .then(() => {
           const url = 'http://www.example.com/absence_by_user/user1.json';
-          assert.calledWithMatch(got, url, { query: { fields: 'login|trip' } });
-        })
-        .then(done, done);
-    });
-
-    it('should get fields from options', function (done) {
-      staff = new YandexStaff(got, { center_url: centerUrl, fields: {} });
-
-      staff.apiAbsence('user1')
-        .then(() => {
-          const url = 'http://www.example.com/absence_by_user/user1.json';
-          assert.calledWithMatch(got, url, { query: { fields: null } });
+          assert.calledWithMatch(got, url, { query: { fields: sinon.match.string } });
         })
         .then(done, done);
     });
@@ -100,8 +86,7 @@ describe('plugins/yandex-staff/class', function () {
 
     beforeEach(function () {
       staff = new YandexStaff(got, {
-        center_url: centerUrl,
-        fields: { info: ['login', 'lastname'] }
+        center_url: centerUrl
       });
 
       got.callsArgWith(2, null, {});
@@ -111,7 +96,7 @@ describe('plugins/yandex-staff/class', function () {
       staff.apiUserInfo(['user1', 'user2'])
         .then(() => {
           const url = 'http://www.example.com/user/user1|user2.json';
-          assert.calledWithMatch(got, url, { query: { fields: 'login|lastname' } });
+          assert.calledWithMatch(got, url, { query: { fields: sinon.match.string } });
         })
         .then(done, done);
     });
@@ -121,8 +106,7 @@ describe('plugins/yandex-staff/class', function () {
 
     beforeEach(function () {
       staff = new YandexStaff(got, {
-        center_url: centerUrl,
-        fields: { where: ['login', 'is_vpn'] }
+        center_url: centerUrl
       });
 
       got.callsArgWith(2, null, {});
@@ -132,7 +116,7 @@ describe('plugins/yandex-staff/class', function () {
       staff.apiUserWhere('user1')
         .then(() => {
           const url = 'http://www.example.com/user/user1/where.json';
-          assert.calledWithMatch(got, url, { query: { fields: 'login|is_vpn' } });
+          assert.calledWithMatch(got, url, { query: { fields: sinon.match.string } });
         })
         .then(done, done);
     });
@@ -162,8 +146,7 @@ describe('plugins/yandex-staff/class', function () {
 
     beforeEach(function () {
       staff = new YandexStaff(got, {
-        center_url: centerUrl,
-        fields: { group: ['login'] }
+        center_url: centerUrl
       });
 
       got.callsArgWith(2, null, {});
@@ -288,8 +271,7 @@ describe('plugins/yandex-staff/class', function () {
 
     beforeEach(function () {
       staff = new YandexStaff(got, {
-        center_url: centerUrl,
-        fields: { group: ['login'] }
+        center_url: centerUrl
       });
 
       resultUsers = [
