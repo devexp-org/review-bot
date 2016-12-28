@@ -26,12 +26,6 @@ describe('services/notification/transport-jabber', function () {
     methods.forEach(method => assert.property(obj, method));
   });
 
-  it('should try connect to jabber', function () {
-    service(options, imports);
-
-    assert.called(jabber.connect);
-  });
-
   it('should close connection when shutdown', function () {
     const callback = sinon.stub();
     const jabberService = service(options, imports);

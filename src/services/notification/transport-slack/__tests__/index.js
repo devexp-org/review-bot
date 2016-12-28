@@ -28,12 +28,6 @@ describe('services/notification/transport-slack', function () {
     methods.forEach(method => assert.property(obj, method));
   });
 
-  it('should try connect to jabber', function () {
-    service(options, imports);
-
-    assert.called(slack.connect);
-  });
-
   it('should close connection when shutdown', function () {
     const callback = sinon.stub();
     const slackService = service(options, imports);

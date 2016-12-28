@@ -1,0 +1,62 @@
+{
+
+  "notification-message-ping": {
+    "path": "./src/services/notification/message-ping",
+    "dependencies": [
+      "events",
+      "logger",
+      "notification"
+    ]
+  },
+
+  "notification-message-start": {
+    "path": "./src/services/notification/message-start",
+    "dependencies": [
+      "events",
+      "logger",
+      "notification"
+    ]
+  },
+
+  "notification-message-complete": {
+    "path": "./src/services/notification/message-complete",
+    "dependencies": [
+      "events",
+      "logger",
+      "notification"
+    ]
+  },
+
+  "notification-jabber": {
+    "path": "./src/services/notification/transport-jabber",
+    "#plugin:notification": {
+      "transports": ["notification-jabber"]
+    },
+    "options": {
+      "auth": {
+        "login": "user@example.com",
+        "password": "password"
+      }
+    },
+    "dependencies": [
+      "logger"
+    ]
+  },
+
+  "notification-slack": {
+    "path": "./src/services/notification/transport-slack",
+    "#plugin:notification": {
+      "transports": ["notification-slack"]
+    },
+    "options": {
+      "token": "0123456789abcdf",
+      "autoMark": true,
+      "autoReconnect": true,
+      "host": "yandex-team.ru"
+    },
+    "dependencies": [
+      "logger"
+    ]
+  }
+
+}
