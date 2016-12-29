@@ -2,7 +2,7 @@ import util from 'util';
 import { find, cloneDeep } from 'lodash';
 
 export const EVENT_NAME = 'review:command:add';
-export const COMMAND_RE = '/add (\\w+)';
+export const COMMAND_RE = '/add ([-\\w]+)';
 
 export default function setup(options, imports) {
 

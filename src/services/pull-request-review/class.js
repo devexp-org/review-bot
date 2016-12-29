@@ -100,7 +100,7 @@ export default class PullRequestReview {
     let approveCount = 0;
 
     const review = pullRequest.get('review');
-    const requiredApproveCount = review.approveCount;
+    const requiredApproveCount = review.approveCount || 1;
 
     forEach(review.reviewers, (reviewer) => {
       if (reviewer.login === login) {
@@ -193,7 +193,14 @@ export default class PullRequestReview {
       )));
     }
 
-    pullRequest.set('review.reviewers', review.reviewers);
+    if ('reviewers' in review) {
+      pullRequest.set('review.reviewers', review.reviewers);
+    }
+
+    if ('approveCount' in review) {
+      pullRequest.set('review.approveCount', review.approveCount);
+    }
+
     pullRequest.set('review.updated_at', new Date());
 
     this.logger.info('Review updated. %s', pullRequest);
