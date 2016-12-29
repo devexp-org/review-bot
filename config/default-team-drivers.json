@@ -31,7 +31,7 @@
     ],
     "#plugin:team-manager": {
       "drivers": {
-        "github": "team-driver-yandex-staff"
+        "yandex-staff": "team-driver-yandex-staff"
       }
     }
   }

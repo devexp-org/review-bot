@@ -37,12 +37,13 @@ export default function setup(options, imports) {
       ));
     }
 
-    if (commentUser !== pullRequest.user.login) {
-      return Promise.reject(new Error(util.format(
-        '%s tried to stop a review, but author is %s %s',
-        commentUser, pullRequest.user.login, pullRequest
-      )));
-    }
+    // TODO
+    // if (commentUser !== pullRequest.user.login) {
+    //   return Promise.reject(new Error(util.format(
+    //     '%s tried to stop a review, but author is %s %s',
+    //     commentUser, pullRequest.user.login, pullRequest
+    //   )));
+    // }
 
     return pullRequestReview.stopReview(pullRequest)
       .then(pullRequest => {

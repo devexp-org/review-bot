@@ -2,7 +2,7 @@ import util from 'util';
 import { find, reject, cloneDeep } from 'lodash';
 
 export const EVENT_NAME = 'review:command:change';
-export const COMMAND_RE = '/change (@?\\w+)(?: | to )(@?\\w+)';
+export const COMMAND_RE = '/change (\\w+)(?: | to )(\\w+)';
 
 export default function commandService(options, imports) {
 
@@ -49,12 +49,12 @@ export default function commandService(options, imports) {
     }
 
     // TODO config this
-    if (commentUser !== pullRequest.user.login) {
-      return Promise.reject(new Error(util.format(
-        '%s tried to change reviewer, but author is %s %s',
-        commentUser, pullRequest.user.login, pullRequest
-      )));
-    }
+    // if (commentUser !== pullRequest.user.login) {
+    //   return Promise.reject(new Error(util.format(
+    //     '%s tried to change reviewer, but author is %s %s',
+    //     commentUser, pullRequest.user.login, pullRequest
+    //   )));
+    // }
 
     if (newReviewerLogin === pullRequest.user.login) {
       return Promise.reject(new Error(util.format(
