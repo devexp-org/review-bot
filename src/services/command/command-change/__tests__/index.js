@@ -111,7 +111,7 @@ describe('services/command/change', function () {
 
   it('should save pullRequest with a new reviewer', function (done) {
     team.findTeamMember
-      .withArgs(pullRequest, 'Spider-Man')
+      .withArgs('Spider-Man')
       .returns(Promise.resolve({ login: 'Spider-Man' }));
 
     command('/change Thor to Spider-Man', payload, ['Thor', 'Spider-Man'])

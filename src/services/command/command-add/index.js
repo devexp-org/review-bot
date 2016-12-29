@@ -30,7 +30,7 @@ export default function setup(options, imports) {
 
     const newReviewerLogin = arglist[0];
 
-    const pullRequestReviewers = pullRequest.get('review.reviewers', []);
+    const pullRequestReviewers = pullRequest.get('review.reviewers');
 
     logger.info('"/add" %s', pullRequest);
 
@@ -49,7 +49,7 @@ export default function setup(options, imports) {
 
     return teamManager
       .findTeamByPullRequest(pullRequest)
-      .then(team => team.findTeamMember(pullRequest, newReviewerLogin))
+      .then(team => team.findTeamMember(newReviewerLogin))
       .then(user => {
         if (!user) {
           return Promise.reject(new Error(util.format(

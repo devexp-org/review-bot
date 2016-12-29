@@ -71,7 +71,7 @@ describe('services/command/add', function () {
 
   it('should return rejected promise if no such user in team', function (done) {
     team.findTeamMember
-      .withArgs(pullRequest, 'Batman')
+      .withArgs('Batman')
       .returns(Promise.resolve(null));
 
     command('/add Batman', payload, ['Batman'])

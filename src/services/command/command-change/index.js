@@ -87,7 +87,7 @@ export default function commandService(options, imports) {
 
     return teamManager
       .findTeamByPullRequest(pullRequest)
-      .then(team => team.findTeamMember(pullRequest, newReviewerLogin))
+      .then(team => team.findTeamMember(newReviewerLogin))
       .then(user => {
         if (!user) {
           return Promise.reject(new Error(util.format(

@@ -47,7 +47,6 @@
       "options": {
         "host": "api.github.com",
         "debug": false,
-        "version": "3.0.0",
         "timeout": 5000,
         "protocol": "https",
         "headers": {

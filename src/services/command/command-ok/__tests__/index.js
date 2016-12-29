@@ -75,7 +75,7 @@ describe('services/command/ok', function () {
     comment.user.login = 'Spider-Man';
 
     team.findTeamMember
-      .withArgs(pullRequest, 'Spider-Man')
+      .withArgs('Spider-Man')
       .returns(Promise.resolve(null));
 
     command('/ok', payload)
@@ -88,7 +88,7 @@ describe('services/command/ok', function () {
     comment.user.login = 'Spider-Man';
 
     team.findTeamMember
-      .withArgs(pullRequest, 'Spider-Man')
+      .withArgs('Spider-Man')
       .returns(Promise.resolve({ login: 'Spider-Man' }));
 
     command('/ok', payload)

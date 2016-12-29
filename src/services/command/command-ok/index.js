@@ -54,7 +54,7 @@ export default function setup(options, imports) {
     } else {
       return teamManager
         .findTeamByPullRequest(pullRequest)
-        .then(team => team.findTeamMember(pullRequest, commentUser))
+        .then(team => team.findTeamMember(commentUser))
         .then(user => {
           if (!user) {
             return Promise.reject(new Error(util.format(
