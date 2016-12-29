@@ -43,7 +43,6 @@ export default function setup(options, imports) {
 
     return pullRequestReview
       .changesNeeded(pullRequest, commentUser)
-      .then(pullRequest => pullRequestReview.stopReview(pullRequest))
       .then(pullRequest => {
         events.emit(EVENT_NAME, { pullRequest });
 

@@ -35,7 +35,7 @@ describe('services/team-manager', function () {
     const factory2 = teamDriverFactoryMock();
     factory2.name.returns('name2');
 
-    options.drivers = ['driver1', 'driver2'];
+    options.drivers = { name1: 'driver1', name2: 'driver2' };
     imports.driver1 = factory1;
     imports.driver2 = factory2;
 

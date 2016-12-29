@@ -93,6 +93,9 @@ export default function setup(options, imports) {
           if ('stepsOptions' in req.body.reviewConfig) {
             team.set('reviewConfig.stepsOptions', req.body.reviewConfig.stepsOptions);
           }
+          if ('notification' in req.body.reviewConfig) {
+            team.set('reviewConfig.notification', req.body.reviewConfig.notification);
+          }
           if ('approveCount' in req.body.reviewConfig) {
             team.set('reviewConfig.approveCount', req.body.reviewConfig.approveCount);
           }

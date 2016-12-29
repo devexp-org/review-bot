@@ -1,4 +1,3 @@
-import util from 'util';
 
 export const EVENT_NAME = 'review:command:start';
 export const COMMAND_RE = '/start';
@@ -21,7 +20,7 @@ export default function setup(options, imports) {
   const startCommand = function startCommand(command, payload) {
 
     const pullRequest = payload.pullRequest;
-    const commentUser = payload.comment.user.login;
+    // const commentUser = payload.comment.user.login;
 
     logger.info('"/start" %s', pullRequest);
 

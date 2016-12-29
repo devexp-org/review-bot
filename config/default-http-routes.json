@@ -78,6 +78,20 @@
     }
   },
 
+  "http-routes-pull-request-badges": {
+    "path": "./src/plugins/badges/routes",
+    "dependencies": [
+      "model",
+      "events",
+      "logger"
+    ],
+    "#plugin:http": {
+      "routes": {
+        "/pulls": ["http-routes-pull-request-badges"]
+      }
+    }
+  },
+
   "http-routes-team-manager": {
     "path": "./src/services/team-manager/routes",
     "dependencies": [

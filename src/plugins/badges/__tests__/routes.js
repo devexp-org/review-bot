@@ -2,6 +2,7 @@ import express from 'express';
 import request from 'supertest';
 import service from '../routes';
 
+import modelMock from '../../../services/model/__mocks__/';
 import eventsMock from '../../../services/events/__mocks__/';
 import loggerMock from '../../../services/logger/__mocks__/';
 import handleError from '../../../services/http/middlewares/handle-error';
@@ -11,19 +12,24 @@ import { pullRequestMock, pullRequestModelMock } from
 describe('services/badges', function () {
 
   let app, options, imports, router;
-  let events, logger, pullRequest, pullRequestModel;
+  let model, events, logger, pullRequest, pullRequestModel;
 
   beforeEach(function () {
 
     app = express();
 
+    model = modelMock();
     events = eventsMock();
     logger = loggerMock();
     pullRequest = pullRequestMock();
     pullRequestModel = pullRequestModelMock();
 
     options = {};
-    imports = { events, logger, 'pull-request-model': pullRequestModel };
+    imports = { events, logger, model };
+
+    model
+      .withArgs('pull_request')
+      .returns(pullRequestModel);
 
     pullRequestModel.findByRepositoryAndNumber
       .withArgs('org/repo', '1')

@@ -31,10 +31,11 @@ export default function setup(options, imports) {
   }
 
   // Subscribe to events for creating review badges.
-  events.on('review:updated', updateBadges);
   events.on('review:started', updateBadges);
+  events.on('review:updated', updateBadges);
   events.on('review:approved', updateBadges);
   events.on('review:complete', updateBadges);
+  events.on('review:changesneeded', updateBadges);
   events.on('review:update_badges', updateBadges);
 
 }

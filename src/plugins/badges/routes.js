@@ -6,7 +6,7 @@ export default function setup(options, imports) {
 
   const events = imports.events;
   const logger = imports.logger.getLogger('http.badges');
-  const PullRequestModel = imports['pull-request-model'];
+  const PullRequestModel = imports.model('pull_request');
 
   const badgesRouter = router();
 

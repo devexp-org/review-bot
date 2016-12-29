@@ -1,4 +1,3 @@
-import util from 'util';
 import { map, forEach } from 'lodash';
 
 /**
@@ -7,25 +6,26 @@ import { map, forEach } from 'lodash';
  * @param {Object} startrek
  * @param {Object} options
  * @param {Object} payload
+ * @param {Object} logger
  *
  * @return {Promise}
  */
-export function updateReviewers(startrek, options, payload) {
+export function updateReviewers(startrek, options, payload, logger) {
 
   const { pullRequest } = payload;
   const issue = startrek.parseIssue(pullRequest.title, options.queues);
 
   if (pullRequest.review.status !== 'inprogress') {
-    return Promise.reject(new Error(util.format(
+    logger.info(
       'Cannot update reviewers in startrek for not in progress pull request %s',
       pullRequest
-    )));
+    );
+    return Promise.resolve();
   }
 
   if (!issue.length) {
-    return Promise.reject(new Error(util.format(
-      'Cannot find issue in pull request %s', pullRequest.toString()
-    )));
+    logger.info('Cannot find issue in pull request %s', pullRequest);
+    return Promise.resolve();
   }
 
   const reviewers = pullRequest.get('review.reviewers');
@@ -43,12 +43,12 @@ export function updateReviewers(startrek, options, payload) {
 export default function setup(options, imports) {
 
   const events = imports.events;
-  const logger = imports.logger;
+  const logger = imports.logger.getLogger('startrek');
   const startrek = imports['yandex-startrek'];
 
   forEach(options.events, (event) => {
     events.on(event, (payload) => {
-      updateReviewers(startrek, options, payload)
+      updateReviewers(startrek, options, payload, logger)
         .catch(logger.error.bind(logger));
     });
   });

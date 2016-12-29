@@ -63,7 +63,7 @@ describe('services/command/start', function () {
       .then(done, done);
   });
 
-  it('should return rejected promise if triggered by not an author', function (done) {
+  it.skip('should return rejected promise if triggered by not an author', function (done) {
     comment.user.login = 'Spider-Man';
 
     command('/start', payload)

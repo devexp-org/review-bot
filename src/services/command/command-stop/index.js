@@ -1,5 +1,3 @@
-import util from 'util';
-
 export const EVENT_NAME = 'review:command:stop';
 export const COMMAND_RE = '/stop';
 
@@ -21,7 +19,7 @@ export default function setup(options, imports) {
   const stopCommand = function stopCommand(command, payload) {
 
     const pullRequest = payload.pullRequest;
-    const commentUser = payload.comment.user.login;
+    // const commentUser = payload.comment.user.login;
 
     logger.info('"/stop" %s', pullRequest);
 

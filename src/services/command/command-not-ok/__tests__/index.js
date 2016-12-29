@@ -77,11 +77,11 @@ describe('services/command/not_ok', function () {
       .then(done, done);
   });
 
-  it('should change status from `complete` to `notstarted`', function (done) {
+  it('should change status from `complete` to `changesneeded`', function (done) {
     pullRequest.review.status = 'complete';
 
     command('/!ok', payload)
-      .then(() => assert.called(pullRequestReview.stopReview))
+      .then(() => assert.called(pullRequestReview.changesNeeded))
       .then(done, done);
   });
 
