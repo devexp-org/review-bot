@@ -1,5 +1,4 @@
 {
-  "parser": "babel-eslint",
   "env": {
     "es6": true,
     "node": true,
@@ -8,6 +7,9 @@
   "globals": {
     "sinon": true,
     "assert": true
+  },
+  "parserOptions": {
+    "sourceType": "module"
   },
   "rules": {
     // possible errors
