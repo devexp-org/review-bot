@@ -18,13 +18,6 @@ export class PreferredReviewStep extends AbstractReviewStep
   }
 
   /**
-   * @override
-   */
-  name() {
-    return 'preferred';
-  }
-
-  /**
    * Finds users in description
    *
    * @param {String} body

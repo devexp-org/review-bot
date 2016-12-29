@@ -19,14 +19,6 @@ describe('services/review/steps/ignore', function () {
     pullRequest.user.login = 'Black Widow';
   });
 
-  describe('#name', function () {
-
-    it('should return `ignore`', function () {
-      assert.equal(step.name(), 'ignore');
-    });
-
-  });
-
   describe('#config', function () {
 
     it('should return step config', function () {

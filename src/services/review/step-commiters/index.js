@@ -16,13 +16,6 @@ export class CommitersReviewStep extends AbstractReviewStep
   /**
    * @override
    */
-  name() {
-    return 'commiters';
-  }
-
-  /**
-   * @override
-   */
   config() {
     return {
       max: { type: 'number' },

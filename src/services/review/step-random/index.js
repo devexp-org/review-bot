@@ -7,13 +7,6 @@ export class RandomReviewStep extends AbstractReviewStep
   /**
    * @override
    */
-  name() {
-    return 'random';
-  }
-
-  /**
-   * @override
-   */
   config() {
     return {
       max: {

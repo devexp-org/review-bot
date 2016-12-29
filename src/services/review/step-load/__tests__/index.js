@@ -40,14 +40,6 @@ describe('services/review/steps/load', function () {
     step = service({}, imports);
   });
 
-  describe('#name', function () {
-
-    it('should return `ignore`', function () {
-      assert.equal(step.name(), 'load');
-    });
-
-  });
-
   describe('#config', function () {
 
     it('should return step config', function () {

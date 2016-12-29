@@ -7,15 +7,6 @@ export default class AbstractReviewStep {
   }
 
   /**
-   * Returns name of step.
-   *
-   * @return {String}
-   */
-  name() {
-    return '';
-  }
-
-  /**
    * Returns config for step.
    *
    * @return {Object}

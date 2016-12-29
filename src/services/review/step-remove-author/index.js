@@ -5,13 +5,6 @@ export class RemoveAuthorReviewStep extends AbstractReviewStep
 {
 
   /**
-   * @override
-   */
-  name() {
-    return 'remove-author';
-  }
-
-  /**
    * Removes author from review.
    *
    * @override

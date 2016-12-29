@@ -13,8 +13,6 @@ export function abstractDriverMock() {
 export function abstractDriverFactoryMock() {
 
   return {
-    name: sinon.stub().returns('name'),
-
     config: sinon.stub().returns({}),
 
     makeDriver: sinon.stub().returns(abstractDriverMock())

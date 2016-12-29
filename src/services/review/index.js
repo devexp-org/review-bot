@@ -7,14 +7,14 @@ export default function setup(options, imports) {
   const logger = imports.logger.getLogger('review');
   const teamManager = imports['team-manager'];
 
-  forEach(options.steps, (stepName) => {
-    const stepModule = imports[stepName];
+  forEach(options.steps, (moduleName, stepName) => {
+    const stepModule = imports[moduleName];
 
     if (!stepModule) {
       throw new Error(`Cannot find step module "${stepName}"`);
     }
 
-    steps[stepModule.name()] = stepModule;
+    steps[stepName] = stepModule;
   });
 
   return new Review(steps, options, { logger, teamManager });

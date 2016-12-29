@@ -18,13 +18,6 @@ export class LoadReviewStep extends AbstractReviewStep
   /**
    * @override
    */
-  name() {
-    return 'load';
-  }
-
-  /**
-   * @override
-   */
   config() {
     return {
       max: {

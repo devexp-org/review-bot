@@ -5,13 +5,6 @@ export class TotalReviewStep extends AbstractReviewStep
 {
 
   /**
-   * @override
-   */
-  name() {
-    return 'total';
-  }
-
-  /**
    * Take defined number of team member for review.
    *
    * @override

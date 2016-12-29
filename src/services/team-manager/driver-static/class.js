@@ -51,13 +51,6 @@ export class StaticDriverFactory extends AbstractDriverFactory {
   /**
    * @override
    */
-  name() {
-    return 'static';
-  }
-
-  /**
-   * @override
-   */
   config() {
     return {};
   }

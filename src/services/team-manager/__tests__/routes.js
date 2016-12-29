@@ -20,15 +20,10 @@ describe('services/team-manager/routes', function () {
     options = {};
     imports = { logger, 'team-manager': teamManager };
 
-    drivers = [
-      {
-        name: () => 'static',
-        config: () => { return {}; } },
-      {
-        name: () => 'github',
-        config: () => { return { orgName: { type: 'string' } }; }
-      }
-    ];
+    drivers = {
+      'static': { config: () => { return {}; } },
+      github: { config: () => { return { orgName: { type: 'string' } }; } }
+    };
 
     teamManager.getDrivers.returns(drivers);
 

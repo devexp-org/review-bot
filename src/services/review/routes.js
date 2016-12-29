@@ -10,8 +10,8 @@ export default function setup(options, imports) {
   reviewRoute.get('/steps', function (req, res) {
     const steps = {};
 
-    forEach(review.getSteps(), (step) => {
-      steps[step.name()] = step.config();
+    forEach(review.getSteps(), (step, name) => {
+      steps[name] = step.config();
     });
 
     res.json(steps);

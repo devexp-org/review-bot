@@ -6,13 +6,6 @@ export class RemoveReviewersReviewStep extends AbstractReviewStep
 {
 
   /**
-   * @override
-   */
-  name() {
-    return 'remove-reviewers';
-  }
-
-  /**
    * Removes candidates which are already reviewers.
    *
    * @override

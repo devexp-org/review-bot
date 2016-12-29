@@ -10,8 +10,8 @@ export default function setup(options, imports) {
   teamManagerRoute.get('/drivers', function (req, res) {
     const drivers = {};
 
-    forEach(teamManager.getDrivers(), (factory) => {
-      drivers[factory.name()] = factory.config();
+    forEach(teamManager.getDrivers(), (factory, name) => {
+      drivers[name] = factory.config();
     });
 
     res.json(drivers);

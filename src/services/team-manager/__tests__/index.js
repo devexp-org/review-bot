@@ -30,10 +30,7 @@ describe('services/team-manager', function () {
 
   it('should setup a team manager', function () {
     const factory1 = teamDriverFactoryMock();
-    factory1.name.returns('name1');
-
     const factory2 = teamDriverFactoryMock();
-    factory2.name.returns('name2');
 
     options.drivers = { name1: 'driver1', name2: 'driver2' };
     imports.driver1 = factory1;

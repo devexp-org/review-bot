@@ -18,14 +18,6 @@ describe('services/review/steps/random', function () {
     pullRequest = pullRequestMock();
   });
 
-  describe('#name', function () {
-
-    it('should return `random`', function () {
-      assert.equal(step.name(), 'random');
-    });
-
-  });
-
   describe('#config', function () {
 
     it('should return step config', function () {

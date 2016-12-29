@@ -22,14 +22,6 @@ describe('services/review/steps/remove_reviewers', function () {
     };
   });
 
-  describe('#name', function () {
-
-    it('should return `remove-reviewers`', function () {
-      assert.equal(step.name(), 'remove-reviewers');
-    });
-
-  });
-
   describe('#config', function () {
 
     it('should return step config', function () {

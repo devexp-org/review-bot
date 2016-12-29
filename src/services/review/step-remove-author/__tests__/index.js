@@ -17,14 +17,6 @@ describe('services/review/steps/remove_author', function () {
     pullRequest.user.login = 'Black Widow';
   });
 
-  describe('#name', function () {
-
-    it('should return `remove-author`', function () {
-      assert.equal(step.name(), 'remove-author');
-    });
-
-  });
-
   describe('#config', function () {
 
     it('should return step config', function () {

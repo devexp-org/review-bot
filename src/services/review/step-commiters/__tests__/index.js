@@ -41,14 +41,6 @@ describe('services/review/steps/commiters', function () {
 
   });
 
-  describe('#name', function () {
-
-    it('should return `ignore`', function () {
-      assert.equal(step.name(), 'commiters');
-    });
-
-  });
-
   describe('#config', function () {
 
     it('should return step config', function () {

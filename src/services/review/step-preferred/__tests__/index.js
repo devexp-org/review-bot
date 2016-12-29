@@ -29,14 +29,6 @@ describe('services/review/steps/preferred', function () {
     step = service({}, imports);
   });
 
-  describe('#name', function () {
-
-    it('should return `preferred`', function () {
-      assert.equal(step.name(), 'preferred');
-    });
-
-  });
-
   describe('#config', function () {
 
     it('should return step config', function () {

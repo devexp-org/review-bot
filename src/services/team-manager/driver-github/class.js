@@ -124,10 +124,6 @@ export class GitHubDriverFactory extends StaticDriverFactory {
     this.github = github;
   }
 
-  name() {
-    return 'github';
-  }
-
   config() {
     return {
       orgName: {

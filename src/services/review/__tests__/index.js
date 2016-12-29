@@ -28,12 +28,9 @@ describe('services/review', function () {
 
   it('should setup a review service', function () {
     const step1 = reviewStepMock();
-    step1.name.returns('name1');
-
     const step2 = reviewStepMock();
-    step2.name.returns('name2');
 
-    options.steps = ['step1', 'step2'];
+    options.steps = { name1: 'step1', name2: 'step2' };
 
     imports.step1 = step1;
     imports.step2 = step2;

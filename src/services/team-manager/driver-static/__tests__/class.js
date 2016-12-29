@@ -49,14 +49,6 @@ describe('services/team-manager/driver-static/class', function () {
 
   });
 
-  describe('#name', function () {
-
-    it('should return `static`', function () {
-      assert.equal(factory.name(), 'static');
-    });
-
-  });
-
   describe('#config', function () {
 
     it('should return driver config', function () {

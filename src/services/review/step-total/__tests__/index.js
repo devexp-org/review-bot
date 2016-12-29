@@ -17,14 +17,6 @@ describe('services/review/steps/total', function () {
     step = service();
   });
 
-  describe('#name', function () {
-
-    it('should return `total`', function () {
-      assert.equal(step.name(), 'total');
-    });
-
-  });
-
   describe('#config', function () {
 
     it('should return step config', function () {

@@ -7,13 +7,6 @@ export class IgnoreReviewStep extends AbstractReviewStep
   /**
    * @override
    */
-  name() {
-    return 'ignore';
-  }
-
-  /**
-   * @override
-   */
   config() {
     return {
       list: {

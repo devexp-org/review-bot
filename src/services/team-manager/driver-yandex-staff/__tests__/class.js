@@ -70,4 +70,12 @@ describe('services/team-manager/driver-yandex-staff/class', function () {
 
   });
 
+  describe('#config', function () {
+
+    it('should return driver config', function () {
+      assert.isObject(factory.config());
+    });
+
+  });
+
 });

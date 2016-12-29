@@ -17,7 +17,6 @@ describe('services/team-manager/driver-github', function () {
   it('should be resolved to StaticDriverFactory', function () {
     factory = service(options, imports);
 
-    assert.property(factory, 'name');
     assert.property(factory, 'config');
     assert.property(factory, 'makeDriver');
   });

@@ -8,14 +8,6 @@ describe('services/review/step', function () {
     step = new AbstractReviewStep();
   });
 
-  describe('#name', function () {
-
-    it('should return ``', function () {
-      assert.equal(step.name(), '');
-    });
-
-  });
-
   describe('#config', function () {
 
     it('should return step config', function () {

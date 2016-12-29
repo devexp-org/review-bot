@@ -51,15 +51,6 @@ export class AbstractDriver {
 export class AbstractDriverFactory {
 
   /**
-   * Returns name of driver.
-   *
-   * @return {String}
-   */
-  name() {
-    return '';
-  }
-
-  /**
    * Returns config for driver.
    *
    * @return {Object}

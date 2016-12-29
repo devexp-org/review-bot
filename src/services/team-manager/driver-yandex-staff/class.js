@@ -49,10 +49,6 @@ export class YandexStaffDriverFactory extends StaticDriverFactory {
     this.staff = staff;
   }
 
-  name() {
-    return 'yandex-staff';
-  }
-
   config() {
     return {
       groupId: {
