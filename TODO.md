@@ -5,7 +5,6 @@
 
 # MAJOR
 * review: перенести project-config
-* command: подключать обработчики через `plugin-manager`.
 * notification: подключаться только при необходимости отправить сообщение. И отключаться по таймауту.
 
 # MINOR

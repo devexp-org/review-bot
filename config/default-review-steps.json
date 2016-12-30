@@ -88,6 +88,20 @@
     ]
   },
 
+  "review-step-project-config": {
+    "path": "./src/services/review/step-project-config",
+    "#plugin:review": {
+      "steps": {
+        "project-config": "review-step-project-config"
+      }
+    },
+    "dependencies": [
+      "logger",
+      "github",
+      "team-manager"
+    ]
+  },
+
   "review-step-total": {
     "path": "./src/services/review/step-total",
     "#plugin:review": {

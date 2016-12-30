@@ -1,25 +1,35 @@
-import ProjectConfig from '../class';
+import service from '../';
+import { find } from 'lodash';
 
-import loggerMock from '../../../services/logger/__mocks__/';
-import githubMock from '../../../services/github/__mocks__/';
-import teamManagerMock from '../../../services/team-manager/__mocks__/';
-import { teamDriverMock } from '../../../services/team-manager/__mocks__/';
-import { pullRequestMock } from '../../../services/model/model-pull-request/__mocks__/';
-import { pullRequestModelReviewMixin } from '../../../services/pull-request-review/__mocks__/';
+import { reviewMock } from '../../__mocks__/';
+import loggerMock from '../../../logger/__mocks__/';
+import githubMock from '../../../github/__mocks__/';
+import teamManagerMock from '../../../team-manager/__mocks__/';
+import { teamDriverMock } from '../../../team-manager/__mocks__/';
+import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';
+import { pullRequestModelReviewMixin } from '../../../pull-request-review/__mocks__/';
 
-describe('services/project-config/config', function () {
+describe('services/review/steps/project-config', function () {
 
-  let team, logger, github, options, config;
-  let pullRequest, teamManager, projectConfig;
-
-  const encode = (config) => {
-    return new Buffer(JSON.stringify(config)).toString('base64');
-  };
+  let step, team, logger, github, config, teamManager, pullRequest;
+  let encode, review, members, options, imports;
 
   beforeEach(function () {
 
+    team = teamDriverMock();
+
+    members = reviewMock();
+
+    encode = (config) => {
+      return new Buffer(JSON.stringify(config)).toString('base64');
+    };
+
     logger = loggerMock();
     github = githubMock();
+    teamManager = teamManagerMock(team);
+
+    options = {};
+    imports = { logger, github, 'team-manager': teamManager };
 
     pullRequest = pullRequestMock(pullRequestModelReviewMixin);
 
@@ -31,20 +41,26 @@ describe('services/project-config/config', function () {
       { filename: '5.txt' }
     ];
 
-    team = teamDriverMock();
-
     team.findTeamMember
-      .withArgs('foo').returns(Promise.resolve({ login: 'foo' }));
+      .withArgs('foo')
+      .returns(Promise.resolve({ login: 'foo' }));
     team.findTeamMember
-      .withArgs('bar').returns(Promise.resolve({ login: 'bar' }));
+      .withArgs('bar')
+      .returns(Promise.resolve({ login: 'bar' }));
     team.findTeamMember
-      .withArgs('baz').returns(Promise.resolve({ login: 'baz' }));
+      .withArgs('baz')
+      .returns(Promise.resolve({ login: 'baz' }));
 
-    teamManager = teamManagerMock();
-    teamManager.findTeamByPullRequest.returns(team);
+    review = { members, pullRequest };
 
-    options = {};
-    projectConfig = new ProjectConfig(logger, github, teamManager, options);
+    step = service(options, imports);
+  });
+
+  describe('#config', function () {
+
+    it('should return step config', function () {
+      assert.isObject(step.config());
+    });
 
   });
 
@@ -80,20 +96,14 @@ describe('services/project-config/config', function () {
         .callsArgWith(1, null, { content: encode(config) });
 
       const expected = {
-        addMembers: [
-          { login: 'bar', pattern: '*.txt' }
-        ],
-        removeMembers: [
-          { login: 'foo', pattern: '*.css' },
-          { login: 'baz', pattern: '*.css' }
-        ],
+        addMembers: ['bar'],
+        removeMembers: ['foo', 'baz'],
         addOnlySpecial: true
       };
 
-      projectConfig.readConfig(pullRequest)
+      step.readConfig(pullRequest)
         .then(patch => assert.deepEqual(patch, expected))
         .then(done, done);
-
     });
 
     it('should ignore user if he is not in team', function (done) {
@@ -112,15 +122,16 @@ describe('services/project-config/config', function () {
         .callsArgWith(1, null, { content: encode(config) });
 
       team.findTeamMember
-        .withArgs('bar').returns(Promise.resolve(null));
+        .withArgs('bar')
+        .returns(Promise.resolve(null));
 
       const expected = {
-        addMembers: [{ login: 'foo', pattern: '*.txt' }],
+        addMembers: ['foo'],
         removeMembers: [],
         addOnlySpecial: false
       };
 
-      projectConfig.readConfig(pullRequest)
+      step.readConfig(pullRequest)
         .then(patch => assert.deepEqual(patch, expected))
         .then(done, done);
 
@@ -137,7 +148,7 @@ describe('services/project-config/config', function () {
         addOnlySpecial: false
       };
 
-      projectConfig.readConfig(pullRequest)
+      step.readConfig(pullRequest)
         .then(patch => assert.deepEqual(patch, expected))
         .then(done, done);
 
@@ -154,7 +165,7 @@ describe('services/project-config/config', function () {
         addOnlySpecial: false
       };
 
-      projectConfig.readConfig(pullRequest)
+      step.readConfig(pullRequest)
         .then(patch => assert.deepEqual(patch, expected))
         .then(done, done);
 
@@ -163,17 +174,18 @@ describe('services/project-config/config', function () {
     it('should return rejected promise if team is not found', function (done) {
 
       teamManager.findTeamByPullRequest
-        .returns(null);
+        .returns(Promise.resolve(null));
 
       github.repos.getContent
         .callsArgWith(1, null, { content: encode({ specialReviewers: [] }) });
 
-      projectConfig.readConfig(pullRequest)
+      step.readConfig(pullRequest)
         .then(() => assert.fail())
         .catch(e => assert.match(e.message, /not found/))
         .then(done, done);
 
     });
+
 
   });
 
@@ -194,13 +206,17 @@ describe('services/project-config/config', function () {
       github.repos.getContent
         .callsArgWith(1, null, { content: encode(config) });
 
-      const expected = [
-        { login: 'foo', rank: 1000, special: true },
-        { login: 'bar', rank: 1000, special: true }
-      ];
+      step.process(review, {})
+        .then(actual => {
+          const fooMember = find(actual.members, { login: 'foo' });
+          const barMember = find(actual.members, { login: 'bar' });
 
-      projectConfig.process(pullRequest)
-        .then(patch => assert.sameDeepMembers(patch, expected))
+          assert.isObject(fooMember);
+          assert.isObject(barMember);
+          assert.propertyVal(fooMember, 'rank', 1000);
+          assert.propertyVal(fooMember, 'special', true);
+          assert.lengthOf(actual.members, 9);
+        })
         .then(done, done);
 
     });
@@ -211,7 +227,7 @@ describe('services/project-config/config', function () {
         specialReviewers: [
           {
             pattern: ['*.txt'],
-            removeMembers: ['foo', 'bar']
+            removeMembers: ['foo', 'bar', 'Hulk']
           }
         ]
       };
@@ -219,13 +235,15 @@ describe('services/project-config/config', function () {
       github.repos.getContent
         .callsArgWith(1, null, { content: encode(config) });
 
-      const expected = [
-        { login: 'foo', rank: -1000 },
-        { login: 'bar', rank: -1000 }
-      ];
+      step.process(review, {})
+        .then(actual => {
+          const fooMember = find(actual.members, { login: 'foo' });
+          const halkMember = find(actual.members, { login: 'Hulk' });
 
-      projectConfig.process(pullRequest)
-        .then(patch => assert.sameDeepMembers(patch, expected))
+          assert.isUndefined(fooMember);
+          assert.isUndefined(halkMember);
+          assert.lengthOf(actual.members, 6);
+        })
         .then(done, done);
 
     });
@@ -236,12 +254,12 @@ describe('services/project-config/config', function () {
         specialReviewers: [
           {
             pattern: ['*.txt'],
-            addMembers: ['foo', 'bar'],
-            membersToAdd: 2
+            addMembers: ['foo'],
+            membersToAdd: 1
           },
           {
             pattern: ['*.css'],
-            removeMembers: ['foo', 'baz']
+            removeMembers: ['Hulk']
           }
         ]
       };
@@ -249,14 +267,15 @@ describe('services/project-config/config', function () {
       github.repos.getContent
         .callsArgWith(1, null, { content: encode(config) });
 
-      const expected = [
-        { login: 'bar', rank: 1000, special: true },
-        { login: 'foo', rank: -1000 },
-        { login: 'baz', rank: -1000 }
-      ];
+      step.process(review, {})
+        .then(actual => {
+          const fooMember = find(actual.members, { login: 'foo' });
+          const halkMember = find(actual.members, { login: 'Hulk' });
 
-      projectConfig.process(pullRequest)
-        .then(patch => assert.deepEqual(patch, expected))
+          assert.isObject(fooMember);
+          assert.isUndefined(halkMember);
+          assert.lengthOf(actual.members, 7);
+        })
         .then(done, done);
 
     });
