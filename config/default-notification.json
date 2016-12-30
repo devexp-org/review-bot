@@ -1,5 +1,14 @@
 {
 
+  "notification-message-help": {
+    "path": "./src/services/notification/message-help",
+    "dependencies": [
+      "events",
+      "logger",
+      "notification"
+    ]
+  },
+
   "notification-message-ping": {
     "path": "./src/services/notification/message-ping",
     "dependencies": [
