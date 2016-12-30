@@ -9,7 +9,7 @@ export default function setup(options, imports) {
   service.shutdown = () => {
     return new Promise(resolve => {
       logger.info('Shutdown start');
-      service.close(() => {
+      service.close().then(() => {
         logger.info('Shutdown finish');
         resolve();
       });

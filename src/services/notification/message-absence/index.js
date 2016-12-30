@@ -39,7 +39,9 @@ export default function setup(options, imports) {
           .value();
 
         if (absenceUsers.length) {
-          notification(payload.pullRequest, login, message(payload, absenceUsers))
+          notification.sendMessage(
+              payload.pullRequest, login, message(payload, absenceUsers)
+            )
             .catch(logger.error.bind(logger));
         }
 

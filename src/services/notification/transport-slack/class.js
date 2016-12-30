@@ -74,14 +74,14 @@ export default class Slack extends AbstractTransport {
   /**
    * Stop listen incoming message and close socket.
    *
-   * @param {Function} callback
+   * @return {Promise}
    */
-  close(callback) {
+  close() {
     if (this._client) {
       this._client.disconnect();
     }
 
-    callback && callback();
+    return Promise.resolve();
   }
 
   /**
@@ -90,6 +90,8 @@ export default class Slack extends AbstractTransport {
    *
    * @param {String} to - username
    * @param {String} body - message body
+   *
+   * @return {Promise}
    */
   send(to, body) {
     const mail = to.login + '@' + this._host;
@@ -117,6 +119,8 @@ export default class Slack extends AbstractTransport {
       this.logger.error(`Error on sending message to ${mail} — ${user.id}`);
       this.logger.error(e);
     }
+
+    return Promise.resolve();
   }
 
 }

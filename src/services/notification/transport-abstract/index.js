@@ -5,17 +5,20 @@ export default class AbstractTransport {
    *
    * @param {String} login
    * @param {String} message
+   *
+   * @return {Promise}
    */
   send(login, message) {
+    return Promise.resolve();
   }
 
   /**
    * Stop listen incoming message and close socket.
    *
-   * @param {Function} [callback]
+   * @return {Promise}
    */
-  close(callback) {
-    callback && callback();
+  close() {
+    return Promise.resolve();
   }
 
   /**

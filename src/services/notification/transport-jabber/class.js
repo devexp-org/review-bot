@@ -102,9 +102,9 @@ export default class Jabber extends AbstractTransport {
   /**
    * Stop listen incoming message and close socket.
    *
-   * @param {Function} [callback]
+   * @return {Promise}
    */
-  close(callback) {
+  close() {
     if (this._client) {
       this._client.end();
     }
@@ -113,7 +113,7 @@ export default class Jabber extends AbstractTransport {
 
     clearInterval(this._keepAliveId);
 
-    callback && callback();
+    return Promise.resolve();
   }
 
   /**
@@ -124,6 +124,8 @@ export default class Jabber extends AbstractTransport {
    *
    * @param {String} user - user login
    * @param {String} body - message body
+   *
+   * @return {Promise}
    */
   send(user, body) {
     const to = user.login + '@yandex-team.ru';
@@ -137,6 +139,8 @@ export default class Jabber extends AbstractTransport {
         this._queue = this._queue.slice(-this._maxQueue);
       }
     }
+
+    return Promise.resolve();
   }
 
   /**

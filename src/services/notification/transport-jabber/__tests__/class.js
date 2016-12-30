@@ -25,14 +25,6 @@ describe('services/notification/transport-jabber/class', function () {
 
   describe('#constructor', function () {
 
-    it('should return Jabber', function () {
-      const jabber = new Jabber(logger, options);
-
-      assert.property(jabber, 'send');
-      assert.property(jabber, 'close');
-      assert.property(jabber, 'connect');
-    });
-
     it('should throw an error if login or password is not set', function () {
       assert.throws(() => new Jabber(logger, {}), /login and password/);
     });
@@ -41,57 +33,43 @@ describe('services/notification/transport-jabber/class', function () {
 
   describe('#connect', function () {
 
-    let clock;
-    beforeEach(function () {
-      clock = sinon.useFakeTimers();
-    });
-
-    afterEach(function () {
-      clock.restore();
-    });
-
     it('should initiate connection to jabber host', function (done) {
       jabber.connect()
         .then(() => assert.called(xmpp.connect))
-        .then(() => jabber.close(done))
-        .catch(done);
-    });
-
-    it('should initiate connection to jabber host', function (done) {
-      jabber.connect()
-        .then(() => assert.called(xmpp.connect))
-        .then(() => jabber.close(done))
-        .catch(done);
+        .then(done, done);
     });
 
     it('should log errors', function (done) {
-      xmpp.on.withArgs('error').callsArgWith(1, new Error());
+      xmpp.on
+        .withArgs('error')
+        .callsArgWith(1, new Error());
 
       jabber.connect()
         .then(() => assert.called(logger.error))
-        .then(() => jabber.close(done))
-        .catch(done);
-
+        .then(done, done);
     });
 
     it('should log when goes online', function (done) {
       const data = { jid: { user: 'user', domain: 'domain' } };
-      xmpp.on.withArgs('online').callsArgWith(1, data);
+      xmpp.on
+        .withArgs('online')
+        .callsArgWith(1, data);
 
       sinon.stub(jabber, 'checkQueue');
 
       jabber.connect()
-        .then(() => jabber.close(done))
-        .catch(done);
+        .then(() => assert.called(logger.info))
+        .then(done, done);
     });
 
     it('should log when goes offline', function (done) {
-      xmpp.on.withArgs('offline').callsArgWith(1);
+      xmpp.on
+        .withArgs('offline')
+        .callsArgWith(1);
 
       jabber.connect()
         .then(() => assert.called(logger.info))
-        .then(() => jabber.close(done))
-        .catch(done);
+        .then(done, done);
     });
 
     it('should log when receive message', function (done) {
@@ -99,8 +77,7 @@ describe('services/notification/transport-jabber/class', function () {
 
       jabber.connect()
         .then(() => assert.called(logger.info))
-        .then(() => jabber.close(done))
-        .catch(done);
+        .then(done, done);
     });
 
   });
@@ -109,17 +86,15 @@ describe('services/notification/transport-jabber/class', function () {
 
     it('should close connection to jabber', function (done) {
       jabber.connect()
-        .then(() => jabber.close(() => {
-          assert.called(xmpp.end);
-          done();
-        }));
+        .then(() => jabber.close())
+        .then(() => assert.called(xmpp.end))
+        .then(done, done);
     });
 
     it('should not throw an error if client is not connect before', function (done) {
-      jabber.close(() => {
-        assert.notCalled(xmpp.end);
-        done();
-      });
+      jabber.close()
+        .then(() => assert.notCalled(xmpp.end))
+        .then(done, done);
     });
 
   });
@@ -128,28 +103,27 @@ describe('services/notification/transport-jabber/class', function () {
 
     it('should send message to user if client is online', function (done) {
       const data = { jid: { user: 'user', domain: 'domain' } };
-      xmpp.on.withArgs('online').callsArgWith(1, data);
+
+      xmpp.on
+        .withArgs('online')
+        .callsArgWith(1, data);
 
       jabber.connect()
         .then(() => jabber.send('foo', 'message'))
         .then(() => assert.called(xmpp.send))
-        .then(() => jabber.close(done))
-        .catch(done);
-
+        .then(done, done);
     });
 
     it('should enqueue message if client is offline', function (done) {
-
       jabber.connect()
         .then(() => jabber.send('foo', 'message'))
         .then(() => assert.notCalled(xmpp.send))
-        .then(() => jabber.close(done))
-        .catch(done);
-
+        .then(done, done);
     });
 
     it('should send message from queue when client goes online', function (done) {
       const data = { jid: { user: 'user', domain: 'domain' } };
+
       setTimeout(() => {
         xmpp.on.withArgs('online').callArgWith(1, data);
       }, 5);
@@ -158,19 +132,25 @@ describe('services/notification/transport-jabber/class', function () {
         .then(() => jabber.send('foo', 'message'))
         .then(() => assert.notCalled(xmpp.send))
         .then(() => {
-          setTimeout(() => {
-            assert.called(xmpp.send);
-            done();
-          }, 10);
+          return new Promise(resolve => {
+            setTimeout(() => {
+              assert.called(xmpp.send);
+              resolve();
+            }, 10);
+          });
         })
-        .catch(done);
+        .then(done, done);
     });
 
     it('should not send message in silent mode', function (done) {
       const data = { jid: { user: 'user', domain: 'domain' } };
-      xmpp.on.withArgs('online').callsArgWith(1, data);
+
+      xmpp.on
+        .withArgs('online')
+        .callsArgWith(1, data);
 
       options.silent = true;
+
       jabber = new Jabber(logger, options);
 
       jabber.connect()
@@ -193,26 +173,31 @@ describe('services/notification/transport-jabber/class', function () {
         .then(done, done);
     });
 
-    it('should not keep to many messages in queue', function (done) {
+    it('should not keep too many messages in queue', function (done) {
 
       const data = { jid: { user: 'user', domain: 'domain' } };
+
       setTimeout(() => {
         xmpp.on.withArgs('online').callArgWith(1, data);
       }, 5);
 
       jabber.connect()
         .then(() => {
+          const promise = [];
           for (let i = 0; i < 1000; i++) {
-            jabber.send('foo', 'message');
+            promise.push(jabber.send('foo', 'message'));
           }
+          return Promise.all(promise);
         })
         .then(() => {
-          setTimeout(() => {
-            assert.isBelow(xmpp.send.callCount, 500);
-            done();
-          }, 10);
+          return new Promise(resolve => {
+            setTimeout(() => {
+              assert.isBelow(xmpp.send.callCount, 500);
+              resolve();
+            }, 10);
+          });
         })
-        .catch(done);
+        .then(done, done);
 
     });
 

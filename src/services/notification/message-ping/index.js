@@ -25,7 +25,7 @@ export default function setup(options, imports) {
     const body = message(payload);
 
     const promise = map(reviewers, (member) => {
-      return notification(payload.pullRequest, member.login, body)
+      return notification.sendMessage(payload.pullRequest, member.login, body)
         .catch(logger.error.bind(logger));
     });
 

@@ -1,6 +1,8 @@
 import service from '../';
+
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
+import notificationMock from '../../__mocks__/';
 import { pullRequestMock } from '../../..//model/model-pull-request/__mocks__/';
 
 describe('services/notification/message-ping', function () {
@@ -13,7 +15,7 @@ describe('services/notification/message-ping', function () {
     events = eventsMock();
     logger = loggerMock();
 
-    notification = sinon.stub().returns(Promise.resolve());
+    notification = notificationMock();
 
     pullRequest = pullRequestMock();
 
@@ -40,8 +42,8 @@ describe('services/notification/message-ping', function () {
 
     service(options, imports);
 
-    assert.calledWith(notification, pullRequest, 'Black Widow');
-    assert.calledWith(notification, pullRequest, 'Spider-Man');
+    assert.calledWith(notification.sendMessage, pullRequest, 'Black Widow');
+    assert.calledWith(notification.sendMessage, pullRequest, 'Spider-Man');
   });
 
   it('should not send ping message to approved reviewers', function () {
@@ -54,8 +56,8 @@ describe('services/notification/message-ping', function () {
 
     service(options, imports);
 
-    assert.calledWith(notification, pullRequest, 'Black Widow');
-    assert.neverCalledWith(notification, pullRequest, 'Spider-Man');
+    assert.calledWith(notification.sendMessage, pullRequest, 'Black Widow');
+    assert.neverCalledWith(notification.sendMessage, pullRequest, 'Spider-Man');
   });
 
 });

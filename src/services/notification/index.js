@@ -1,6 +1,5 @@
-function getServiceName(transport) {
-  return 'notification-' + transport;
-}
+import { forEach } from 'lodash';
+import Notification from './class';
 
 /**
  * Notification service
@@ -14,41 +13,18 @@ export default function setup(options, imports) {
 
   const teamManager = imports['team-manager'];
 
-  /**
-   *
-   * @param {PullRequest} pullRequest
-   * @param {String} addressee
-   * @param {String} message
-   *
-   * @return {Promise}
-   */
-  return function send(pullRequest, addressee, message) {
+  const transports = {};
 
-    return teamManager.findTeamByPullRequest(pullRequest)
-      .then(team => {
-        if (!team) {
-          throw new Error(`The team for ${pullRequest} is not found`);
-        }
+  forEach(options.transports, (moduleName, transportName) => {
+    const transportModule = imports[moduleName];
 
-        const transport = team.getOption('notification');
-        const serviceName = getServiceName(transport);
-        const sendService = imports[serviceName];
+    if (!transportModule) {
+      throw new Error(`Cannot find transport module "${transportName}"`);
+    }
 
-        if (!sendService) {
-          throw new Error(`The transport '${serviceName}" is not found`);
-        }
+    transports[transportName] = transportModule;
+  });
 
-        return team
-          .findTeamMember(addressee)
-          .then(user => {
-            if (!user) {
-              throw new Error(`The user '${addressee}" is not found in team ${team.name}`);
-            }
-
-            sendService.send(user, message);
-          });
-      });
-
-  };
+  return new Notification(transports, teamManager);
 
 }

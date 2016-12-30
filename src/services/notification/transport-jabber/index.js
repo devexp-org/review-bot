@@ -9,7 +9,7 @@ export default function setup(options, imports) {
   service.shutdown = () => {
     return new Promise(resolve => {
       logger.info('Shutdown start');
-      service.close(() => {
+      service.close().then(() => {
         logger.info('Shutdown finish');
         resolve();
       });
@@ -17,7 +17,7 @@ export default function setup(options, imports) {
   };
 
   // Ignore promise and don't wait until client goes online.
-  service.connect();
+  !options.offline && service.connect();
 
   return service;
 

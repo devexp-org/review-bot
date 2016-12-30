@@ -38,8 +38,7 @@
 
   "notification-jabber": {
     "path": "./src/services/notification/transport-jabber",
-    "ignore": true,
-    "#comment:#plugin:notification": {
+    "#plugin:notification": {
       "transports": ["notification-jabber"]
     },
     "options": {

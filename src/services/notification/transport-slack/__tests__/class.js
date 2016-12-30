@@ -26,12 +26,6 @@ describe('services/notification/transport-slack/class', function () {
 
   describe('#constructor', function () {
 
-    it('should return Slack', function () {
-      assert.property(slack, 'send');
-      assert.property(slack, 'close');
-      assert.property(slack, 'connect');
-    });
-
     it('should throw an error if token is not set', function () {
       assert.throws(() => new Slack(logger, {}), /token/);
     });
@@ -62,17 +56,15 @@ describe('services/notification/transport-slack/class', function () {
 
     it('should close connection to slack', function (done) {
       slack.connect()
-        .then(() => slack.close(() => {
-          assert.called(client.disconnect);
-          done();
-        }));
+        .then(() => slack.close())
+        .then(() => assert.called(client.disconnect))
+        .then(done, done);
     });
 
     it('should not throw an error if client is not connect before', function (done) {
-      slack.close(() => {
-        assert.notCalled(client.disconnect);
-        done();
-      });
+      slack.close()
+        .then(() => assert.notCalled(client.disconnect))
+        .then(done, done);
     });
 
   });

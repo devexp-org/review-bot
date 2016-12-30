@@ -1,88 +1,41 @@
 import service from '../';
-import { userMock } from '../../model/model-user/__mocks__/';
-import { pullRequestMock } from
-  '../../model/model-pull-request/__mocks__/';
-import teamManagerMock, { teamDriverMock } from
-  '../../team-manager/__mocks__/';
+import serviceMock, { transportMock } from '../__mocks__/';
 
 describe('services/notification', function () {
 
-  let user, pullRequest, teamDriver, teamManager;
-  let options, imports, notification, transport;
+  let options, imports;
 
-  beforeEach(function () {
-
-    user = userMock();
-
-    teamDriver = teamDriverMock();
-
-    teamManager = teamManagerMock(teamDriver);
-
-    pullRequest = pullRequestMock();
-
-    teamDriver.getOption
-      .withArgs('notification')
-      .returns('email');
-
-    teamDriver.findTeamMember
-      .withArgs('octocat')
-      .returns(Promise.resolve(user));
-
-    transport = { send: sinon.stub() };
-
+  it('the mock object should have the same methods', function () {
     options = {};
+    imports = {};
 
-    imports = {
-      'team-manager': teamManager,
-      'notification-email': transport
-    };
+    const obj = service(options, imports);
+    const mock = serviceMock();
+    const methods = Object.keys(mock);
 
+    methods.forEach(method => assert.property(obj, method));
   });
 
-  it('should be able to send message using given transport', function (done) {
-    notification = service(options, imports);
+  it('should setup a notification', function () {
+    const transport1 = transportMock();
+    const transport2 = transportMock();
 
-    notification(pullRequest, 'octocat', 'message')
-      .then(() => {
-        transport.send.calledWith(user, 'message');
-      })
-      .then(done, done);
+    options.transports = { name1: 'transport1', name2: 'transport2' };
+    imports.transport1 = transport1;
+    imports.transport2 = transport2;
+
+    const notification = service(options, imports);
+
+    assert.deepEqual(
+      notification.getTransports(),
+      { name1: transport1, name2: transport2 }
+    );
   });
 
-  it('should reject promise if team is not found', function (done) {
-    teamManager.findTeamByPullRequest
-      .returns(Promise.resolve(null));
+  it('should throw an error if transport module was not given', function () {
+    options.transports = ['unknown-transport'];
 
-    notification = service(options, imports);
-
-    notification(pullRequest, 'user', 'message')
-      .then(() => assert.fail())
-      .catch(e => assert.match(e.message, /team .* not found/))
-      .then(done, done);
-  });
-
-  it('should reject promise if transport is not found', function (done) {
-    delete imports['notification-email'];
-
-    notification = service(options, imports);
-
-    notification(pullRequest, 'user', 'message')
-      .then(() => assert.fail())
-      .catch(e => assert.match(e.message, /transport .* not found/))
-      .then(done, done);
-  });
-
-  it('should reject promise if user is not found', function (done) {
-    notification = service(options, imports);
-
-    teamDriver.findTeamMember
-      .withArgs('foo')
-      .returns(Promise.resolve(null));
-
-    notification(pullRequest, 'foo', 'message')
-      .then(() => assert.fail())
-      .catch(e => assert.match(e.message, /user .* not found/))
-      .then(done, done);
+    assert.throws(() => service(options, imports), /cannot find/i);
   });
 
 });

@@ -17,7 +17,7 @@ export default function setup(options, imports) {
   function completeNotification(payload) {
     const login = payload.pullRequest.get('user.login');
 
-    return notification(payload.pullRequest, login, message(payload))
+    return notification.sendMessage(payload.pullRequest, login, message(payload))
       .catch(logger.error.bind(logger));
   }
 

@@ -28,14 +28,13 @@ describe('services/notification/transport-slack', function () {
     methods.forEach(method => assert.property(obj, method));
   });
 
-  it('should close connection when shutdown', function () {
-    const callback = sinon.stub();
+  it('should close connection when shutdown', function (done) {
     const slackService = service(options, imports);
 
-    slackService.close.callsArg(0);
-    slackService.shutdown(callback);
-
-    assert.called(slack.close);
+    slackService
+      .shutdown()
+      .then(() => assert.called(slack.close))
+      .then(done, done);
   });
 
 });

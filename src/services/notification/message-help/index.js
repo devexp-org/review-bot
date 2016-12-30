@@ -11,7 +11,7 @@ export default function setup(options, imports) {
   function helpNotification(payload, link) {
     const login = payload.comment.user.login;
 
-    return notification(payload.pullRequest, login, message(link))
+    return notification.sendMessage(payload.pullRequest, login, message(link))
       .catch(logger.error.bind(logger));
   }
 

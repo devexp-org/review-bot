@@ -1,6 +1,8 @@
 import service from '../';
+
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
+import notificationMock from '../../__mocks__/';
 import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';
 import yandexStaffMock from '../../../../plugins/yandex-staff/__mocks__/';
 
@@ -15,7 +17,7 @@ describe('plugins/notification/absence', function () {
     logger = loggerMock();
     staff = yandexStaffMock();
 
-    notification = sinon.stub().returns(Promise.resolve());
+    notification = notificationMock();
 
     pullRequest = pullRequestMock();
     pullRequest.user = { login: 'Thor' };
@@ -48,7 +50,7 @@ describe('plugins/notification/absence', function () {
     service(options, imports);
 
     setTimeout(() => {
-      assert.calledWith(notification, pullRequest, 'Thor');
+      assert.calledWith(notification.sendMessage, pullRequest, 'Thor');
       done();
     }, 0);
   });
@@ -60,7 +62,7 @@ describe('plugins/notification/absence', function () {
     service(options, imports);
 
     setTimeout(() => {
-      assert.neverCalledWith(notification, pullRequest, 'Thor');
+      assert.neverCalledWith(notification.sendMessage, pullRequest, 'Thor');
       done();
     }, 0);
   });
@@ -74,7 +76,7 @@ describe('plugins/notification/absence', function () {
     service(options, imports);
 
     setTimeout(() => {
-      assert.neverCalledWith(notification, pullRequest, 'Thor');
+      assert.neverCalledWith(notification.sendMessage, pullRequest, 'Thor');
       done();
     }, 0);
   });

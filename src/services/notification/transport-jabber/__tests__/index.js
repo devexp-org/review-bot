@@ -17,23 +17,23 @@ describe('services/notification/transport-jabber', function () {
     service = proxyquire('../', {
       './class': { 'default': jabber }
     }).default;
+
   });
 
   it('the mock object should have the same methods', function () {
     const obj = service(options, imports);
-    const methods = Object.keys(jabber);
+    const methods = Object.keys(obj);
 
     methods.forEach(method => assert.property(obj, method));
   });
 
-  it('should close connection when shutdown', function () {
-    const callback = sinon.stub();
+  it('should close connection when shutdown', function (done) {
     const jabberService = service(options, imports);
 
-    jabberService.close.callsArg(0);
-    jabberService.shutdown(callback);
-
-    assert.called(jabber.close);
+    jabberService
+      .shutdown()
+      .then(() => assert.called(jabber.close))
+      .then(done, done);
   });
 
 });

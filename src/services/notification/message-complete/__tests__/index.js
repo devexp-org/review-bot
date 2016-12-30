@@ -1,6 +1,8 @@
 import service from '../';
+
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
+import notificationMock from '../../__mocks__/';
 import { pullRequestMock } from '../../..//model/model-pull-request/__mocks__/';
 
 describe('services/notification/message-complete', function () {
@@ -13,7 +15,7 @@ describe('services/notification/message-complete', function () {
     events = eventsMock();
     logger = loggerMock();
 
-    notification = sinon.stub().returns(Promise.resolve());
+    notification = notificationMock();
 
     pullRequest = pullRequestMock();
 
@@ -38,7 +40,7 @@ describe('services/notification/message-complete', function () {
 
     service(options, imports);
 
-    assert.calledWith(notification, pullRequest, 'Black Widow');
+    assert.calledWith(notification.sendMessage, pullRequest, 'Black Widow');
   });
 
 });

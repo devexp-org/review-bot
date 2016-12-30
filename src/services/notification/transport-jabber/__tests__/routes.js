@@ -5,7 +5,7 @@ import handleError from '../../../../services/http/middlewares/handle-error';
 
 import jabberMock from '../__mocks__/';
 
-describe('services/jabber/routes', function () {
+describe('services/notification/transport-jabber/routes', function () {
 
   let app, options, imports, router, jabber;
 
