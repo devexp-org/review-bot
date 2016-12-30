@@ -1,11 +1,18 @@
-import { map } from 'lodash';
+import { get, map } from 'lodash';
 
 export function message({ pullRequest }) {
+  const pullRequestAuthor = get(pullRequest, 'user.login');
 
   return `
-You were assigned to review the pull request:
+Вы были назначены ревьювером пулл реквеста:
 #${pullRequest.number} – ${pullRequest.title}
 ${pullRequest.html_url}
+
+Автор: @${pullRequestAuthor}
+Добавлено: ${pullRequest.additions}
+Удалено: ${pullRequest.deletions}
+Файлов затронуто: ${pullRequest.changed_files}
+Коммитов: ${pullRequest.commits}
 `;
 
 }

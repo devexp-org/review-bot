@@ -1,7 +1,7 @@
 export function message({ pullRequest }) {
 
   return `
-Review completed.
+Ревью завершено:
 #${pullRequest.number} – ${pullRequest.title}
 ${pullRequest.html_url}
 `;

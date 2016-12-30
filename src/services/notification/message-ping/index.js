@@ -3,7 +3,7 @@ import { filter, map } from 'lodash';
 function message({ pullRequest }) {
 
   return `
-Reminder! You have to review pull request.
+Пулл реквест ожидает ревью:
 #${pullRequest.number} – ${pullRequest.title}
 ${pullRequest.html_url}
 `;

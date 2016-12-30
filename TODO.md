@@ -1,7 +1,6 @@
 # MAIN
 * мигрировать из старой базы
 * review: добавить шаг staff-absence
-* notification: в сообщениях писать кол-во измененных строк
 
 # MAJOR
 * command: добавить команду /restart

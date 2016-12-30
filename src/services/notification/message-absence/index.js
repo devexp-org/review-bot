@@ -1,10 +1,12 @@
 import { get, chain } from 'lodash';
 
 export function message(payload, absenceUsers) {
+  const isPlural = absenceUsers.length > 1;
   const pullRequest = payload.pullRequest;
 
   return `
-Reviewers are absent: ${absenceUsers}. You may change them to somebody else.
+${isPlural ? 'Ревьюверы' : 'Ревьювер'}: ${absenceUsers.join(', ')} ${isPlural ? 'отсутствуют' : 'отсутствует'},
+что может замедлить ревью. Можно заменить отсутствующих ревьюверов с помощью команды /change
 #${pullRequest.number} – ${pullRequest.title}
 ${pullRequest.html_url}
 `;
