@@ -45,7 +45,7 @@ export default function setup(options, imports) {
               throw new Error(`The user '${addressee}" is not found in team ${team.name}`);
             }
 
-            sendService(user, message);
+            sendService.send(user, message);
           });
       });
 

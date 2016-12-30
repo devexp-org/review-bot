@@ -28,7 +28,7 @@ describe('services/notification', function () {
       .withArgs('octocat')
       .returns(Promise.resolve(user));
 
-    transport = sinon.stub();
+    transport = { send: sinon.stub() };
 
     options = {};
 
@@ -44,7 +44,7 @@ describe('services/notification', function () {
 
     notification(pullRequest, 'octocat', 'message')
       .then(() => {
-        transport.calledWith(user, 'message');
+        transport.send.calledWith(user, 'message');
       })
       .then(done, done);
   });
