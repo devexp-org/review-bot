@@ -1,6 +1,5 @@
 # MAIN
 * мигрировать из старой базы
-* review: добавить шаг staff-absence
 
 # MAJOR
 * command: добавить команду /restart

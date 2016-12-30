@@ -109,6 +109,18 @@
         "total": "review-step-total"
       }
     }
+  },
+
+  "review-step-absence": {
+    "path": "./src/services/review/step-absence",
+    "#plugin:review": {
+      "steps": {
+        "absence": "review-step-absence"
+      }
+    },
+    "dependencies": [
+      "yandex-staff"
+    ]
   }
 
 }
