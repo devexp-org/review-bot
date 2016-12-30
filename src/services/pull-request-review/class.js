@@ -78,6 +78,8 @@ export default class PullRequestReview {
     review.status = 'notstarted';
     review.updated_at = new Date();
 
+    delete review.completed_at;
+
     pullRequest.set('review', review);
 
     this.logger.info('Review stopped. %s', pullRequest);
@@ -164,6 +166,8 @@ export default class PullRequestReview {
 
     review.status = 'changesneeded';
     review.updated_at = new Date();
+
+    delete review.completed_at;
 
     pullRequest.set('review', review);
 

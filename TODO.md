@@ -1,12 +1,10 @@
 # MAIN
 * мигрировать из старой базы
 * review: добавить шаг staff-absence
-* command: добавить команду /restart
-* pull-request-github: обновление статусов на гитхабе
 * notification: в сообщениях писать кол-во измененных строк
 
 # MAJOR
-* review: перенести project-config
+* command: добавить команду /restart
 * notification: подключаться только при необходимости отправить сообщение. И отключаться по таймауту.
 
 # MINOR

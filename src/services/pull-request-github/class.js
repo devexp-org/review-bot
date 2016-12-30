@@ -104,6 +104,43 @@ export default class PullRequestGitHub {
       .then(local => local.save());
   }
 
+  /**
+   * Set status to github
+   * https://developer.github.com/v3/repos/statuses/
+   *
+   * @param {Object} local
+   *
+   * @return {Promise}
+   */
+  setDeploymentStatus(local) {
+    const status = local.review.status === 'complete' ? 'success' : 'pending';
+
+    const description = {
+      success: 'Завершено',
+      pending: 'Ещё не пройдено'
+    };
+
+    return new Promise((resolve, reject) => {
+
+      const req = {
+        sha: local.head.sha,
+        repo: local.repository.name,
+        owner: local.owner,
+        state: status,
+        context: 'Ревью кода',
+        description: description[status]
+      };
+
+      this.github.repos.createStatus(req, (err) => {
+        if (err) {
+          reject(new Error('Cannot update status for the pull request: ' + err));
+        }
+      });
+
+    });
+
+  }
+
   setPayload(local, payload) {
     const remote = payload.pull_request;
 

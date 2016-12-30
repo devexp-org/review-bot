@@ -100,7 +100,16 @@ export default function setup(options, imports) {
             team.set('reviewConfig.approveCount', req.body.reviewConfig.approveCount);
           }
           if ('totalReviewers' in req.body.reviewConfig) {
-            team.set('reviewConfig.totalReviewers', req.body.reviewConfig.totalReviewers);
+            team.set(
+              'reviewConfig.totalReviewers',
+              req.body.reviewConfig.totalReviewers
+            );
+          }
+          if ('setGitHubReviewStatus' in req.body.reviewConfig) {
+            team.set(
+              'reviewConfig.setGitHubReviewStatus',
+              req.body.reviewConfig.setGitHubReviewStatus
+            );
           }
         }
 

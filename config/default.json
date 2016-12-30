@@ -117,6 +117,16 @@
       ]
     },
 
+    "pull-request-status": {
+      "path": "./src/services/pull-request-status",
+      "dependencies": [
+        "events",
+        "logger",
+        "team-manager",
+        "pull-request-github"
+      ]
+    },
+
     "pull-request-review": {
       "path": "./src/services/pull-request-review",
       "dependencies": [
