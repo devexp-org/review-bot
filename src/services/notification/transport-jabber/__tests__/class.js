@@ -7,6 +7,7 @@ describe('services/notification/transport-jabber/class', function () {
   let xmpp, options, logger, jabber, Jabber;
 
   beforeEach(function () {
+
     xmpp = nodeXmppMock();
 
     logger = loggerMock();

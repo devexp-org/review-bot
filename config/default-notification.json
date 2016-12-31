@@ -36,6 +36,16 @@
     ]
   },
 
+  "notification-email": {
+    "path": "./src/services/notification/transport-email",
+    "#plugin:notification": {
+      "transports": ["notification-email"]
+    },
+    "dependencies": [
+      "logger"
+    ]
+  },
+
   "notification-jabber": {
     "path": "./src/services/notification/transport-jabber",
     "#plugin:notification": {

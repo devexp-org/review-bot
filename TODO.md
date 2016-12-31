@@ -30,5 +30,4 @@
 * review: "честный blame"
   * На шаге commiters баллы добавяютя последним авторам коммитов.
   * Но более правильно будет искать авторов измененных строк в пулле.
-* notification: добавить transport-email
 * notification: добавить transport-telegram

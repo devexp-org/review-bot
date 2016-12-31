@@ -22,7 +22,8 @@ describe('services/notification/transport-jabber', function () {
 
   it('the mock object should have the same methods', function () {
     const obj = service(options, imports);
-    const methods = Object.keys(obj);
+    const mock = jabberMock();
+    const methods = Object.keys(mock);
 
     methods.forEach(method => assert.property(obj, method));
   });

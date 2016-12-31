@@ -47,6 +47,8 @@
     "node-architect": "^0.0.15",
     "node-schedule": "^1.1.1",
     "node-xmpp-client": "^3.0.2",
+    "nodemailer": "^2.7.0",
+    "nodemailer-sendmail-transport": "^1.0.0",
     "response-time": "^2.3.1",
     "server-destroy": "^1.0.1"
   },
