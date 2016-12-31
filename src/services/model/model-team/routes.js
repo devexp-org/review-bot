@@ -74,43 +74,25 @@ export default function setup(options, imports) {
 
     findByName(id)
       .then(team => {
-        if ('name' in req.body) {
-          team.set('name', req.body.name);
-        }
-
-        if ('driver' in req.body) {
-          team.set('driver', req.body.driver);
-        }
-
-        if ('patterns' in req.body) {
-          team.set('patterns', req.body.patterns);
-        }
+        ['name', 'driver', 'patterns'].forEach(param => {
+          if (param in req.body) {
+            team.set(param, req.body[param]);
+          }
+        });
 
         if ('reviewConfig' in req.body) {
-          if ('steps' in req.body.reviewConfig) {
-            team.set('reviewConfig.steps', req.body.reviewConfig.steps);
-          }
-          if ('stepsOptions' in req.body.reviewConfig) {
-            team.set('reviewConfig.stepsOptions', req.body.reviewConfig.stepsOptions);
-          }
-          if ('notification' in req.body.reviewConfig) {
-            team.set('reviewConfig.notification', req.body.reviewConfig.notification);
-          }
-          if ('approveCount' in req.body.reviewConfig) {
-            team.set('reviewConfig.approveCount', req.body.reviewConfig.approveCount);
-          }
-          if ('totalReviewers' in req.body.reviewConfig) {
-            team.set(
-              'reviewConfig.totalReviewers',
-              req.body.reviewConfig.totalReviewers
-            );
-          }
-          if ('setGitHubReviewStatus' in req.body.reviewConfig) {
-            team.set(
-              'reviewConfig.setGitHubReviewStatus',
-              req.body.reviewConfig.setGitHubReviewStatus
-            );
-          }
+          [
+            'steps',
+            'stepsOptions',
+            'notification',
+            'approveCount',
+            'totalReviewers',
+            'setGitHubReviewStatus'
+          ].forEach(param => {
+            if (param in req.body.reviewConfig) {
+              team.set('reviewConfig.' + param, req.body.reviewConfig[param]);
+            }
+          });
         }
 
         return team.save();
