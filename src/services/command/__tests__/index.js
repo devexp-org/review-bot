@@ -1,4 +1,5 @@
 import service from '../';
+
 import modelMock from '../../model/__mocks__/';
 import queueMock from '../../queue/__mocks__/';
 import eventsMock from '../../events/__mocks__/';
@@ -9,14 +10,19 @@ import { pullRequestMock, pullRequestModelMock } from
 
 describe('service/command', function () {
 
-  let model, queue, events, logger, teamManager;
-  let PullRequestModel;
-  let options, imports;
+  let model, queue, events, logger, teamManager, PullRequestModel;
+  let command, options, imports;
 
   beforeEach(function () {
 
+    command = {
+      pattern: '/command',
+      command: sinon.stub().returns(Promise.resolve())
+    };
+
     options = {
-      events: ['github:issue_comment']
+      events: ['github:issue_comment'],
+      commands: { command: 'command' }
     };
 
     model = modelMock();
@@ -37,6 +43,7 @@ describe('service/command', function () {
       queue,
       events,
       logger,
+      command,
       'team-manager': teamManager
     };
 
@@ -49,27 +56,27 @@ describe('service/command', function () {
   });
 
   it('should dispatch event to commands', function (done) {
-    const command = sinon.stub().returns(Promise.resolve());
+
     const payload = {
       comment: { body: '/command' },
       pullRequest: pullRequestMock()
     };
-    const dispatcher = service(options, imports);
-
-    dispatcher.addCommand('command', '/command', command);
 
     events.on
       .withArgs('github:issue_comment')
-      .callArgWith(1, payload);
+      .callsArgWith(1, payload);
 
     queue.dispatch
       .withArgs('pull-request#1')
       .callsArg(1);
 
+    service(options, imports);
+
     setTimeout(function () {
-      assert.called(command);
+      assert.called(command.command);
       done();
     }, 0);
+
   });
 
 });

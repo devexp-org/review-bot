@@ -5,7 +5,6 @@ export default function setup(options, imports) {
 
   const events = imports.events;
   const logger = imports.logger.getLogger('command.stop');
-  const command = imports.command;
   const pullRequestReview = imports['pull-request-review'];
 
   /**
@@ -52,7 +51,9 @@ export default function setup(options, imports) {
 
   };
 
-  command.addCommand('stop', COMMAND_RE, stopCommand);
+  return {
+    pattern: COMMAND_RE,
+    command: stopCommand
+  };
 
-  return stopCommand;
 }

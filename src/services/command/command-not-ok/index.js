@@ -8,7 +8,6 @@ export default function setup(options, imports) {
 
   const events = imports.events;
   const logger = imports.logger.getLogger('command.not_ok');
-  const command = imports.command;
   const pullRequestReview = imports['pull-request-review'];
 
   /**
@@ -50,7 +49,9 @@ export default function setup(options, imports) {
       });
   };
 
-  command.addCommand('not_ok', COMMAND_RE, notOkCommand);
+  return {
+    pattern: COMMAND_RE,
+    command: notOkCommand
+  };
 
-  return notOkCommand;
 }

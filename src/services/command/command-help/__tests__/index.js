@@ -2,21 +2,18 @@ import service from '../';
 
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
-import commandMock from '../../__mocks__/';
 import { pullRequestMock } from
   '../../../model/model-pull-request/__mocks__/';
 
 describe('services/command/help', function () {
 
-  let events, logger, pullRequest, commandDispatcher;
+  let events, logger, pullRequest;
   let options, imports, command, comment, payload;
 
   beforeEach(function () {
 
     events = eventsMock();
     logger = loggerMock();
-
-    commandDispatcher = commandMock();
 
     pullRequest = pullRequestMock();
 
@@ -26,9 +23,9 @@ describe('services/command/help', function () {
 
     options = {};
 
-    imports = { logger, events, command: commandDispatcher };
+    imports = { logger, events };
 
-    command = service(options, imports);
+    command = service(options, imports).command;
 
   });
 

@@ -9,7 +9,6 @@ export default function commandService(options, imports) {
   const events = imports.events;
   const logger = imports.logger.getLogger('command.replace');
   const review = imports.review;
-  const command = imports.command;
   const pullRequestReview = imports['pull-request-review'];
 
   /**
@@ -68,7 +67,9 @@ export default function commandService(options, imports) {
       });
   };
 
-  command.addCommand('replace', COMMAND_RE, replaceCommand);
+  return {
+    pattern: COMMAND_RE,
+    command: replaceCommand
+  };
 
-  return replaceCommand;
 }

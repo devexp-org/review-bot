@@ -4,7 +4,6 @@ export const COMMAND_RE = '/help';
 export default function setup(options, imports) {
 
   const events = imports.events;
-  const command = imports.command;
 
   /**
    * Handle '/help' command.
@@ -20,8 +19,9 @@ export default function setup(options, imports) {
     return Promise.resolve(payload.pullRequest);
   };
 
-  command.addCommand('help', COMMAND_RE, helpCommand);
-
-  return helpCommand;
+  return {
+    pattern: COMMAND_RE,
+    command: helpCommand
+  };
 
 }

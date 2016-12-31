@@ -1,20 +1,19 @@
 import service from '../';
 
-import commandMock from '../../__mocks__/';
-import { teamDriverMock } from '../../../team-manager/__mocks__/';
-import teamManagerMock from '../../../team-manager/__mocks__/class';
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
 import { reviewersMock } from '../../__mocks__/';
 import { pullRequestMock } from
   '../../../model/model-pull-request/__mocks__/';
+import teamManagerMock, { teamDriverMock } from
+  '../../../team-manager/__mocks__/';
 import pullRequestReviewMock, { pullRequestReviewMixin } from
   '../../../pull-request-review/__mocks__/';
 
 describe('services/command/stop', function () {
 
   let team, events, logger, teamManager, pullRequest, pullRequestReview;
-  let options, imports, command, comment, payload, commandDispatcher;
+  let options, imports, command, comment, payload;
 
   beforeEach(function () {
 
@@ -24,10 +23,7 @@ describe('services/command/stop', function () {
     events = eventsMock();
     logger = loggerMock();
 
-    teamManager = teamManagerMock();
-    teamManager.findTeamByPullRequest.returns(Promise.resolve(team));
-
-    commandDispatcher = commandMock();
+    teamManager = teamManagerMock(team);
 
     pullRequest = pullRequestMock(pullRequestReviewMixin);
     pullRequest.user.login = 'Black Widow';
@@ -45,12 +41,11 @@ describe('services/command/stop', function () {
     imports = {
       events,
       logger,
-      command: commandDispatcher,
       'team-manager': teamManager,
       'pull-request-review': pullRequestReview
     };
 
-    command = service(options, imports);
+    command = service(options, imports).command;
 
   });
 

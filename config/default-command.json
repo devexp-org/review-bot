@@ -2,10 +2,12 @@
 
   "command-add": {
     "path": "./src/services/command/command-add",
+    "#plugin:command": {
+      "commands": { "add": "command-add" }
+    },
     "dependencies": [
       "events",
       "logger",
-      "command",
       "team-manager",
       "pull-request-review"
     ]
@@ -13,11 +15,13 @@
 
   "command-busy": {
     "path": "./src/services/command/command-busy",
+    "#plugin:command": {
+      "commands": { "busy": "command-busy" }
+    },
     "dependencies": [
       "events",
       "logger",
       "review",
-      "command",
       "team-manager",
       "pull-request-review"
     ]
@@ -25,10 +29,12 @@
 
   "command-change": {
     "path": "./src/services/command/command-change",
+    "#plugin:command": {
+      "commands": { "change": "command-change" }
+    },
     "dependencies": [
       "events",
       "logger",
-      "command",
       "team-manager",
       "pull-request-review"
     ]
@@ -36,10 +42,12 @@
 
   "command-ok": {
     "path": "./src/services/command/command-ok",
+    "#plugin:command": {
+      "commands": { "ok": "command-ok" }
+    },
     "dependencies": [
       "events",
       "logger",
-      "command",
       "team-manager",
       "pull-request-review"
     ]
@@ -47,40 +55,48 @@
 
   "command-not-ok": {
     "path": "./src/services/command/command-not-ok",
+    "#plugin:command": {
+      "commands": { "not-ok": "command-not-ok" }
+    },
     "dependencies": [
       "events",
       "logger",
-      "command",
       "pull-request-review"
     ]
   },
 
   "command-ping": {
     "path": "./src/services/command/command-ping",
+    "#plugin:command": {
+      "commands": { "ping": "command-ping" }
+    },
     "dependencies": [
       "events",
-      "logger",
-      "command"
+      "logger"
     ]
   },
 
   "command-remove": {
     "path": "./src/services/command/command-remove",
+    "#plugin:command": {
+      "commands": { "remove": "command-remove" }
+    },
     "dependencies": [
       "events",
       "logger",
-      "command",
       "pull-request-review"
     ]
   },
 
   "command-replace": {
     "path": "./src/services/command/command-replace",
+    "#plugin:command": {
+      "commands": { "replace": "command-replace" }
+    },
     "dependencies": [
       "events",
       "logger",
       "review",
-      "command",
       "team-manager",
       "pull-request-review"
     ]
@@ -88,32 +104,38 @@
 
   "command-start": {
     "path": "./src/services/command/command-start",
+    "#plugin:command": {
+      "commands": { "start": "command-start" }
+    },
     "dependencies": [
       "logger",
       "events",
-      "command",
       "pull-request-review"
     ]
   },
 
   "command-stop": {
     "path": "./src/services/command/command-stop",
+    "#plugin:command": {
+      "commands": { "stop": "command-stop" }
+    },
     "dependencies": [
       "logger",
       "events",
-      "command",
       "pull-request-review"
     ]
   },
 
   "command-help": {
     "path": "./src/services/command/command-help",
+    "#plugin:command": {
+      "commands": { "help": "command-help" }
+    },
     "options": {
       "link": "https://example.com/help"
     },
     "dependencies": [
-      "events",
-      "command"
+      "events"
     ]
   }
 

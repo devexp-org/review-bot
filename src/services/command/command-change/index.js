@@ -8,7 +8,6 @@ export default function commandService(options, imports) {
 
   const events = imports.events;
   const logger = imports.logger.getLogger('command.change');
-  const command = imports.command;
   const teamManager = imports['team-manager'];
   const pullRequestReview = imports['pull-request-review'];
 
@@ -115,7 +114,9 @@ export default function commandService(options, imports) {
       });
   };
 
-  command.addCommand('change', COMMAND_RE, changeCommand);
+  return {
+    pattern: COMMAND_RE,
+    command: changeCommand
+  };
 
-  return changeCommand;
 }

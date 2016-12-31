@@ -7,7 +7,6 @@ export default function commandService(options, imports) {
 
   const events = imports.events;
   const logger = imports.logger.getLogger('command.ping');
-  const command = imports.command;
 
   /**
    * Handle '/ping' command.
@@ -42,7 +41,9 @@ export default function commandService(options, imports) {
     return Promise.resolve(pullRequest);
   };
 
-  command.addCommand('ping', COMMAND_RE, pingCommand);
+  return {
+    pattern: COMMAND_RE,
+    command: pingCommand
+  };
 
-  return pingCommand;
 }

@@ -13,6 +13,20 @@ export default function setup(options, imports) {
     queue, teamManager, PullRequestModel
   );
 
+  forEach(options.commands, (moduleName, commandName) => {
+    const commandModule = imports[moduleName];
+
+    if (!commandModule) {
+      throw new Error(`Cannot find command module "${commandName}"`);
+    }
+
+    dispatcher.addCommand(
+      commandName,
+      commandModule.pattern,
+      commandModule.command
+    );
+  });
+
   forEach(options.events, (event) => {
     events.on(event, (payload) => {
       const comment = get(payload, 'comment.body', '');

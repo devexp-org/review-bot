@@ -8,7 +8,6 @@ export default function setup(options, imports) {
 
   const events = imports.events;
   const logger = imports.logger.getLogger('command.ok');
-  const command = imports.command;
   const teamManager = imports['team-manager'];
   const pullRequestReview = imports['pull-request-review'];
 
@@ -82,7 +81,9 @@ export default function setup(options, imports) {
     }
   };
 
-  command.addCommand('ok', COMMAND_RE, okCommand);
+  return {
+    pattern: COMMAND_RE,
+    command: okCommand
+  };
 
-  return okCommand;
 }

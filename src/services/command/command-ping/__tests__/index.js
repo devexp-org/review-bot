@@ -2,7 +2,6 @@ import service from '../';
 
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
-import commandMock from '../../__mocks__/';
 import { reviewersMock } from '../../__mocks__/';
 import { pullRequestMock } from
   '../../../model/model-pull-request/__mocks__/';
@@ -11,14 +10,12 @@ import { pullRequestReviewMixin } from
 
 describe('services/command/ping', function () {
 
-  let events, logger, pullRequest, commandDispatcher;
+  let events, logger, pullRequest;
   let options, imports, command, comment, payload;
 
   beforeEach(function () {
     events = eventsMock();
     logger = loggerMock();
-
-    commandDispatcher = commandMock();
 
     pullRequest = pullRequestMock(pullRequestReviewMixin);
     pullRequest.user.login = 'Black Widow';
@@ -30,9 +27,9 @@ describe('services/command/ping', function () {
 
     options = {};
 
-    imports = { logger, events, command: commandDispatcher };
+    imports = { logger, events };
 
-    command = service(options, imports);
+    command = service(options, imports).command;
 
   });
 

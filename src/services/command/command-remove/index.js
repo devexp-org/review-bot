@@ -8,7 +8,6 @@ export default function setup(options, imports) {
 
   const events = imports.events;
   const logger = imports.logger.getLogger('command.remove');
-  const command = imports.command;
   const pullRequestReview = imports['pull-request-review'];
 
   // TODO must be team config
@@ -72,7 +71,9 @@ export default function setup(options, imports) {
 
   };
 
-  command.addCommand('remove', COMMAND_RE, removeCommand);
+  return {
+    pattern: COMMAND_RE,
+    command: removeCommand
+  };
 
-  return removeCommand;
 }

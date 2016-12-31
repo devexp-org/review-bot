@@ -3,7 +3,6 @@ import service from '../';
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
 import reviewMock from '../../../review/__mocks__/';
-import commandMock from '../../__mocks__/';
 import { reviewersMock } from '../../__mocks__/';
 import { pullRequestMock } from
   '../../../model/model-pull-request/__mocks__/';
@@ -13,7 +12,7 @@ import pullRequestReviewMock, { pullRequestReviewMixin } from
 describe('services/command/busy', function () {
 
   let events, logger, review, pullRequest, pullRequestReview;
-  let options, imports, command, comment, payload, commandDispatcher;
+  let options, imports, command, comment, payload;
 
   beforeEach(function () {
 
@@ -21,10 +20,9 @@ describe('services/command/busy', function () {
     logger = loggerMock();
     review = reviewMock();
 
-    commandDispatcher = commandMock();
-
     review.choose.returns(Promise.resolve({
-      ranks: [{ login: 'Black Widow' }], pullRequest
+      reviewers: [{ login: 'Black Widow' }],
+      pullRequest
     }));
 
     pullRequest = pullRequestMock(pullRequestReviewMixin);
@@ -42,11 +40,10 @@ describe('services/command/busy', function () {
       events,
       logger,
       review,
-      command: commandDispatcher,
       'pull-request-review': pullRequestReview
     };
 
-    command = service(options, imports);
+    command = service(options, imports).command;
 
   });
 

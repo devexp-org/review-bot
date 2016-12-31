@@ -9,7 +9,6 @@ export default function setup(options, imports) {
   const events = imports.events;
   const logger = imports.logger.getLogger('command.busy');
   const review = imports.review;
-  const command = imports.command;
   const pullRequestReview = imports['pull-request-review'];
 
   /**
@@ -45,10 +44,10 @@ export default function setup(options, imports) {
     }
 
     return review.choose(pullRequest)
-      .then(({ ranks }) => {
-        // TODO handle an empty team.
+      .then((review) => {
+        // TODO handle an empty reviewers.
 
-        newReviewer = cloneDeep(ranks.shift());
+        newReviewer = cloneDeep(review.reviewers.shift());
 
         pullRequestReviewers = reject(
           pullRequestReviewers, { login: commentUser }
@@ -67,7 +66,9 @@ export default function setup(options, imports) {
       });
   };
 
-  command.addCommand('busy', COMMAND_RE, busyCommand);
+  return {
+    pattern: COMMAND_RE,
+    command: busyCommand
+  };
 
-  return busyCommand;
 }
