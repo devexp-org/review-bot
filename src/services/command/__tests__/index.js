@@ -79,4 +79,10 @@ describe('service/command', function () {
 
   });
 
+  it('should throw an error if command module was not given', function () {
+    options.commands = ['unknown-command'];
+
+    assert.throws(() => service(options, imports), /cannot find/i);
+  });
+
 });

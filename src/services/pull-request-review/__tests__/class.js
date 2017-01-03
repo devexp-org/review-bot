@@ -328,6 +328,12 @@ describe('services/pull-request-review/class', function () {
         .then(done, done);
     });
 
+    it('should update approveCount in pull request', function (done) {
+      pullRequestReview.updateReview(pullRequest, { approveCount: 2 })
+        .then(() => assert.calledWith(pullRequest.set, 'review.approveCount', 2))
+        .then(done, done);
+    });
+
     it('should update property "updated_at"', function (done) {
       pullRequestReview.updateReview(
           pullRequest, { reviewers: [{ login: 'baz' }] }

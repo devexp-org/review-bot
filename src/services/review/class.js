@@ -167,7 +167,7 @@ export default class Review {
         this.logger.info('Reviewers: %s',
           isEmpty(review.reviewers)
             ? 'ooops, no reviewers were selected...'
-            : review.members.map(x => x.login).join(' ')
+            : review.reviewers.map(x => x.login).join(' ')
         );
 
         return review;

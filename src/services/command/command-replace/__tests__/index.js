@@ -71,6 +71,16 @@ describe('services/command/replace', function () {
       .then(done, done);
   });
 
+  it('should not reject promise if no reviewers at all', function (done) {
+    review.choose.returns(Promise.resolve({
+      reviewers: [], pullRequest
+    }));
+
+    command('/replace Hulk', payload, ['Hulk'])
+      .then(() => {})
+      .then(done, done);
+  });
+
   it('should save pull request with a new reviewer', function (done) {
     command('/replace Hulk', payload, ['Hulk'])
       .then(() => {

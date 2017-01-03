@@ -12,7 +12,8 @@ export default function mock() {
 
   const reposMock = {
     getCommits: sinon.stub().callsArg(1),
-    getContent: sinon.stub().callsArg(1)
+    getContent: sinon.stub().callsArg(1),
+    createStatus: sinon.stub().callsArg(1)
   };
 
   const pullRequestsMock = {

@@ -1,7 +1,8 @@
 export default function mock() {
 
   return {
-    choose: sinon.stub().returns(Promise.resolve())
+    choose: sinon.stub().returns(Promise.resolve()),
+    getSteps: sinon.stub().returns([])
   };
 
 }

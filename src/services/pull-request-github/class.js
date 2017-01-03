@@ -135,6 +135,8 @@ export default class PullRequestGitHub {
         if (err) {
           reject(new Error('Cannot update status for the pull request: ' + err));
         }
+
+        resolve();
       });
 
     });

@@ -190,14 +190,14 @@ export default class PullRequestReview {
    */
   updateReview(pullRequest, review) {
 
-    if (isEmpty(review.reviewers)) {
-      return Promise.reject(new Error(util.format(
-        'Cannot drop all reviewers from pull request. %s',
-        pullRequest
-      )));
-    }
-
     if ('reviewers' in review) {
+      if (isEmpty(review.reviewers)) {
+        return Promise.reject(new Error(util.format(
+          'Cannot drop all reviewers from pull request. %s',
+          pullRequest
+        )));
+      }
+
       pullRequest.set('review.reviewers', review.reviewers);
     }
 

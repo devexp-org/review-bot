@@ -2,6 +2,7 @@ import PullRequestGitHub from '../class';
 
 import githubMock from '../../github/__mocks__/';
 import { pullRequestMock } from '../../model/model-pull-request/__mocks__/';
+import { pullRequestReviewMixin } from '../../pull-request-review/__mocks__/';
 
 describe('services/pull-request-github/class', function () {
 
@@ -9,7 +10,7 @@ describe('services/pull-request-github/class', function () {
 
   beforeEach(function () {
     github = githubMock();
-    pullRequest = pullRequestMock();
+    pullRequest = pullRequestMock(pullRequestReviewMixin);
 
     options = {
       separator: {
@@ -173,6 +174,59 @@ describe('services/pull-request-github/class', function () {
           );
         })
         .then(done, done);
+    });
+
+  });
+
+  describe('#setDeploymentStatus', function () {
+
+    it('should update pull request deployment status on github', function (done) {
+
+      pullRequestGitHub.setDeploymentStatus(pullRequest)
+        .then(() => {
+          assert.calledWith(
+            github.repos.createStatus,
+            sinon.match({
+              sha: sinon.match.string,
+              repo: sinon.match.string,
+              owner: sinon.match.string,
+              state: sinon.match.string,
+              context: sinon.match.string,
+              description: sinon.match.string
+            })
+          );
+        })
+        .then(done, done);
+
+    });
+
+    it('should set state to `success` if review is complete', function (done) {
+      pullRequest.review.status = 'complete';
+
+      pullRequestGitHub.setDeploymentStatus(pullRequest)
+        .then(() => {
+          assert.calledWith(
+            github.repos.createStatus,
+            sinon.match({ state: 'success' })
+          );
+        })
+        .then(done, done);
+
+    });
+
+    it('should throw an error if github return error', function (done) {
+
+      const err = new Error('just error');
+      github.repos.createStatus.callsArgWith(1, err);
+
+      pullRequestGitHub.setDeploymentStatus(pullRequest)
+        .then(() => assert.fail())
+        .catch(e => {
+          assert.match(e.message, /just error/i);
+          assert.match(e.message, /cannot.*update/i);
+        })
+        .then(done, done);
+
     });
 
   });

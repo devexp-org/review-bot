@@ -233,7 +233,12 @@ describe('services/review/class', function () {
     let steps, review;
 
     beforeEach(function () {
-      const reviewData = { team: teamDriver, members: memberMock(), pullRequest };
+      const reviewData = {
+        team: teamDriver,
+        members: memberMock(),
+        reviewers: memberMock().slice(0, 2),
+        pullRequest
+      };
 
       steps = { step1, step2 };
 
@@ -266,12 +271,12 @@ describe('services/review/class', function () {
 
     it('should return resolved promise even when reviewers are not selected', function (done) {
       step2.process = function (review) {
-        review.members = [];
+        review.reviewers = [];
         return Promise.resolve(review);
       };
 
       review.choose(pullRequest)
-        .then(review => assert.lengthOf(review.members, 0))
+        .then(review => assert.lengthOf(review.reviewers, 0))
         .then(done, done);
     });
 

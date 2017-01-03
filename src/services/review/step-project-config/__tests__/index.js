@@ -50,6 +50,9 @@ describe('services/review/steps/project-config', function () {
     team.findTeamMember
       .withArgs('baz')
       .returns(Promise.resolve({ login: 'baz' }));
+    team.findTeamMember
+      .withArgs('Hulk')
+      .returns(Promise.resolve({ login: 'Hulk' }));
 
     review = { members, pullRequest };
 
@@ -197,7 +200,7 @@ describe('services/review/steps/project-config', function () {
         specialReviewers: [
           {
             pattern: ['*.txt'],
-            addMembers: ['foo', 'bar'],
+            addMembers: ['foo', 'Hulk'],
             membersToAdd: 2
           }
         ]
@@ -209,13 +212,15 @@ describe('services/review/steps/project-config', function () {
       step.process(review, {})
         .then(actual => {
           const fooMember = find(actual.members, { login: 'foo' });
-          const barMember = find(actual.members, { login: 'bar' });
+          const hulkMember = find(actual.members, { login: 'Hulk' });
 
           assert.isObject(fooMember);
-          assert.isObject(barMember);
+          assert.isObject(hulkMember);
           assert.propertyVal(fooMember, 'rank', 1000);
           assert.propertyVal(fooMember, 'special', true);
-          assert.lengthOf(actual.members, 9);
+          assert.propertyVal(hulkMember, 'rank', 1008);
+          assert.propertyVal(hulkMember, 'special', true);
+          assert.lengthOf(actual.members, 8);
         })
         .then(done, done);
 
