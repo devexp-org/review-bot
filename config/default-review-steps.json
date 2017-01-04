@@ -130,6 +130,15 @@
     "dependencies": [
       "yandex-staff"
     ]
+  },
+
+  "review-step-sakhalin": {
+    "path": "./src/services/review/step-sakhalin",
+    "#plugin:review": {
+      "steps": {
+        "sakhalin": "review-step-sakhalin"
+      }
+    }
   }
 
 }
