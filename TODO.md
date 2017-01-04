@@ -1,9 +1,10 @@
 # MAJOR
-* покрыть тестами на 100%
-* command: добавить команду /restart
+* review: sakhalin
+* review: path_related
+* team-dispatcher: yandex-mm
+* pull-request-header
 
 # MINOR
-* user: изменить схему контактов на плоскую.
 * config: переместить plugin-manger в конфиг.
 * command: Добавить test:e2e тестов для command.
 * team-manager: возращать участников по схеме `model-user`

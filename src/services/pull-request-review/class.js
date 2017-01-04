@@ -89,6 +89,34 @@ export default class PullRequestReview {
   }
 
   /**
+   * Deny review.
+   *
+   * @param {PullRequest} pullRequest
+   *
+   * @return {Promise}
+   */
+  denyReview(pullRequest) {
+
+    const review = pullRequest.get('review');
+
+    review.status = 'notstarted';
+    review.updated_at = new Date();
+    delete review.completed_at;
+
+    forEach(review.reviewers, (reviewer) => {
+      reviewer.approved = false;
+    });
+
+    pullRequest.set('review', review);
+
+    this.logger.info('Review denied. %s', pullRequest);
+    this.events.emit('review:updated', { pullRequest });
+
+    return Promise.resolve(pullRequest);
+
+  }
+
+  /**
    * Approve and complete review if approved reviewers equal `approveCount`.
    *
    * @param {PullRequest} pullRequest

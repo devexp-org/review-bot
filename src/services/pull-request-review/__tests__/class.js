@@ -177,6 +177,60 @@ describe('services/pull-request-review/class', function () {
 
   });
 
+  describe('#denyReview', function () {
+
+    beforeEach(function () {
+      review.status = 'inprogress';
+    });
+
+    it('should emit event `review:updated`', function (done) {
+      pullRequestReview.denyReview(pullRequest)
+        .then(() => assert.calledWith(events.emit, 'review:updated'))
+        .then(done, done);
+    });
+
+    it('should set status to "notstarted"', function (done) {
+      pullRequestReview.denyReview(pullRequest)
+        .then(() => assert.calledWith(
+          pullRequest.set, 'review', sinon.match({ status: 'notstarted' })
+        ))
+        .then(done, done);
+    });
+
+    it('should update property "updated_at"', function (done) {
+      pullRequestReview.denyReview(pullRequest)
+        .then(() => assert.calledWith(
+          pullRequest.set, 'review', sinon.match.has('updated_at')
+        ))
+        .then(done, done);
+    });
+
+    it('should not reject promise if pull request status is "notstarted"', function (done) {
+      review.status = 'notstarted';
+
+      pullRequestReview.denyReview(pullRequest)
+        .then(() => {})
+        .then(done, done);
+    });
+
+    it('should not reject promise if pull request status is "complete"', function (done) {
+      review.status = 'complete';
+
+      pullRequestReview.denyReview(pullRequest)
+        .then(() => {})
+        .then(done, done);
+    });
+
+    it('should not reject promise if pull request status is "changesneeded"', function (done) {
+      review.status = 'changesneeded';
+
+      pullRequestReview.denyReview(pullRequest)
+        .then(() => {})
+        .then(done, done);
+    });
+
+  });
+
   describe('#approveReview', function () {
 
     it('should emit event `review:approved`', function (done) {

@@ -21,21 +21,19 @@ export class AbsenceReviewStep extends AbstractReviewStep
    * @return {Promise.<Review>}
    */
   process(review, options) {
-    return new Promise(resolve => {
-      const users = map(review.members, 'login');
+    const users = map(review.members, 'login');
 
-      this.staff
-        .apiAbsence(users)
-        .then(absence => {
-          const absentUsers = map(absence, 'staff__login');
+    return this.staff
+      .apiAbsence(users)
+      .then(absence => {
+        const absentUsers = map(absence, 'staff__login');
 
-          remove(review.members, (member) => {
-            return includes(absentUsers, member.login);
-          });
-
-          return Promise.resolve(review);
+        remove(review.members, (member) => {
+          return includes(absentUsers, member.login);
         });
-    });
+
+        return review;
+      });
   }
 
 }
