@@ -88,6 +88,15 @@
     ]
   },
 
+  "review-step-path-related": {
+    "path": "./src/services/review/step-path-related",
+    "#plugin:review": {
+      "steps": {
+        "absence": "review-step-path-related"
+      }
+    }
+  },
+
   "review-step-project-config": {
     "path": "./src/services/review/step-project-config",
     "#plugin:review": {

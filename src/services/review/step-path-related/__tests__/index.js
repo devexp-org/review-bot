@@ -1,23 +1,34 @@
 import _ from 'lodash';
-import service, {
-  isMatchAny, isMatchAll, getFiles, incRank, decRank
-} from '../path_related';
+import service from '../';
 
+import { reviewMock } from '../../__mocks__/';
 import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';
-import { reviewMembersMock } from '../../__mocks__/';
-import { membersMock } from '../../../command/__mocks__/';
 import { pullRequestReviewMixin } from '../../../pull-request-review/__mocks__/';
 
-describe('services/review/steps/path_related', function () {
+describe('services/review/steps/path-related', function () {
+
+  let step;
+
+  beforeEach(function () {
+    step = service();
+  });
+
+  describe('#config', function () {
+
+    it('should return step config', function () {
+      assert.isObject(step.config());
+    });
+
+  });
 
   describe('#isMatch', function () {
 
     it('should return true if pattern match files pathes', function () {
-      assert.isTrue(isMatchAny(['test.js', 'test.priv.js'], ['*.js']));
+      assert.isTrue(step.isMatchAny(['test.js', 'test.priv.js'], ['*.js']));
     });
 
     it('should return false if pattern doesn`t match files pathes', function () {
-      assert.isFalse(isMatchAny(['test.js', 'test.priv.js'], ['*.css']));
+      assert.isFalse(step.isMatchAny(['test.js', 'test.priv.js'], ['*.css']));
     });
 
   });
@@ -25,11 +36,11 @@ describe('services/review/steps/path_related', function () {
   describe('#isMatchAll', function () {
 
     it('should return true if all patterns match files pathes', function () {
-      assert.isTrue(isMatchAll(['test.js', 'test.priv.js'], ['*.js', 'test.*']));
+      assert.isTrue(step.isMatchAll(['test.js', 'test.priv.js'], ['*.js', 'test.*']));
     });
 
     it('should return false if not all patterns match files pathes', function () {
-      assert.isFalse(isMatchAll(['test.js', 'test.priv.js'], ['*.js', '*.css']));
+      assert.isFalse(step.isMatchAll(['test.js', 'test.priv.js'], ['*.js', '*.css']));
     });
 
   });
@@ -42,7 +53,7 @@ describe('services/review/steps/path_related', function () {
       const pullRequest = pullRequestMock(pullRequestReviewMixin);
       pullRequest.files = files;
 
-      getFiles(pullRequest)
+      step.getFiles(pullRequest)
         .then(result => assert.deepEqual(result, ['', '', '']))
         .then(done, done);
     });
@@ -52,7 +63,7 @@ describe('services/review/steps/path_related', function () {
 
       pullRequest.files = [];
 
-      getFiles(pullRequest)
+      step.getFiles(pullRequest)
         .then(() => assert.fail())
         .catch(e => assert.match(e.message, /no files/i))
         .then(done, done);
@@ -64,30 +75,32 @@ describe('services/review/steps/path_related', function () {
     let team, members, options;
 
     beforeEach(function () {
-      team = reviewMembersMock();
+      team = reviewMock();
       members = ['Hulk', 'Hawkeye'];
       options = { pattern: ['*.js'], max: 5, members };
     });
 
     it('should increment rank for one random member of team', function (done) {
-      const step = incRank(options, { members: team });
+      const inc = step.incRank({ members: team }, options);
 
-      step(['test.js'])
-        .then(reviewers => {
-          _.forEach(reviewers, (member) => {
-            assert.isAtLeast(member.rank, 0);
-          });
-
-          assert.isAbove(reviewers.length, 0);
+      inc(['test.js'])
+        .then(review => {
+          const hulk = _.find(review.members, { login: 'Hulk' });
+          const hawkeye = _.find(review.members, { login: 'Hawkeye' });
+          assert(hulk.rank > 8 || hawkeye.rank > 3);
         })
         .then(done, done);
     });
 
     it('should not change rank if there are no matched pathes', function (done) {
-      const step = incRank(options, { members: team });
+      const inc = step.incRank({ members: team }, options);
 
-      step(['test.css'])
-        .then(reviewers => assert.deepEqual(reviewers, []))
+      inc(['test.css'])
+        .then(review => {
+          const hulk = _.find(review.members, { login: 'Hulk' });
+          const hawkeye = _.find(review.members, { login: 'Hawkeye' });
+          assert(hulk.rank === 8 && hawkeye.rank === 3);
+        })
         .then(done, done);
     });
   });
@@ -97,41 +110,41 @@ describe('services/review/steps/path_related', function () {
     let team, members, options;
 
     beforeEach(function () {
-      team = reviewMembersMock();
+      team = reviewMock();
       members = ['Hulk', 'Hawkeye'];
       options = { pattern: ['*.js'], max: 5, members };
     });
 
     it('should decrement rank for all members specified in options', function (done) {
-      const step = decRank(options, { members: team });
+      const dec = step.decRank({ members: team }, options);
 
-      step(['test.js'])
-        .then(reviewers => {
-          _.forEach(reviewers, (member) => {
-            assert.isAtMost(member.rank, 0);
-          });
-
-          assert.isAbove(reviewers.length, 0);
+      dec(['test.js'])
+        .then(review => {
+          const hulk = _.find(review.members, { login: 'Hulk' });
+          const hawkeye = _.find(review.members, { login: 'Hawkeye' });
+          assert(hulk.rank < 8 || hawkeye.rank < 3);
         })
         .then(done, done);
     });
 
     it('should not change rank if there is no matched pathes', function (done) {
-      const step = decRank(options, { members: team });
+      const dec = step.decRank({ members: team }, options);
 
-      step(['test.css'])
-        .then(reviewers => assert.deepEqual(reviewers, []))
+      dec(['test.css'])
+        .then(review => {
+          const hulk = _.find(review.members, { login: 'Hulk' });
+          const hawkeye = _.find(review.members, { login: 'Hawkeye' });
+          assert(hulk.rank === 8 && hawkeye.rank === 3);
+        })
         .then(done, done);
     });
   });
 
   describe('service', function () {
-    let step, team, pullRequest, options;
+    let team, pullRequest, options;
 
     beforeEach(() => {
-      step = service();
-
-      team = reviewMembersMock();
+      team = reviewMock();
 
       pullRequest = pullRequestMock(pullRequestReviewMixin);
 
@@ -148,13 +161,12 @@ describe('services/review/steps/path_related', function () {
       const review = { members: team, pullRequest };
 
       pullRequest.files = [{ filename: 'a.js' }];
-      pullRequest.review.reviewers = membersMock();
+      pullRequest.review.reviewers = reviewMock();
 
-      step(review, options)
-        .then(members => {
-          const reviewer = _.find(members, { login: 'Hulk' });
-          assert.isAbove(reviewer.rank, 0);
-          assert.isBelow(reviewer.rank, 6);
+      step.process(review, options)
+        .then(review => {
+          const hulk = _.find(review.members, { login: 'Hulk' });
+          assert.isAbove(hulk.rank, 8);
         })
         .then(done, done);
     });
@@ -163,13 +175,12 @@ describe('services/review/steps/path_related', function () {
       const review = { members: team, pullRequest };
 
       pullRequest.files = [{ filename: 'a.json' }];
-      pullRequest.review.reviewers = membersMock();
+      pullRequest.review.reviewers = reviewMock();
 
-      step(review, options)
-        .then(members => {
-          const reviewer = _.find(members, { login: 'Hulk' });
-          assert.isAbove(reviewer.rank, -6);
-          assert.isBelow(reviewer.rank, 0);
+      step.process(review, options)
+        .then(reveiw => {
+          const hulk = _.find(review.members, { login: 'Hulk' });
+          assert.isBelow(hulk.rank, 8);
         })
         .then(done, done);
     });
