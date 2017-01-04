@@ -8,6 +8,7 @@
     "sinon": true,
     "assert": true
   },
+  "parser": "babel-eslint",
   "parserOptions": {
     "sourceType": "module"
   },
