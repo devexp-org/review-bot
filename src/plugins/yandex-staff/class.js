@@ -298,11 +298,7 @@ export default class YandexStaff {
    * @return {String|null}
    */
   _getFields(name) {
-    if (fields && fields[name] && Array.isArray(fields[name])) {
-      return fields[name].join('|');
-    }
-
-    return null;
+    return fields[name].join('|');
   }
 
   /**

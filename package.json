@@ -62,6 +62,7 @@
     "eslint": "^3.3.1",
     "eslint-plugin-react": "^6.2.0",
     "flow-bin": "^0.37.4",
+    "flow-jsdoc": "^0.2.2",
     "git-pre-commit": "^2.1.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.0.2",
@@ -74,6 +75,7 @@
   "nyc": {
     "include": [
       "src/modules",
+      "src/plugins",
       "src/services"
     ],
     "exclude": [

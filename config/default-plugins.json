@@ -53,6 +53,19 @@
       "center_url": "https://center.yandex-team.ru/api/v1/",
       "jabber_url": "https://center.yandex-team.ru/jabber/status-bulk/"
     }
+  },
+
+  "pull-request-header": {
+    "path": "./src/plugins/pull-request-header",
+    "options": {
+      "queues": ["IMAGESUI", "VIDEOUI", "MOBVIDEO", "SAKHALIN"]
+    },
+    "dependencies": [
+      "queue",
+      "events",
+      "yandex-startrek",
+      "pull-request-github"
+    ]
   }
 
 }
