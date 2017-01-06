@@ -34,6 +34,18 @@
         "yandex-staff": "team-driver-yandex-staff"
       }
     }
+  },
+
+  "team-driver-yandex-multimedia": {
+    "path": "./src/services/team-manager/driver-yandex-multimedia",
+    "dependencies": [
+      "yandex-staff"
+    ],
+    "#plugin:team-manager": {
+      "drivers": {
+        "yandex-multimedia": "team-driver-yandex-multimedia"
+      }
+    }
   }
 
 }

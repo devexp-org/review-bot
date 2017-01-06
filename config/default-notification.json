@@ -39,17 +39,21 @@
   "notification-email": {
     "path": "./src/services/notification/transport-email",
     "#plugin:notification": {
-      "transports": ["notification-email"]
+      "transports": {
+        "email": "notification-email"
+      }
     },
     "dependencies": [
       "logger"
     ]
   },
 
-  "notification-jabber": {
+  "#comment:notification-jabber": {
     "path": "./src/services/notification/transport-jabber",
     "#plugin:notification": {
-      "transports": ["notification-jabber"]
+      "transports": {
+        "jabber": "notification-jabber"
+      }
     },
     "options": {
       "auth": {
@@ -65,7 +69,9 @@
   "notification-slack": {
     "path": "./src/services/notification/transport-slack",
     "#plugin:notification": {
-      "transports": ["notification-slack"]
+      "transports": {
+        "slack": "notification-slack"
+      }
     },
     "options": {
       "token": "0123456789abcdf",

@@ -169,7 +169,7 @@
     "notification": {
       "path": "./src/services/notification",
       "options": {
-        "transports": []
+        "transports": {}
       },
       "dependencies": [
         "team-manager"

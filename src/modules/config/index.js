@@ -26,14 +26,14 @@ export function requireIfExists(configPath) {
   return {};
 }
 
-export default function config(basePath, envName, middlewares = []) {
+export default function config(basePath, envName, transpormers = []) {
 
   envName = envName || process.env.NODE_ENV || 'development';
   basePath = path.join(basePath, 'config');
 
   const join = path.join.bind(path, basePath);
   const transform = (json) => {
-    return middlewares.reduce((acc, func) => func(acc), json);
+    return transpormers.reduce((acc, func) => func(acc), json);
   };
 
   const defaultConfigPath = join('default.json');

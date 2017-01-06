@@ -10,8 +10,8 @@ import configPluginsTransformer from './modules/config/transformers/plugins';
 const env = process.env.NODE_ENV || 'development';
 const basePath = path.join(__dirname, '..');
 const appConfig = parseConfig(basePath, env, [
-  configCommentTransformer(),
   configIncludeTransformer(path.join(basePath, 'config')),
+  configCommentTransformer(),
   configPluginsTransformer()
 ]);
 const application = new Architect(appConfig, basePath);
