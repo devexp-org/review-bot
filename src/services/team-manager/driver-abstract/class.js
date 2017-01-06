@@ -29,9 +29,11 @@ export class AbstractDriver {
   /**
    * Returns candidates for review.
    *
+   * @param {PullRequest} pullRequest
+   *
    * @return {Promise.<Array.<User>>}
    */
-  getCandidates() {
+  getCandidates(pullRequest) {
     return Promise.reject(new Error('abstract method'));
   }
 

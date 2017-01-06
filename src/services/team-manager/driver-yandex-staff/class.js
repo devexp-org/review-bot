@@ -52,7 +52,7 @@ export class YandexStaffDriverFactory extends StaticDriverFactory {
   config() {
     return {
       groupId: {
-        type: 'number'
+        type: ['number']
       }
     };
   }
