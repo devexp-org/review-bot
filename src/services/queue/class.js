@@ -1,39 +1,30 @@
-/* @flow */
-
 import { isEmpty } from 'lodash';
 
+/**
+ * Queue that starts tasks in order.
+ */
 export default class Queue {
-
-  queue: {
-    [key: string]: {
-      queue: Array<{
-        id: string,
-        reject: () => void,
-        resolve: () => void,
-        callback: () => void
-      }>,
-      active: boolean,
-    }
-  }
 
   /**
    * @constructor
+   *
+   * @property {Object} queue
    */
   constructor() {
     this.queue = {};
   }
 
   /**
-   * Inserts a new element at the end of the queue.
+   * Inserts a new task at the end of the queue.
    *
    * @protected
    *
-   * @param {String} id
-   * @param {Function} callback
+   * @param {String} id - queue id. Queues with different ids run in parallel.
+   * @param {Function} callback - queue task.
    *
    * @return {Promise}
    */
-  enqueue(id: string, callback: () => void): Promise<void> {
+  enqueue(id, callback) {
     return new Promise((resolve, reject) => {
       this.queue[id] = this.queue[id] || { active: false, queue: [] };
       this.queue[id].queue.push({ id, callback, resolve, reject });
@@ -41,12 +32,13 @@ export default class Queue {
   }
 
   /**
-   * Queue step.
+   * Starts the first task from queue.
+   *
+   * @param {String} id - queue id.
    *
    * @protected
-   * @param {String} id
    */
-  step(id: string) {
+  step(id) {
     if (!this.queue[id] || this.queue[id].active) {
       return;
     }
@@ -77,14 +69,14 @@ export default class Queue {
   }
 
   /**
-   * Inserts a new element at the end of the queue and run the queue.
+   * Inserts a new task at the end of the queue and run that queue.
    *
-   * @param {String} id - uniq key
-   * @param {Function} callback
+   * @param {String} id - queue id. Queues with different ids run in parallel.
+   * @param {Function} callback - queue task.
    *
-   * @return {Promise}
+   * @return {Promise} - when the task will completed.
    */
-  dispatch(id: string, callback: () => void) {
+  dispatch(id, callback) {
     const promise = this.enqueue(id, callback);
 
     this.step(id);

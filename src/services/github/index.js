@@ -1,8 +1,6 @@
-/* @flow */
-
 import GitHub from 'github';
 
-export default function setup(options: Object): GitHub {
+export default function setup(options) {
   const github = new GitHub(options);
 
   if (options.auth) {

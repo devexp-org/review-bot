@@ -2,7 +2,7 @@
 [x] services/queue
 [x] services/events
 [x] services/logger
-[x] services/github
+[ ] services/github
 [ ] services/mongoose
 
 ### level2

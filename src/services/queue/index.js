@@ -1,6 +1,9 @@
 import Queue from './class';
 
-export default function setup(): Queue {
+/**
+ * @return {Queue}
+ */
+export default function setup() {
 
   return new Queue();
 
