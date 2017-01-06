@@ -10,7 +10,7 @@ import _ from 'lodash';
  *
  * @return {Object}
  */
-const requireIfExists = function (configPath) {
+export function requireIfExists(configPath) {
   if (fs.existsSync(configPath)) {
     let config;
 
@@ -24,80 +24,29 @@ const requireIfExists = function (configPath) {
   }
 
   return {};
-};
-
-/**
- * Walks through json and does edits:
- *   - removes array elements started with '#comment:'
- *   - removes keys in object started with '#comment:'
- *   - parse `#include:filepath` in object keys and
- *     merges content of the filepath to the object.
- *
- * @param {String} basePath
- * @param {Object} json
- *
- * @return {Object}
- */
-export function transform(basePath, json) {
-
-  const visit = function (context) {
-
-    if (_.isArray(context)) {
-      return _(context)
-        .filter(key => !_.isString(key) || key.substr(0, 9) !== '#comment:')
-        .map(visit)
-        .value();
-    }
-
-    if (_.isPlainObject(context)) {
-      const addons = [];
-
-      const newObj = _(context)
-        .mapValues((v, k) => {
-          if (k.substr(0, 9) === '#comment:') {
-            return null;
-          } else if (k.substr(0, 9) === '#include:') {
-            const includePath = path.join(basePath, v);
-            const includeContent = requireIfExists(includePath);
-
-            addons.push(visit(includeContent));
-
-            return null;
-          } else {
-            return visit(v);
-          }
-        })
-        .omitBy(_.isNull)
-        .value();
-
-      return _.merge.apply(_, [newObj].concat(addons));
-    }
-
-    return context;
-  };
-
-  return visit(json);
-
 }
 
-export default function config(basePath, envName) {
+export default function config(basePath, envName, middlewares = []) {
 
   envName = envName || process.env.NODE_ENV || 'development';
   basePath = path.join(basePath, 'config');
 
   const join = path.join.bind(path, basePath);
-
-  const envConfigPath = join(envName + '.json');
-  const envConfigRaw = requireIfExists(envConfigPath);
-  const envConfig = transform(basePath, envConfigRaw);
-
-  const secretConfigPath = join('secret.json');
-  const secretConfigRaw = requireIfExists(secretConfigPath);
-  const secretConfig = transform(basePath, secretConfigRaw);
+  const transform = (json) => {
+    return middlewares.reduce((acc, func) => func(acc), json);
+  };
 
   const defaultConfigPath = join('default.json');
   const defaultConfigRaw = requireIfExists(defaultConfigPath);
-  const defaultConfig = transform(basePath, defaultConfigRaw);
+  const defaultConfig = transform(defaultConfigRaw);
+
+  const secretConfigPath = join('secret.json');
+  const secretConfigRaw = requireIfExists(secretConfigPath);
+  const secretConfig = transform(secretConfigRaw);
+
+  const envConfigPath = join(envName + '.json');
+  const envConfigRaw = requireIfExists(envConfigPath);
+  const envConfig = transform(envConfigRaw);
 
   return _.merge({ env: envName }, defaultConfig, secretConfig, envConfig);
 

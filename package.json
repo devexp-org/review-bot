@@ -17,6 +17,7 @@
     "test:watch": "$npm_package_config_mocha --watch --reporter spec $npm_package_config_pattern_test",
     "start": "node start.js",
     "start:watch": "nodemon start.js -e js,json,html --ignore node_modules/ --ignore client/",
+    "flow": "flow check",
     "eslint": "eslint .",
     "coverage": "BABEL_ENV=test $npm_package_config_istanbul $npm_package_config_pattern_test",
     "coverage:e2e": "$npm_package_config_istanbul $npm_package_config_pattern_test $npm_package_config_pattern_e2e",
@@ -77,6 +78,7 @@
     ],
     "exclude": [
       "src/app.js",
+      "flow-typed",
       "**/__tests__/**",
       "**/__mocks__/**"
     ],

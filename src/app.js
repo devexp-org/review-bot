@@ -3,9 +3,17 @@
 import path from 'path';
 import Architect from 'node-architect';
 import parseConfig from './modules/config';
+import configCommentTransformer from './modules/config/transformers/comment';
+import configIncludeTransformer from './modules/config/transformers/include';
+import configPluginsTransformer from './modules/config/transformers/plugins';
 
+const env = process.env.NODE_ENV || 'development';
 const basePath = path.join(__dirname, '..');
-const appConfig = parseConfig(basePath);
+const appConfig = parseConfig(basePath, env, [
+  configCommentTransformer(),
+  configIncludeTransformer(path.join(basePath, 'config')),
+  configPluginsTransformer()
+]);
 const application = new Architect(appConfig, basePath);
 
 application

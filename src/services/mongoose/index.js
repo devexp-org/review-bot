@@ -1,9 +1,16 @@
+/* @flow */
+
 import mongoose from 'mongoose';
 import beautifyUnique from 'mongoose-beautiful-unique-validation';
 
 mongoose.Promise = global.Promise;
 
-export default function setup(options, imports) {
+type MongooseConnection = {
+  model(name: string, schema: ?any): void
+}
+
+export default function setup(options: Object, imports: Object)
+  : Promise<MongooseConnection> {
 
   mongoose.plugin(beautifyUnique);
 

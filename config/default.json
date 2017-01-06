@@ -55,10 +55,6 @@
       }
     },
 
-    "plugin-manager": {
-      "path": "./src/services/plugin-manager"
-    },
-
     "mongoose": {
       "path": "./src/services/mongoose",
       "options": {
@@ -74,8 +70,7 @@
         "plugins": {}
       },
       "dependencies": [
-        "mongoose",
-        "plugin-manager"
+        "mongoose"
       ]
     },
 
@@ -90,8 +85,7 @@
       },
       "dependencies": [
         "events",
-        "logger",
-        "plugin-manager"
+        "logger"
       ]
     },
 
@@ -103,8 +97,7 @@
         "drivers": {}
       },
       "dependencies": [
-        "model",
-        "plugin-manager"
+        "model"
       ]
     },
 
@@ -138,7 +131,7 @@
     "review": {
       "path": "./src/services/review",
       "options": {
-        "steps": [],
+        "steps": {},
         "stepsOptions": {},
         "approveCount": 2,
         "defaultSteps": [
@@ -153,8 +146,7 @@
       },
       "dependencies": [
         "logger",
-        "team-manager",
-        "plugin-manager"
+        "team-manager"
       ]
     },
 
@@ -170,8 +162,7 @@
         "queue",
         "events",
         "logger",
-        "team-manager",
-        "plugin-manager"
+        "team-manager"
       ]
     },
 
@@ -181,8 +172,7 @@
         "transports": []
       },
       "dependencies": [
-        "team-manager",
-        "plugin-manager"
+        "team-manager"
       ]
     },
 

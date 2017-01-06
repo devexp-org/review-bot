@@ -1,6 +1,20 @@
+/* @flow */
+
 import { isEmpty } from 'lodash';
 
 export default class Queue {
+
+  queue: {
+    [key: string]: {
+      queue: Array<{
+        id: string,
+        reject: () => void,
+        resolve: () => void,
+        callback: () => void
+      }>,
+      active: boolean,
+    }
+  }
 
   /**
    * @constructor
@@ -10,7 +24,7 @@ export default class Queue {
   }
 
   /**
-   * Add a new item to the queue.
+   * Inserts a new element at the end of the queue.
    *
    * @protected
    *
@@ -19,7 +33,7 @@ export default class Queue {
    *
    * @return {Promise}
    */
-  enqueue(id, callback) {
+  enqueue(id: string, callback: () => void): Promise<void> {
     return new Promise((resolve, reject) => {
       this.queue[id] = this.queue[id] || { active: false, queue: [] };
       this.queue[id].queue.push({ id, callback, resolve, reject });
@@ -32,7 +46,7 @@ export default class Queue {
    * @protected
    * @param {String} id
    */
-  step(id) {
+  step(id: string) {
     if (!this.queue[id] || this.queue[id].active) {
       return;
     }
@@ -55,7 +69,7 @@ export default class Queue {
         fulfilled || queueItem.resolve();
 
         if (isEmpty(section.queue)) {
-          this.queue[id] = null;
+          delete this.queue[id];
         }
 
         this.step(id);
@@ -63,14 +77,14 @@ export default class Queue {
   }
 
   /**
-   * Add a new item to the queue and run the queue.
+   * Inserts a new element at the end of the queue and run the queue.
    *
    * @param {String} id - uniq key
    * @param {Function} callback
    *
    * @return {Promise}
    */
-  dispatch(id, callback) {
+  dispatch(id: string, callback: () => void) {
     const promise = this.enqueue(id, callback);
 
     this.step(id);

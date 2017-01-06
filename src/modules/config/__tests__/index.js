@@ -87,44 +87,17 @@ describe('modules/config', function () {
     assert.deepEqual(result, { env: 'development', http: { port: 80, debug: true } });
   });
 
-  it('should parse #include directive', function () {
-    const defaultConfig = '{ "port": 80, "#include:test": "include.json" }';
-    const includeConfig = '{ "port": 8080, "params": [true, false] }';
+  it('should be able apply transformers', function () {
+    const defaultConfig = '{ "port": 80 }';
 
     existsSyncStub.withArgs('config/default.json').returns(true);
-    existsSyncStub.withArgs('config/include.json').returns(true);
-
     readFileSyncStub.withArgs('config/default.json').returns(defaultConfig);
-    readFileSyncStub.withArgs('config/include.json').returns(includeConfig);
 
-    const result = parseConfig('.');
+    const result = parseConfig('.', 'development', [
+      function (json) { json.port = 8080; return json; }
+    ]);
 
-    assert.deepEqual(result, { env: 'testing', port: 8080, params: [true, false] });
-
-  });
-
-  describe('#comment', function () {
-
-    it('should parse #comment directive in object key', function () {
-      const defaultConfig = '{ "port": 80, "#comment:test": "comment" }';
-      existsSyncStub.withArgs('config/default.json').returns(true);
-      readFileSyncStub.withArgs('config/default.json').returns(defaultConfig);
-
-      const result = parseConfig('.');
-
-      assert.deepEqual(result, { env: 'testing', port: 80 });
-    });
-
-    it('should parse #comment directive in array value', function () {
-      const defaultConfig = '{ "port": 80, "params": [true, "#comment:test"] }';
-      existsSyncStub.withArgs('config/default.json').returns(true);
-      readFileSyncStub.withArgs('config/default.json').returns(defaultConfig);
-
-      const result = parseConfig('.');
-
-      assert.deepEqual(result, { env: 'testing', port: 80, params: [true] });
-    });
-
+    assert.deepEqual(result, { env: 'development', port: 8080 });
   });
 
   it('should throw an error if json file is not valid', function () {
