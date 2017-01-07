@@ -64,3 +64,18 @@ export function setupModel(modelName, model) {
 export default function setup() {
   return { baseSchema, setupModel };
 }
+
+/**
+ * @classdesc The class used to represent team.
+ *
+ * @name Team
+ * @class
+ *
+ * @extends MongooseModel
+ *
+ * @property {String} name
+ * @property {Object} driver
+ * @property {Array.<User>} members
+ * @property {Array.<String>} patterns
+ * @property {Object} reviewConfig
+ */

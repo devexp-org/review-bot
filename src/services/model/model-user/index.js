@@ -57,3 +57,17 @@ export function setupModel(modelName, model) {
 export default function setup() {
   return { baseSchema, setupModel };
 }
+
+/**
+ * @classdesc The class used to represent user.
+ *
+ * @name User
+ * @class
+ *
+ * @extends MongooseModel
+ *
+ * @property {String} login
+ * @property {String} html_url
+ * @property {String} avatar_url
+ * @property {Array} contacts
+ */

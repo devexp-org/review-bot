@@ -15,7 +15,7 @@ export default function setup(options, imports) {
       .then(pullRequest => {
         if (!pullRequest) {
           return Promise.reject(
-            new NotFoundError(`Pull request #${id} is not found`)
+            new NotFoundError(`Pull request ${id} is not found`)
           );
         }
 
@@ -24,10 +24,14 @@ export default function setup(options, imports) {
   }
 
   pullRequestRouter.get('/', function (req, res) {
+    const skip = req.query.skip || 0;
+    const limit = req.query.limit || 50;
+
     PullRequestModel
       .find({})
       .sort('-updated_at')
-      .limit(50)
+      .skip(skip)
+      .limit(limit)
       .exec()
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));

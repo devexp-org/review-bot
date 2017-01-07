@@ -3,6 +3,17 @@ import { forEach } from 'lodash';
 
 import PluginBroker from './class';
 
+/**
+ * Create "model" service.
+ *
+ * @param {Object} options
+ * @param {Array} options.models List of models to register.
+ * @param {Array} options.plugins List of plugins for models.
+ * @param {Object} imports
+ * @param {MongooseConnection} imports.mongoose
+ *
+ * @return {Model}
+ */
 export default function setup(options, imports) {
 
   const plugins = {};
@@ -51,3 +62,20 @@ export default function setup(options, imports) {
   return (modelName) => mongoose.model(modelName);
 
 }
+
+/**
+ * Function used to get mongoose models.
+ *
+ * @callback Model
+ *
+ * @param {String} name Model name.
+ *
+ * @return {MongooseModel}
+ */
+
+/**
+ * @classdesc The class used to represent the Mongoose model.
+ *
+ * @name MongooseModel
+ * @class
+ */

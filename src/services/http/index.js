@@ -5,6 +5,18 @@ import bodyParser from 'body-parser';
 import responseTime from 'response-time';
 import enableDestroy from 'server-destroy';
 
+/**
+ * Creates "http" service.
+ *
+ * @param {Object} options
+ * @param {String|Number} [options.port] Port to listen.
+ * @param {Array} options.routes List of routes.
+ * @param {Array} options.middlewares List of middlewares.
+ * @param {Object} imports
+ * @param {Logger} imports.logger Http logger
+ *
+ * @return {HttpServer}
+ */
 export default function setup(options, imports) {
 
   const app = express();
@@ -29,9 +41,7 @@ export default function setup(options, imports) {
 
   forEach(options.routes, (routeList, route) => {
 
-    if (!Array.isArray(routeList)) {
-      routeList = [routeList];
-    }
+    routeList = [].concat(routeList);
 
     forEach(routeList, (routeName) => {
       const routerModule = imports[routeName];
@@ -51,6 +61,7 @@ export default function setup(options, imports) {
 
   return new Promise(resolve => {
     const server = app.listen(port, () => {
+
       // Enable destroying a server, and all currently open connections.
       enableDestroy(server);
 
@@ -72,3 +83,10 @@ export default function setup(options, imports) {
   });
 
 }
+
+/**
+ * @classdesc HttpServer.
+ *
+ * @name HttpServer
+ * @class
+ */

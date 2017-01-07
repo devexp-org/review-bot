@@ -1,16 +1,19 @@
-/* @flow */
-
 import mongoose from 'mongoose';
 import beautifyUnique from 'mongoose-beautiful-unique-validation';
 
 mongoose.Promise = global.Promise;
 
-type MongooseConnection = {
-  model(name: string, schema: ?any): void
-}
-
-export default function setup(options: Object, imports: Object)
-  : Promise<MongooseConnection> {
+/**
+ * Creates "mongoose" service.
+ *
+ * @param {Object} options
+ * @param {String} options.host Mongoose {@link http://mongoosejs.com/docs/connections.html URI}
+ * @param {Object} imports
+ * @param {Logger} imports.logger
+ *
+ * @return {Promise.<MongooseConnection>}
+ */
+export default function setup(options, imports) {
 
   mongoose.plugin(beautifyUnique);
 
@@ -43,3 +46,22 @@ export default function setup(options: Object, imports: Object)
   });
 
 }
+
+/**
+ * @classdesc The class used to represent the mongoose connection.
+ *
+ * @name MongooseConnection
+ * @class
+ */
+
+/**
+ * Returns or registers with given schema a mongoose model.
+ *
+ * @name MongooseConnection#model
+ * @method
+ *
+ * @param {String} name Model name
+ * @param {Object} [schema] Mongoose schema
+ *
+ * @return {MongooseModel}
+ */

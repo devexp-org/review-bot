@@ -1,6 +1,8 @@
 import { EventEmitter2 } from 'eventemitter2';
 
 /**
+ * Creates "EventEmitter" service.
+ *
  * @return {EventEmitter}
  */
 export default function setup() {

@@ -107,14 +107,18 @@ export function setupModel(modelName, model) {
    * Finds pull requests by user.
    *
    * @param {String} login
+   * @param {Number} skip
+   * @param {Number} limit
    *
    * @return {Promise.<PullRequest>}
    */
-  model.statics.findByUser = function (login) {
+  model.statics.findByUser = function (login, skip = 0, limit = 50) {
     return this
       .model(modelName)
       .find({ 'user.login': login })
       .sort('-updated_at')
+      .skip(skip)
+      .limit(limit)
       .limit(50)
       .exec();
   };
@@ -139,3 +143,36 @@ export function setupModel(modelName, model) {
 export default function setup() {
   return { baseSchema, setupModel };
 }
+
+
+/**
+ * @classdesc The class used to represent pull request.
+ *
+ * @name PullRequest
+ * @class
+ *
+ * @extends MongooseModel
+ *
+ * @property {Number} id
+ * @property {String} body
+ * @property {String} title
+ * @property {Number} number
+ * @property {String} html_url
+ * @property {String} state
+ * @property {Object} head
+ * @property {Object} base
+ * @property {Object} user
+ * @property {Object} repository
+ * @property {Date} created_at
+ * @property {Date} updated_at
+ * @property {Date} closed_at
+ * @property {Date} merged_at
+ * @property {Object} merged_by
+ * @property {Number} commits
+ * @property {Number} comments
+ * @property {Number} additions
+ * @property {Number} deletions
+ * @property {Number} changed_files
+ * @property {Number} review_comments
+ * @property {Array} files
+ */

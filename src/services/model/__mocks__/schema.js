@@ -1,5 +1,8 @@
 import { get } from 'lodash';
 
+function noop() {
+}
+
 export default function mock() {
 
   return {
@@ -23,7 +26,7 @@ export function virtualMock() {
 
 }
 
-export function instanceMock(obj, mixin) {
+export function instanceMock(obj, mixin = noop) {
 
   obj.get = function () {};
   obj.set = sinon.stub().returnsThis();
@@ -35,9 +38,7 @@ export function instanceMock(obj, mixin) {
     return get(this, path);
   });
 
-  if (mixin) {
-    mixin(obj);
-  }
+  mixin(obj);
 
   return obj;
 

@@ -20,10 +20,10 @@ export default function setup(options, imports) {
           'default': 'notstarted'
         },
         reviewers: [Reviewer],
-        approveCount: Number,
         started_at: Date,
         updated_at: Date,
-        completed_at: Date
+        completed_at: Date,
+        approveCount: Number
       }
     });
 

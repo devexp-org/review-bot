@@ -116,13 +116,13 @@ describe('services/http', function () {
 
   });
 
-  it('should throw an error if route module was not given', function () {
+  it('should throw an error if route module is not given', function () {
     imports.index = null;
 
     assert.throws(() => service(options, imports), /cannot.*index/i);
   });
 
-  it('should throw an error if middleware module was not given', function () {
+  it('should throw an error if middleware module is not given', function () {
     imports['cors-headers'] = null;
 
     assert.throws(() => service(options, imports), /cannot.*cors-headers/i);

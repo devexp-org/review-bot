@@ -1,10 +1,13 @@
+function noop() {
+}
+
 export default function mock() {
   const statics = staticMock();
 
   return { model: sinon.stub().returns(statics) };
 }
 
-export function staticMock(obj, mixin) {
+export function staticMock(obj, mixin = noop) {
   const statics = sinon.stub().returns(obj);
 
   statics.find = sinon.stub().returnsThis();
@@ -19,9 +22,7 @@ export function staticMock(obj, mixin) {
   statics.findOne = sinon.stub().returnsThis();
   statics.findById = sinon.stub().returns(Promise.resolve(null));
 
-  if (mixin) {
-    mixin(statics);
-  }
+  mixin(statics);
 
   return statics;
 }

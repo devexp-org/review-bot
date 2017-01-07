@@ -1,8 +1,7 @@
+import service from '../';
+import { teamMock } from '../__mocks__/';
 import { isFunction } from 'lodash';
 
-import service, * as teamModel from '../';
-
-import { teamMock } from '../__mocks__/';
 import staticModelMock from '../../../model/__mocks__/static';
 import schemaModelMock from '../../../model/__mocks__/schema';
 
@@ -19,7 +18,7 @@ describe('services/model/model-team', function () {
 
     it('the mock object should have the same properties', function () {
       const mock = teamMock();
-      const schema = teamModel.baseSchema();
+      const schema = service().baseSchema();
 
       const properties = Object.keys(mock);
 
@@ -37,7 +36,7 @@ describe('services/model/model-team', function () {
     beforeEach(function () {
       model = schemaModelMock();
 
-      teamModel.setupModel('team', model);
+      service().setupModel('team', model);
     });
 
     it('should add static method "findByName"', function () {

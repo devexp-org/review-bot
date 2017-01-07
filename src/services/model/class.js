@@ -6,16 +6,20 @@ import { forEach } from 'lodash';
 export default class PluginBroker {
 
   /**
+   * @constructor
+   * @property {Object[]} plugins
+   *
    * @param {Object[]} plugins
+   *
    */
   constructor(plugins) {
     this.plugins = plugins || {};
   }
 
   /**
-   * Returns plugins for given model.
+   * Returns plugins for the given model.
    *
-   * @param {String} model - model name.
+   * @param {String} model Model name.
    *
    * @return {Object}
    */
@@ -24,10 +28,10 @@ export default class PluginBroker {
   }
 
   /**
-   * Applies plugins to given model.
+   * Applies plugins to the given model.
    *
-   * @param {String} name - model name.
-   * @param {Object} model - mongoose model.
+   * @param {String} name Model name.
+   * @param {Object} model Mongoose model.
    */
   setupModel(name, model) {
     forEach(this.get(name), (plugin) => {

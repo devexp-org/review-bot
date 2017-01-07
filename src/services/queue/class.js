@@ -8,7 +8,7 @@ export default class Queue {
   /**
    * @constructor
    *
-   * @property {Object} queue
+   * @property {Object} queue Queue storage.
    */
   constructor() {
     this.queue = {};
@@ -19,8 +19,8 @@ export default class Queue {
    *
    * @protected
    *
-   * @param {String} id - queue id. Queues with different ids run in parallel.
-   * @param {Function} callback - queue task.
+   * @param {String} id Queue id. Queues with different ids run in parallel.
+   * @param {Function} callback Queue task.
    *
    * @return {Promise}
    */
@@ -34,7 +34,7 @@ export default class Queue {
   /**
    * Starts the first task from queue.
    *
-   * @param {String} id - queue id.
+   * @param {String} id Queue id.
    *
    * @protected
    */
@@ -71,10 +71,10 @@ export default class Queue {
   /**
    * Inserts a new task at the end of the queue and run that queue.
    *
-   * @param {String} id - queue id. Queues with different ids run in parallel.
-   * @param {Function} callback - queue task.
+   * @param {String} id Queue id. Queues with different ids run in parallel.
+   * @param {Function} callback Queue task.
    *
-   * @return {Promise} - when the task will completed.
+   * @return {Promise} when the task will completed.
    */
   dispatch(id, callback) {
     const promise = this.enqueue(id, callback);

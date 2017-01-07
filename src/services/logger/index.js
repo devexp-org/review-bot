@@ -1,7 +1,10 @@
 import intel from 'intel';
 
 /**
- * @param {Object} options
+ * Creates "Logger" service.
+ *
+ * @param {Object} options Options for "intel" logger
+ *   {@link https://www.npmjs.com/package/intel "intel" package on NPM}
  *
  * @return {Logger}
  */
@@ -27,9 +30,9 @@ export default function setup(options) {
  * @name Logger#log
  * @method
  *
- * @param {String} severity - string value which specifies the severity of the log message.
- * @param {String} message - log message containing zero or more format items.
- * @param {...} [parameters] - message parameters.
+ * @param {String} severity String value which specifies the severity of the log message.
+ * @param {String} message Log message containing zero or more format items.
+ * @param {*} [...parameters] Message parameters.
  *
  * @return {void}
  */
@@ -40,8 +43,8 @@ export default function setup(options) {
  * @name Logger#info
  * @method
  *
- * @param {String} message - log message containing zero or more format items.
- * @param {...} [parameters] - message parameters.
+ * @param {String} message Log message containing zero or more format items.
+ * @param {*} [...parameters] Message parameters.
  *
  * @return {void}
  */
@@ -52,8 +55,8 @@ export default function setup(options) {
  * @name Logger#warn
  * @method
  *
- * @param {String} message - log message containing zero or more format items.
- * @param {...} [parameters] - message parameters.
+ * @param {String} message Log message containing zero or more format items.
+ * @param {*} [...parameters] Message parameters.
  *
  * @return {void}
  */
@@ -64,8 +67,8 @@ export default function setup(options) {
  * @name Logger#error
  * @method
  *
- * @param {String} message - log message containing zero or more format items.
- * @param {...} [parameters] - message parameters.
+ * @param {String} message Log message containing zero or more format items.
+ * @param {*} [...parameters] Message parameters.
  *
  * @return {void}
  */
@@ -78,7 +81,7 @@ export default function setup(options) {
  * @name Logger#getLogger
  * @method
  *
- * @param {String} name - the logger name.
+ * @param {String} name The logger name.
  *
  * @return {Logger}
  */

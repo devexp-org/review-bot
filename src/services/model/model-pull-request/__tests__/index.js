@@ -1,8 +1,7 @@
+import service from '../';
 import { isFunction } from 'lodash';
-
-import service, * as pullRequestModel from '../';
-
 import { pullRequestMock } from '../__mocks__/';
+
 import staticModelMock from '../../../model/__mocks__/static';
 import schemaModelMock, { virtualMock } from '../../../model/__mocks__/schema';
 
@@ -19,7 +18,7 @@ describe('services/model/model-pull-request', function () {
 
     it('the mock object should have the same properties', function () {
       const mock = pullRequestMock();
-      const schema = pullRequestModel.baseSchema();
+      const schema = service().baseSchema();
 
       const properties = Object.keys(mock);
 
@@ -45,14 +44,14 @@ describe('services/model/model-pull-request', function () {
 
       pullRequest = pullRequestMock();
 
-      pullRequestModel.setupModel('pull_request', model);
+      service().setupModel('pull_request', model);
     });
 
     it('should add property "owner"', function () {
       ownerMock.get.callArgOnWith(0, pullRequest);
     });
 
-    it('should add the method "toString"', function () {
+    it('should add method "toString"', function () {
       assert.property(model.methods, 'toString');
       assert.isFunction(model.methods.toString);
     });

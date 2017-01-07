@@ -1,8 +1,7 @@
+import service from '../';
+import { userMock } from '../__mocks__/';
 import { isFunction } from 'lodash';
 
-import service, * as userModel from '../';
-
-import { userMock } from '../__mocks__/';
 import staticModelMock from '../../../model/__mocks__/static';
 import schemaModelMock from '../../../model/__mocks__/schema';
 
@@ -19,7 +18,7 @@ describe('services/model/model-user', function () {
 
     it('the mock object should have the same properties', function () {
       const mock = userMock();
-      const schema = userModel.baseSchema();
+      const schema = service().baseSchema();
 
       const properties = Object.keys(mock);
 
@@ -39,7 +38,7 @@ describe('services/model/model-user', function () {
 
       model = schemaModelMock();
 
-      userModel.setupModel('user', model);
+      service().setupModel('user', model);
     });
 
     it('should add method "getContacts"', function () {

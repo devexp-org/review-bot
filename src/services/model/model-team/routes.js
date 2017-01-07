@@ -15,7 +15,9 @@ export default function setup(options, imports) {
   const teamRoute = router();
 
   function findByName(name, getMembers = false) {
-    return TeamModel[getMembers ? 'findByNameWithMembers' : 'findByName'](name)
+    const method = getMembers ? 'findByNameWithMembers' : 'findByName';
+
+    return TeamModel[method](name)
       .then(team => {
         if (!team) {
           return Promise.reject(new NotFoundError(
@@ -42,7 +44,14 @@ export default function setup(options, imports) {
   }
 
   teamRoute.get('/', function (req, res) {
-    TeamModel.find({}).limit(50).exec()
+    const skip = req.query.skip || 0;
+    const limit = req.query.limit || 50;
+
+    TeamModel.find({})
+      .sort('name')
+      .skip(skip)
+      .limit(limit)
+      .exec()
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });

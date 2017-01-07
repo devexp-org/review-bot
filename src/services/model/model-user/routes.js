@@ -24,7 +24,14 @@ export default function setup(options, imports) {
   }
 
   userRoute.get('/', function (req, res) {
-    UserModel.find({}).limit(50).exec()
+    const skip = req.query.skip;
+    const limit = req.query.limit;
+
+    UserModel.find({})
+      .sort('login')
+      .skip(skip)
+      .limit(limit)
+      .exec()
       .then(res.json.bind(res))
       .catch(res.handleError.bind(res, logger));
   });

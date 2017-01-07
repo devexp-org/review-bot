@@ -2,16 +2,19 @@
 [x] services/queue
 [x] services/events
 [x] services/logger
-[ ] services/github
-[ ] services/mongoose
+[x] services/github
+[x] services/mongoose
 
 ### level2
-[ ] http
-[ ] model
+[x] http
+[x] model
 [ ] pull-request-github
 [ ] pull-request-review
 
 ### level3
+[x] user-model
+[x] team-model
+[x] pull-request-model
 [ ] webhook
 [ ] team-manager
 

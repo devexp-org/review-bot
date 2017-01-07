@@ -26,7 +26,7 @@ describe('services/model', function () {
 
   });
 
-  it('should setup a model', function () {
+  it('should be able to setup a model', function () {
     const model = service(options, imports);
 
     model('test');
@@ -44,7 +44,7 @@ describe('services/model', function () {
       models: { test: 'non-existent model' }
     };
 
-    assert.throws(() => service(options, imports), /cannot find/i);
+    assert.throws(() => service(options, imports), /cannot find the model/i);
   });
 
   it('should throw an error if cannot find plugin', function () {
@@ -52,7 +52,7 @@ describe('services/model', function () {
       plugins: { test: ['non-existent addon'] }
     };
 
-    assert.throws(() => service(options, imports), /cannot find/i);
+    assert.throws(() => service(options, imports), /cannot find the plugin/i);
   });
 
 });
