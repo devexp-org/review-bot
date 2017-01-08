@@ -29,7 +29,7 @@ describe('services/webhook/github/pull_request', function () {
 
     payload = {
       id: 123456789,
-      action: 'pull_request',
+      action: 'open',
       pull_request: {
         title: 'The Ultimate Question of Life, the Universe, and Everything',
         number: 42,
@@ -52,18 +52,24 @@ describe('services/webhook/github/pull_request', function () {
 
   });
 
-  it('should trigger event `github:pull_request`', function (done) {
+  it('should trigger event `github:pull_request:*`', function (done) {
     webhook(payload, imports)
-      .then(() => events.emit.calledWith('github:pull_requset'))
+      .then(() => assert.calledWith(events.emitAsync, 'github:pull_request:open'))
       .then(done, done);
   });
 
-  it('should create new object if pull request was not found', function (done) {
+  it('should create new object if pull request is not found', function (done) {
     PullRequestModel.findById
       .returns(Promise.resolve(null));
 
     webhook(payload, imports)
-      .then(pullRequest => assert.isObject(pullRequest))
+      .then(() => {
+        assert.calledWithMatch(
+          events.emitAsync,
+          'github:pull_request:open',
+          sinon.match.object
+      );
+      })
       .then(done, done);
   });
 

@@ -32,9 +32,8 @@ export default function webhook(payload, imports) {
       const action = isNewPullRequest ? 'saved' : 'updated';
 
       logger.info('Pull request %s %s', action, pullRequest);
-      events.emit('github:pull_request:' + payload.action, { pullRequest });
 
-      return pullRequest;
+      return events.emitAsync('github:pull_request:' + payload.action, { pullRequest });
     });
 
 }

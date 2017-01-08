@@ -64,7 +64,11 @@ export default class Review {
 
         return team.getCandidates(review.pullRequest)
           .then(members => {
-            review.members = members;
+            review.members = members.map(member => {
+              member.rank = 0;
+              return member;
+            });
+
             return review;
           });
       });
@@ -133,14 +137,24 @@ export default class Review {
     );
 
     const sortByRank = (a, b) => b.rank - a.rank;
+    const getCurrent = function (review) {
+      return review.members
+          .slice(0, 5)
+          .map(x => x.login + '#' + x.rank)
+          .join(', ');
+    };
 
     return review.steps.reduce((promise, { name, ranker }) => {
       return promise.then(review => {
-        this.logger.info('review phase is `%s`', name);
-
+        this.logger.info('Phase is `%s`', name);
         review.members.sort(sortByRank);
 
-        return ranker.process(review, stepsOptions[name] || {});
+        return ranker
+          .process(review, stepsOptions[name] || {})
+          .then(review => {
+            this.logger.info('After `%s`: %s', name, getCurrent(review));
+            return review;
+          });
       });
     }, Promise.resolve(review));
   }

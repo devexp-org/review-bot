@@ -27,12 +27,11 @@ export default function webhook(payload, imports) {
       }
 
       logger.info('Issue comment %s', pullRequest);
-      events.emit(
+
+      return events.emitAsync(
         'github:issue_comment',
         { pullRequest, comment: payload.comment }
       );
-
-      return pullRequest;
     });
 
 }

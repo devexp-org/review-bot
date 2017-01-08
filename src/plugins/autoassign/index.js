@@ -11,15 +11,17 @@ export default function setup(options, imports) {
    *
    * @param {Object} payload
    * @param {Object} payload.pullRequest
+   *
+   * @return {Promise}
    */
   function autoStart({ pullRequest }) {
     if (pullRequest.hasReviewers()) return;
 
     logger.info('Autostart review. %s', pullRequest);
 
-    review.choose(pullRequest)
-      .then(result => pullRequestReview.updateReview(pullRequest, result))
-      .catch(logger.error.bind(logger));
+    return review.choose(pullRequest)
+      .then(result => pullRequestReview.updateReview(pullRequest, result));
+      // .catch(logger.error.bind(logger));
   }
 
   events.on('github:pull_request:opened', autoStart);

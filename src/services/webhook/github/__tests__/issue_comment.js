@@ -45,7 +45,7 @@ describe('services/webhook/github/issue_comment', function () {
 
   it('should trigger system event `github:issue_comment`', function (done) {
     webhook(payload, imports)
-      .then(() => assert.calledWith(events.emit, 'github:issue_comment'))
+      .then(() => assert.calledWith(events.emitAsync, 'github:issue_comment'))
       .then(done, done);
   });
 
