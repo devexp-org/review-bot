@@ -108,7 +108,7 @@ export default function commandService(options, imports) {
         );
       })
       .then(pullRequest => {
-        events.emit(EVENT_NAME, { pullRequest });
+        events.emit(EVENT_NAME, { pullRequest, newReviewer });
 
         return pullRequest;
       });

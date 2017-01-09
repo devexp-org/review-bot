@@ -65,6 +65,16 @@ describe('services/command/busy', function () {
       .then(done, done);
   });
 
+  it('should not reject promise if no reviewers at all', function (done) {
+    review.choose.returns(Promise.resolve({
+      reviewers: [], pullRequest
+    }));
+
+    command('/busy', payload)
+      .then(() => {})
+      .then(done, done);
+  });
+
   it('should save pull request with a new reviewer', function (done) {
     command('/busy', payload)
       .then(() => {

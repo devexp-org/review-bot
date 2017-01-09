@@ -1,5 +1,5 @@
 import util from 'util';
-import { find, reject, cloneDeep } from 'lodash';
+import { find, reject, isEmpty, cloneDeep } from 'lodash';
 
 export const EVENT_NAME = 'review:command:busy';
 export const COMMAND_RE = '/busy';
@@ -44,10 +44,12 @@ export default function setup(options, imports) {
     }
 
     return review.choose(pullRequest)
-      .then((review) => {
-        // TODO handle an empty reviewers.
+      .then(({ reviewers }) => {
+        if (isEmpty(reviewers)) {
+          return pullRequest;
+        }
 
-        newReviewer = cloneDeep(review.reviewers.shift());
+        newReviewer = cloneDeep(reviewers.shift());
 
         pullRequestReviewers = reject(
           pullRequestReviewers, { login: commentUser }

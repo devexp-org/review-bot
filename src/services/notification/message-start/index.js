@@ -24,18 +24,24 @@ export default function setup(options, imports) {
   const notification = imports.notification;
 
   function startNotification(payload) {
-    const reviewers = payload.pullRequest.get('review.reviewers');
-
     const body = message(payload);
+    const send = (login) => {
+      return notification.sendMessage(payload.pullRequest, login, body);
+    };
 
-    const promise = map(reviewers, (member) => {
-      return notification.sendMessage(payload.pullRequest, member.login, body)
-        .catch(logger.error.bind(logger));
-    });
+    const newReviewers = [].concat(payload.newReviewer).filter(Boolean);
+    const allReviewers = payload.pullRequest.get('review.reviewers');
+    const users = (newReviewers.length) ? newReviewers : allReviewers;
 
-    return Promise.all(promise);
+    const promise = map(users, (user) => send(user.login));
+
+    return Promise.all(promise).catch(logger.error.bind(logger));
   }
 
   events.on('review:started', startNotification);
+  events.on('review:command:add', startNotification);
+  events.on('review:command:busy', startNotification);
+  events.on('review:command:change', startNotification);
+  events.on('review:command:replace', startNotification);
 
 }

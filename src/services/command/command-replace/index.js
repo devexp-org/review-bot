@@ -22,6 +22,8 @@ export default function commandService(options, imports) {
    */
   const replaceCommand = function replaceCommand(command, payload, arglist) {
 
+    let newReviewer;
+
     const pullRequest = payload.pullRequest;
     const commentUser = payload.comment.user.login;
 
@@ -50,18 +52,20 @@ export default function commandService(options, imports) {
           return pullRequest;
         }
 
+        newReviewer = cloneDeep(reviewers.shift());
+
         pullRequestReviewers = reject(
           pullRequestReviewers, { login: oldReviewerLogin }
         );
 
-        pullRequestReviewers.push(cloneDeep(reviewers.shift()));
+        pullRequestReviewers.push(newReviewer);
 
         return pullRequestReview.updateReview(
           pullRequest, { reviewers: pullRequestReviewers }
         );
       })
       .then(pullRequest => {
-        events.emit(EVENT_NAME, { pullRequest });
+        events.emit(EVENT_NAME, { pullRequest, newReviewer });
 
         return pullRequest;
       });

@@ -21,7 +21,9 @@ describe('services/notification/message-start', function () {
 
     payload = { pullRequest };
 
-    events.on.callsArgWith(1, payload);
+    events.on
+      .withArgs('review:started')
+      .callsArgWith(1, payload);
 
     options = {};
 
@@ -29,10 +31,14 @@ describe('services/notification/message-start', function () {
 
   });
 
-  it('should subscribe to event `review:started', function () {
+  it('should subscribe to events', function () {
     service(options, imports);
 
     assert.calledWith(events.on, 'review:started');
+    assert.calledWith(events.on, 'review:command:add');
+    assert.calledWith(events.on, 'review:command:busy');
+    assert.calledWith(events.on, 'review:command:change');
+    assert.calledWith(events.on, 'review:command:replace');
   });
 
   it('should send start message to the reviewers', function () {
@@ -44,6 +50,20 @@ describe('services/notification/message-start', function () {
 
     assert.calledWith(notification.sendMessage, pullRequest, 'Black Widow');
     assert.calledWith(notification.sendMessage, pullRequest, 'Spider-Man');
+  });
+
+  it('should send start message only to new reviewers', function () {
+    payload.newReviewer = { login: 'Spider-Man' };
+
+    pullRequest.review = {
+      reviewers: [{ login: 'Black Widow' }, { login: 'Spider-Man' }]
+    };
+
+    service(options, imports);
+
+    assert.calledOnce(notification.sendMessage);
+    assert.calledWith(notification.sendMessage, pullRequest, 'Spider-Man');
+    assert.neverCalledWith(notification.sendMessage, pullRequest, 'Black Widow');
   });
 
 });
