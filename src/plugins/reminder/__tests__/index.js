@@ -162,11 +162,11 @@ describe('services/reminder', function () {
       scheduleService = service.default(options, imports);
     });
 
-    it('should emit event `review:schedule:ping` and reset timer if no comments in pull request', function (done) {
+    it('should emit event `review:command:ping` and reset timer if no comments in pull request', function (done) {
       scheduleService.trigger(1);
 
       setTimeout(() => {
-        assert.calledWith(events.emit, 'review:schedule:ping');
+        assert.calledWith(events.emit, 'review:command:ping');
         assert.calledWith(schedule.scheduleJob, 'pull-1');
         done();
       }, 0);
@@ -178,7 +178,7 @@ describe('services/reminder', function () {
       scheduleService.trigger(1);
 
       setTimeout(() => {
-        assert.neverCalledWith(events.emit, 'review:schedule:ping');
+        assert.neverCalledWith(events.emit, 'review:command:ping');
         assert.neverCalledWith(schedule.scheduleJob, 'pull-1');
         done();
       }, 0);

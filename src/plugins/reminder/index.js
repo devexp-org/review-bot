@@ -2,7 +2,7 @@ import moment from 'moment';
 import schedule from 'node-schedule';
 import { forEach } from 'lodash';
 
-export const EVENT_NAME = 'review:schedule:ping';
+export const EVENT_NAME = 'review:command:ping';
 
 export function cancelJob(pullRequest) {
   const key = 'pull-' + pullRequest.id;
