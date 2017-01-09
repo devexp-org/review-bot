@@ -1,7 +1,7 @@
 import { find } from 'lodash';
-import { StaticDriver, StaticDriverFactory } from '../driver-static/class';
+import { AbstractDriver, AbstractDriverFactory } from '../driver-abstract/class';
 
-export class GitHubDriver extends StaticDriver {
+export class GitHubDriver extends AbstractDriver {
 
   /**
    * @constructor
@@ -111,7 +111,7 @@ export class GitHubDriver extends StaticDriver {
 
 }
 
-export class GitHubDriverFactory extends StaticDriverFactory {
+export class GitHubDriverFactory extends AbstractDriverFactory {
 
   /**
    * @constructor

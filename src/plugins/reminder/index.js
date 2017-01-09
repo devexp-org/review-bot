@@ -32,7 +32,7 @@ export function createJob(pullRequest, timeShift, trigger) {
 
 export function scheduleInReview(PullRequestModel, timeShift, trigger) {
 
-  return PullRequestModel.findInReview()
+  return PullRequestModel.findInReview(0, 1000)
     .then(result => {
       const promise = result.map(pullRequest => {
         return createJob(pullRequest, timeShift, trigger);
@@ -64,7 +64,7 @@ export default function setup(options, imports) {
       .then(pullRequest => {
         if (pullRequest.state !== 'closed' && !pullRequest.review_comments) {
           events.emit(EVENT_NAME, { pullRequest });
-          createJob(pullRequest);
+          return createJob(pullRequest);
         }
       });
   }
