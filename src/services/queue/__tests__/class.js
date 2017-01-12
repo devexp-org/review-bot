@@ -1,23 +1,37 @@
 import Queue from '../class';
+import queueMock from '../__mocks__/';
 
 describe('services/queue', function () {
 
-  let id, queue;
+  let id, task, mock, queue;
 
   beforeEach(function () {
     id = 'just_id';
+    mock = queueMock();
+    task = () => Promise.resolve();
     queue = new Queue();
   });
 
   describe('#dispatch', function () {
 
-    it('should add a task to queue and execute it', function (done) {
-      const task = () => Promise.resolve();
+    it('should pass __mock__ verification', function (done) {
+      queue = queueMock.spy(queue);
 
-      queue
-        .dispatch(id, task)
-        .then(() => done())
-        .catch(done);
+      Promise.resolve()
+        .then(() => mock.dispatch(id, task))
+        .then(() => queue.dispatch(id, task))
+        .then(() => {
+          queueMock.verify(mock);
+          queueMock.verify(queue);
+        })
+        .then(done, done);
+    });
+
+    it('should add a task to queue and execute it', function (done) {
+      Promise.resolve()
+        .then(() => queue.dispatch(id, task))
+        .then(() => {})
+        .then(done, done);
     });
 
     it('should add a task to queue if previous tasks were not finished', function (done) {
@@ -42,7 +56,7 @@ describe('services/queue', function () {
       };
 
       order.push('enqueue long task');
-      queue.dispatch(id, longTask);
+      queue.enqueue(id, longTask);
 
       order.push('enqueue short task');
       queue
@@ -76,7 +90,7 @@ describe('services/queue', function () {
         return Promise.resolve();
       };
 
-      queue.dispatch(id, longTask);
+      queue.enqueue(id, longTask);
 
       queue
         .dispatch(id, shortTask)

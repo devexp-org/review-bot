@@ -15,23 +15,6 @@ export default class Queue {
   }
 
   /**
-   * Inserts a new task at the end of the queue.
-   *
-   * @protected
-   *
-   * @param {String} id Queue id. Queues with different ids run in parallel.
-   * @param {Function} callback Queue task.
-   *
-   * @return {Promise}
-   */
-  enqueue(id, callback) {
-    return new Promise((resolve, reject) => {
-      this.queue[id] = this.queue[id] || { active: false, queue: [] };
-      this.queue[id].queue.push({ id, callback, resolve, reject });
-    });
-  }
-
-  /**
    * Starts the first task from queue.
    *
    * @param {String} id Queue id.
@@ -66,6 +49,23 @@ export default class Queue {
 
         this.step(id);
       });
+  }
+
+  /**
+   * Inserts a new task at the end of the queue.
+   *
+   * @protected
+   *
+   * @param {String} id Queue id. Queues with different ids run in parallel.
+   * @param {Function} callback Queue task.
+   *
+   * @return {Promise}
+   */
+  enqueue(id, callback) {
+    return new Promise((resolve, reject) => {
+      this.queue[id] = this.queue[id] || { active: false, queue: [] };
+      this.queue[id].queue.push({ id, callback, resolve, reject });
+    });
   }
 
   /**
