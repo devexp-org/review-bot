@@ -1,13 +1,15 @@
 ### level 1
 [x] services/queue
-[x] services/events
-[x] services/logger
-[x] services/github
-[x] services/mongoose
+  [x] jsdoc
+  [x] typecheck
+[ ] services/events
+[ ] services/logger
+[ ] services/github
+[ ] services/mongoose
 
 ### level2
-[x] http
-[x] model
+[ ] http
+[ ] model
 [ ] pull-request-github
 [ ] pull-request-review
 
