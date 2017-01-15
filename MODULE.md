@@ -2,9 +2,15 @@
 [x] services/queue
   [x] jsdoc
   [x] typecheck
-[ ] services/events
-[ ] services/logger
-[ ] services/github
+[x] services/events
+  [x] jsdoc
+  [x] typecheck
+[x] services/logger
+  [x] jsdoc
+  [x] typecheck
+[x] services/github
+  [x] jsdoc
+  [x] typecheck
 [ ] services/mongoose
 
 ### level2

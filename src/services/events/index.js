@@ -12,7 +12,7 @@ export default function setup() {
 }
 
 /**
- * @classdesc EventEmitter.
+ * @classdesc Event emitter.
  *
  * @name EventEmitter
  * @class

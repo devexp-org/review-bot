@@ -3,29 +3,21 @@ import queueMock from '../__mocks__/';
 
 describe('services/queue', function () {
 
-  let id, task, mock, queue;
+  let id, task, queue;
 
   beforeEach(function () {
     id = 'just_id';
-    mock = queueMock();
     task = () => Promise.resolve();
     queue = new Queue();
+
+    queueMock.spy(queue);
+  });
+
+  afterEach(function () {
+    queueMock.verify(queue);
   });
 
   describe('#dispatch', function () {
-
-    it('should pass __mock__ verification', function (done) {
-      queue = queueMock.spy(queue);
-
-      Promise.resolve()
-        .then(() => mock.dispatch(id, task))
-        .then(() => queue.dispatch(id, task))
-        .then(() => {
-          queueMock.verify(mock);
-          queueMock.verify(queue);
-        })
-        .then(done, done);
-    });
 
     it('should add a task to queue and execute it', function (done) {
       Promise.resolve()
@@ -90,7 +82,9 @@ describe('services/queue', function () {
         return Promise.resolve();
       };
 
-      queue.enqueue(id, longTask);
+      queue
+        .enqueue(id, longTask)
+        .catch(() => {});
 
       queue
         .dispatch(id, shortTask)

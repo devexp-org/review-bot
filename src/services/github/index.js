@@ -21,10 +21,10 @@ export default function setup(options) {
 /**
  * @typedef {Object} GitHub
  *
- * @property {GitHubOrgs} orgs
- * @property {GitHubUsers} users
- * @property {GitHubRepos} repos
- * @property {GitHubPullRequests} pullRequests
+ * @property {GitHubOrgs} orgs - Manage organisations
+ * @property {GitHubUsers} users - Manage users
+ * @property {GitHubRepos} repos - Manage repositories
+ * @property {GitHubPullRequests} pullRequests Manage pull requests
  */
 
 /**
