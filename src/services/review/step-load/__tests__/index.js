@@ -27,7 +27,7 @@ describe('services/review/steps/load', function () {
       pullRequestModelReviewMixin
     );
 
-    PullRequestModel.findInReviewByReviewer
+    PullRequestModel.findInReview
       .returns(Promise.resolve([]));
 
     model
@@ -75,12 +75,7 @@ describe('services/review/steps/load', function () {
       { login: 'Thor', rank: 3 }
     ];
 
-    PullRequestModel.findInReviewByReviewer
-      .withArgs('Black Widow')
-      .returns(Promise.resolve([activePull1]));
-
-    PullRequestModel.findInReviewByReviewer
-      .withArgs('Hulk')
+    PullRequestModel.findInReview
       .returns(Promise.resolve([activePull1, activePull2]));
 
     step = service({}, imports);

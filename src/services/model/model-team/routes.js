@@ -60,6 +60,7 @@ export default function setup(options, imports) {
     const team = new TeamModel({
       name: req.body.name,
       driver: req.body.driver,
+      patterns: req.body.patterns,
       reviewConfig: req.body.reviewConfig
     });
 

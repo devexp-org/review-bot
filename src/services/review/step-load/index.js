@@ -1,4 +1,4 @@
-import { chain, find, forEach, isEmpty } from 'lodash';
+import { find, forEach, isEmpty } from 'lodash';
 import AbstractReviewStep from '../step';
 
 export class LoadReviewStep extends AbstractReviewStep
@@ -40,26 +40,18 @@ export class LoadReviewStep extends AbstractReviewStep
   process(review, options) {
     const max = options.max;
 
-    const promise = [];
-
     if (isEmpty(review.members)) {
       return Promise.resolve(review);
     }
 
-    forEach(review.members, (member) => {
-      promise.push(this.PullRequestModel.findInReviewByReviewer(member.login));
-    });
+    return this.PullRequestModel.findInReview(0, 1000)
+      .then(pulls => {
+        forEach(pulls, (current) => {
+          forEach(current.review.reviewers, (reviewer) => {
+            const member = find(review.members, { login: reviewer.login });
 
-    return Promise.all(promise)
-      .then(openReviews => {
-        const reviews = chain(openReviews).flatten().uniq('id').value();
-
-        forEach(reviews, (activeReview) => {
-          forEach(activeReview.review.reviewers, (reviewer) => {
-            reviewer = find(review.members, { login: reviewer.login });
-
-            if (reviewer) {
-              reviewer.rank -= max;
+            if (member) {
+              member.rank -= max;
             }
           });
         });
