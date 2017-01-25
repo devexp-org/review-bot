@@ -24,6 +24,7 @@ export default class PullRequestReview {
    * @return {Promise}
    */
   startReview(pullRequest) {
+
     const review = pullRequest.get('review');
 
     if (!pullRequest.hasReviewers()) {
@@ -51,10 +52,14 @@ export default class PullRequestReview {
 
     pullRequest.set('review', review);
 
-    this.logger.info('Review started. %s', pullRequest);
-    this.events.emit('review:started', { pullRequest });
+    return pullRequest.save()
+      .then(pullRequest => {
+        this.logger.info('Review started. %s', pullRequest);
+        this.events.emit('review:started', { pullRequest });
 
-    return Promise.resolve(pullRequest);
+        return pullRequest;
+      });
+
   }
 
   /**
@@ -65,6 +70,7 @@ export default class PullRequestReview {
    * @return {Promise}
    */
   stopReview(pullRequest) {
+
     const review = pullRequest.get('review');
 
     if (review.status !== 'inprogress' && review.status !== 'changesneeded') {
@@ -82,10 +88,14 @@ export default class PullRequestReview {
 
     pullRequest.set('review', review);
 
-    this.logger.info('Review stopped. %s', pullRequest);
-    this.events.emit('review:updated', { pullRequest });
+    return pullRequest.save()
+      .then(pullRequest => {
+        this.logger.info('Review stopped. %s', pullRequest);
+        this.events.emit('review:updated', { pullRequest });
 
-    return Promise.resolve(pullRequest);
+        return pullRequest;
+      });
+
   }
 
   /**
@@ -109,10 +119,13 @@ export default class PullRequestReview {
 
     pullRequest.set('review', review);
 
-    this.logger.info('Review denied. %s', pullRequest);
-    this.events.emit('review:updated', { pullRequest });
+    return pullRequest.save()
+      .then(pullRequest => {
+        this.logger.info('Review denied. %s', pullRequest);
+        this.events.emit('review:updated', { pullRequest });
 
-    return Promise.resolve(pullRequest);
+        return pullRequest;
+      });
 
   }
 
@@ -163,15 +176,18 @@ export default class PullRequestReview {
 
     pullRequest.set('review', review);
 
-    this.logger.info('Review approved by %s. %s', login, pullRequest);
-    this.events.emit('review:approved', { pullRequest, login });
+    return pullRequest.save()
+      .then(pullRequest => {
+        this.logger.info('Review approved by %s. %s', login, pullRequest);
+        this.events.emit('review:approved', { pullRequest, login });
 
-    if (complete) {
-      this.logger.info('Review complete. %s', pullRequest);
-      this.events.emit('review:complete', { pullRequest });
-    }
+        if (complete) {
+          this.logger.info('Review complete. %s', pullRequest);
+          this.events.emit('review:complete', { pullRequest });
+        }
 
-    return Promise.resolve(pullRequest);
+        return pullRequest;
+      });
 
   }
 
@@ -184,6 +200,7 @@ export default class PullRequestReview {
    * @return {Promise}
    */
   changesNeeded(pullRequest, login) {
+
     const review = pullRequest.get('review');
 
     forEach(review.reviewers, (reviewer) => {
@@ -199,13 +216,17 @@ export default class PullRequestReview {
 
     pullRequest.set('review', review);
 
-    this.logger.info(
-      'Pull request marked as `changes needed` by %s. %s', login, pullRequest
-    );
+    return pullRequest.save()
+      .then(pullRequest => {
+        this.logger.info(
+          'Pull request marked as `changes needed` by %s. %s', login, pullRequest
+        );
 
-    this.events.emit('review:changesneeded', { pullRequest, login });
+        this.events.emit('review:changesneeded', { pullRequest, login });
 
-    return Promise.resolve(pullRequest);
+        return pullRequest;
+      });
+
   }
 
   /**
@@ -235,10 +256,13 @@ export default class PullRequestReview {
 
     pullRequest.set('review.updated_at', new Date());
 
-    this.logger.info('Review updated. %s', pullRequest);
-    this.events.emit('review:updated', { pullRequest });
+    return pullRequest.save()
+      .then(pullRequest => {
+        this.logger.info('Review updated. %s', pullRequest);
+        this.events.emit('review:updated', { pullRequest });
 
-    return Promise.resolve(pullRequest);
+        return pullRequest;
+      });
 
   }
 
