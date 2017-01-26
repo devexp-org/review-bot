@@ -182,20 +182,6 @@
 
     "#include:plugins": "./default-plugins.json",
 
-    "invater-github": {
-      "path": "./src/services/invater/yandex-github",
-      "dependencies": [
-        "github"
-      ]
-    },
-
-    "invater-staff": {
-      "path": "./src/services/invater/yandex-staff-user",
-      "dependencies": [
-        "yandex-staff"
-      ]
-    },
-
     "#comment:__LASTLINE__": ""
   }
 
