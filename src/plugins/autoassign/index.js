@@ -20,8 +20,7 @@ export default function setup(options, imports) {
     logger.info('Autostart review. %s', pullRequest);
 
     return review.choose(pullRequest)
-      .then(result => pullRequestReview.updateReview(pullRequest, result))
-      .then(pullRequest => pullRequest.save());
+      .then(result => pullRequestReview.updateReview(pullRequest, result));
       // .catch(logger.error.bind(logger));
   }
 

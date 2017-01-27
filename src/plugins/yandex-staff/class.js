@@ -224,11 +224,8 @@ export default class YandexStaff {
       headers: { Authorization: `OAuth ${this._options.token}` }
     };
 
-    return new Promise((resolve, reject) => {
-      this.request(url, params, (err, data) => {
-        err ? reject(err) : this._afterRequest(options, data, resolve);
-      });
-    });
+    return this.request(url, params)
+      .then(data => this._afterRequest(options, data));
   }
 
   /**
@@ -259,15 +256,17 @@ export default class YandexStaff {
    * @param {Object} options
    * @param {Object} data
    * @param {Function} resolve
+   *
+   * @return {Object} data
    */
-  _afterRequest(options, data, resolve) {
+  _afterRequest(options, data) {
     if (options.key && options.cache) {
       const cacheTime = options.cache * 1000;
 
       this._cache[options.key] = { data, expires: Date.now() + cacheTime };
     }
 
-    resolve(data);
+    return data;
   }
 
   /**

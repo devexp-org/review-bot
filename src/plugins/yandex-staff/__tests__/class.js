@@ -8,7 +8,7 @@ describe('plugins/yandex-staff/class', function () {
   beforeEach(function () {
     got = sinon.stub();
 
-    got.callsArgWith(2, null, {});
+    got.returns(Promise.resolve({}));
   });
 
   describe('#request', function () {
@@ -51,7 +51,7 @@ describe('plugins/yandex-staff/class', function () {
     });
 
     it('should reject promise if request return an error', function (done) {
-      got.callsArgWith(2, new Error('request error'), {});
+      got.returns(Promise.reject(new Error('request error')));
 
       staff.apiAbsence('user1')
         .then(() => assert.fail())
@@ -68,7 +68,7 @@ describe('plugins/yandex-staff/class', function () {
         center_url: centerUrl
       });
 
-      got.callsArgWith(2, null, {});
+      got.returns(Promise.resolve({}));
     });
 
     it('should make the right request', function (done) {
@@ -89,7 +89,7 @@ describe('plugins/yandex-staff/class', function () {
         center_url: centerUrl
       });
 
-      got.callsArgWith(2, null, {});
+      got.returns(Promise.resolve({}));
     });
 
     it('should make the right request', function (done) {
@@ -109,7 +109,7 @@ describe('plugins/yandex-staff/class', function () {
         center_url: centerUrl
       });
 
-      got.callsArgWith(2, null, {});
+      got.returns(Promise.resolve({}));
     });
 
     it('should make the right request', function (done) {
@@ -128,7 +128,7 @@ describe('plugins/yandex-staff/class', function () {
     beforeEach(function () {
       staff = new YandexStaff(got, { jabber_url: jabberUrl });
 
-      got.callsArgWith(2, null, {});
+      got.returns(Promise.resolve({}));
     });
 
     it('should make the right request', function (done) {
@@ -149,7 +149,7 @@ describe('plugins/yandex-staff/class', function () {
         center_url: centerUrl
       });
 
-      got.callsArgWith(2, null, {});
+      got.returns(Promise.resolve({}));
     });
 
     it('should make the right request', function (done) {
@@ -168,7 +168,7 @@ describe('plugins/yandex-staff/class', function () {
     beforeEach(function () {
       staff = new YandexStaff(got, { center_url: centerUrl });
 
-      got.callsArgWith(2, null, {});
+      got.returns(Promise.resolve({}));
 
       sinon.stub(staff, 'apiGroupMembers').returns(Promise.resolve([
         { login: 'user1' },
