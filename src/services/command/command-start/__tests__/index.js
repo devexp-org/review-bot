@@ -28,7 +28,7 @@ describe('services/command/start', function () {
 
     pullRequest = pullRequestMock(pullRequestReviewMixin);
     pullRequest.user.login = 'Black Widow';
-    pullRequest.review.status = 'open';
+    pullRequest.review.status = 'notstarted';
     pullRequest.review.reviewers = reviewersMock();
 
     pullRequestReview = pullRequestReviewMock(pullRequest);

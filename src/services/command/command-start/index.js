@@ -29,7 +29,7 @@ export default function setup(options, imports) {
       ));
     }
 
-    if (pullRequest.get('review.status') !== 'open') {
+    if (pullRequest.get('review.status') !== 'notstarted') {
       return Promise.reject(new Error(
         `Cannot start is not open review ${pullRequest}`
       ));

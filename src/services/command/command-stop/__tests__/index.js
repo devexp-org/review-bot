@@ -68,7 +68,7 @@ describe('services/command/stop', function () {
   });
 
   it('should return rejected if pull request review not in progress', function (done) {
-    pullRequest.review.status = 'open';
+    pullRequest.review.status = 'notstarted';
 
     command('/stop', payload)
       .then(() => { throw new Error('should reject promise'); })
