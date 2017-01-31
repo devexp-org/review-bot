@@ -5,7 +5,10 @@ export default function setup(options, imports) {
 
   return function plugin(schema, modelName) {
 
-    const Reviewer = new Schema({ login: String });
+    const Reviewer = new Schema({
+      login: String,
+      approved: Boolean
+    });
 
     schema.add({
       review: {
