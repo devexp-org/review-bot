@@ -1,4 +1,4 @@
-import YandexStaffUser from './class';
+import YandexStaffSearch from './class';
 
 /**
  * Creates "Invater" service.
@@ -12,6 +12,6 @@ export default function setup(options, imports) {
 
   const staff = imports['yandex-staff'];
 
-  return new YandexStaffUser(staff);
+  return new YandexStaffSearch(staff);
 
 }

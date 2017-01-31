@@ -1,4 +1,4 @@
-import GitHubUser from './class';
+import GitHubSearch from './class';
 
 /**
  * Creates "Invater" service.
@@ -12,6 +12,6 @@ export default function setup(options, imports) {
 
   const github = imports.github;
 
-  return new GitHubUser(github);
+  return new GitHubSearch(github);
 
 }

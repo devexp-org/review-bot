@@ -27,7 +27,6 @@ describe('services/team-manager/driver-yandex-staff/class', function () {
 
     assert.property(driver, 'getOption');
     assert.property(driver, 'getCandidates');
-    assert.property(driver, 'findTeamMember');
   });
 
   it('should throw an error if `orgNmae` is not given', function () {
@@ -47,27 +46,6 @@ describe('services/team-manager/driver-yandex-staff/class', function () {
 
       driver.getCandidates()
         .then(members => assert.deepEqual(members, users))
-        .then(done, done);
-    });
-
-  });
-
-  describe.skip('#findTeamMember', function () {
-
-    it('should search user in staff', function (done) {
-      const fooUser = { login: 'foo' };
-
-      driver = factory.makeDriver(team, manager, config);
-
-      staff.apiUserInfo
-        .withArgs('foo')
-        .returns(Promise.resolve(fooUser));
-
-      staff._addAvatarAndUrl
-        .returnsArg(0);
-
-      driver.findTeamMember('foo')
-        .then(user => assert.deepEqual(user, fooUser))
         .then(done, done);
     });
 

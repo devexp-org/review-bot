@@ -110,4 +110,17 @@ describe('services/team-manager/class', function () {
 
   });
 
+  describe('#findTeamMember', function () {
+    let manager;
+
+    beforeEach(function () {
+      manager = new TeamManager(TeamModel, { 'static': teamDriverFactory }, search);
+    });
+
+    it('should search user using `search` driver', function () {
+      manager.findTeamMember('foo');
+      assert.calledWith(search.findUser, 'foo');
+    });
+  });
+
 });

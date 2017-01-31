@@ -1,4 +1,4 @@
-export default class GitHubUser
+export default class GitHubSearch
 {
 
   constructor(github) {

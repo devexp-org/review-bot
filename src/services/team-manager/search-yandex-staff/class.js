@@ -1,4 +1,4 @@
-export default class YandexStaffUser
+export default class YandexStaffSearch
 {
 
   constructor(staff) {

@@ -27,7 +27,6 @@ describe('services/team-manager/driver-github/class', function () {
 
     assert.property(driver, 'getOption');
     assert.property(driver, 'getCandidates');
-    assert.property(driver, 'findTeamMember');
   });
 
   it('should throw an error if `orgNmae` is not given', function () {
@@ -108,36 +107,6 @@ describe('services/team-manager/driver-github/class', function () {
         .callsArgWith(1, new Error('just error'));
 
       driver.getMembersByOrgName('github')
-        .then(() => assert.fail())
-        .catch(e => assert.match(e.message, /just error/))
-        .then(done, done);
-    });
-
-  });
-
-  describe.skip('#findTeamMember', function () {
-
-    beforeEach(function () {
-      driver = factory.makeDriver(team, manager, config);
-    });
-
-    it('should use method `getForUser` to obtain a user', function (done) {
-      github.users.getForUser
-        .callsArgWith(1, null, { login: 'octocat' });
-
-      driver.findTeamMember('octocat')
-        .then(() => assert.calledWith(
-          github.users.getForUser,
-          sinon.match({ username: 'octocat' })
-        ))
-        .then(done, done);
-    });
-
-    it('should rejected promise if github return an error', function (done) {
-      github.users.getForUser
-        .callsArgWith(1, new Error('just error'));
-
-      driver.findTeamMember('octocat')
         .then(() => assert.fail())
         .catch(e => assert.match(e.message, /just error/))
         .then(done, done);
