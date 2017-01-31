@@ -1,17 +1,20 @@
 import { AbstractDriver, AbstractDriverFactory } from '../class';
 
+import teamManagerMock from '../../__mocks__/';
 import { teamMock } from '../../../model/model-team/__mocks__/';
 
 describe('services/team-manager/driver-abstract/class', function () {
 
-  let team, factory, teamDriver;
+  let team, factory, teamDriver, manager;
 
   beforeEach(function () {
     team = teamMock();
 
+    manager = teamManagerMock();
+
     factory = new AbstractDriverFactory();
 
-    teamDriver = new AbstractDriver(team, {});
+    teamDriver = new AbstractDriver(team, manager, {});
   });
 
   describe('#makeDriver', function () {
@@ -35,10 +38,9 @@ describe('services/team-manager/driver-abstract/class', function () {
 
   describe('#findTeamMember', function () {
 
-    it('should reject promise', function (done) {
+    it('should proxy method to manager ', function (done) {
       teamDriver.findTeamMember('foo')
-        .then(() => assert.fail())
-        .catch(e => assert.match(e.message, /abstract method/))
+        .then(() => assert.calledWith(manager.findTeamMember, 'foo'))
         .then(done, done);
     });
 

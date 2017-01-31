@@ -1,13 +1,16 @@
 import TeamManager from '../class';
+import searchMock from '../__mocks__/search';
 import { teamModelMock } from '../../model/model-team/__mocks__/';
 import { pullRequestMock } from '../../model/model-pull-request/__mocks__/';
 import { teamDriverFactoryMock } from '../__mocks__/';
 
 describe('services/team-manager/class', function () {
 
-  let TeamModel, pullRequest, teamDriverFactory;
+  let TeamModel, pullRequest, teamDriverFactory, search;
 
   beforeEach(function () {
+    search = searchMock();
+
     TeamModel = teamModelMock();
 
     pullRequest = pullRequestMock();
@@ -32,11 +35,11 @@ describe('services/team-manager/class', function () {
         .withArgs('team1')
         .returns(Promise.resolve(team));
 
-      teamDriverFactory.makeDriver
-        .withArgs(team)
-        .returns(1);
+      manager = new TeamManager(TeamModel, { 'static': teamDriverFactory }, search);
 
-      manager = new TeamManager({ 'static': teamDriverFactory }, TeamModel);
+      teamDriverFactory.makeDriver
+        .withArgs(manager, team)
+        .returns(1);
     });
 
     it('should use the first matched route', function (done) {
@@ -53,7 +56,7 @@ describe('services/team-manager/class', function () {
         .returns(Promise.resolve(otherTeam));
 
       teamDriverFactory.makeDriver
-        .withArgs(otherTeam)
+        .withArgs(manager, otherTeam)
         .returns(2);
 
       manager.findTeamByPullRequest(pullRequest)

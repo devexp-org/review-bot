@@ -6,10 +6,12 @@ export default class TeamManager {
   /**
    * @constructor
    *
-   * @param {Array} drivers
    * @param {TeamModel} TeamModel
+   * @param {Array} drivers
+   * @param {Object} search
    */
-  constructor(drivers, TeamModel) {
+  constructor(TeamModel, drivers, search) {
+    this.search = search;
     this.drivers = drivers;
     this.TeamModel = TeamModel;
   }
@@ -72,7 +74,7 @@ export default class TeamManager {
           throw new Error(`Unknown driver '${driverName}' of '${teamName}'`);
         }
 
-        return driverFactory.makeDriver(team, driverConfig);
+        return driverFactory.makeDriver(this, team, driverConfig);
       });
   }
 
@@ -111,6 +113,17 @@ export default class TeamManager {
   findTeamByPullRequest(pullRequest) {
     return this.find(pullRequest)
       .then(route => this.getTeamDriver(route.team));
+  }
+
+  /**
+   * Finds reviewer by `login`.
+   *
+   * @param {String} login
+   *
+   * @return {Promise.<User>}
+   */
+  findTeamMember(login) {
+    return this.search.findUser(login);
   }
 
   /**

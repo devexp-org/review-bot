@@ -7,11 +7,12 @@ export default class YandexStaffDriver extends StaticDriver {
    * @constructor
    *
    * @param {Team} team
+   * @param {TeamManager} manager
    * @param {Object} driverConfig
    * @param {Object} staff - yandex staff module
    */
-  constructor(team, driverConfig, staff) {
-    super(team);
+  constructor(team, manager, driverConfig, staff) {
+    super(team, manager, driverConfig);
 
     if (!driverConfig.groupId) {
       throw new Error('Required parameter "groupId" is not given');
@@ -28,15 +29,6 @@ export default class YandexStaffDriver extends StaticDriver {
     return this.staff
       .getUsersInOffice(this.groupId)
       .then(team => cloneDeep(team));
-  }
-
-  /**
-   * @override
-   */
-  findTeamMember(login) {
-    return this.staff
-      .apiUserInfo(login)
-      .then(user => this.staff._addAvatarAndUrl(user));
   }
 
 }
@@ -57,8 +49,8 @@ export class YandexStaffDriverFactory extends StaticDriverFactory {
     };
   }
 
-  makeDriver(team, driverConfig) {
-    return new YandexStaffDriver(team, driverConfig, this.staff);
+  makeDriver(team, manager, driverConfig) {
+    return new YandexStaffDriver(team, manager, driverConfig, this.staff);
   }
 
 }

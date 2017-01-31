@@ -94,6 +94,7 @@
     "team-manager": {
       "path": "./src/services/team-manager",
       "options": {
+        "search": "team-search-github",
         "drivers": {}
       },
       "dependencies": [

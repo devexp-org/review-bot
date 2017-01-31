@@ -6,10 +6,12 @@ export class AbstractDriver {
    * @constructor
    *
    * @param {Team} team
+   * @param {TeamManager} manager
    * @param {Object} driverConfig
    */
-  constructor(team, driverConfig) {
+  constructor(team, manager, driverConfig) {
     this.name = team.name;
+    this.manager = manager;
     this.options = team.reviewConfig;
     this.driverConfig = driverConfig;
   }
@@ -38,14 +40,14 @@ export class AbstractDriver {
   }
 
   /**
-   * Finds reviewer by `pull request` and `login`.
+   * Finds reviewer by `login`.
    *
    * @param {String} login
    *
    * @return {Promise.<User>}
    */
   findTeamMember(login) {
-    return Promise.reject(new Error('abstract method'));
+    return this.manager.findTeamMember(login);
   }
 
 }
@@ -65,9 +67,10 @@ export class AbstractDriverFactory {
    * Returns instance of driver.
    *
    * @param {Team} team
+   * @param {TeamManager} manager
    * @param {Object} driverConfig
    */
-  makeDriver(team, driverConfig) {
+  makeDriver(team, manager, driverConfig) {
     throw new Error('abstract method');
   }
 

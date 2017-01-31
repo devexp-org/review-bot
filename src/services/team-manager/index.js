@@ -4,6 +4,7 @@ import TeamManager from './class';
 export default function setup(options, imports) {
 
   const model = imports.model;
+  const search = imports[options.search];
 
   const drivers = {};
 
@@ -17,6 +18,6 @@ export default function setup(options, imports) {
     drivers[driverName] = driverModule;
   });
 
-  return new TeamManager(drivers, model('team'));
+  return new TeamManager(model('team'), drivers, search);
 
 }

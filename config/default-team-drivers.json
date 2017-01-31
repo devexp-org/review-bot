@@ -1,5 +1,19 @@
 {
 
+  "team-search-github": {
+    "path": "./src/services/team-manager/search-github",
+    "dependencies": [
+      "github"
+    ]
+  },
+
+  "team-search-yandex-staff": {
+    "path": "./src/services/team-manager/search-yandex-staff",
+    "dependencies": [
+      "yandex-staff"
+    ]
+  },
+
   "team-driver-static": {
     "path": "./src/services/team-manager/driver-static",
     "dependencies": [

@@ -11,6 +11,8 @@ export default function mock(teamDriver) {
 
     getTeamDriver: sinon.stub().returns(Promise.reject()),
 
+    findTeamMember: sinon.stub().returns(Promise.reject()),
+
     findTeamByPullRequest: sinon.stub()
       .returns(Promise.resolve(teamDriver || abstractDriverMock()))
   };

@@ -7,11 +7,12 @@ export class GitHubDriver extends AbstractDriver {
    * @constructor
    *
    * @param {Team} team
+   * @param {TeamManager} manager
    * @param {Object} driverConfig
    * @param {Object} github - GitHub API module
    */
-  constructor(team, driverConfig, github) {
-    super(team);
+  constructor(team, manager, driverConfig, github) {
+    super(team, manager, driverConfig);
 
     if (!driverConfig.orgName) {
       throw new Error('Required parameter "orgName" is not given');
@@ -32,22 +33,6 @@ export class GitHubDriver extends AbstractDriver {
       return this.getTeamId(this.orgName, this.slugName)
         .then(teamId => this.getMembersByTeamId(teamId));
     }
-  }
-
-  /**
-   * @override
-   */
-  findTeamMember(login) {
-    return new Promise((resolve, reject) => {
-      this.github.users.getForUser({ username: login }, (err, result) => {
-        if (err) {
-          reject(new Error('GitHub API: ' + err));
-          return;
-        }
-
-        resolve(result);
-      });
-    });
   }
 
   /**
@@ -135,8 +120,8 @@ export class GitHubDriverFactory extends AbstractDriverFactory {
     };
   }
 
-  makeDriver(team, driverConfig) {
-    return new GitHubDriver(team, driverConfig, this.github);
+  makeDriver(team, manager, driverConfig) {
+    return new GitHubDriver(team, manager, driverConfig, this.github);
   }
 
 }

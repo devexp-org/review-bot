@@ -2,22 +2,25 @@ import service from '../';
 import serviceMock from '../__mocks__/';
 
 import modelMock from '../../model/__mocks__/';
+import searchMock from '../__mocks__/search';
 import { teamModelMock } from '../../model/model-team/__mocks__/';
 import { teamDriverFactoryMock } from '../__mocks__/';
 
 describe('services/team-manager', function () {
 
-  let options, imports, model;
+  let options, imports, model, search;
 
   beforeEach(function () {
     model = modelMock();
+
+    search = searchMock();
 
     model
       .withArgs('team')
       .returns(teamModelMock());
 
     options = {};
-    imports = { model };
+    imports = { model, search };
   });
 
   it('the mock object should have the same methods', function () {

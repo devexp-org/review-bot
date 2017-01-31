@@ -7,11 +7,12 @@ export default class YandexMultimediaDriver extends StaticDriver {
    * @constructor
    *
    * @param {Team} team
+   * @param {TeamManager} manager
    * @param {Object} driverConfig
    * @param {Object} staff - yandex staff module
    */
-  constructor(team, driverConfig, staff) {
-    super(team);
+  constructor(team, manager, driverConfig, staff) {
+    super(team, manager, driverConfig);
 
     if (!driverConfig.video || !driverConfig.images) {
       throw new Error('Required parameters "video" or "images" are not given');
@@ -59,15 +60,6 @@ export default class YandexMultimediaDriver extends StaticDriver {
   }
 
   /**
-   * @override
-   */
-  findTeamMember(login) {
-    return this.staff
-      .apiUserInfo(login)
-      .then(user => this.staff._addAvatarAndUrl(user));
-  }
-
-  /**
    * @protected
    *
    * @param {User} member
@@ -102,8 +94,8 @@ export class YandexMultimediaDriverFactory extends StaticDriverFactory {
     };
   }
 
-  makeDriver(team, driverConfig) {
-    return new YandexMultimediaDriver(team, driverConfig, this.staff);
+  makeDriver(team, manager, driverConfig) {
+    return new YandexMultimediaDriver(team, manager, driverConfig, this.staff);
   }
 
 }
