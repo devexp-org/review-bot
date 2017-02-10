@@ -12,7 +12,7 @@ export default function setup(options, imports) {
     const driverModule = imports[moduleName];
 
     if (!driverModule) {
-      throw new Error(`Cannot find driver module "${driverName}"`);
+      throw new Error(`Cannot find driver module "${moduleName}"`);
     }
 
     drivers[driverName] = driverModule;

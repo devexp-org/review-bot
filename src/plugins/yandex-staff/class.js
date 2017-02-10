@@ -266,7 +266,7 @@ export default class YandexStaff {
       this._cache[options.key] = { data, expires: Date.now() + cacheTime };
     }
 
-    return data;
+    return data.body;
   }
 
   /**

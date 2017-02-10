@@ -9,7 +9,7 @@ export function withTeamManager(next) {
         'team-manager': {
           path: './src/services/team-manager',
           options: {
-            drivers: []
+            drivers: {}
           },
           dependencies: [
             'model'

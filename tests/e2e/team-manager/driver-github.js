@@ -13,7 +13,9 @@ export function withTeamDriverGitHub(next) {
       services: {
         'team-manager': {
           options: {
-            drivers: ['team-driver-github']
+            drivers: {
+              github: 'team-driver-github'
+            }
           },
           dependencies: [
             'team-driver-github'
@@ -55,7 +57,7 @@ export function withTeamDriverGitHub(next) {
 
 }
 
-describe('services/team-manager/driver-github', function () {
+describe.only('services/team-manager/driver-github', function () {
 
   const test = withTeamDriverGitHub(
     withTeamManager(

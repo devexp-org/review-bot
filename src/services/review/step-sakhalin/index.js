@@ -1,8 +1,7 @@
 import { find } from 'lodash';
 import AbstractReviewStep from '../step';
 
-export class SakhalinReviewStep extends AbstractReviewStep
-{
+export class SakhalinReviewStep extends AbstractReviewStep {
 
   /**
    * Up rank to one reviewer from images and one from video.

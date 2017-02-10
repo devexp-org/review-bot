@@ -2,8 +2,7 @@ import _ from 'lodash';
 import minimatch from 'minimatch';
 import AbstractReviewStep from '../step';
 
-export class PathRelatedReviewStep extends AbstractReviewStep
-{
+export class PathRelatedReviewStep extends AbstractReviewStep {
 
   /**
    * @override

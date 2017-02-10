@@ -2,8 +2,7 @@ import { map, remove, includes } from 'lodash';
 
 import AbstractReviewStep from '../step';
 
-export class AbsenceReviewStep extends AbstractReviewStep
-{
+export class AbsenceReviewStep extends AbstractReviewStep {
 
   constructor(staff) {
     super();

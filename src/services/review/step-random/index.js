@@ -1,8 +1,7 @@
 import { forEach } from 'lodash';
 import AbstractReviewStep from '../step';
 
-export class RandomReviewStep extends AbstractReviewStep
-{
+export class RandomReviewStep extends AbstractReviewStep {
 
   /**
    * @override

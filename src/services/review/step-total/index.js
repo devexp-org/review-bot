@@ -1,8 +1,7 @@
 import { take } from 'lodash';
 import AbstractReviewStep from '../step';
 
-export class TotalReviewStep extends AbstractReviewStep
-{
+export class TotalReviewStep extends AbstractReviewStep {
 
   /**
    * Take defined number of team member for review.

@@ -3,8 +3,7 @@ import moment from 'moment';
 import minimatch from 'minimatch';
 import AbstractReviewStep from '../step';
 
-export class CommitersReviewStep extends AbstractReviewStep
-{
+export class CommitersReviewStep extends AbstractReviewStep {
 
   constructor(github, logger) {
     super();

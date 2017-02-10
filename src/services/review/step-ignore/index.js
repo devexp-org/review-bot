@@ -1,8 +1,7 @@
 import { remove, isEmpty, includes } from 'lodash';
 import AbstractReviewStep from '../step';
 
-export class IgnoreReviewStep extends AbstractReviewStep
-{
+export class IgnoreReviewStep extends AbstractReviewStep {
 
   /**
    * @override

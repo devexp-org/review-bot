@@ -1,8 +1,7 @@
 import { remove, matches } from 'lodash';
 import AbstractReviewStep from '../step';
 
-export class RemoveAuthorReviewStep extends AbstractReviewStep
-{
+export class RemoveAuthorReviewStep extends AbstractReviewStep {
 
   /**
    * Removes author from review.

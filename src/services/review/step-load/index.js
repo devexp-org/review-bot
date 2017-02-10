@@ -1,8 +1,7 @@
 import { find, forEach, isEmpty } from 'lodash';
 import AbstractReviewStep from '../step';
 
-export class LoadReviewStep extends AbstractReviewStep
-{
+export class LoadReviewStep extends AbstractReviewStep {
 
   /**
    * @constructor

@@ -1,5 +1,4 @@
-export default class GitHubSearch
-{
+export default class GitHubSearch {
 
   constructor(github) {
     this.github = github;

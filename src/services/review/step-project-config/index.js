@@ -5,8 +5,7 @@ import {
 import minimatch from 'minimatch';
 import AbstractReviewStep from '../step';
 
-export class ProjectConfigReviewStep extends AbstractReviewStep
-{
+export class ProjectConfigReviewStep extends AbstractReviewStep {
 
   constructor(logger, github, teamManager) {
     super();

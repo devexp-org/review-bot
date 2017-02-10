@@ -2,8 +2,7 @@ import { remove, forEach, isEmpty } from 'lodash';
 
 import AbstractReviewStep from '../step';
 
-export class RemoveReviewersReviewStep extends AbstractReviewStep
-{
+export class RemoveReviewersReviewStep extends AbstractReviewStep {
 
   /**
    * Removes candidates which are already reviewers.

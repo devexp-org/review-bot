@@ -25,6 +25,7 @@ export default function setup(options, imports) {
   }
 
   events.on('github:pull_request:opened', autoStart);
+  events.on('github:pull_request:reopened', autoStart);
   events.on('github:pull_request:synchronize', autoStart);
 
 }

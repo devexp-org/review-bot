@@ -3,8 +3,7 @@ import AbstractReviewStep from '../step';
 
 export const REVIEWER_RE = /(?:^|\W)@([a-z][-0-9a-z]+)(?:\W|$)/gi;
 
-export class PreferredReviewStep extends AbstractReviewStep
-{
+export class PreferredReviewStep extends AbstractReviewStep {
 
   /**
    * @constructor

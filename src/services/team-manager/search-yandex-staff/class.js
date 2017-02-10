@@ -1,5 +1,4 @@
-export default class YandexStaffSearch
-{
+export default class YandexStaffSearch {
 
   constructor(staff) {
     this.staff = staff;
