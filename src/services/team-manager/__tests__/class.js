@@ -38,7 +38,7 @@ describe('services/team-manager/class', function () {
       manager = new TeamManager(TeamModel, { 'static': teamDriverFactory }, search);
 
       teamDriverFactory.makeDriver
-        .withArgs(manager, team)
+        .withArgs(team, manager)
         .returns(1);
     });
 
@@ -56,7 +56,7 @@ describe('services/team-manager/class', function () {
         .returns(Promise.resolve(otherTeam));
 
       teamDriverFactory.makeDriver
-        .withArgs(manager, otherTeam)
+        .withArgs(otherTeam, manager)
         .returns(2);
 
       manager.findTeamByPullRequest(pullRequest)

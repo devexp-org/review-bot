@@ -74,7 +74,7 @@ export default class TeamManager {
           throw new Error(`Unknown driver '${driverName}' of '${teamName}'`);
         }
 
-        return driverFactory.makeDriver(this, team, driverConfig);
+        return driverFactory.makeDriver(team, this, driverConfig);
       });
   }
 
