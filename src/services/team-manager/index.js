@@ -8,6 +8,10 @@ export default function setup(options, imports) {
 
   const drivers = {};
 
+  if (!search) {
+    throw new Error(`Cannot find search module "${options.search}"`);
+  }
+
   forEach(options.drivers, (moduleName, driverName) => {
     const driverModule = imports[moduleName];
 

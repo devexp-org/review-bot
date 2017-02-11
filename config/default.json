@@ -98,7 +98,8 @@
         "drivers": {}
       },
       "dependencies": [
-        "model"
+        "model",
+        "team-search-github"
       ]
     },
 
