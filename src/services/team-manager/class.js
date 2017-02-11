@@ -104,34 +104,6 @@ export default class TeamManager {
   }
 
   /**
-   * TODO
-   *
-   * @param {String} teamName
-   */
-  syncTeam(teamName) {
-    this.getTeamDriver(teamName)
-      .then(driver => driver.getMembers())
-      .then(members => {
-        const promise = members.map(username => {
-          return this.search.findUser(username);
-        });
-
-        return Promise.all(promise);
-      })
-      .then(members => {
-        const promise = members.map(this.syncUser.bind(this));
-        return Promise.all(promise);
-      })
-      .then(members => {
-        return this.TeamModel.findByName(teamName)
-          .then(team => {
-            team.set('members', members);
-            return team.save();
-          });
-      });
-  }
-
-  /**
    * Returns driver of matched route.
    *
    * @param {PullRequest} pullRequest
