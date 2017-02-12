@@ -100,7 +100,20 @@
     ],
     "#plugin:http": {
       "routes": {
-        "/team-manager": "http-routes-team-manager"
+        "/team-manager": ["http-routes-team-manager"]
+      }
+    }
+  },
+
+  "http-routes-team-sync": {
+    "path": "./src/services/team-sync/routes",
+    "dependencies": [
+      "logger",
+      "team-sync"
+    ],
+    "#plugin:http": {
+      "routes": {
+        "/team-manager": ["http-routes-team-sync"]
       }
     }
   },

@@ -1,17 +1,20 @@
 import { find } from 'lodash';
 
-export default class TeamSync
-{
+export default class TeamSync {
 
-  construct(userModel, teamModel, teamManager) {
-    this.userModel = userModel;
-    this.teamModel = teamModel;
+  constructor(UserModel, TeamModel, teamManager) {
+    this.UserModel = UserModel;
+    this.TeamModel = TeamModel;
     this.teamManager = teamManager;
   }
 
   syncUser(remote) {
-    return this.userModel.findByLogin(remote.login)
+    return this.UserModel.findByLogin(remote.login)
       .then(local => {
+        if (!local) {
+          local = new this.UserModel({ login: remote.login });
+        }
+
         local.html_url = remote.html_url || local.html_url;
         local.avatar_url = remote.avatar_url || local.avatar_url;
 
@@ -24,16 +27,16 @@ export default class TeamSync
           }
         });
 
-        return local;
+        return local.save();
       });
   }
 
   syncTeam(teamName) {
-    this.teamManager.getTeamDriver(teamName)
+    return this.teamManager.getTeamDriver(teamName)
       .then(driver => driver.getCandidates())
       .then(members => {
-        const promise = members.map(username => {
-          return this.teamManager.search(username);
+        const promise = members.map(member => {
+          return this.teamManager.findTeamMember(member.login);
         });
 
         return Promise.all(promise);

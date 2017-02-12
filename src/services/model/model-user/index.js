@@ -16,7 +16,7 @@ export function baseSchema() {
       maxlength: 1024
     },
     contacts: [{
-      id: { type: String, 'enum': ['email', 'jabber'] },
+      id: { type: String },
       account: {
         type: String,
         required: true,

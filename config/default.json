@@ -94,12 +94,20 @@
     "team-manager": {
       "path": "./src/services/team-manager",
       "options": {
-        "search": "team-search-github",
+        "search": "team-search-yandex-staff",
         "drivers": {}
       },
       "dependencies": [
         "model",
-        "team-search-github"
+        "team-search-yandex-staff"
+      ]
+    },
+
+    "team-sync": {
+      "path": "./src/services/team-sync",
+      "dependencies": [
+        "model",
+        "team-manager"
       ]
     },
 

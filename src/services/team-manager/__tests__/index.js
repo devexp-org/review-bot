@@ -19,7 +19,9 @@ describe('services/team-manager', function () {
       .withArgs('team')
       .returns(teamModelMock());
 
-    options = {};
+    options = {
+      search: 'search'
+    };
     imports = { model, search };
   });
 
