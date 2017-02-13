@@ -29,6 +29,7 @@ export default function setup(options, imports) {
       return notification.sendMessage(payload.pullRequest, login, body);
     };
 
+    // Don't send notification message before start of review.
     if (payload.pullRequest.review.status !== 'inprogress') {
       return Promise.resolve();
     }

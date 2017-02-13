@@ -1,5 +1,4 @@
 # MAJOR
-* command: /change и /busy отправляет уведомление всем ревьюверам.
 * yandex-staff (routes): дать возможность указать несколько groupId
 
 # MINOR

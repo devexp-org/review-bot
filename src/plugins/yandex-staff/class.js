@@ -247,7 +247,7 @@ export default class YandexStaff {
    * @return {Object}
    */
   _getCacheValue(key) {
-    return this._cache[key] && this._cache[key].data;
+    return this._cache[key] && this._cache[key].data.body;
   }
 
   /**

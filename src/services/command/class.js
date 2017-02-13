@@ -74,14 +74,15 @@ export default class CommandDispatcher {
 
         const promise = [];
 
-        forEach(this.store, (command) => {
+        forEach(comment.split('\n'), (line) => {
 
-          const teamRegExp = team.getOption('command.regexp.' + command.id, []);
-          const defaultRegExp = command.test;
+          forEach(this.store, (command) => {
 
-          const allRegExp = [].concat(defaultRegExp, teamRegExp).map(buildRegExp);
+            const teamRegExp = team.getOption('command.regexp.' + command.id, []);
+            const defaultRegExp = command.test;
 
-          forEach(comment.split('\n'), (line) => {
+            const allRegExp = [].concat(defaultRegExp, teamRegExp).map(buildRegExp);
+
             forEach(allRegExp, (test) => {
               const matches = line.match(test);
               if (matches && matches.length > 0) {
