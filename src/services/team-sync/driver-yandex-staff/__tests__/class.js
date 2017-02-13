@@ -36,7 +36,7 @@ describe('services/team-manager/driver-yandex-staff/class', function () {
 
       driver = factory.makeDriver(team, config);
 
-      staff.getUsersInOffice
+      staff.getUsers
         .withArgs(1)
         .returns(Promise.resolve(users));
 

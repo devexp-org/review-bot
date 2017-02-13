@@ -8,6 +8,7 @@ export default function setup(options, imports) {
   const model = imports.model;
   const UserModel = model('user');
   const TeamModel = model('team');
+  const userSearch = imports['team-search'];
   const teamManager = imports['team-manager'];
 
   const date = options.schedule || '0 0 2 * * *'; // every day at 02:00:00 am
@@ -23,7 +24,7 @@ export default function setup(options, imports) {
     drivers[driverName] = driverModule;
   });
 
-  const sync = new TeamSync(drivers, UserModel, TeamModel);
+  const sync = new TeamSync(drivers, UserModel, TeamModel, userSearch);
 
   return new Promise(resolve => {
 

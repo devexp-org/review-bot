@@ -1,6 +1,7 @@
 # MAJOR
-* reminder не работает
-* /change и /busy отправляет уведомление всем ревьюверам.
+* command: /change и /busy отправляет уведомление всем ревьюверам.
+* reminder: не работает trigger
+* yandex-staff: дать возможность указать несколько groupId
 
 # MINOR
 * notification: нужно пинговать автора пулла, а не ревьювиров, если пулл в статусе `changesneeded`.

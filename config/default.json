@@ -110,6 +110,7 @@
       "path": "./src/services/team-sync",
       "dependencies": [
         "model",
+        "team-search",
         "team-manager"
       ]
     },

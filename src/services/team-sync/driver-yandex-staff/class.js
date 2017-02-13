@@ -26,7 +26,7 @@ export default class YandexStaffDriver extends AbstractDriver {
    */
   getMembers() {
     return this.staff
-      .getUsersInOffice(this.groupId)
+      .getUsers(this.groupId)
       .then(team => cloneDeep(team));
   }
 

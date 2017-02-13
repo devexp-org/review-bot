@@ -8,12 +8,15 @@ export default class TeamSync {
    * @param {Object} drivers
    * @param {UserModel} UserModel
    * @param {TeamModel} TeamModel
+   * @param {UserSearch} userSearch
    */
-  constructor(drivers, UserModel, TeamModel) {
+  constructor(drivers, UserModel, TeamModel, userSearch) {
     this.drivers = drivers;
 
     this.UserModel = UserModel;
     this.TeamModel = TeamModel;
+
+    this.userSearch = userSearch;
   }
 
   /**
@@ -90,7 +93,7 @@ export default class TeamSync {
       .then(driver => driver.getMembers())
       .then(items => {
         return Promise.all(items.map(member => {
-          return this.teamManager.findTeamMember(member.login);
+          return this.userSearch.findByLogin(member.login);
         }));
       })
       .then(items => {
