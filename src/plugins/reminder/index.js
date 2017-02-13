@@ -58,10 +58,14 @@ export default function setup(options, imports) {
   const logger = imports.logger.getLogger('reminder');
   const PullRequestModel = imports.model('pull_request');
 
+  // TODO trigger.bind(null, id);
+
   function trigger(id) {
     return PullRequestModel
       .findById(id)
       .then(pullRequest => {
+        if (!pullRequest) return;
+
         if (pullRequest.state !== 'closed' && !pullRequest.review_comments) {
           events.emit(EVENT_NAME, { pullRequest });
           return createJob(pullRequest);
