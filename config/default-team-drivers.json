@@ -35,7 +35,7 @@
     "dependencies": [
       "model"
     ],
-    "#plugin:team-manager": {
+    "#plugin:team-sync": {
       "drivers": {
         "static": "team-driver-static"
       }
@@ -47,7 +47,7 @@
     "dependencies": [
       "github"
     ],
-    "#plugin:team-manager": {
+    "#plugin:team-sync": {
       "drivers": {
         "github": "team-driver-github"
       }
@@ -59,7 +59,7 @@
     "dependencies": [
       "yandex-staff"
     ],
-    "#plugin:team-manager": {
+    "#plugin:team-sync": {
       "drivers": {
         "yandex-staff": "team-driver-yandex-staff"
       }
