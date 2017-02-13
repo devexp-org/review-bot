@@ -150,11 +150,11 @@ export default class Jabber extends AbstractTransport {
    * @param {String} body - message body
    */
   _send(to, body) {
-    this.logger.info(`Send message to: ${to} — ${body}`);
+    this.logger.info(`Send message to: ${to.login} — ${body}`);
 
     if (this._silent) return;
 
-    const elem = { to, type: 'chat' };
+    const elem = { to: to.login, type: 'chat' };
     const stanza = new ltx.Element('message', elem).c('body').t(body);
 
     this._client.send(stanza);

@@ -1,4 +1,3 @@
-import util from 'util';
 import { forEach } from 'lodash';
 
 /**
@@ -8,17 +7,17 @@ import { forEach } from 'lodash';
  * @param {Object} options
  * @param {Object} payload
  * @param {String} status
+ * @param {Logger} logger
  *
  * @return {Promise}
  */
-export function setIssueStatus(startrek, options, payload, status) {
+export function setIssueStatus(startrek, options, payload, status, logger) {
   const { pullRequest } = payload;
   const issue = startrek.parseIssue(pullRequest.title, options.queues);
 
   if (!issue.length) {
-    return Promise.reject(new Error(util.format(
-      'Cannot find issue in pull request %s', pullRequest
-    )));
+    logger.info('Cannot find issue in pull request %s', pullRequest);
+    return Promise.resolve();
   }
 
   const promise = issue.map(task => {
@@ -31,12 +30,12 @@ export function setIssueStatus(startrek, options, payload, status) {
 export default function setup(options, imports) {
 
   const events = imports.events;
-  const logger = imports.logger.getLogger('startrek');
+  const logger = imports.logger.getLogger('startrek.set-issue-status');
   const startrek = imports['yandex-startrek'];
 
   forEach(options.events, (event) => {
     events.on(event, (payload) => {
-      setIssueStatus(startrek, options, payload, 'review')
+      setIssueStatus(startrek, options, payload, 'review', logger)
         .catch(logger.error.bind(logger));
     });
   });

@@ -1,5 +1,7 @@
 function message(link) {
-  return `Документацию можно найти по адресу: ${link}`;
+  return `
+Документацию можно найти по адресу: ${link}
+`;
 }
 
 export default function setup(options, imports) {

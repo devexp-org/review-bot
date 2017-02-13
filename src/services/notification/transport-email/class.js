@@ -55,7 +55,7 @@ export default class Email extends AbstractTransport {
       to: to,
       text: body,
       from: this._sender,
-      subject: '[CodeReview] ' + body.substr(body.indexOf('\n'))
+      subject: '[CodeReview] ' + body.split('\n')[1]
     };
 
     return new Promise(resolve => {

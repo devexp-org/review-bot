@@ -4,6 +4,10 @@ export default function setup(options, imports) {
 
   const logger = imports.logger.getLogger('notification.email');
 
-  return new Email(logger, options);
+  const service = new Email(logger, options);
+
+  !options.offline && service.connect();
+
+  return service;
 
 }

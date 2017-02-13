@@ -43,7 +43,7 @@ export function updateReviewers(startrek, options, payload, logger) {
 export default function setup(options, imports) {
 
   const events = imports.events;
-  const logger = imports.logger.getLogger('startrek');
+  const logger = imports.logger.getLogger('startrek.update-reviewers');
   const startrek = imports['yandex-startrek'];
 
   forEach(options.events, (event) => {
