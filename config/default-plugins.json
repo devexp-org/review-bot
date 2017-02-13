@@ -31,7 +31,8 @@
     "dependencies": [
       "model",
       "events",
-      "logger"
+      "logger",
+      "team-manager"
     ]
   },
 

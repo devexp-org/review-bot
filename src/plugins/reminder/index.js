@@ -24,7 +24,7 @@ export function createJob(pullRequest, timeShift, trigger) {
 
   return cancelJob(pullRequest).then(() => {
     return schedule.scheduleJob(
-      key, expirationTime.toDate(), trigger
+      key, expirationTime.toDate(), trigger.bind(null, pullRequest.id)
     );
   });
 
@@ -56,20 +56,27 @@ export default function setup(options, imports) {
 
   const events = imports.events;
   const logger = imports.logger.getLogger('reminder');
+  const teamManager = imports['team-manager'];
   const PullRequestModel = imports.model('pull_request');
-
-  // TODO trigger.bind(null, id);
 
   function trigger(id) {
     return PullRequestModel
       .findById(id)
       .then(pullRequest => {
-        if (!pullRequest) return;
+        if (!pullRequest) return Promise.resolve();
 
-        if (pullRequest.state !== 'closed' && !pullRequest.review_comments) {
-          events.emit(EVENT_NAME, { pullRequest });
-          return createJob(pullRequest);
-        }
+        return teamManager.findTeamByPullRequest(pullRequest)
+          .then(team => {
+            if (!team) {
+              logger.warn(`Cannot find team by pull request ${pullRequest}`);
+              return Promise.resolve();
+            }
+
+            if (pullRequest.state !== 'closed' && !pullRequest.review_comments) {
+              events.emit(EVENT_NAME, { pullRequest });
+              return createJob(pullRequest, options.days, trigger);
+            }
+          });
       });
   }
 

@@ -5,7 +5,22 @@
       "options": {
         "port": 8080
       }
+    },
+
+    "notification-jabber": {
+      "options": {
+        "silent": true,
+        "offline": true
+      }
+    },
+
+    "notification-slack": {
+      "options": {
+        "silent": true,
+        "offline": true
+      }
     }
+
   }
 
 }

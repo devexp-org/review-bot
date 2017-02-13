@@ -17,7 +17,7 @@ export default function setup(options, imports) {
   };
 
   // Ignore promise and don't wait until client goes online.
-  service.connect();
+  !options.offline && service.connect();
 
   return service;
 

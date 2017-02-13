@@ -3,6 +3,7 @@ import proxyquire from 'proxyquire';
 import modelMock from '../../../services/model/__mocks__/';
 import eventsMock from '../../../services/events/__mocks__/';
 import loggerMock from '../../../services/logger/__mocks__/';
+import teamManagerMock from '../../../services/team-manager/__mocks__/';
 import { pullRequestMock, pullRequestModelMock } from
   '../../../services/model/model-pull-request/__mocks__/';
 import {
@@ -85,9 +86,22 @@ describe('services/reminder', function () {
         .then(() => assert.calledWith(schedule.cancelJob, 'pull-1'))
         .then(() => {
           assert.calledWith(
-            schedule.scheduleJob, 'pull-1', expirationTime, trigger
+            schedule.scheduleJob, 'pull-1', expirationTime, sinon.match.func
           );
         })
+        .then(done, done);
+    });
+
+    it('should fire trigger with pull request id', function (done) {
+      pullRequest.id = 1;
+      pullRequest.reivew = { started_at: new Date(2000, 1, 1) };
+
+      const trigger = sinon.stub();
+      const timeShift = 1;
+
+      createJob(pullRequest, timeShift, trigger)
+        .then(() => schedule.scheduleJob.callArg(2))
+        .then(() => assert.calledWith(trigger, 1))
         .then(done, done);
     });
 
@@ -103,7 +117,7 @@ describe('services/reminder', function () {
         .then(() => assert.calledWith(schedule.cancelJob, 'pull-1'))
         .then(() => {
           assert.calledWith(
-            schedule.scheduleJob, 'pull-1', expirationTime, trigger
+            schedule.scheduleJob, 'pull-1', expirationTime, sinon.match.func
           );
         })
         .then(done, done);
@@ -146,15 +160,17 @@ describe('services/reminder', function () {
   describe('#trigger', function () {
 
     let options, imports, scheduleService;
-    let logger, events;
+    let logger, events, teamManager;
 
     beforeEach(function () {
 
       events = eventsMock();
       logger = loggerMock();
 
+      teamManager = teamManagerMock();
+
       options = {};
-      imports = { events, logger, model };
+      imports = { events, logger, model, 'team-manager': teamManager };
 
       PullRequestModel.findById
         .withArgs(1).returns(Promise.resolve(pullRequest));

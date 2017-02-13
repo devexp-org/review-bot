@@ -48,7 +48,7 @@
     ]
   },
 
-  "#comment:notification-jabber": {
+  "notification-jabber": {
     "path": "./src/services/notification/transport-jabber",
     "#plugin:notification": {
       "transports": {
