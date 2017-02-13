@@ -4,6 +4,8 @@ import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
 import notificationMock from '../../__mocks__/';
 import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';
+import { pullRequestReviewMixin } from
+  '../../../pull-request-review/__mocks__/';
 
 describe('services/notification/message-start', function () {
 
@@ -18,6 +20,9 @@ describe('services/notification/message-start', function () {
     notification = notificationMock();
 
     pullRequest = pullRequestMock();
+    pullRequestReviewMixin(pullRequest);
+
+    pullRequest.review.status = 'inprogress';
 
     payload = { pullRequest };
 
@@ -42,9 +47,8 @@ describe('services/notification/message-start', function () {
   });
 
   it('should send start message to the reviewers', function () {
-    pullRequest.review = {
-      reviewers: [{ login: 'Black Widow' }, { login: 'Spider-Man' }]
-    };
+    pullRequest.review.reviewers =
+      [{ login: 'Black Widow' }, { login: 'Spider-Man' }];
 
     service(options, imports);
 
@@ -54,10 +58,8 @@ describe('services/notification/message-start', function () {
 
   it('should send start message only to new reviewers', function () {
     payload.newReviewer = { login: 'Spider-Man' };
-
-    pullRequest.review = {
-      reviewers: [{ login: 'Black Widow' }, { login: 'Spider-Man' }]
-    };
+    pullRequest.review.reviewers =
+      [{ login: 'Black Widow' }, { login: 'Spider-Man' }];
 
     service(options, imports);
 
