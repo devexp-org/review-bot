@@ -87,7 +87,7 @@ describe('services/model/model-team/routes', function () {
     it('should return an error if team already exsits', function (done) {
       const team = new TeamModel();
 
-      team.save.returns(Promise.reject(new Error('Team "test-team" already exists')));
+      team.save.throws(new Error('Team "test-team" already exists'));
 
       request(app)
         .post('/')

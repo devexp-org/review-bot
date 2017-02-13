@@ -91,15 +91,18 @@
 
     "#include:http-routes": "./default-http-routes.json",
 
+    "team-search": {
+      "path": "./src/services/team-search"
+    },
+
     "team-manager": {
       "path": "./src/services/team-manager",
       "options": {
-        "search": "team-search-yandex-staff",
         "drivers": {}
       },
       "dependencies": [
         "model",
-        "team-search-yandex-staff"
+        "team-search"
       ]
     },
 

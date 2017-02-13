@@ -92,19 +92,6 @@
     }
   },
 
-  "http-routes-team-manager": {
-    "path": "./src/services/team-manager/routes",
-    "dependencies": [
-      "logger",
-      "team-manager"
-    ],
-    "#plugin:http": {
-      "routes": {
-        "/team-manager": ["http-routes-team-manager"]
-      }
-    }
-  },
-
   "http-routes-team-sync": {
     "path": "./src/services/team-sync/routes",
     "dependencies": [

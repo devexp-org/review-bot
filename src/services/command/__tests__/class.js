@@ -42,7 +42,7 @@ describe('services/command/class', function () {
   describe('#addCommand', function () {
 
     it('should dispatch event to handlers', function (done) {
-      const commandStart = sinon.stub().returns(Promise.resolve());
+      const commandStart = sinon.stub().returns(Promise.resolve(pullRequest));
 
       dispatcher.addCommand('start', '/start', commandStart);
 
@@ -58,8 +58,8 @@ describe('services/command/class', function () {
     let h1, h2, comment;
 
     beforeEach(function () {
-      h1 = sinon.stub().returns(Promise.resolve());
-      h2 = sinon.stub().returns(Promise.resolve());
+      h1 = sinon.stub().returns(Promise.resolve(pullRequest));
+      h2 = sinon.stub().returns(Promise.resolve(pullRequest));
 
       comment = 'first line\n/fireball\nthird line';
     });

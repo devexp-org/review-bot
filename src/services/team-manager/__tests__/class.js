@@ -1,12 +1,12 @@
 import TeamManager from '../class';
-import searchMock from '../__mocks__/search';
+
+import searchMock from '../../team-search/__mocks__/';
 import { teamModelMock } from '../../model/model-team/__mocks__/';
 import { pullRequestMock } from '../../model/model-pull-request/__mocks__/';
-import { teamDriverFactoryMock } from '../__mocks__/';
 
 describe('services/team-manager/class', function () {
 
-  let TeamModel, pullRequest, teamDriverFactory, search;
+  let search, TeamModel, pullRequest;
 
   beforeEach(function () {
     search = searchMock();
@@ -14,8 +14,6 @@ describe('services/team-manager/class', function () {
     TeamModel = teamModelMock();
 
     pullRequest = pullRequestMock();
-
-    teamDriverFactory = teamDriverFactoryMock();
 
     pullRequest.repository.full_name = 'nodejs/node';
   });
@@ -27,19 +25,14 @@ describe('services/team-manager/class', function () {
     beforeEach(function () {
       team = {
         name: 'team1',
-        driver: { name: 'static', options: {} },
         patterns: ['nodejs/node']
       };
 
-      TeamModel.findByName
+      TeamModel.findByNameWithMembers
         .withArgs('team1')
         .returns(Promise.resolve(team));
 
-      manager = new TeamManager(TeamModel, { 'static': teamDriverFactory }, search);
-
-      teamDriverFactory.makeDriver
-        .withArgs(team, manager)
-        .returns(1);
+      manager = new TeamManager(TeamModel, search);
     });
 
     it('should use the first matched route', function (done) {
@@ -51,16 +44,12 @@ describe('services/team-manager/class', function () {
         { name: 'team3', patterns: ['*'] }
       ]));
 
-      TeamModel.findByName
+      TeamModel.findByNameWithMembers
         .withArgs('team2')
         .returns(Promise.resolve(otherTeam));
 
-      teamDriverFactory.makeDriver
-        .withArgs(otherTeam, manager)
-        .returns(2);
-
       manager.findTeamByPullRequest(pullRequest)
-        .then(result => assert.equal(result, 2))
+        .then(result => assert.equal(result.getName(), 'team2'))
         .then(done, done);
     });
 
@@ -70,7 +59,7 @@ describe('services/team-manager/class', function () {
       ]));
 
       manager.findTeamByPullRequest(pullRequest)
-        .then(result => assert.equal(result, 1))
+        .then(result => assert.equal(result.getName(), 'team1'))
         .then(done, done);
     });
 
@@ -80,7 +69,7 @@ describe('services/team-manager/class', function () {
       ]));
 
       manager.findTeamByPullRequest(pullRequest)
-        .then(result => assert.equal(result, 1))
+        .then(result => assert.equal(result.getName(), 'team1'))
         .then(done, done);
     });
 
@@ -95,32 +84,6 @@ describe('services/team-manager/class', function () {
         .then(done, done);
     });
 
-    it('should return an error if there is no matched driver', function (done) {
-      team.driver.name = 'unknown';
-
-      TeamModel.exec.returns(Promise.resolve([
-        { name: 'team1', patterns: ['*'] }
-      ]));
-
-      manager.findTeamByPullRequest(pullRequest)
-        .then(() => assert.fail())
-        .catch(e => assert.match(e.message, /unknown driver/i))
-        .then(done, done);
-    });
-
-  });
-
-  describe('#findTeamMember', function () {
-    let manager;
-
-    beforeEach(function () {
-      manager = new TeamManager(TeamModel, { 'static': teamDriverFactory }, search);
-    });
-
-    it('should search user using `search` driver', function () {
-      manager.findTeamMember('foo');
-      assert.calledWith(search.findUser, 'foo');
-    });
   });
 
 });

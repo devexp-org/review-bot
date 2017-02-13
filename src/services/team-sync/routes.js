@@ -1,3 +1,4 @@
+import { forEach } from 'lodash';
 import { Router as router } from 'express';
 
 export default function setup(options, imports) {
@@ -7,12 +8,22 @@ export default function setup(options, imports) {
 
   const teamSyncRoute = router();
 
-  teamSyncRoute.get('/sync', function (req, res) {
-    const teamName = req.body.teamName || req.query.teamName;
+  teamSyncRoute.put('/sync', function (req, res) {
+    const teamName = req.body.teamName;
 
     teamSync.syncTeam(teamName)
       .then(() => res.json({ status: 'ok' }))
       .catch(res.handleError.bind(res, logger));
+  });
+
+  teamSyncRoute.get('/drivers', function (req, res) {
+    const drivers = {};
+
+    forEach(teamSync.getDrivers(), (factory, name) => {
+      drivers[name] = factory.config();
+    });
+
+    res.json(drivers);
   });
 
   return teamSyncRoute;

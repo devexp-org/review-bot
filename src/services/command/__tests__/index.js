@@ -10,14 +10,16 @@ import { pullRequestMock, pullRequestModelMock } from
 
 describe('service/command', function () {
 
-  let model, queue, events, logger, teamManager, PullRequestModel;
+  let model, queue, events, logger, teamManager, pullRequest, PullRequestModel;
   let command, options, imports;
 
   beforeEach(function () {
 
+    pullRequest = pullRequestMock();
+
     command = {
       pattern: '/command',
-      command: sinon.stub().returns(Promise.resolve())
+      command: sinon.stub().returns(Promise.resolve(pullRequest))
     };
 
     options = {
@@ -59,7 +61,7 @@ describe('service/command', function () {
 
     const payload = {
       comment: { body: '/command' },
-      pullRequest: pullRequestMock()
+      pullRequest: pullRequest
     };
 
     events.on

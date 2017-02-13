@@ -1,5 +1,7 @@
-import TeamSync from './class';
 import schedule from 'node-schedule';
+import { forEach } from 'lodash';
+
+import TeamSync from './class';
 
 export default function setup(options, imports) {
 
@@ -8,24 +10,36 @@ export default function setup(options, imports) {
   const TeamModel = model('team');
   const teamManager = imports['team-manager'];
 
-  const teamSync = new TeamSync(UserModel, TeamModel, teamManager);
+  const date = options.schedule || '0 0 2 * * *'; // every day at 02:00:00 am
+  const drivers = {};
 
-  return new Promise((resolve) => {
+  forEach(options.drivers, (moduleName, driverName) => {
+    const driverModule = imports[moduleName];
 
-    const date = '0 0 2 * * *'; // every day at 02:00:00 am
-    const sync = schedule.scheduleJob('team-sync', date, () => {
+    if (!driverModule) {
+      throw new Error(`Cannot find driver module "${moduleName}"`);
+    }
+
+    drivers[driverName] = driverModule;
+  });
+
+  const sync = new TeamSync(drivers, UserModel, TeamModel);
+
+  return new Promise(resolve => {
+
+    const task = schedule.scheduleJob('team-sync', date, () => {
       return teamManager.getTeams()
-        .then(teams => {
-          const promise = teams.map(team => {
-            return teamSync.syncTeam(team.name);
-          });
-          return Promise.all(promise);
+        .then(items => {
+          return Promise.all(items.map(team => sync.syncTeam(team.name)));
         });
     });
 
-    teamSync.shutdown = () => sync.cancel();
+    sync.shutdown = () => {
+      task.cancel();
+      return Promise.resolve();
+    };
 
-    resolve(teamSync);
+    resolve(sync);
 
   });
 

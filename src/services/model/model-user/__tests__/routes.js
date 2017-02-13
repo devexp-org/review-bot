@@ -74,7 +74,7 @@ describe('services/model/model-user/routes', function () {
     it('should return an error if the user already exsits', function (done) {
       const user = new UserModel();
 
-      user.save.returns(Promise.reject(new Error('User "test-user" already exists')));
+      user.save.throws(new Error('User "test-user" already exists'));
 
       request(app)
         .post('/')

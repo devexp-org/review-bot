@@ -1,38 +1,28 @@
 import { forEach } from 'lodash';
 import minimatch from 'minimatch';
 
+import TeamDriver from './team-driver';
+
 export default class TeamManager {
 
   /**
    * @constructor
    *
    * @param {TeamModel} TeamModel
-   * @param {Array} drivers
-   * @param {Object} search
+   * @param {UserSearch} userSearch
    */
-  constructor(TeamModel, drivers, search) {
-    this.search = search;
-    this.drivers = drivers;
+  constructor(TeamModel, userSearch) {
     this.TeamModel = TeamModel;
+    this.userSearch = userSearch;
   }
 
   /**
-   * Returns all teams.
-   * Only name and patterns.
+   * Returns all teams. Only names and patterns.
    *
    * @return {Promise.<Array.<Team>>}
    */
   getTeams() {
     return this.TeamModel.find({}).select({ name: 1, patterns: 1 }).exec();
-  }
-
-  /**
-   * Returns all drivers.
-   *
-   * @return {Array.<TeamDriver>}
-   */
-  getDrivers() {
-    return this.drivers;
   }
 
   /**
@@ -52,29 +42,6 @@ export default class TeamManager {
         });
 
         return routes;
-      });
-  }
-
-  /**
-   * Returns driver for given team.
-   *
-   * @param {String} teamName
-   *
-   * @return {TeamDriver}
-   */
-  getTeamDriver(teamName) {
-    return this.TeamModel
-      .findByName(teamName)
-      .then(team => {
-        const driverName = team.driver && team.driver.name;
-        const driverConfig = team.driver && team.driver.options || {};
-        const driverFactory = this.drivers[driverName];
-
-        if (!driverFactory) {
-          throw new Error(`Unknown driver '${driverName}' of '${teamName}'`);
-        }
-
-        return driverFactory.makeDriver(team, this, driverConfig);
       });
   }
 
@@ -104,26 +71,28 @@ export default class TeamManager {
   }
 
   /**
-   * Returns driver of matched route.
+   * Finds team by name.
    *
-   * @param {PullRequest} pullRequest
+   * @param {String} teamName
    *
-   * @return {Promise.<Team>}
+   * @return {Promise.<TeamDriver>}
    */
-  findTeamByPullRequest(pullRequest) {
-    return this.find(pullRequest)
-      .then(route => this.getTeamDriver(route.team));
+  findTeamByName(teamName) {
+    return this.TeamModel
+      .findByNameWithMembers(teamName)
+      .then(team => new TeamDriver(team, this.userSearch));
   }
 
   /**
-   * Finds reviewer by `login`.
+   * Finds team by matching routes.
    *
-   * @param {String} login
+   * @param {PullRequest} pullRequest
    *
-   * @return {Promise.<User>}
+   * @return {Promise.<TeamDriver>}
    */
-  findTeamMember(login) {
-    return this.search.findUser(login);
+  findTeamByPullRequest(pullRequest) {
+    return this.find(pullRequest)
+      .then(route => this.findTeamByName(route.team));
   }
 
   /**

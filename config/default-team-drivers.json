@@ -1,21 +1,37 @@
 {
 
+  "team-search": {
+    "options": {
+      "defaultDriver": "yandex-staff"
+    }
+  },
+
   "team-search-github": {
-    "path": "./src/services/team-manager/search-github",
+    "path": "./src/services/team-search/search-github",
     "dependencies": [
       "github"
-    ]
+    ],
+    "#plugin:team-search": {
+      "drivers": {
+        "github": "team-search-github"
+      }
+    }
   },
 
   "team-search-yandex-staff": {
-    "path": "./src/services/team-manager/search-yandex-staff",
+    "path": "./src/services/team-search/search-yandex-staff",
     "dependencies": [
       "yandex-staff"
-    ]
+    ],
+    "#plugin:team-search": {
+      "drivers": {
+        "yandex-staff": "team-search-yandex-staff"
+      }
+    }
   },
 
   "team-driver-static": {
-    "path": "./src/services/team-manager/driver-static",
+    "path": "./src/services/team-sync/driver-static",
     "dependencies": [
       "model"
     ],
@@ -27,7 +43,7 @@
   },
 
   "team-driver-github": {
-    "path": "./src/services/team-manager/driver-github",
+    "path": "./src/services/team-sync/driver-github",
     "dependencies": [
       "github"
     ],
@@ -39,25 +55,13 @@
   },
 
   "team-driver-yandex-staff": {
-    "path": "./src/services/team-manager/driver-yandex-staff",
+    "path": "./src/services/team-sync/driver-yandex-staff",
     "dependencies": [
       "yandex-staff"
     ],
     "#plugin:team-manager": {
       "drivers": {
         "yandex-staff": "team-driver-yandex-staff"
-      }
-    }
-  },
-
-  "team-driver-yandex-multimedia": {
-    "path": "./src/services/team-manager/driver-yandex-multimedia",
-    "dependencies": [
-      "yandex-staff"
-    ],
-    "#plugin:team-manager": {
-      "drivers": {
-        "yandex-multimedia": "team-driver-yandex-multimedia"
       }
     }
   }
