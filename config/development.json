@@ -7,6 +7,12 @@
       }
     },
 
+    "notification-email": {
+      "options": {
+        "silent": true
+      }
+    },
+
     "notification-jabber": {
       "options": {
         "silent": true,

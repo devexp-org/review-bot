@@ -49,7 +49,7 @@ export default class Email extends AbstractTransport {
 
     this.logger.info(`Send message to: ${to} — ${body}`);
 
-    if (this._silent) return;
+    if (this._silent) return Promise.resolve();
 
     const handle = {
       to: to,
