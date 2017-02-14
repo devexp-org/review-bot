@@ -189,10 +189,10 @@ describe('services/pull-request-review/class', function () {
         .then(done, done);
     });
 
-    it('should set status to "notstarted"', function (done) {
+    it('should set status to "inprogress"', function (done) {
       pullRequestReview.denyReview(pullRequest)
         .then(() => assert.calledWith(
-          pullRequest.set, 'review', sinon.match({ status: 'notstarted' })
+          pullRequest.set, 'review', sinon.match({ status: 'inprogress' })
         ))
         .then(done, done);
     });

@@ -48,5 +48,6 @@ export default function setup(options, imports) {
   events.on('review:command:busy', startNotification);
   events.on('review:command:change', startNotification);
   events.on('review:command:replace', startNotification);
+  events.on('review:command:restart', startNotification);
 
 }

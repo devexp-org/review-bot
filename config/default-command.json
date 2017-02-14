@@ -102,6 +102,18 @@
     ]
   },
 
+  "command-restart": {
+    "path": "./src/services/command/command-restart",
+    "#plugin:command": {
+      "commands": { "restart": "command-restart" }
+    },
+    "dependencies": [
+      "events",
+      "logger",
+      "pull-request-review"
+    ]
+  },
+
   "command-start": {
     "path": "./src/services/command/command-start",
     "#plugin:command": {

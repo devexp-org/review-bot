@@ -109,7 +109,7 @@ export default class PullRequestReview {
 
     const review = pullRequest.get('review');
 
-    review.status = 'notstarted';
+    review.status = 'inprogress';
     review.updated_at = new Date();
     delete review.completed_at;
 
