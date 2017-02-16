@@ -1,5 +1,5 @@
-import { withModel } from '../model/';
-import { merge, withApp } from '../app';
+import { merge, withApp, withInitial } from '../app';
+import { withModel } from '../model';
 
 export function withTeamModel(next) {
 
@@ -35,12 +35,10 @@ export function withTeamModel(next) {
             name: 'test-team',
             driver: { name: 'static' },
             members: [],
-            patterns: [],
+            patterns: ['artems/devkit'],
             reviewConfig: {
-              approveCount: 2,
-              stepsOptions: {
-                total: 3
-              }
+              approveCount: 1,
+              totalReviewers: 2
             }
           });
 
@@ -62,7 +60,7 @@ export function withTeamModel(next) {
 
 describe('services/model/model-team', function () {
 
-  const test = withTeamModel(withModel(withApp));
+  const test = withTeamModel(withModel(withInitial(withApp)));
 
   it('should setup team model', function (done) {
 

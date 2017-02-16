@@ -205,7 +205,7 @@ export default class PullRequestReview {
 
     forEach(review.reviewers, (reviewer) => {
       if (reviewer.login === login) {
-        delete reviewer.approved;
+        reviewer.approved = false;
       }
     });
 

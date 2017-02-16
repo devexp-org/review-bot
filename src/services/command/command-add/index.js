@@ -39,6 +39,12 @@ export default function setup(options, imports) {
       ));
     }
 
+    if (newReviewerLogin === pullRequest.user.login) {
+      return Promise.reject(new Error(util.format(
+        '%s tried to add himself for review %s', newReviewerLogin, pullRequest
+      )));
+    }
+
     if (find(pullRequestReviewers, { login: newReviewerLogin })) {
       return Promise.reject(new Error(util.format(
         '%s tried to add the reviewer %s, but he is already a reviewer. %s',

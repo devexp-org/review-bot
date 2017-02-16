@@ -346,7 +346,7 @@ describe('services/pull-request-review/class', function () {
       pullRequestReview.changesNeeded(pullRequest, 'foo')
         .then(() => assert.calledWith(
           pullRequest.set, 'review', sinon.match({
-            reviewers: [{ login: 'foo' }, { login: 'bar' }]
+            reviewers: [{ login: 'foo', approved: false }, { login: 'bar' }]
           })
         ))
         .then(done, done);

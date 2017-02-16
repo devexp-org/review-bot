@@ -1,4 +1,8 @@
-import { merge, withApp } from '../app';
+import { merge, withApp, withInitial } from '../app';
+import { withTeamModel } from '../model/model-team';
+import { withUserModel } from '../model/model-user';
+import { withPullRequestModel } from '../model/model-pull-request';
+
 import testingConfig from '../../../config/testing';
 
 export function withModel(next) {
@@ -7,9 +11,9 @@ export function withModel(next) {
 
     config = merge({
       services: {
-        logger: {
-          path: './src/services/logger',
-          options: { handlers: {} }
+        model: {
+          path: './src/services/model',
+          dependencies: ['mongoose']
         },
         mongoose: {
           path: './src/services/mongoose',
@@ -17,10 +21,6 @@ export function withModel(next) {
             host: testingConfig.services.mongoose.options.host
           },
           dependencies: ['logger']
-        },
-        model: {
-          path: './src/services/model',
-          dependencies: ['mongoose']
         }
       }
     }, config);
@@ -29,6 +29,10 @@ export function withModel(next) {
 
   };
 
+}
+
+export function withModelSuite(next) {
+  return withUserModel(withTeamModel(withPullRequestModel(withModel(next))));
 }
 
 export function withFooModel(next) {
@@ -84,6 +88,8 @@ export function withFooModel(next) {
 
 describe('services/model', function () {
 
+  const test = withFooModel(withModel(withInitial(withApp)));
+
   it('should be able to apply plugins', function (done) {
 
     const plugin = function () {
@@ -111,7 +117,7 @@ describe('services/model', function () {
       }
     };
 
-    withFooModel(withModel(withApp))(imports => {
+    test(imports => {
       const foo = imports.foo;
       assert.equal(foo.newProperty, 1);
     }, config, done);

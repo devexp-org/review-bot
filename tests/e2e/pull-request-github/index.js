@@ -1,7 +1,7 @@
-import { merge, withApp } from './app';
-import { withModel } from './model/';
-import { withGitHub } from './github';
-import { withPullRequestModel } from './model/model-pull-request';
+import { merge, withApp, withInitial } from '../app';
+import { withModel } from '../model';
+import { withGitHub } from '../github';
+import { withPullRequestModel } from '../model/model-pull-request';
 
 export function withPullRequestGitHub(next) {
 
@@ -47,7 +47,9 @@ describe('services/pull-request-github', function () {
     withPullRequestModel(
       withModel(
         withGitHub(
-          withApp
+          withInitial(
+            withApp
+          )
         )
       )
     )

@@ -1,12 +1,11 @@
-import { merge, withApp } from './app';
-import { withModel } from './model/';
-import { withGitHub } from './github';
-import { withTeamModel } from './model/model-team';
-import { withUserModel } from './model/model-user';
-import { withTeamManager } from './team-manager/';
-import { withPullRequestModel } from './model/model-pull-request';
-import { withTeamDriverStatic } from './team-manager/driver-static';
-import { withPullRequestReview } from './pull-request-review.js';
+import { merge, withApp, withInitial } from '../app';
+import { withModel } from '../model';
+import { withTeamModel } from '../model/model-team';
+import { withUserModel } from '../model/model-user';
+import { withPullRequestModel } from '../model/model-pull-request';
+import { withPullRequestReview } from '../pull-request-review';
+import { withTeamManager } from '../team-manager';
+import { withGitHub } from '../github';
 
 export function withReview(next) {
 
@@ -17,15 +16,15 @@ export function withReview(next) {
         review: {
           path: './src/services/review',
           options: {
-            steps: [
-              'review-step-preferred',
-              'review-step-remove-author',
-              'review-step-remove-reviewers',
-              'review-step-load',
-              'review-step-random',
-              'review-step-total',
-              'review-step-commiters'
-            ],
+            steps: {
+              preferred: 'review-step-preferred',
+              'remove-author': 'review-step-remove-author',
+              'remove-reviewers': 'review-step-remove-reviewers',
+              load: 'review-step-load',
+              random: 'review-step-random',
+              total: 'review-step-total',
+              commiters: 'review-step-commiters'
+            },
             stepsOptions: {
               load: { max: 5 },
               random: { max: 5 },
@@ -103,16 +102,20 @@ export function withReview(next) {
 
 }
 
+export function withReviewSuite(next) {
+  return withReview(withGitHub(next));
+}
+
 describe('services/review', function () {
 
   const test = withReview(
     withPullRequestReview(
-      withTeamDriverStatic(
-        withTeamManager(
-          withTeamModel(
-            withUserModel(
-              withPullRequestModel(
-                withModel(
+      withTeamManager(
+        withTeamModel(
+          withUserModel(
+            withPullRequestModel(
+              withModel(
+                withInitial(
                   withGitHub(
                     withApp
                   )

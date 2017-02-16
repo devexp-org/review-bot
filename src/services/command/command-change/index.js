@@ -2,7 +2,7 @@ import util from 'util';
 import { find, reject, cloneDeep } from 'lodash';
 
 export const EVENT_NAME = 'review:command:change';
-export const COMMAND_RE = '/change ([-\\w]+)(?: | to )([-\\w]+)';
+export const COMMAND_RE = '/change ([-\\w]+)(?: to | )([-\\w]+)';
 
 export default function commandService(options, imports) {
 

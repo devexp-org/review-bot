@@ -5,7 +5,6 @@ export default function setup(options, imports) {
 
   const queue = imports.queue;
   const events = imports.events;
-  const logger = imports.logger.getLogger('command');
   const teamManager = imports['team-manager'];
   const PullRequestModel = imports.model('pull_request');
 
@@ -30,9 +29,7 @@ export default function setup(options, imports) {
   forEach(options.events, (event) => {
     events.on(event, (payload) => {
       const comment = get(payload, 'comment.body', '');
-      dispatcher
-        .dispatch(comment, payload)
-        .catch(logger.error.bind(logger));
+      return dispatcher.dispatch(comment, payload);
     });
   });
 

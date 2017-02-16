@@ -1,10 +1,8 @@
-import { merge, withApp } from './app';
-import { withModel } from './model/';
-import { withTeamModel } from './model/model-team';
-import { withUserModel } from './model/model-user';
-import { withPullRequestModel } from './model/model-pull-request';
-import { withTeamManager } from './team-manager/';
-import { withTeamDriverStatic } from './team-manager/driver-static';
+import { merge, withApp, withInitial } from '../app';
+import { withModel } from '../model';
+import { withTeamModel } from '../model/model-team';
+import { withUserModel } from '../model/model-user';
+import { withPullRequestModel } from '../model/model-pull-request';
 
 export function withPullRequestReview(next) {
 
@@ -12,21 +10,18 @@ export function withPullRequestReview(next) {
 
     config = merge({
       services: {
-        events: {
-          path: './src/services/events'
-        },
         model: {
           options: {
             plugins: {
               pull_request: ['pull-request-review-plugin']
             }
           },
-          dependencies: ['mongoose', 'pull-request-review-plugin']
+          dependencies: ['pull-request-review-plugin']
         },
         'pull-request-review': {
           path: './src/services/pull-request-review',
           options: { approveCount: 1 },
-          dependencies: ['team-manager', 'events', 'logger']
+          dependencies: ['events', 'logger']
         },
         'pull-request-review-plugin': {
           path: './src/services/pull-request-review/addon'
@@ -39,7 +34,10 @@ export function withPullRequestReview(next) {
       pullRequest.set('review.reviewers', [{ login: 'foo' }]);
       pullRequest.set('review.approveCount', 1);
 
-      return test(imports);
+      return pullRequest
+        .save()
+        .then(() => test(imports));
+
     }, config, done);
 
   };
@@ -49,14 +47,12 @@ export function withPullRequestReview(next) {
 describe('services/pull-request-review', function () {
 
   const test = withPullRequestReview(
-    withTeamDriverStatic(
-      withTeamManager(
-        withTeamModel(
-          withUserModel(
-            withPullRequestModel(
-              withModel(
-                withApp
-              )
+    withUserModel(
+      withTeamModel(
+        withPullRequestModel(
+          withModel(
+            withInitial(
+              withApp
             )
           )
         )
@@ -208,6 +204,62 @@ describe('services/pull-request-review', function () {
             .then(saveAndLoad(PullRequestModel))
             .then(pullRequestLoaded => {
               assert.equal(pullRequestLoaded.get('review.status'), 'complete');
+            });
+        }, {}, done);
+      });
+
+    });
+
+    describe('#denyReview', function () {
+
+      it('should reset status of reviewers and change status of pull request to "inprogress"', function (done) {
+        test(imports => {
+          const pullRequest = imports.pullRequest;
+          const PullRequestModel = imports.PullRequestModel;
+          const pullRequestReview = imports['pull-request-review'];
+
+          pullRequest.set('review.status', 'inprogress');
+
+          return pullRequestReview.approveReview(pullRequest, 'foo')
+            .then(saveAndLoad(PullRequestModel))
+            .then(pullRequestLoaded => {
+              return pullRequestReview.denyReview(pullRequestLoaded);
+            })
+            .then(saveAndLoad(PullRequestModel))
+            .then(pullRequestLoaded => {
+              const reviewers = pullRequestLoaded.get('review.reviewers');
+
+              assert.equal(reviewers[0].login, 'foo');
+              assert.equal(reviewers[0].approved, false);
+              assert.equal(pullRequestLoaded.get('review.status'), 'inprogress');
+            });
+        }, {}, done);
+      });
+
+    });
+
+    describe('#changesNeeded', function () {
+
+      it('should reset status of reviewer and change status of pull request to "changesneeded"', function (done) {
+        test(imports => {
+          const pullRequest = imports.pullRequest;
+          const PullRequestModel = imports.PullRequestModel;
+          const pullRequestReview = imports['pull-request-review'];
+
+          pullRequest.set('review.status', 'inprogress');
+
+          return pullRequestReview.approveReview(pullRequest, 'foo')
+            .then(saveAndLoad(PullRequestModel))
+            .then(pullRequestLoaded => {
+              return pullRequestReview.changesNeeded(pullRequestLoaded, 'foo');
+            })
+            .then(saveAndLoad(PullRequestModel))
+            .then(pullRequestLoaded => {
+              const reviewers = pullRequestLoaded.get('review.reviewers');
+
+              assert.equal(reviewers[0].login, 'foo');
+              assert.equal(reviewers[0].approved, false);
+              assert.equal(pullRequestLoaded.get('review.status'), 'changesneeded');
             });
         }, {}, done);
       });

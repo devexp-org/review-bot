@@ -1,5 +1,5 @@
-import { withModel } from '../model/';
-import { merge, withApp } from '../app';
+import { merge, withApp, withInitial } from '../app';
+import { withModel } from '../model';
 
 export function withUserModel(next) {
 
@@ -55,7 +55,7 @@ export function withUserModel(next) {
 
 describe('services/model/model-user', function () {
 
-  const test = withUserModel(withModel(withApp));
+  const test = withUserModel(withModel(withInitial(withApp)));
 
   it('should setup user model', function (done) {
 

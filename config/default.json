@@ -97,9 +97,6 @@
 
     "team-manager": {
       "path": "./src/services/team-manager",
-      "options": {
-        "drivers": {}
-      },
       "dependencies": [
         "model",
         "team-search"

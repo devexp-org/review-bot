@@ -1,5 +1,5 @@
-import { withModel } from '../model/';
-import { merge, withApp } from '../app';
+import { merge, withApp, withInitial } from '../app';
+import { withModel } from '../model';
 import pullRequestHook from '../data/pull_request_webhook';
 
 export function withPullRequestModel(next) {
@@ -52,7 +52,7 @@ export function withPullRequestModel(next) {
 
 describe('services/model/model-pull-request', function () {
 
-  const test = withPullRequestModel(withModel(withApp));
+  const test = withPullRequestModel(withModel(withInitial(withApp)));
 
   it('should setup pull request', function (done) {
 
@@ -62,6 +62,7 @@ describe('services/model/model-pull-request', function () {
 
       assert.property(pullRequest, 'owner');
       assert.property(pullRequest, 'toString');
+
       assert.property(PullRequestModel, 'findById');
       assert.property(PullRequestModel, 'findByUser');
       assert.property(PullRequestModel, 'findByRepositoryAndNumber');
@@ -124,6 +125,7 @@ describe('services/model/model-pull-request', function () {
     });
 
   });
+
   describe('#findByUser', function () {
 
     it('should return pull requests filtered by user', function (done) {

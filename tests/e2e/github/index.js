@@ -1,6 +1,6 @@
-import { merge } from './app';
-import secret from '../../config/secret';
-import defaultConfig from '../../config/default';
+import { merge } from '../app';
+import secret from '../../../config/secret';
+import defaultConfig from '../../../config/default';
 
 export function withGitHub(next) {
 
