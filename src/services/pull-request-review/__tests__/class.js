@@ -95,20 +95,23 @@ describe('services/pull-request-review/class', function () {
         .then(done, done);
     });
 
-    it('should not reject a promise if pull request status is "changesneeded"', function (done) {
+    it('should reject a promise if pull request status is "changesneeded"', function (done) {
       review.status = 'changesneeded';
 
       pullRequestReview.startReview(pullRequest)
         .then(() => {})
+        .then(() => assert.fail())
+        .catch(e => assert.match(e.message, /try to start/i))
+
         .then(done, done);
     });
 
-    it('should reject a promise if pull request status is not "notstarted" or "changesneeded"', function (done) {
+    it('should reject a promise if pull request status is "inprogress"', function (done) {
       review.status = 'inprogress';
 
       pullRequestReview.startReview(pullRequest)
         .then(() => assert.fail())
-        .catch(e => assert.match(e.message, /is not opened/))
+        .catch(e => assert.match(e.message, /try to start/i))
         .then(done, done);
     });
 
@@ -151,19 +154,21 @@ describe('services/pull-request-review/class', function () {
         .then(done, done);
     });
 
-    it('should not reject promise if pull request status is "notstarted"', function (done) {
+    it('should reject promise if pull request status is "notstarted"', function (done) {
       review.status = 'notstarted';
 
       pullRequestReview.stopReview(pullRequest)
-        .then(() => {})
+        .then(() => assert.fail())
+        .catch(e => assert.match(e.message, /try to stop/i))
         .then(done, done);
     });
 
-    it('should not reject promise if pull request status is "complete"', function (done) {
+    it('should reject promise if pull request status is "complete"', function (done) {
       review.status = 'complete';
 
       pullRequestReview.stopReview(pullRequest)
-        .then(() => {})
+        .then(() => assert.fail())
+        .catch(e => assert.match(e.message, /try to stop/i))
         .then(done, done);
     });
 
@@ -357,6 +362,63 @@ describe('services/pull-request-review/class', function () {
         .then(() => assert.calledWith(
           pullRequest.set, 'review', sinon.match.has('updated_at')
         ))
+        .then(done, done);
+    });
+
+  });
+
+  describe('#fixedReview', function () {
+
+    beforeEach(function () {
+      review.status = 'changesneeded';
+    });
+
+    it('should emit event `review:fixed`', function (done) {
+      pullRequestReview.fixedReview(pullRequest)
+        .then(() => assert.calledWith(events.emit, 'review:fixed'))
+        .then(done, done);
+    });
+
+    it('should set status to "inprogress"', function (done) {
+      pullRequestReview.fixedReview(pullRequest)
+        .then(() => assert.calledWith(
+          pullRequest.set, 'review', sinon.match({ status: 'inprogress' })
+        ))
+        .then(done, done);
+    });
+
+    it('should update property "updated_at"', function (done) {
+      pullRequestReview.fixedReview(pullRequest)
+        .then(() => assert.calledWith(
+          pullRequest.set, 'review', sinon.match.has('updated_at')
+        ))
+        .then(done, done);
+    });
+
+    it('should reject promise if pull request status is "notstarted"', function (done) {
+      review.status = 'notstarted';
+
+      pullRequestReview.fixedReview(pullRequest)
+        .then(() => assert.fail())
+        .catch(e => assert.match(e.message, /try to mark/i))
+        .then(done, done);
+    });
+
+    it('should reject promise if pull request status is "complete"', function (done) {
+      review.status = 'complete';
+
+      pullRequestReview.fixedReview(pullRequest)
+        .then(() => assert.fail())
+        .catch(e => assert.match(e.message, /try to mark/i))
+        .then(done, done);
+    });
+
+    it('should reject promise if pull request status is "inprogress"', function (done) {
+      review.status = 'inprogress';
+
+      pullRequestReview.fixedReview(pullRequest)
+        .then(() => assert.fail())
+        .catch(e => assert.match(e.message, /try to mark/i))
         .then(done, done);
     });
 

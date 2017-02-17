@@ -41,7 +41,7 @@ export class ProjectConfigReviewStep extends AbstractReviewStep {
   getConfig(pullRequest, configName = '.devexp.json') {
 
     const req = {
-      user: pullRequest.owner,
+      owner: pullRequest.owner,
       repo: pullRequest.repository.name,
       path: configName
     };

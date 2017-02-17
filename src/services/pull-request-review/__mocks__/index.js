@@ -8,6 +8,7 @@ export default function mock(pullRequest) {
     stopReview: sinon.stub().returns(Promise.resolve(pullRequest)),
     denyReview: sinon.stub().returns(Promise.resolve(pullRequest)),
     startReview: sinon.stub().returns(Promise.resolve(pullRequest)),
+    fixedReview: sinon.stub().returns(Promise.resolve(pullRequest)),
     updateReview: sinon.stub().returns(Promise.resolve(pullRequest)),
     approveReview: sinon.stub().returns(Promise.resolve(pullRequest)),
     changesNeeded: sinon.stub().returns(Promise.resolve(pullRequest))

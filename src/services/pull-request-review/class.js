@@ -34,9 +34,9 @@ export default class PullRequestReview {
       )));
     }
 
-    if (review.status !== 'notstarted' && review.status !== 'changesneeded') {
+    if (review.status !== 'notstarted') {
       return Promise.reject(new Error(util.format(
-        'Try to start is not opened review. Status is %s. %s',
+        'Try to start is not `notstarted` review. Current status is %s. %s',
         review.status,
         pullRequest
       )));
@@ -74,11 +74,11 @@ export default class PullRequestReview {
     const review = pullRequest.get('review');
 
     if (review.status !== 'inprogress' && review.status !== 'changesneeded') {
-      this.logger.info(
-        'Try to stop is not in progress review. Status is %s. %s',
+      return Promise.reject(new Error(util.format(
+        'Try to stop is not `inprogress` review. Current status is %s. %s',
         review.status,
         pullRequest
-      );
+      )));
     }
 
     review.status = 'notstarted';
@@ -223,6 +223,43 @@ export default class PullRequestReview {
         );
 
         this.events.emit('review:changesneeded', { pullRequest, login });
+
+        return pullRequest;
+      });
+
+  }
+
+  /**
+   * Mark pull request as `fixed` after `changes needed`.
+   *
+   * @param {PullRequest} pullRequest
+   *
+   * @return {Promise}
+   */
+  fixedReview(pullRequest) {
+
+    const review = pullRequest.get('review');
+
+    if (review.status !== 'changesneeded') {
+      return Promise.reject(new Error(util.format(
+        'Try to mark pull request as `fixed` but status is %s. %s',
+        review.status,
+        pullRequest
+      )));
+    }
+
+    review.status = 'inprogress';
+    review.updated_at = new Date();
+
+    pullRequest.set('review', review);
+
+    return pullRequest.save()
+      .then(pullRequest => {
+        this.logger.info(
+          'Pull request marked as `fixed`. %s', pullRequest
+        );
+
+        this.events.emit('review:fixed', { pullRequest });
 
         return pullRequest;
       });

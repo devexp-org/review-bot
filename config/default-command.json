@@ -40,6 +40,18 @@
     ]
   },
 
+  "command-fixed": {
+    "path": "./src/services/command/command-fixed",
+    "#plugin:command": {
+      "commands": { "fixed": "command-fixed" }
+    },
+    "dependencies": [
+      "events",
+      "logger",
+      "pull-request-review"
+    ]
+  },
+
   "command-ok": {
     "path": "./src/services/command/command-ok",
     "#plugin:command": {

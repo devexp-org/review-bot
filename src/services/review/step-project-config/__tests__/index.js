@@ -92,7 +92,7 @@ describe('services/review/steps/project-config', function () {
 
       github.repos.getContent
         .withArgs({
-          user: 'repository.owner.login',
+          owner: 'repository.owner.login',
           repo: 'repository.name',
           path: '.devexp.json'
         })

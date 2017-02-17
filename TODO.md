@@ -1,7 +1,5 @@
 # MAJOR
-* project-config: github owner
 * Перенос пулл реквестом из старой схемы в новую (несовместимость между id:number и id:ObjectId)
-* notofication: слать уведомления автору после изменения статуса в changeneeded
 
 # MINOR
 * ui: настраивать права автор/не автор (skip'ы)
