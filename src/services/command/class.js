@@ -66,6 +66,8 @@ export default class CommandDispatcher {
 
     return this.teamManager.findTeamByPullRequest(pullRequest)
       .then(team => {
+        payload.team = team;
+
         if (!team) {
           return Promise.reject(new Error(
             `Team is not found for pull request ${pullRequest}`

@@ -1,5 +1,5 @@
 import util from 'util';
-import { find, reject } from 'lodash';
+import { reject } from 'lodash';
 
 export const EVENT_NAME = 'review:command:remove';
 export const COMMAND_RE = '/remove ([-\\w]+)';
@@ -36,14 +36,6 @@ export default function setup(options, imports) {
     if (pullRequest.state !== 'open') {
       return Promise.reject(new Error(util.format(
         `Cannot ping for closed pull request ${pullRequest}`
-      )));
-    }
-
-    // TODO config this
-    if (!find(pullRequestReviewers, { login: oldReviewerLogin })) {
-      return Promise.reject(new Error(util.format(
-        '%s tried to remove %s, but he is not a reviewer %s',
-        commentUser, oldReviewerLogin, pullRequest
       )));
     }
 

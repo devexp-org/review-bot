@@ -58,13 +58,6 @@ describe('services/command/remove', function () {
       .then(done, done);
   });
 
-  it('should return rejected promise if user is not a reviewer', function (done) {
-    command('/remove Spider-Man', payload, ['Spider-Man'])
-      .then(() => { throw new Error('should reject promise'); })
-      .catch(error => assert.match(error.message, /reviewer/))
-      .then(done, done);
-  });
-
   it('should return rejected promise if there is only 1 reviewer', function (done) {
     pullRequest.review.reviewers.splice(1, 1);
 

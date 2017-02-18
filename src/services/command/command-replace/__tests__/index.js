@@ -39,7 +39,7 @@ describe('services/command/replace', function () {
 
     comment = { user: { login: 'Black Widow' } };
 
-    payload = { pullRequest, comment };
+    payload = { pullRequest, comment, team };
 
     options = {};
 
@@ -64,10 +64,21 @@ describe('services/command/replace', function () {
       .then(done, done);
   });
 
-  it('should return rejected promise if user is not a reviewer', function (done) {
-    command('/replace Spider-Man', payload, ['Spider-Man'])
+  it('should return rejected promise if commenter is not an author', function (done) {
+    pullRequest.user.login = 'Spider-Man';
+
+    command('/replace Hulk', payload, ['Hulk'])
       .then(() => { throw new Error('should reject promise'); })
-      .catch(error => assert.match(error.message, /reviewer/))
+      .catch(error => assert.match(error.message, /author/i))
+      .then(done, done);
+  });
+
+  it('should return resolved promise if commenter is not an author but config allows it', function (done) {
+    pullRequest.user.login = 'Spider-Man';
+    team.getOption.withArgs('changeReviewerByAnyone').returns(true);
+
+    command('/replace Hulk', payload, ['Hulk'])
+      .then(() => {})
       .then(done, done);
   });
 

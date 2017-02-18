@@ -1,3 +1,5 @@
+import util from 'util';
+
 export const EVENT_NAME = 'review:command:restart';
 export const COMMAND_RE = '/restart';
 
@@ -17,8 +19,9 @@ export default function setup(options, imports) {
    */
   const restartCommand = function restartCommand(command, payload) {
 
+    const team = payload.team;
     const pullRequest = payload.pullRequest;
-    // const commentUser = payload.comment.user.login;
+    const commentUser = payload.comment.user.login;
 
     logger.info('"/restart" %s', pullRequest);
 
@@ -28,13 +31,13 @@ export default function setup(options, imports) {
       ));
     }
 
-    // TODO
-    // if (commentUser !== pullRequest.user.login) {
-    //   return Promise.reject(new Error(util.format(
-    //     '%s tried to restart a review, but author is %s %s',
-    //     commentUser, pullRequest.user.login, pullRequest
-    //   )));
-    // }
+    const allowed = team.getOption('startReviewByAnyone');
+    if (commentUser !== pullRequest.user.login && !allowed) {
+      return Promise.reject(new Error(util.format(
+        '%s tried to restart a review, but author is %s %s',
+        commentUser, pullRequest.user.login, pullRequest
+      )));
+    }
 
     return pullRequestReview.denyReview(pullRequest)
       .then(pullRequest => {

@@ -3,7 +3,8 @@ import service from '../';
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
 import notificationMock from '../../__mocks__/';
-import { pullRequestMock } from '../../..//model/model-pull-request/__mocks__/';
+import { pullRequestMock } from '../../../model/model-pull-request/__mocks__/';
+import { pullRequestReviewMixin } from '../../../pull-request-review/__mocks__/';
 
 describe('services/notification/message-ping', function () {
 
@@ -17,7 +18,7 @@ describe('services/notification/message-ping', function () {
 
     notification = notificationMock();
 
-    pullRequest = pullRequestMock();
+    pullRequest = pullRequestMock(pullRequestReviewMixin);
 
     payload = { pullRequest };
 
@@ -35,10 +36,21 @@ describe('services/notification/message-ping', function () {
     assert.calledWith(events.on, 'review:command:ping');
   });
 
-  it('should send ping message to the reviewers', function () {
-    pullRequest.review = {
-      reviewers: [{ login: 'Black Widow' }, { login: 'Spider-Man' }]
-    };
+  it('should send ping message to the author if review status is `changesneeded`', function () {
+    pullRequest.user.login = 'Hulk';
+    pullRequest.review.status = 'changesneeded';
+
+    service(options, imports);
+
+    assert.alwaysCalledWith(notification.sendMessage, pullRequest, 'Hulk');
+  });
+
+  it('should send ping message to the reviewers if review status is `inprogress`', function () {
+    pullRequest.review.status = 'inprogress';
+    pullRequest.review.reviewers = [
+      { login: 'Black Widow' },
+      { login: 'Spider-Man' }
+    ];
 
     service(options, imports);
 
@@ -47,17 +59,15 @@ describe('services/notification/message-ping', function () {
   });
 
   it('should not send ping message to approved reviewers', function () {
-    pullRequest.review = {
-      reviewers: [
-        { login: 'Black Widow' },
-        { login: 'Spider-Man', approved: true }
-      ]
-    };
+    pullRequest.review.status = 'inprogress';
+    pullRequest.review.reviewers = [
+      { login: 'Black Widow' },
+      { login: 'Spider-Man', approved: true }
+    ];
 
     service(options, imports);
 
-    assert.calledWith(notification.sendMessage, pullRequest, 'Black Widow');
-    assert.neverCalledWith(notification.sendMessage, pullRequest, 'Spider-Man');
+    assert.alwaysCalledWith(notification.sendMessage, pullRequest, 'Black Widow');
   });
 
 });

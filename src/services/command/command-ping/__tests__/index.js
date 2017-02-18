@@ -3,6 +3,8 @@ import service from '../';
 import eventsMock from '../../../events/__mocks__/';
 import loggerMock from '../../../logger/__mocks__/';
 import { reviewersMock } from '../../__mocks__/';
+import { teamDriverMock } from
+  '../../../team-manager/__mocks__/';
 import { pullRequestMock } from
   '../../../model/model-pull-request/__mocks__/';
 import { pullRequestReviewMixin } from
@@ -10,10 +12,13 @@ import { pullRequestReviewMixin } from
 
 describe('services/command/ping', function () {
 
-  let events, logger, pullRequest;
+  let team, events, logger, pullRequest;
   let options, imports, command, comment, payload;
 
   beforeEach(function () {
+
+    team = teamDriverMock();
+
     events = eventsMock();
     logger = loggerMock();
 
@@ -23,7 +28,7 @@ describe('services/command/ping', function () {
 
     comment = { user: { login: 'Black Widow' } };
 
-    payload = { pullRequest, comment };
+    payload = { pullRequest, comment, team };
 
     options = {};
 
@@ -42,12 +47,21 @@ describe('services/command/ping', function () {
       .then(done, done);
   });
 
-  it('should return rejected promise if triggered by not an author', function (done) {
-    comment.user.login = 'Spider-Man';
+  it('should return rejected promise if commenter is not an author', function (done) {
+    pullRequest.user.login = 'Spider-Man';
 
     command('/ping', payload)
       .then(() => { throw new Error('should reject promise'); })
-      .catch(error => assert.match(error.message, /author/))
+      .catch(error => assert.match(error.message, /author/i))
+      .then(done, done);
+  });
+
+  it('should return resolved promise if commenter is not an author but config allows it', function (done) {
+    pullRequest.user.login = 'Spider-Man';
+    team.getOption.withArgs('pingReviewByAnyone').returns(true);
+
+    command('/ping', payload)
+      .then(() => {})
       .then(done, done);
   });
 

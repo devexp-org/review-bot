@@ -18,6 +18,7 @@ export default function commandService(options, imports) {
    */
   const pingCommand = function pingCommand(command, payload) {
 
+    const team = payload.team;
     const pullRequest = payload.pullRequest;
     const commentUser = payload.comment.user.login;
 
@@ -29,7 +30,8 @@ export default function commandService(options, imports) {
       )));
     }
 
-    if (commentUser !== pullRequest.user.login) {
+    const allowed = team.getOption('pingReviewByAnyone');
+    if (commentUser !== pullRequest.user.login && !allowed) {
       return Promise.reject(new Error(util.format(
         '%s tried to ping to review, but author is %s %s',
         commentUser, pullRequest.user.login, pullRequest

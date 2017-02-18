@@ -23,7 +23,13 @@ export function baseSchema() {
       stepsOptions: Object,
       approveCount: Number,
       notification: String,
-      totalReviewers: Number
+      totalReviewers: Number,
+      setGitHubReviewStatus: Boolean,
+      fixReviewByAnyone: Boolean,
+      pingReviewByAnyone: Boolean,
+      stopReviewByAnyone: Boolean,
+      startReviewByAnyone: Boolean,
+      changeReviewerByAnyone: Boolean
     }
   };
 }

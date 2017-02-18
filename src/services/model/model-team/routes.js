@@ -97,7 +97,12 @@ export default function setup(options, imports) {
             'notification',
             'approveCount',
             'totalReviewers',
-            'setGitHubReviewStatus'
+            'setGitHubReviewStatus',
+            'fixReviewByAnyone',
+            'pingReviewByAnyone',
+            'stopReviewByAnyone',
+            'startReviewByAnyone',
+            'changeReviewerByAnyone'
           ].forEach(param => {
             if (param in req.body.reviewConfig) {
               team.set('reviewConfig.' + param, req.body.reviewConfig[param]);

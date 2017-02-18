@@ -1,6 +1,14 @@
-import { filter, map } from 'lodash';
+function messageToAuthor({ pullRequest }) {
 
-function message({ pullRequest }) {
+  return `
+Ваш пулл реквест ожидает правок:
+#${pullRequest.number} – ${pullRequest.title}
+${pullRequest.html_url}
+`;
+
+}
+
+function messageToReviewer({ pullRequest }) {
 
   return `
 Пулл реквест ожидает ревью:
@@ -17,19 +25,36 @@ export default function setup(options, imports) {
   const notification = imports.notification;
 
   function pingNotification(payload) {
-    const reviewers = filter(
-      payload.pullRequest.get('review.reviewers'),
-      (reviewer) => !reviewer.approved
-    );
+    const pullRequest = payload.pullRequest;
+    const pullRequestStatus = pullRequest.get('review.status');
 
-    const body = message(payload);
+    if (pullRequest.state !== 'open') {
+      logger.warn('Ping for closed pull request %s', pullRequest);
+      return Promise.resolve();
+    }
 
-    const promise = map(reviewers, (member) => {
-      return notification.sendMessage(payload.pullRequest, member.login, body)
+    if (pullRequestStatus === 'changesneeded') {
+
+      const body = messageToAuthor(payload);
+      const author = pullRequest.get('user.login');
+
+      return notification.sendMessage(pullRequest, author, body)
         .catch(logger.error.bind(logger));
-    });
 
-    return Promise.all(promise);
+    } else if (pullRequestStatus === 'inprogress') {
+
+      const body = messageToReviewer(payload);
+      const reviewers = pullRequest.get('review.reviewers')
+        .filter(reviewer => !reviewer.approved)
+        .map(reviewer => reviewer.login);
+
+      const promise = reviewers.map(login => {
+        return notification.sendMessage(pullRequest, login, body);
+      });
+
+      return Promise.all(promise).catch(logger.error.bind(logger));
+    }
+
   }
 
   events.on('review:command:ping', pingNotification);

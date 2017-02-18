@@ -35,7 +35,7 @@ describe('services/command/start', function () {
 
     comment = { user: { login: 'Black Widow' } };
 
-    payload = { pullRequest, comment };
+    payload = { pullRequest, comment, team };
 
     options = {};
 
@@ -59,12 +59,21 @@ describe('services/command/start', function () {
       .then(done, done);
   });
 
-  it.skip('should return rejected promise if triggered by not an author', function (done) {
-    comment.user.login = 'Spider-Man';
+  it('should return rejected promise if commenter is not an author', function (done) {
+    pullRequest.user.login = 'Spider-Man';
 
     command('/start', payload)
       .then(() => { throw new Error('should reject promise'); })
-      .catch(error => assert.match(error.message, /author/))
+      .catch(error => assert.match(error.message, /author/i))
+      .then(done, done);
+  });
+
+  it('should return resolved promise if commenter is not an author but config allows it', function (done) {
+    pullRequest.user.login = 'Spider-Man';
+    team.getOption.withArgs('startReviewByAnyone').returns(true);
+
+    command('/start', payload)
+      .then(() => {})
       .then(done, done);
   });
 

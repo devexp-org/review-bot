@@ -1,3 +1,5 @@
+import util from 'util';
+
 export const EVENT_NAME = 'review:command:fixed';
 export const COMMAND_RE = '/fixed';
 
@@ -17,8 +19,9 @@ export default function setup(options, imports) {
    */
   const fixedCommand = function fixedCommand(command, payload) {
 
+    const team = payload.team;
     const pullRequest = payload.pullRequest;
-    // const commentUser = payload.comment.user.login;
+    const commentUser = payload.comment.user.login;
 
     logger.info('"/fixed" %s', pullRequest);
 
@@ -34,13 +37,13 @@ export default function setup(options, imports) {
       ));
     }
 
-    // TODO
-    // if (commentUser !== pullRequest.user.login) {
-    //   return Promise.reject(new Error(util.format(
-    //     '%s tried to start a review, but author is %s %s',
-    //     commentUser, pullRequest.user.login, pullRequest
-    //   )));
-    // }
+    const allowed = team.getOption('fixReviewByAnyone');
+    if (commentUser !== pullRequest.user.login && !allowed) {
+      return Promise.reject(new Error(util.format(
+        '%s tried to fix a review, but author is %s %s',
+        commentUser, pullRequest.user.login, pullRequest
+      )));
+    }
 
     return pullRequestReview.fixedReview(pullRequest)
       .then(pullRequest => {

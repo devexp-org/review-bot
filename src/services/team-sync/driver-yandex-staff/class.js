@@ -18,7 +18,7 @@ export default class YandexStaffDriver extends AbstractDriver {
     }
 
     this.staff = staff;
-    this.groupId = config.groupId;
+    this.groupId = String(config.groupId).split(',');
   }
 
   /**

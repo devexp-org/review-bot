@@ -24,6 +24,7 @@ export default function commandService(options, imports) {
 
     let newReviewer;
 
+    const team = payload.team;
     const pullRequest = payload.pullRequest;
     const commentUser = payload.comment.user.login;
 
@@ -47,13 +48,13 @@ export default function commandService(options, imports) {
       )));
     }
 
-    // TODO config this
-    // if (commentUser !== pullRequest.user.login) {
-    //   return Promise.reject(new Error(util.format(
-    //     '%s tried to change reviewer, but author is %s %s',
-    //     commentUser, pullRequest.user.login, pullRequest
-    //   )));
-    // }
+    const allowed = team.getOption('changeReviewerByAnyone');
+    if (commentUser !== pullRequest.user.login && !allowed) {
+      return Promise.reject(new Error(util.format(
+        '%s tried to change reviewer, but author is %s %s',
+        commentUser, pullRequest.user.login, pullRequest
+      )));
+    }
 
     if (newReviewerLogin === pullRequest.user.login) {
       return Promise.reject(new Error(util.format(
