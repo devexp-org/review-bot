@@ -18,6 +18,7 @@ export function staticMock(obj, mixin = noop) {
   statics.populate = sinon.stub().returnsThis();
 
   statics.exec = sinon.stub().returns(Promise.resolve(null));
+  statics.remove = sinon.stub().returns(Promise.resolve(null));
 
   statics.findOne = sinon.stub().returnsThis();
   statics.findById = sinon.stub().returns(Promise.resolve(null));

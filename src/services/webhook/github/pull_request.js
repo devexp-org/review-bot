@@ -23,6 +23,15 @@ export default function webhook(payload, imports) {
         isNewPullRequest = true;
       }
 
+      if (!pullRequest._id) {
+        return PullRequestModel
+          .remove({ id: pullRequest.id })
+          .then(() => new PullRequestModel());
+      }
+
+      return pullRequest;
+    })
+    .then(pullRequest => {
       pullRequestGitHub.setPayload(pullRequest, payload);
 
       return pullRequestGitHub.loadPullRequestFiles(pullRequest);
