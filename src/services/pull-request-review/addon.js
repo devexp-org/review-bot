@@ -7,6 +7,7 @@ export default function setup(options, imports) {
 
     const Reviewer = new Schema({
       login: String,
+      html_url: String,
       approved: Boolean
     });
 
