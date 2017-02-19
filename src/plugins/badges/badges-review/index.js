@@ -38,5 +38,6 @@ export default function setup(options, imports) {
   events.on('review:complete', updateBadges);
   events.on('review:changesneeded', updateBadges);
   events.on('review:update_badges', updateBadges);
+  events.on('github:pull_request:synchronize', updateBadges);
 
 }

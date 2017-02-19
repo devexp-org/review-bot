@@ -25,6 +25,7 @@ export default function setup(options, imports) {
   }
 
   events.on('review:started', updateStatus);
+  events.on('review:updated', updateStatus);
   events.on('review:complete', updateStatus);
   events.on('github:pull_request:opened', updateStatus);
   events.on('github:pull_request:reopened', updateStatus);

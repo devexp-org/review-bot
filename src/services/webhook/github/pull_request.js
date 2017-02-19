@@ -24,9 +24,14 @@ export default function webhook(payload, imports) {
       }
 
       if (!pullRequest._id) {
+        // if it is a old pull request then create a new one.
         return PullRequestModel
           .remove({ id: pullRequest.id })
-          .then(() => new PullRequestModel());
+          .then(() => {
+            const newPullRequest = new PullRequestModel();
+            newPullRequest.set(pullRequest);
+            return newPullRequest;
+          });
       }
 
       return pullRequest;
