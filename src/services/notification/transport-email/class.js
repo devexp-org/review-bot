@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import sendmailTransport from 'nodemailer-sendmail-transport';
+import sMTPTransport from 'nodemailer-smtp-transport';
 import AbstractTransport from '../transport-abstract';
 
 export default class Email extends AbstractTransport {
@@ -19,6 +19,7 @@ export default class Email extends AbstractTransport {
 
     this._silent = options.silent;
     this._sender = options.sender || 'no-reply@yandex-team.ru';
+    this._transportOptions = options.transportOptions;
 
     this._client = null;
   }
@@ -29,7 +30,8 @@ export default class Email extends AbstractTransport {
    * @return {Promise}
    */
   connect() {
-    this._client = nodemailer.createTransport(sendmailTransport());
+    const transport = sMTPTransport(this._transportOptions);
+    this._client = nodemailer.createTransport(transport);
 
     return Promise.resolve();
   }
