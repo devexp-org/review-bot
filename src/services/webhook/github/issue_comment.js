@@ -28,6 +28,20 @@ export default function webhook(payload, imports) {
 
       logger.info('Issue comment %s', pullRequest);
 
+      if (!pullRequest._id) {
+        // if it is a old pull request then create a new one.
+        return PullRequestModel
+          .remove({ id: pullRequest.id })
+          .then(() => {
+            const newPullRequest = new PullRequestModel();
+            newPullRequest.set(pullRequest);
+            return newPullRequest;
+          });
+      }
+
+      return pullRequest;
+    })
+    .then(pullRequest => {
       return events.emitAsync(
         'github:issue_comment',
         { pullRequest, comment: payload.comment }
