@@ -35,7 +35,7 @@ export default function webhook(payload, imports) {
           .then(() => {
             const newPullRequest = new PullRequestModel();
             newPullRequest.set(pullRequest);
-            return newPullRequest;
+            return newPullRequest.save();
           });
       }
 
