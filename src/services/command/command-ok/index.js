@@ -2,7 +2,8 @@ import util from 'util';
 import { find, cloneDeep } from 'lodash';
 
 export const EVENT_NAME = 'review:command:ok';
-export const COMMAND_RE = '/ok';
+// export const COMMAND_RE = '/ok';
+export const COMMAND_RE = '/ok|/ок|^ok|^ок|^:ok:|збс|^lgtm|^норм ваще|^:fire:|^мне нравится';
 
 export default function setup(options, imports) {
 

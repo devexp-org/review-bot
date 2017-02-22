@@ -2,7 +2,8 @@ import util from 'util';
 import { find } from 'lodash';
 
 export const EVENT_NAME = 'review:command:not_ok';
-export const COMMAND_RE = '/!ok';
+// export const COMMAND_RE = '/!ok';
+export const COMMAND_RE = '/!ok|/!ок|^not ok|^нужны правки|^не ок|^wtf|^неок';
 
 export default function setup(options, imports) {
 
