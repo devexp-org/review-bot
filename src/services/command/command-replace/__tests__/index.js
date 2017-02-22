@@ -82,6 +82,13 @@ describe('services/command/replace', function () {
       .then(done, done);
   });
 
+  it('should rejected promise if old reviewer not in reviewers list', function (done) {
+    command('/replace Spider-Man', payload, ['Spider-Man'])
+      .then(() => { throw new Error('should reject promise'); })
+      .catch(error => assert.match(error.message, /is not a reviewer/i))
+      .then(done, done);
+  });
+
   it('should not reject promise if no reviewers at all', function (done) {
     review.choose.returns(Promise.resolve({
       reviewers: [], pullRequest

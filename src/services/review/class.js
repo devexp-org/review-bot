@@ -147,11 +147,11 @@ export default class Review {
     return review.steps.reduce((promise, { name, ranker }) => {
       return promise.then(review => {
         this.logger.info('Phase is `%s`', name);
-        review.members.sort(sortByRank);
 
         return ranker
           .process(review, stepsOptions[name] || {})
           .then(review => {
+            review.members.sort(sortByRank);
             this.logger.info('After `%s`: %s', name, getCurrent(review));
             return review;
           });

@@ -48,7 +48,7 @@ export default function setup(options, imports) {
       }
 
       default: {
-        logger.warn(`Unknown event "${eventName}"`);
+        logger.info(`Unknown event "${eventName}"`);
         res.json({ status: 'error', message: 'unknown event' });
       }
     }

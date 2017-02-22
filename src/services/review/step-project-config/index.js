@@ -49,7 +49,7 @@ export class ProjectConfigReviewStep extends AbstractReviewStep {
     return new Promise((resolve, reject) => {
       this.github.repos.getContent(req, (err, data) => {
         if (err) {
-          this.logger.warn(
+          this.logger.info(
             'Cannot find confing for %s',
             pullRequest.get('repository.full_name')
           );

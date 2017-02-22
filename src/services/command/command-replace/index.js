@@ -1,5 +1,5 @@
 import util from 'util';
-import { reject, isEmpty, cloneDeep } from 'lodash';
+import { find, reject, isEmpty, cloneDeep } from 'lodash';
 
 export const EVENT_NAME = 'review:command:replace';
 export const COMMAND_RE = '/replace ([-\\w]+)';
@@ -45,6 +45,16 @@ export default function commandService(options, imports) {
       return Promise.reject(new Error(util.format(
         '%s tried to change reviewer, but author is %s %s',
         commentUser, pullRequest.user.login, pullRequest
+      )));
+    }
+
+    if (!find(pullRequestReviewers, { login: oldReviewerLogin })) {
+      return Promise.reject(new Error(util.format(
+        '%s tried to replace %s, but %s is not a reviewer %s',
+        commentUser,
+        oldReviewerLogin,
+        oldReviewerLogin,
+        pullRequest
       )));
     }
 

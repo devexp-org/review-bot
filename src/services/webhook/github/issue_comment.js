@@ -35,11 +35,16 @@ export default function webhook(payload, imports) {
           .then(() => {
             const newPullRequest = new PullRequestModel();
             newPullRequest.set(pullRequest);
-            return newPullRequest.save();
+            return newPullRequest;
           });
       }
 
       return pullRequest;
+    })
+    .then(pullRequest => {
+      pullRequest.set('repository', payload.repository);
+
+      return pullRequest.save();
     })
     .then(pullRequest => {
       return events.emitAsync(
