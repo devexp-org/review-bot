@@ -2,7 +2,7 @@ import util from 'util';
 import { reject } from 'lodash';
 
 export const EVENT_NAME = 'review:command:remove';
-export const COMMAND_RE = '/remove ([-\\w]+)';
+export const COMMAND_RE = '/remove @?([-\\w]+)';
 
 export default function setup(options, imports) {
 

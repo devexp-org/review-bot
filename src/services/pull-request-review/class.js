@@ -143,7 +143,13 @@ export default class PullRequestReview {
     let approveCount = 0;
 
     const review = pullRequest.get('review');
-    const requiredApproveCount = review.approveCount || 1;
+    const requiredApproveCount = review.approveCount ||
+      review.reviewers.length ||
+      1;
+
+    if (review.approveCount) {
+      this.logger.warn('approveCount is undefined %s', pullRequest);
+    }
 
     forEach(review.reviewers, (reviewer) => {
       if (reviewer.login === login) {
