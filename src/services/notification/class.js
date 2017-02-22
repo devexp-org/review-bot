@@ -32,9 +32,15 @@ export default class Notification {
 
         const name = team.getOption('notification');
 
+        if (!name) {
+          return Promise.reject(
+            new Error(`Team "${team.getName()}" doesn't have any transport`)
+          );
+        }
+
         if (!(name in this.transports)) {
           return Promise.reject(
-            new Error(`The transport '${name}" is not found`)
+            new Error(`The transport "${name}" is not found`)
           );
         }
 
