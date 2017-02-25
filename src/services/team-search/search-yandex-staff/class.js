@@ -23,6 +23,7 @@ export default class YandexStaffSearch extends AbstractUserSearch {
       login: user.login,
       html_url: `https://staff.yandex-team.ru/${user.login}`,
       avatar_url: `//center.yandex-team.ru/api/v1/user/${user.login}/avatar/100.jpg`,
+      staffGroupId: user.department && user.department.id,
       contacts: [
         { id: 'email', account },
         { id: 'jabber', account }

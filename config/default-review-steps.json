@@ -132,6 +132,15 @@
     ]
   },
 
+  "review-step-multimedia": {
+    "path": "./src/services/review/step-multimedia",
+    "#plugin:review": {
+      "steps": {
+        "multimedia": "review-step-multimedia"
+      }
+    }
+  },
+
   "review-step-sakhalin": {
     "path": "./src/services/review/step-sakhalin",
     "#plugin:review": {

@@ -12,6 +12,8 @@ assert.alwaysReturned = function (spy, match) {
   );
 };
 
+chai.config.truncateThreshold = 100;
+
 global.chai = chai;
 global.sinon = sinon;
 global.assert = assert;

@@ -16,7 +16,7 @@ export class SakhalinReviewStep extends AbstractReviewStep {
    */
   process(review, options) {
 
-    const upRankCount = options.upRankCount;
+    const upRankCount = options.upRankCount || 1000;
 
     if (review.pullRequest.title.includes('SAKHALIN')) {
       const videoMember = find(review.members, (user) => user.mmTeam === 'video');

@@ -52,6 +52,15 @@
         "pull_request": ["pull-request-complexity-plugin"]
       }
     }
+  },
+
+  "user-staff-group-plugin": {
+    "path": "./src/plugins/yandex-staff/addon",
+    "#plugin:model": {
+      "plugins": {
+        "user": ["user-staff-group-plugin"]
+      }
+    }
   }
 
 }

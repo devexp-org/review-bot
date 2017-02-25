@@ -20,6 +20,7 @@ export const fields = {
     'birthday',
     'cars',
     'city',
+    'department',
     'family_status',
     'first_name',
     'last_name',

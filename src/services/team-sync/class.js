@@ -65,17 +65,16 @@ export default class TeamSync {
           local = new this.UserModel({ login: remote.login });
         }
 
-        local.html_url = remote.html_url || local.html_url;
-        local.avatar_url = remote.avatar_url || local.avatar_url;
-
-        (remote.contacts || []).forEach(contact => {
+        (local.contacts || []).forEach(contact => {
           const item = { id: contact.id, account: contact.account };
-          const hasContact = find(local.contacts, item);
+          const hasContact = find(remote.contacts, item);
 
           if (!hasContact) {
-            local.contacts.push(contact);
+            remote.contacts.push(contact);
           }
         });
+
+        local.set(remote);
 
         return local.save();
       });
