@@ -22,7 +22,8 @@ export function baseSchema() {
         required: true,
         minlength: 2,
         maxlength: 1024
-      }
+      },
+      metadata: Object
     }]
   };
 }
@@ -40,6 +41,21 @@ export function setupModel(modelName, model) {
     return this
       .model(modelName)
       .findOne({ login })
+      .exec();
+  };
+
+  /**
+   * Finds user by contact
+   *
+   * @param {String} type
+   * @param {String} account
+   *
+   * @return {Promise.<Array.<User>>}
+   */
+  model.statics.findByContact = function (type, account) {
+    return this
+      .model(modelName)
+      .find({ 'contacts.id': type, 'contacts.account': account })
       .exec();
   };
 

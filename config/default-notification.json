@@ -66,20 +66,48 @@
     ]
   },
 
-  "notification-slack": {
+  "notification-slack-serp": {
     "path": "./src/services/notification/transport-slack",
     "#plugin:notification": {
       "transports": {
-        "slack": "notification-slack"
+        "slack-serp": "notification-slack-serp"
       }
     },
     "options": {
-      "token": "0123456789abcdf",
-      "autoMark": true,
-      "autoReconnect": true,
-      "host": "yandex-team.ru"
+      "token": "0123456789abcdf"
     },
     "dependencies": [
+      "logger"
+    ]
+  },
+
+  "notification-slack-multimedia": {
+    "path": "./src/services/notification/transport-slack",
+    "#plugin:notification": {
+      "transports": {
+        "slack-miltimedia": "notification-slack-multimedia"
+      }
+    },
+    "options": {
+      "token": "0123456789abcdf"
+    },
+    "dependencies": [
+      "logger"
+    ]
+  },
+
+  "notification-telegram": {
+    "path": "./src/services/notification/transport-telegram",
+    "#plugin:notification": {
+      "transports": {
+        "telegram": "notification-telegram"
+      }
+    },
+    "options": {
+      "token": "0123456789abcdf"
+    },
+    "dependencies": [
+      "model",
       "logger"
     ]
   }

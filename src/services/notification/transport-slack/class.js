@@ -26,8 +26,12 @@ export default class Slack extends AbstractTransport {
     this._host = options.host;
     this._token = options.token;
     this._silent = options.silent;
-    this._autoMark = Boolean(options.autoMark);
-    this._autoReconnect = Boolean(options.autoReconnect);
+    this._autoMark = 'autoMark' in options
+      ? Boolean(options.autoMark)
+      : true;
+    this._autoReconnect = 'autoReconnect' in options
+      ? Boolean(options.autoReconnect)
+      : true;
 
     this._client = null;
   }

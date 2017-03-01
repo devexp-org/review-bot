@@ -20,7 +20,21 @@
       }
     },
 
-    "notification-slack": {
+    "notification-slack-serp": {
+      "options": {
+        "silent": true,
+        "offline": true
+      }
+    },
+
+    "notification-slack-multimedia": {
+      "options": {
+        "silent": true,
+        "offline": true
+      }
+    },
+
+    "notification-telegram": {
       "options": {
         "silent": true,
         "offline": true
