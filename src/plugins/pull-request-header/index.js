@@ -1,50 +1,68 @@
-
 function normalizePlatformPath(platform) {
   if (platform === 'desktop') {
     return '';
   }
 
-  return platform + '/';
-}
-
-function getPerlReportLink(id, service, platform) {
-  platform = normalizePlatformPath(platform);
-  return `[perl-report](https://buildfarm-d-pull-${id}.mm-proxy.serp.yandex.ru/${service}/${platform}?noredirect=1)`;
-}
-
-function getTemplarLink(id, service, platform) {
-  platform = normalizePlatformPath(platform);
-  return `[templar](https://pull-${id}.mm-fol.serp.yandex.ru/${service}/${platform}?noredirect=1)`;
-}
-
-function getRRLink(id, service, platform) {
-  platform = normalizePlatformPath(platform);
-  return `[RR](https://fiji-pull-${id}-rr-templates.hamster.yandex.ru/${service}/${platform}?noredirect=1)`;
+  return ({
+    'touch-pad': 'pad',
+    'touch-phone': 'touch'
+  })[platform] + '/';
 }
 
 function getPRLink(id, service, platform) {
-  return `${getPerlReportLink(id, service, platform)} \\| ${getTemplarLink(id, service, platform)} \\| ${getRRLink(id, service, platform)}`;
+  const platformPath = normalizePlatformPath(platform);
+  const icon = ({
+    desktop: 'https://jing.yandex-team.ru/files/sbmaxx/font-awesome-desktop.png',
+    'touch-pad': 'https://jing.yandex-team.ru/files/sbmaxx/font-awesome-tablet.png',
+    'touch-phone': 'https://jing.yandex-team.ru/files/sbmaxx/font-awesome-mobile.png'
+  })[platform];
+
+  return `<img src="${icon}" width="20" align="absmiddle">&nbsp;<a href="https://fiji-pull-${id}-rr-templates.hamster.yandex.ru/${service}/${platformPath}?noredirect=1">${platform}</a>`;
 }
 
-function build(id, tasks) {
-  const tasksSection = tasks.map(task => `Task: https://st.yandex-team.ru/${task}`);
+function getLink(href, text) {
+  return `<a href="${href}" target="_blank">${text}</a>`;
+}
 
-  /* eslint-disable quotes */
+function getSandboxPRLink(id) {
+  const sandboxPrj = 'SANDBOX_CI_FIJI';
+  const encodedID = encodeURIComponent(`mm-interfaces/fiji#${id}`);
+  const urlPr = `https://sandbox.yandex-team.ru/tasks?type=${sandboxPrj}&desc_re=${encodedID}&page=1&pageCapacity=20&forPage=tasks`;
+  const urlRestart = `https://sandbox-ci.qloud.yandex-team.ru/restart-task?sandboxTask=${sandboxPrj}&sandboxTaskDescRe=${encodedID}`;
 
-  return tasksSection.concat([
-    ``,
-    `Платформа    |                 Images                |                 Video               `,
-    `-------------|---------------------------------------|-------------------------------------`,
-    `desktop      | ${getPRLink(id, 'images', 'desktop')} | ${getPRLink(id, 'video', 'desktop')}`,
-    `touch-phone  | ${getPRLink(id, 'images', 'touch')}   | ${getPRLink(id, 'video', 'touch')}  `,
-    `touch-pad    | ${getPRLink(id, 'images', 'pad')}     | ${getPRLink(id, 'video', 'pad')}    `,
-    `\nmm-proxy.serp.yandex.ru проксирует запросы в ti.balancer.serp.yandex.ru`,
-    `\n\n`,
-    `[Посмотреть или запустить](http://quigon.yandex.ru/project.html?projectId=Multimedia_Fiji_Pr&branch_Multimedia_Fiji_Pr=${id}) сборку в TeamCity для данного PR`
-  ]).join('\n');
+  return [
+    '<img src="https://sandbox.yandex-team.ru/favicon.png" width="20" height="20" align="absmiddle"/>    ',
+    `${getLink(urlPr, 'страница PR')} | ${getLink(urlRestart, 'перезапустить сборку')}`
+  ].join('');
+}
 
-  /* eslint-enable quotes */
+function getStartrekLink(task) {
+  const url = `https://st.yandex-team.ru/${task}`;
 
+  return `<img src="https://st.yandex-team.ru/favicon.ico" width="20" height="20" align="absmiddle"/>    ${getLink(url, task)}`;
+}
+
+function renderTemplate(id, tasks) {
+  const str = [];
+
+  str.push([
+    '<img src="https://yastatic.net/q/logoaas/v1/Яндекс%20Видео.svg" align="absmiddle">',
+    `${getPRLink(id, 'video', 'desktop')} ${getPRLink(id, 'video', 'touch-phone')} ${getPRLink(id, 'video', 'touch-pad')}`,
+    '',
+    '<img src="https://yastatic.net/q/logoaas/v1/Яндекс%20Картинки.svg" align="absmiddle">',
+    `${getPRLink(id, 'images', 'desktop')} ${getPRLink(id, 'images', 'touch-phone')} ${getPRLink(id, 'images', 'touch-pad')}`,
+    '***'
+  ].join('\n'));
+
+  tasks.forEach(task => {
+    str.push(getStartrekLink(task));
+  });
+
+  str.push(getSandboxPRLink(id));
+
+  str.push('\n\n');
+
+  return str.join('\n');
 }
 
 export default function setup(options, imports) {
@@ -71,7 +89,7 @@ export default function setup(options, imports) {
     const tasks = startrek.parseIssue(pullRequest.title, options.queues);
 
     return queue.dispatch('pull-request#' + pullRequest.id, () => {
-      const content = build(pullRequest.number, tasks);
+      const content = renderTemplate(pullRequest.number, tasks);
       pullRequestGitHub.setBodySection(
         pullRequest, 'pull-request-header', content, 25
       );
@@ -80,5 +98,6 @@ export default function setup(options, imports) {
   }
 
   events.on('review:updated', updateHeader);
+  events.on('review:update_badges', updateHeader);
 
 }
