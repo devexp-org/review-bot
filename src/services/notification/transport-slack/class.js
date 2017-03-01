@@ -23,7 +23,7 @@ export default class Slack extends AbstractTransport {
 
     this.logger = logger;
 
-    this._host = options.host;
+    this._host = options.host || 'yandex-team.ru';
     this._token = options.token;
     this._silent = options.silent;
     this._autoMark = 'autoMark' in options

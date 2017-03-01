@@ -85,7 +85,7 @@
     "path": "./src/services/notification/transport-slack",
     "#plugin:notification": {
       "transports": {
-        "slack-miltimedia": "notification-slack-multimedia"
+        "slack-multimedia": "notification-slack-multimedia"
       }
     },
     "options": {
