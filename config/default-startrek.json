@@ -12,7 +12,11 @@
         "ISLSUGGEST",
         "MOBVIDEO",
         "SAKHALIN",
-        "VIDEOUI"
+        "VIDEOUI",
+        "MARKETVERSTKA",
+        "DIRECTCLIENT",
+        "RASPFRONT",
+        "MOBMARKET"
       ],
       "events": [
         "review:command:ok",
@@ -42,7 +46,11 @@
         "ISLSUGGEST",
         "MOBVIDEO",
         "SAKHALIN",
-        "VIDEOUI"
+        "VIDEOUI",
+        "MARKETVERSTKA",
+        "DIRECTCLIENT",
+        "RASPFRONT",
+        "MOBMARKET"
       ],
       "events": [
         "review:command:start"
