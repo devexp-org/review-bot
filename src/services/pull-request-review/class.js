@@ -147,7 +147,7 @@ export default class PullRequestReview {
       review.reviewers.length ||
       1;
 
-    if (review.approveCount) {
+    if (!review.approveCount) {
       this.logger.warn('approveCount is undefined %s', pullRequest);
     }
 

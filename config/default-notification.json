@@ -66,6 +66,21 @@
     ]
   },
 
+  "notification-slack-rasp": {
+    "path": "./src/services/notification/transport-slack",
+    "#plugin:notification": {
+      "transports": {
+        "slack-rasp": "notification-slack-rasp"
+      }
+    },
+    "options": {
+      "token": "0123456789abcdf"
+    },
+    "dependencies": [
+      "logger"
+    ]
+  },
+
   "notification-slack-serp": {
     "path": "./src/services/notification/transport-slack",
     "#plugin:notification": {
