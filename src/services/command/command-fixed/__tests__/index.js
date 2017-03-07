@@ -77,12 +77,11 @@ describe('services/command/fixed', function () {
       .then(done, done);
   });
 
-  it('should return rejected promise if pull request review is not open', function (done) {
+  it('should not rejected promise if pull request review is not open', function (done) {
     pullRequest.review.status = 'inprogress';
 
     command('/fixed', payload)
-      .then(() => { throw new Error('should reject promise'); })
-      .catch(error => assert.match(error.message, /changesneeded/))
+      .then(() => assert.calledWith(events.emit, 'review:command:fixed'))
       .then(done, done);
   });
 

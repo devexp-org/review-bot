@@ -32,9 +32,7 @@ export default function setup(options, imports) {
     }
 
     if (pullRequest.get('review.status') !== 'changesneeded') {
-      return Promise.reject(new Error(
-        `Cannot fix is not 'changesneeded' review ${pullRequest}`
-      ));
+      logger.info(`Cannot fix is not 'changesneeded' review ${pullRequest}`);
     }
 
     const allowed = team.getOption('fixReviewByAnyone');

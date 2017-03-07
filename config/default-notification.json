@@ -36,6 +36,15 @@
     ]
   },
 
+  "notification-message-fixed": {
+    "path": "./src/services/notification/message-fixed",
+    "dependencies": [
+      "events",
+      "logger",
+      "notification"
+    ]
+  },
+
   "notification-email": {
     "path": "./src/services/notification/transport-email",
     "#plugin:notification": {

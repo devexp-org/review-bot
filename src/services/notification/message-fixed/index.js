@@ -20,7 +20,7 @@ ${pullRequest.html_url}
 export default function setup(options, imports) {
 
   const events = imports.events;
-  const logger = imports.logger.getLogger('notification.message.start');
+  const logger = imports.logger.getLogger('notification.message.fixed');
   const notification = imports.notification;
 
   function fixedNotification(payload) {

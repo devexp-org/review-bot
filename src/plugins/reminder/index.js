@@ -73,6 +73,7 @@ export default function setup(options, imports) {
             }
 
             if (pullRequest.state !== 'closed' && !pullRequest.review_comments) {
+              logger.info(EVENT_NAME, pullRequest);
               events.emit(EVENT_NAME, { pullRequest });
               return createJob(pullRequest, options.days, trigger);
             }
