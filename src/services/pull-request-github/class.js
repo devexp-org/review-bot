@@ -166,9 +166,9 @@ export default class PullRequestGitHub {
     local.body = this.cleanPullRequestBody(local.body);
 
     const bodyContentWithSeparators = [
-      (local.body.length ? '\n' : ''),
+      (local.body.length ? '\n\n' : ''),
       this.separator.top + '\n',
-      (local.body.length ? '----\n' : ''),
+      (local.body.length ? '****\n' : ''),
       bodyContent + '\n',
       this.separator.bottom
     ].join('');

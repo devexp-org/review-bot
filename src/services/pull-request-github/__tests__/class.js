@@ -324,7 +324,7 @@ describe('services/pull-request-github/class', function () {
   describe('#fillPullRequestBody', function () {
 
     it('should be able to replace pull request body', function () {
-      const body = 'BODY TEXT\n<!-- BEGIN -->\n<div>EXTRA BODY TEXT</div>\n<!-- END -->';
+      const body = 'BODY TEXT\n\n<!-- BEGIN -->\n<div>EXTRA BODY TEXT</div>\n<!-- END -->';
 
       const pullRequest = {
         body: body,
@@ -336,7 +336,7 @@ describe('services/pull-request-github/class', function () {
 
       pullRequestGitHub.fillPullRequestBody(pullRequest);
 
-      const expected = 'BODY TEXT\n<!-- BEGIN -->\n----\nID1\nID2\n<!-- END -->';
+      const expected = 'BODY TEXT\n\n<!-- BEGIN -->\n****\nID1\nID2\n<!-- END -->';
 
       assert.equal(pullRequest.body, expected);
     });
