@@ -27,7 +27,7 @@ describe('services/notification/message-fixed', function () {
     payload = { pullRequest };
 
     events.on
-      .withArgs('review:fixed')
+      .withArgs('review:command:fixed')
       .callsArgWith(1, payload);
 
     options = {};
@@ -39,7 +39,7 @@ describe('services/notification/message-fixed', function () {
   it('should subscribe to events', function () {
     service(options, imports);
 
-    assert.calledWith(events.on, 'review:fixed');
+    assert.calledWith(events.on, 'review:command:fixed');
   });
 
   it('should send `fixed` message to the reviewers', function () {

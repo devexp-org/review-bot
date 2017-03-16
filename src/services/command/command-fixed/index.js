@@ -43,12 +43,18 @@ export default function setup(options, imports) {
       )));
     }
 
-    return pullRequestReview.fixedReview(pullRequest)
-      .then(pullRequest => {
-        events.emit(EVENT_NAME, { pullRequest });
+    let promise;
+    if (pullRequest.get('review.status') !== 'changesneeded') {
+      promise = Promise.resolve(pullRequest);
+    } else {
+      promise = pullRequestReview.fixedReview(pullRequest);
+    }
 
-        return pullRequest;
-      });
+    return promise.then(pullRequest => {
+      events.emit(EVENT_NAME, { pullRequest });
+
+      return pullRequest;
+    });
 
   };
 

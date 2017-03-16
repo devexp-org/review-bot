@@ -53,6 +53,13 @@ describe('services/review/steps/preferred', function () {
       assert.deepEqual(logins, ['foo', 'bar']);
     });
 
+    it('should parse logins separeted by space', function () {
+      const body = '@foo @bar @baz';
+      const logins = step.findReviewersInDescription(body);
+
+      assert.deepEqual(logins, ['foo', 'bar', 'baz']);
+    });
+
   });
 
   it('should inc rank if reviewer mentioned in description', function (done) {

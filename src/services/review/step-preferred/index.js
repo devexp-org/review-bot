@@ -1,7 +1,7 @@
 import { map, uniq, includes, difference, forEach } from 'lodash';
 import AbstractReviewStep from '../step';
 
-export const REVIEWER_RE = /(?:^|\W)@([a-z][-0-9a-z]+)(?:\W|$)/gi;
+export const REVIEWER_RE = /(?:^|\W)@([a-z][-0-9a-z]+)(?:(?=\W|$))/gi;
 
 export class PreferredReviewStep extends AbstractReviewStep {
 

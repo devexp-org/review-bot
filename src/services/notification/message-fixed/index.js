@@ -38,6 +38,6 @@ export default function setup(options, imports) {
     return Promise.all(promise).catch(logger.error.bind(logger));
   }
 
-  events.on('review:fixed', fixedNotification);
+  events.on('review:command:fixed', fixedNotification);
 
 }
