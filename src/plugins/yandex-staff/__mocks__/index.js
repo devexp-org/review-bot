@@ -5,6 +5,7 @@ export default function mock() {
     apiAbsence: sinon.stub(),
     apiUserInfo: sinon.stub(),
     getUsersInOffice: sinon.stub(),
+    isAbsence: sinon.stub().returns(true),
     _addAvatarAndUrl: sinon.stub()
   };
 

@@ -197,13 +197,13 @@ export default class YandexStaff {
     const today = new Date();
 
     return this.getUsers(groupId)
-      .then(users => {
-        return users.filter(user => {
-          return !user.absence ||
-            new Date(user.absence.right_edge) - today < 0 ||
-            user.absence.gap_type__name === 'trip';
-        });
-      });
+      .then(users => users.filter(user => !this.isAbsence(user.absence, today)));
+  }
+
+  isAbsence(absence, today = new Date()) {
+    return absence &&
+      new Date(absence.right_edge) - today > 0 &&
+      absence.gap_type__name !== 'trip';
   }
 
   /**
