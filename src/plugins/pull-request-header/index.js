@@ -26,9 +26,11 @@ function getLink(href, text) {
 
 function getSandboxPRLink(id) {
   const sandboxPrj = 'SANDBOX_CI_FIJI';
-  const encodedID = encodeURIComponent(`mm-interfaces/fiji#${id}`);
-  const urlPr = `https://sandbox.yandex-team.ru/tasks?type=${sandboxPrj}&desc_re=${encodedID}&page=1&pageCapacity=20&forPage=tasks`;
-  const urlRestart = `https://sandbox-ci.qloud.yandex-team.ru/restart-task?sandboxTask=${sandboxPrj}&sandboxTaskDescRe=${encodedID}`;
+  const githubRepoOwner = 'mm-interfaces';
+  const githubRepoName = 'fiji';
+
+  const urlPr = `https://sandbox.yandex-team.ru/tasks?type=${sandboxPrj}&input_parameters=%7B"project_github_owner"%3A"${githubRepoOwner}"%2C"project_github_repo"%3A"${githubRepoName}"%2C"project_git_merge_ref"%3A%5B"pull%2F${id}"%5D%7D&order=-id`;
+  const urlRestart = `https://sandbox-ci.qloud.yandex-team.ru/restart-task?sandboxTask=${sandboxPrj}&githubRepoOwner=${githubRepoOwner}&githubRepoName=${githubRepoOwner}&githubPullRequestNumber=${id}`;
 
   return [
     '<img src="https://sandbox.yandex-team.ru/favicon.png" width="20" height="20" align="absmiddle"/>    ',
